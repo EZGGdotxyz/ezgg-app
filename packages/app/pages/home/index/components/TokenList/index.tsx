@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 16:20:20
+ * @LastEditTime: 2025-02-24 19:22:39
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/TokenList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -21,13 +21,13 @@ const TokenList: React.FC<any> = (props: TokenListProps) => {
 
   const list = [
     {
-      name: 'USDT',
-      link: 'BSC',
+      token: 'USDT',
+      chain: 'BSC',
       amount: '100',
     },
     {
-      name: 'USDC',
-      link: 'Polygon',
+      token: 'USDC',
+      chain: 'Polygon',
       amount: '100',
     },
   ];
@@ -46,14 +46,14 @@ const TokenList: React.FC<any> = (props: TokenListProps) => {
             <AppImage
               width={appScale(48)}
               height={appScale(48)}
-              src={require('app/assets/images/topUp.png')}
+              src={require(`app/assets/images/token/${item.token}.png`)}
               type="local"
             />
-            <XStack pos={'absolute'} bottom={appScale(8)} right={appScale(18)}>
+            <XStack pos={'absolute'} bottom={appScale(4)} right={appScale(18)}>
               <AppImage
                 width={appScale(24)}
                 height={appScale(24)}
-                src={require('app/assets/images/topUp.png')}
+                src={require(`app/assets/images/chain/${item.chain}.png`)}
                 type="local"
               />
             </XStack>
@@ -61,10 +61,10 @@ const TokenList: React.FC<any> = (props: TokenListProps) => {
           <XStack flex={1} ai={'center'} jc={'space-between'}>
             <YStack gap={appScale(2)}>
               <SizableText fontSize={'$6'} color={'#26273C'} fontWeight={'500'}>
-                {item.name}
+                {item.token}
               </SizableText>
               <SizableText fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
-                {item.link}
+                {item.chain}
               </SizableText>
             </YStack>
             <YStack gap={appScale(2)}>

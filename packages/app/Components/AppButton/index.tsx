@@ -1,12 +1,12 @@
 /*
  * @Date: 2023-12-08 16:25:15
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-07-22 17:11:31
- * @FilePath: /snapx-nfc-app/packages/app/Components/AppButton/index.tsx
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-02-24 19:44:49
+ * @FilePath: /ezgg-app/packages/app/Components/AppButton/index.tsx
  */
 import {Button, Paragraph} from '@my/ui';
 import {PrimaryColor, SubColor} from 'app/config';
-import {useState} from 'react';
+import {appScale} from 'app/utils';
 import {ActivityIndicator} from 'react-native';
 
 interface AppButtonProps {
@@ -20,23 +20,27 @@ export default function AppButton(props: AppButtonProps) {
   const {onPress, style, isLoading = false} = props;
   return (
     <Button
+      h={appScale(58)}
+      w={'100%'}
+      br={appScale(28)}
+      ai={'center'}
+      jc={'center'}
       style={{
-        // backgroundColor: isLoading ? SubColor : PrimaryColor,
-        height: 44,
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10,
         ...style,
+        opacity: isLoading ? 0.5 : 1,
       }}
-      bc={isLoading ? '$color9' : '$color'}
+      bc={PrimaryColor}
       onPress={onPress}
-      disabled={isLoading}
+      // disabled={isLoading}
+      pressStyle={{
+        opacity: 0.85,
+      }}
+      unstyled
     >
       {isLoading ? (
-        <ActivityIndicator color={'#fff'} />
+        <ActivityIndicator color={'#212121'} />
       ) : (
-        <Paragraph fontSize={'$3'} color={'$color1'}>
+        <Paragraph fontSize={'$4'} color={'#212121'} fontWeight={'700'}>
           {props?.children}
         </Paragraph>
       )}

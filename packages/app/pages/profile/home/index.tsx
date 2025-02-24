@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:02:34
+ * @LastEditTime: 2025-02-24 18:52:24
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -21,7 +21,7 @@ import {
 import {ChevronRight} from '@tamagui/lucide-icons';
 import {useRematchModel} from 'app/store/model';
 import {setLanguage} from 'app/utils/auth';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useRouter} from 'solito/router';
 export const ESTIMATED_ITEM_SIZE = 90;
@@ -36,6 +36,7 @@ import {Dispatch} from 'app/store';
 import useRequest from 'app/hooks/useRequest';
 import Header from './components/Header';
 import {appScale} from 'app/utils';
+import CountryPopup from './components/CountryPopup';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
 
 // 我的
@@ -45,15 +46,38 @@ const MyScreen = () => {
   const {userLogout} = useUser();
   const dispatch = useDispatch<Dispatch>();
   const {makeRequest} = useRequest();
-  const [{unread}] = useRematchModel('app');
+  const [{unread, demoniator}] = useRematchModel('app');
   const [{isLogin}] = useRematchModel('user');
-
+  const [areaCodeList, setAreaCodeList] = useState<any[]>([
+    {
+      id: '1',
+      emoji: '🇺🇸',
+      chineseName: '美国',
+      englishName: 'USA',
+      code: 'USD',
+    },
+    {
+      id: '2',
+      emoji: '🇨🇳',
+      chineseName: '中国',
+      englishName: 'China',
+      code: 'CNY',
+    },
+  ]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [phoneAreaCode, setPhoneAreaCode] = useState<any>({
+    id: '1',
+    emoji: '🇺🇸',
+    chineseName: '美国',
+    englishName: 'USA',
+    code: 'USD',
+  });
   const [isLoading, setIsLoading] = React.useState(false);
 
   const InfoItems = [
     {
       title: t('profile.home.security'),
-      icon: 'search',
+      icon: 'security2',
       url: '/profile/security',
       id: 'security',
     },
@@ -139,6 +163,8 @@ const MyScreen = () => {
             } else {
               window.open(item.url, '_blank');
             }
+          } else if (item.id === 'demoniator') {
+            setModalVisible(true);
           } else {
             push(item.url);
           }
@@ -168,10 +194,23 @@ const MyScreen = () => {
               {t('profile.home.language.zh_hk')}
             </SizableText>
           )}
+          {item.id === 'demoniator' && (
+            <SizableText fow={'600'} color={'#212121'} fontSize="$2">
+              {demoniator}
+            </SizableText>
+          )}
           {item.id !== 'logout' && <ChevronRight color={'#212121'} />}
         </XStack>
       </Button>
     );
+  };
+
+  const selectCountry = (item) => {
+    setPhoneAreaCode(item);
+    setModalVisible(false);
+    dispatch.app.updateState({
+      demoniator: item.code,
+    });
   };
 
   return (
@@ -218,13 +257,11 @@ const MyScreen = () => {
         <XStack w={'100%'} pl="$4" pr="$4" mt="$6" pb="$10">
           {!isLogin && (
             <Button
-              style={{
-                width: '100%',
-                height: 50,
-                borderRadius: 25,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
+              borderRadius={25}
+              h={50}
+              w={'100%'}
+              jc={'center'}
+              ai={'center'}
               bc={'$color'}
               onPress={() => {
                 push('/login');
@@ -237,6 +274,13 @@ const MyScreen = () => {
           )}
         </XStack>
       </ScrollView>
+      <CountryPopup
+        areaCodeList={areaCodeList}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        selectCountry={selectCountry}
+        phoneAreaCode={phoneAreaCode}
+      />
     </PermissionPage>
   );
 };

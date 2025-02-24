@@ -4,7 +4,7 @@
  * @LastEditTime: 2025-02-24 17:04:42
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
-import {AppImage, Button, Label, ScrollView, Separator, SizableText, Switch, XStack, YStack} from '@my/ui';
+import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
 import useRequest from 'app/hooks/useRequest';
 import HomeHeader from './components/HomeHeader';
 import {useRematchModel} from 'app/store/model';
@@ -132,17 +132,14 @@ const HomeScreen = (props: HomeScreenProps) => {
           onPress={() => setSwitchOn(!switchOn)}
         >
           <XStack
+            animation="quick"
             position="absolute"
             top={appScale(4)}
             width={appScale(158)}
             height={appScale(48)}
             br={appScale(24)}
             bc="#FFFFFF"
-            style={{
-              transform: `translateX(${switchOn ? appScale(164) : appScale(4)}px)`,
-              transition: 'transform 0.2s ease-out',
-              // willChange: 'transform',
-            }}
+            x={switchOn ? appScale(164) : appScale(4)}
           />
           <XStack top={0} position="absolute" w={'100%'} h={'100%'}>
             <SizableText

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-19 14:34:29
+ * @LastEditTime: 2025-02-24 17:44:40
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -18,6 +18,7 @@ export default {
   'home.history': 'History',
   'home.viewAll': 'View All',
   'home.today': 'Today',
+  'home.yesterday': 'Yesterday',
   'home.receive': 'Receive',
   'home.deposit': 'Deposit',
 

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:05:17
+ * @LastEditTime: 2025-02-24 17:53:14
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/History/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -9,7 +9,7 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronRight} from '@tamagui/lucide-icons';
-import {appScale} from 'app/utils';
+import {appScale, getRelativeDate} from 'app/utils';
 import HistoryItem from 'app/Components/HistoryItem';
 import HistoryDayItem from 'app/Components/HistoryDayItem';
 
@@ -34,7 +34,7 @@ const History: React.FC<any> = (props: HistoryProps) => {
   ];
   const list2 = [
     {
-      day: 'Today',
+      day: getRelativeDate(new Date()),
       list: [
         {
           name: 'From Request (@Elvan123)',
@@ -49,7 +49,7 @@ const History: React.FC<any> = (props: HistoryProps) => {
       ],
     },
     {
-      day: 'Yesterday',
+      day: getRelativeDate('2025-02-22'),
       list: [
         {
           name: 'From Request (@Elvan123)',

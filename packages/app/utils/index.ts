@@ -1,11 +1,13 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-18 11:23:52
+ * @LastEditTime: 2025-02-24 17:53:49
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
 import {Dimensions, Platform} from 'react-native';
+import dayjs from 'dayjs';
+import {useTranslation} from 'react-i18next';
 
 export const appScale = (width: number) => baseScale((width * 350) / 430);
 
@@ -37,4 +39,30 @@ export const isIphoneX = () => {
     matchIOSScreenSize(width12, height12, screenW, screenH) ||
     matchIOSScreenSize(width12Max, height12Max, screenW, screenH)
   );
+};
+
+/**
+ * 判断日期是今天、昨天还是其他日期
+ * @param date 日期对象或时间戳
+ * @returns 返回「今天」、「昨天」或具体日期
+ */
+
+export const getRelativeDate = (date: any) => {
+  const {t} = useTranslation();
+  const targetDate = dayjs(date).startOf('day');
+  const today = dayjs().startOf('day');
+  const yesterday = today.subtract(1, 'day');
+
+  if (targetDate.isSame(today)) {
+    return t('home.today');
+  } else if (targetDate.isSame(yesterday)) {
+    return t('home.yesterday');
+  } else {
+    return targetDate.format('MMM DD, YYYY');
+  }
+};
+
+export const formatDateTime = (date: Date | number) => {
+  const d = dayjs(date);
+  return d.format('MMM DD, YYYY • h:mm A');
 };

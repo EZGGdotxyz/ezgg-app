@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 14:54:20
+ * @LastEditTime: 2025-02-24 17:55:24
  * @FilePath: /ezgg-app/packages/app/Components/HistoryDayItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';

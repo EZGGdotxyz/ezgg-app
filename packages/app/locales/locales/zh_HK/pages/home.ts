@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-19 14:35:05
+ * @LastEditTime: 2025-02-24 17:44:52
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -18,6 +18,7 @@ export default {
   'home.history': '歷史',
   'home.viewAll': '查看全部',
   'home.today': '今天',
+  'home.yesterday': '昨天',
   'home.receive': '接收',
   'home.deposit': '存款',
 

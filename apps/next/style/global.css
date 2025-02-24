@@ -57,3 +57,9 @@
   z-index: -99;
   opacity: 0;
 }
+
+
+@keyframes cursorBlink {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
