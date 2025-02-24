@@ -1,0 +1,21 @@
+{
+    "appName": "snpax",
+    "roleName": "pinpointLambdaRole1a0c4f8d",
+    "cloudformationPolicyName": "cloudformationPolicy1a0c4f8d",
+    "cloudWatchPolicyName": "cloudWatchPolicy1a0c4f8d",
+    "pinpointPolicyName": "pinpointPolicy1a0c4f8d",
+    "authPolicyName": "pinpoint_amplify_1a0c4f8d",
+    "unauthPolicyName": "pinpoint_amplify_1a0c4f8d",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

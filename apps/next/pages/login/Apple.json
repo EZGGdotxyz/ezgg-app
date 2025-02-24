@@ -1,0 +1,47 @@
+{
+  "user": {
+    "uid": "UPmskowmXZNDmrfR6d4mKS2aiym2",
+    "email": "yosancheng@qq.com",
+    "emailVerified": true,
+    "displayName": "Yuan Cheng",
+    "isAnonymous": false,
+    "providerData": [
+      {
+        "providerId": "apple.com",
+        "uid": "000746.42889d074d044f45974b07f6f92aba85.0747",
+        "displayName": null,
+        "email": "yosancheng@qq.com",
+        "phoneNumber": null,
+        "photoURL": null
+      }
+    ],
+    "stsTokenManager": {
+      "refreshToken": "AMf-vBwsp2OusWpkPA7jeCwMvS7Z_E3j8zZ5f82GftkeKu-2OKZXfjoQaqLroBzB3uzbzU--_ocvBDDOBDWYX70lZ1eqgXxnRog4Y0hmQ-v0WGvLuGXVru_TqDUD0q9ZTEXxwRnQeH0zl3T7UMMpf8QUGJ_737319ncw8ATJUcGv9_HqXgxvfBj7rQsEOSEtlOtJOTfStD-1z8HxkVOYk5SPXfB6CCLTbASS_tYuIjOtqDjwd2JjNA5MWTG65hXGsALxxScdIIQycbALOvIQNwExZBWs_wrqz_YHDQKA6Q4yODZ3IHdF7Rc",
+      "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzMmNjMWNiMjg5ZGQ0NjI2YTQzNWQ3Mjk4OWFlNDMyMTJkZWZlNzgiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiWXVhbiBDaGVuZyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXZvZC0xNTM5MzM3NzI5OTU5IiwiYXVkIjoiaG12b2QtMTUzOTMzNzcyOTk1OSIsImF1dGhfdGltZSI6MTcwMzY3MTQ5OCwidXNlcl9pZCI6IlVQbXNrb3dtWFpORG1yZlI2ZDRtS1MyYWl5bTIiLCJzdWIiOiJVUG1za293bVhaTkRtcmZSNmQ0bUtTMmFpeW0yIiwiaWF0IjoxNzAzNjcxNDk4LCJleHAiOjE3MDM2NzUwOTgsImVtYWlsIjoieW9zYW5jaGVuZ0BxcS5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJhcHBsZS5jb20iOlsiMDAwNzQ2LjQyODg5ZDA3NGQwNDRmNDU5NzRiMDdmNmY5MmFiYTg1LjA3NDciXSwiZW1haWwiOlsieW9zYW5jaGVuZ0BxcS5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJhcHBsZS5jb20ifX0.yxL4t6ABZLvCW9QPTxfOHK8Sq6cgziG7czrJQSY6W-hSL89L5RIbCluqGJsfxlBhRMS4em6pNQ7W59c64dcJ3si9v-dwgbe20s-7L9dBmQ75aczl6aLkhV-nPP6hYoXfbCStdz6KfNkmA_YyN0BYbiE6qoL8rHoBO1nr_YU0LteQK8Xu5bq36HBlyu0a7zOgzA3eXx7IcFh-k8M5lz3zZKBwn-xETF79erDlnn3bto3ygkxQx1XM5MU6-QlLMSb8ImC8_wwPqsdJjxgdz-dxOZFtsIkZ7LwQ7lklwh1xIzgEumwkr1L7Z30FvyE3ZIiVEo_ktsmARW0_RKRYyG41yg",
+      "expirationTime": 1703675098475
+    },
+    "createdAt": "1703663255253",
+    "lastLoginAt": "1703671498452",
+    "apiKey": "AIzaSyAg_Qto2qsBPbhrnghuHZ0iQn7gMFpYxZo",
+    "appName": "[DEFAULT]"
+  },
+  "providerId": "apple.com",
+  "_tokenResponse": {
+    "federatedId": "apple.com/000746.42889d074d044f45974b07f6f92aba85.0747",
+    "providerId": "apple.com",
+    "email": "yosancheng@qq.com",
+    "emailVerified": true,
+    "localId": "UPmskowmXZNDmrfR6d4mKS2aiym2",
+    "idToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzMmNjMWNiMjg5ZGQ0NjI2YTQzNWQ3Mjk4OWFlNDMyMTJkZWZlNzgiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiWXVhbiBDaGVuZyIsImlzcyI6Imh0dHBzOi8vc2VjdXJldG9rZW4uZ29vZ2xlLmNvbS9obXZvZC0xNTM5MzM3NzI5OTU5IiwiYXVkIjoiaG12b2QtMTUzOTMzNzcyOTk1OSIsImF1dGhfdGltZSI6MTcwMzY3MTQ5OCwidXNlcl9pZCI6IlVQbXNrb3dtWFpORG1yZlI2ZDRtS1MyYWl5bTIiLCJzdWIiOiJVUG1za293bVhaTkRtcmZSNmQ0bUtTMmFpeW0yIiwiaWF0IjoxNzAzNjcxNDk4LCJleHAiOjE3MDM2NzUwOTgsImVtYWlsIjoieW9zYW5jaGVuZ0BxcS5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJhcHBsZS5jb20iOlsiMDAwNzQ2LjQyODg5ZDA3NGQwNDRmNDU5NzRiMDdmNmY5MmFiYTg1LjA3NDciXSwiZW1haWwiOlsieW9zYW5jaGVuZ0BxcS5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJhcHBsZS5jb20ifX0.yxL4t6ABZLvCW9QPTxfOHK8Sq6cgziG7czrJQSY6W-hSL89L5RIbCluqGJsfxlBhRMS4em6pNQ7W59c64dcJ3si9v-dwgbe20s-7L9dBmQ75aczl6aLkhV-nPP6hYoXfbCStdz6KfNkmA_YyN0BYbiE6qoL8rHoBO1nr_YU0LteQK8Xu5bq36HBlyu0a7zOgzA3eXx7IcFh-k8M5lz3zZKBwn-xETF79erDlnn3bto3ygkxQx1XM5MU6-QlLMSb8ImC8_wwPqsdJjxgdz-dxOZFtsIkZ7LwQ7lklwh1xIzgEumwkr1L7Z30FvyE3ZIiVEo_ktsmARW0_RKRYyG41yg",
+    "context": "",
+    "oauthAccessToken": "ac951d53727004b1fafdc87be2a7628aa.0.mxuw.23L2I-O_P3pnc_qeX3VxtA",
+    "oauthExpireIn": 3600,
+    "refreshToken": "AMf-vBwsp2OusWpkPA7jeCwMvS7Z_E3j8zZ5f82GftkeKu-2OKZXfjoQaqLroBzB3uzbzU--_ocvBDDOBDWYX70lZ1eqgXxnRog4Y0hmQ-v0WGvLuGXVru_TqDUD0q9ZTEXxwRnQeH0zl3T7UMMpf8QUGJ_737319ncw8ATJUcGv9_HqXgxvfBj7rQsEOSEtlOtJOTfStD-1z8HxkVOYk5SPXfB6CCLTbASS_tYuIjOtqDjwd2JjNA5MWTG65hXGsALxxScdIIQycbALOvIQNwExZBWs_wrqz_YHDQKA6Q4yODZ3IHdF7Rc",
+    "expiresIn": "3600",
+    "oauthIdToken": "eyJraWQiOiJZdXlYb1kiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiY24ubGFicy5saW1pdGVkLnNuYXB4LndlYjIiLCJleHAiOjE3MDM3NTc4OTgsImlhdCI6MTcwMzY3MTQ5OCwic3ViIjoiMDAwNzQ2LjQyODg5ZDA3NGQwNDRmNDU5NzRiMDdmNmY5MmFiYTg1LjA3NDciLCJhdF9oYXNoIjoiRzdRUmV0aERCdDRIMFZ5c3c0MXAtdyIsImVtYWlsIjoieW9zYW5jaGVuZ0BxcS5jb20iLCJlbWFpbF92ZXJpZmllZCI6InRydWUiLCJhdXRoX3RpbWUiOjE3MDM2NzE0OTQsIm5vbmNlX3N1cHBvcnRlZCI6dHJ1ZX0.Myw0wsCyMAtUsBWxhVTKo1prLXrFxu-bSry6L-ys67-u0x5hxvBYQ0idS_Nq5vE9hN_gP3vWnGtyB6tv4nLysHA9dgexOi_CGmms_X7U1lZWozGDVoUZdrkkfOqrwzWZ2mwdRGK1rFcO2fAeO5MPj45Pfr0VyoBfNSbDNmga2o16oNOo-25yf2m4T7YDTZMhkUEs71i08xTIO0sNUKaaoC0wldiWb7MdNDH1HeqbTXEbwJrikGJJiV036FTYOawijdclIxSxsXXUqAr9IGdDryKHciNwqbAnV8BZTx1MwN55rMoSc2cGcZYainte09e0HqDkbQ4tTT8hrEsfBpvVXA",
+    "rawUserInfo": "{\"at_hash\":\"G7QRethDBt4H0Vysw41p-w\",\"aud\":\"cn.labs.limited.snapx.web2\",\"auth_time\":1703671494,\"exp\":1703757898,\"iat\":1703671498,\"iss\":\"https://appleid.apple.com\",\"sub\":\"000746.42889d074d044f45974b07f6f92aba85.0747\",\"email\":\"yosancheng@qq.com\",\"email_verified\":\"true\",\"nonce_supported\":true}",
+    "kind": "identitytoolkit#VerifyAssertionResponse",
+    "pendingToken": "AMzJoSl2ATTgo6rVyKEeOzM-Z_S5Kx3H9BEviG2_clGd4-FpZsUwIhCUsEK0gRN8LTmqTExwJscaie9hYDFhxDygdAwHUSlrPbi8a-CLl9MB0U6Jtn1UlogGFWgm69xYuvH2dBc1KkbJ9X4AfPNUyigGIXyKljv0qk8idxhN-zWKEzabUVmw-SCXiA6bkHRu09N0yg6R_-VfShdjKcxCD6BdYj47P5lWSlG6tSiCyjDydXtwB50W7Y2mYxq35vEbhwCVb4IbkTbf3zOvNaMCF3sM3VrzGEXsv8odVMHLjQWW_DfoOtceQqiYSGlaWw0jcuLqjhVborj9OpnoTcXU2j5dSISOjDBF3AWBBSK8XzMsSeyZjhcALmlKZhGlazsI0JJ1Hz-NkTJkTKN4-E-raXu_iSbHQNOztnvhbifq6Y2qJczIhcG5RWm1cVe3RFer3gdi-krRE15I1orgH9rcf0f-eIhHvsGqvCQU8_dGQUacKbOoitgTWrQCd37DVLvc_fBh4sPqSYM5MbYu-DBVQDtmss6KtdIbwBcI1YQYDdQIUm8kd-UPQJBiw7sYFBGBeFiiaCkoe_8vAdhtxNLcUWpBEoQxgUMbsnOCbWgzDIka0U7HIQxexJq6RvMAPX7I_jzQVNihUeYdv46WCQwqgh6pf5q6EAsXW7JtWXIEft_6vdA07kVNQtRMJ7DZI0jd0cn15UA4x0oC4v-Z0xOvRrPD0WwHS_7MEvpdGiIc85eeIwd0pF9Z6O8h5UOBS30cphhQ2sPixsvwUSN1cKdLHw4j5K3236nWbIaeQKEOo0rA88foqRMKgr7542v3pFYg3p15wu7jvthPpbuakwZ2FqrXgg83CMznurbzVE9fxhALrwSkE_9Mdt9eSxB-80oMUEMGGal_PzBrItqmNoWyvcpVbypGjrcF2gmidIQsyajKxmM5bEgc2XKY9YTHPB1zjMc4AJdIrg7PHn8oWKB71LMwpLMEhnwtGwsTMHGmBWQLKf7VrJiRtUSV9lCTG-R5mj_vWTg8RxcfCH42U_Lb8pCxfSz5HUk_7zZlj6Pi_QkXg5V1JiyrIuA9ISklVSGNwt0HWRKfGVdRilLE-H4WYhXPLna87jOniDnTynUPPhvM8E1Vq9rnqTRTV8Y7LT0MmglCmV-SsnXh93t2HBvZhVXuXFXxvE4X6JmGxP3CNuf4vgKU1Fgw8fPj5oGdu0ZPLRH1c15xjTXiPGZjF42te_Vp70DgfJHb_plsqw8F7VvXfjMCYOTJjPzuUs82VaEXA-ckF5664PrjfgdP_q9tSr12qM3cNwV5lYI37-KbTpdpYTTCA0YGFj-Pf2vp3hoanNfLObCsCV0dui_B9S57YqqAPNn_AhxiNyIzhegj_3gI2NFNAhAN27RNxKnOHI75KPYHAy3etnD7vW71ydeHQi0TZyFVVh1g1jkQvMe3zymBEsJYuK3ijfMKMCkSf49ZUWAVAEJSbudWKrAI963xv78GQD9KItO_Obg6qg-hCjxp4X7VYK8Gczn_hNTeQITkZNbqFFfwnFBZusHPULBd9boOD10hdFNllNyKc-kENkZWcNMuTdlHqpFbdfQPDTaeHLK1ZyMa_gOfMTQ_pWv5LaUCyJDywCqc-wGIznqH57A-6AUhW2cSG9bG2vNNaPrZYS-RWquY8RDgx9vUDE-zkBO3btQD-ShosCRBwxU8fDAj1P2goD4f1YpCnYLT79l4YtbsOJ426n50-ASfgZFhCaxF5urjHo0s3fOMRdPJ-X1Ud9zIQvFcZWsH13RZvx-oNOudB4qjnAkvaHaVJ8RNigxOOXWcwjrjOwiyuXgePq19ezqtytrjaStAbEKCId-L_GqQqSmoFgAvuVVAm3etxk2L5svy33wLlYpSRS915pDuLukn64LVxYFvaR-bjkLfR6HkpnFl62qo70zi0P6En8cRKnCGAD8K6QMQMP-Tndb_WwUFvMdqU5k3bZrTa3mFpf0fBAnM51u6ZnZ3KxuY2PZaA8JcrMrQU1SXFHzh-iS9uMh6WW2DnYY"
+  },
+  "operationType": "signIn"
+}

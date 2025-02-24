@@ -1,0 +1,17 @@
+{
+  "idToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ1NmI1MmM4MWUzNmZlYWQyNTkyMzFhNjk0N2UwNDBlMDNlYTEyNjIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIxMDg4NzQwMTYzMjQyLWR2amI2YWF0bzhlMXBldDAwaGdrNGZyMnR2a2Yzajc0LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMTA4ODc0MDE2MzI0Mi1kdmpiNmFhdG84ZTFwZXQwMGhnazRmcjJ0dmtmM2o3NC5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwMzY0OTk2MzkyMzE0MjMwOTc1MiIsImVtYWlsIjoiYTEwNDAwMzIzMDZAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJoNE5CaWFkTW92VklPNjRoeWJkZWJnIiwibm9uY2UiOiIyaVF2NjhqaUloQThIUjN6d1kwVGY4YmNLTDhhS1JGNGs5aElZQVlyamJrIiwibmFtZSI6IkNoZW5nIFlvc2FuIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0tsRWJzbWU2cVpMbTZXQTZibUFoeUw1UXNSTkF5bjBuV2lIQlZMVkl3aGh3PXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkNoZW5nIiwiZmFtaWx5X25hbWUiOiJZb3NhbiIsImxvY2FsZSI6InpoLUNOIiwiaWF0IjoxNzAzODQ1MzA5LCJleHAiOjE3MDM4NDg5MDl9.zOyX6321BJpcaqlIfrW6xylzBlsOGiOlabmL3l6dZdm-NE3Yjrl0JuNuT9w-nKzAdBgoKvTBrcRBK7Ax3FYml4Lm2ifJb1kuqp2fDoOhWWl6J3vcjotcul5RockLETHTCIwClBH1a0eGWwz7MbsbBYSCiKzAIHoNaEnD3ZzKBjQEqaTo1YNJ_xlRccUOfcoT5hT_HT7nJBpVETeFMYHaQZAaPNWzyrIdtWvzk35HW8XgzEq_tJj69-haDMq_p-c2X9UxYKRyH1AG8PBsSSGBOHL3QzuzQ9Y82lQFLfz9fsq7jNGPBrt_qtfOIv01PjgJTYvgKvvfzMtrl9Vuzjq1uQ",
+  "scopes": [
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "openid"
+  ],
+  "serverAuthCode": null,
+  "user": {
+    "email": "a1040032306@gmail.com",
+    "familyName": "Yosan",
+    "givenName": "Cheng",
+    "id": "103649963923142309752",
+    "name": "Cheng Yosan",
+    "photo": "https://lh3.googleusercontent.com/a/ACg8ocKlEbsme6qZLm6WA6bmAhyL5QsRNAyn0nWiHBVLVIwhhw=s120"
+  }
+}

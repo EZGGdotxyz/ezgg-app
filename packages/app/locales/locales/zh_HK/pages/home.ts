@@ -1,0 +1,96 @@
+/*
+ * @Date: 2024-01-04 22:24:57
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-02-19 14:35:05
+ * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
+ */
+
+export default {
+  'home.all': '全部',
+  'home.income': '收入',
+  'home.expense': '支出',
+  'home.send': '發送',
+  'home.request': '請求',
+  'home.topUp': '充值',
+  'home.withdraw': '提現',
+  'home.balance': '可用餘額',
+  'home.portfolio': '投資組合',
+  'home.history': '歷史',
+  'home.viewAll': '查看全部',
+  'home.today': '今天',
+  'home.receive': '接收',
+  'home.deposit': '存款',
+
+  'home.send.search': '郵件地址, 電話號碼, 用戶ID 或錢包',
+  'home.send.recent': '最近',
+  'home.send.paylink': '支付連結',
+  'home.send.currency': '貨幣',
+  'home.send.amountToSend': '請輸入要發送的金額',
+  'home.send.continue': '繼續',
+  'home.send.viewLink': '查看連結',
+  'home.send.copyLink': '複製連結',
+  'home.send.link': '查看',
+  'home.send.void': '取消',
+  'home.send.tips1': '複製連結並發送',
+  'home.send.tips2': '查看您已發送的連結',
+
+  'home.deposit.or': '或 ',
+  'home.deposit.sendTips': '發送 {{tolen}} ({{link}} ONLY) 至如下地址',
+  'home.deposit.deposit': '存款',
+
+  'home.withdraw.withdraw': '提取',
+
+  'home.request.amountRequesting': '請輸入您想要請求的金額',
+  'home.request.amountToRequest': '請求的金額',
+  'home.request.requestCrypto': '請求加密貨幣',
+
+  'home.order.youSent': '您已發送',
+  'home.order.youRequest': '您已請求',
+  'home.order.youWithdraw': '您已提現',
+  'home.order.youDeposit': '您已存款',
+  'home.order.youReceived': '您已收到',
+  'home.order.youTopUp': '您已充值',
+  'home.order.youRequested': '您已請求',
+  'home.order.amountRequested': '請求金額',
+
+  'home.order.networkFee': '網絡費用',
+  'home.order.date': '日期',
+  'home.order.to': '接收方',
+  'home.order.transactionHash': '交易哈希',
+  'home.order.deposit': '存款',
+  'home.order.status': '狀態',
+  'home.order.status.unpaid': '未支付',
+  'home.order.status.paid': '已支付',
+  'home.order.status.declined': '已拒絕',
+  'home.order.withdrawTips': '您已從ezgg的餘額中提取。',
+  'home.order.depositTips': '您已存款至ezgg.的餘額。',
+  'home.order.decline': '拒絕',
+  'home.order.acceptRequest': '接受請求',
+  'home.order.sendTo': '發送到',
+  'home.order.amountRequested2': '請求金額',
+  'home.order.amountReceivedTips': '此金額將從您的餘額中扣除。',
+  'home.order.share': '分享',
+  'home.order.done': '完成',
+  'home.order.declineRequest': '拒絕請求',
+  'home.order.declineTips': '您要拒絕來自{{name}}的{{amount}}的請求嗎？',
+  'home.order.noDecline': `不是，不要拒絕。`,
+  'home.order.yesDecline': '是的，拒絕。',
+  'home.order.declinedTips2': '請求已被拒絕！',
+  'home.order.noTransactions': '無交易記錄',
+  'home.order.noTransactions2': `您尚未進行任何交易。`,
+
+  'home.paylink.recipient': '接收方',
+  'home.paylink.anyoneLink ': '任何擁有連結的人',
+  'home.paylink.privateLink': '私人連結',
+  'home.paylink.amountToSend': '發送的金額',
+  'home.paylink.addMessage': '添加訊息',
+  'home.paylink.sendCrypto': '發送加密貨幣',
+
+  'home.qr.title': '掃描QR碼',
+  'home.qr.sub': '將相機對準QR碼進行掃描',
+
+  'home.qr.title2': '我的QR碼',
+  'home.qr.sub2': '地址',
+  'home.qr.save': '保存',
+  'home.qr.share': '分享',
+};

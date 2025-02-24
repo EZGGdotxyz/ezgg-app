@@ -1,0 +1,35 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-snpax-dev-152131-authRole",
+      "UnauthRoleArn": "arn:aws:iam::310646393807:role/amplify-snpax-dev-152131-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::310646393807:role/amplify-snpax-dev-152131-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-snpax-dev-152131-deployment",
+      "UnauthRoleName": "amplify-snpax-dev-152131-unauthRole",
+      "StackName": "amplify-snpax-dev-152131",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:310646393807:stack/amplify-snpax-dev-152131/3f593710-a2f6-11ee-b15f-0e475b115c21",
+      "AmplifyAppId": "duwvm0a3vr8je"
+    },
+    "categories": {
+      "auth": {
+        "snpax": {}
+      },
+      "analytics": {
+        "snpax": {},
+        "Pinpoint": {
+          "Name": "snpax-dev",
+          "Id": "378b4b19448c40d283327b54bb505022",
+          "Region": "ap-southeast-1"
+        }
+      },
+      "notifications": {
+        "Pinpoint": {
+          "Name": "snpax-dev",
+          "Id": "378b4b19448c40d283327b54bb505022",
+          "Region": "ap-southeast-1"
+        }
+      }
+    }
+  }
+}

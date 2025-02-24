@@ -1,0 +1,52 @@
+{
+  "user": {
+    "uid": "5LfW1JXV7QRXbG0uxrWVXj8YTH63",
+    "email": "a1040032306@gmail.com",
+    "emailVerified": true,
+    "displayName": "Cheng Yosan",
+    "isAnonymous": false,
+    "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKlEbsme6qZLm6WA6bmAhyL5QsRNAyn0nWiHBVLVIwhhw=s96-c",
+    "providerData": [
+      {
+        "providerId": "google.com",
+        "uid": "103649963923142309752",
+        "displayName": "Cheng Yosan",
+        "email": "a1040032306@gmail.com",
+        "phoneNumber": null,
+        "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocKlEbsme6qZLm6WA6bmAhyL5QsRNAyn0nWiHBVLVIwhhw=s96-c"
+      }
+    ],
+    "stsTokenManager": {
+      "refreshToken": "AMf-vByIbGE4Z0KYzWfLUGmekJ3g24uH5f8QxXSVnR5-ECGnfUmlLxpxGRTzWylJjYu26LR7U0vcSgyKfY2DX_yTdjGS8U-MFWP9AlaZcJTxCCeku0AwZz9GsOcaSnsVbNuK-GeU6k1Ols5tv7zoq2FgNcqNY5j9zuMCoYyiWrm8G3jOWjjIJNwcb0HdKcoSfqQttAR-wZjxuXWZx-Jpv8Jk46ZX19MyH_kuHgHCrRkfM8PBcc-Ry0aHMFK0w3mCcImzH4i5zaKkRVcsyLfRPnIC-HFFaPXs_6FE4jdUb4FQqbAaEygxbePBwGiEINf5p3xGJwu3eBCTyLD8kQeCUL7sb1wmpb_CAj24LIA0wdf3rPHnBijEUkZWXfpf8R2Vv3vnbXgzc6EBWj3x9km4vQ9nlLyOLvyyvtz8gyQjebgSf2qwwgvAi9HTO4VwbZ2ptWw02FRv-xGF",
+      "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzMmNjMWNiMjg5ZGQ0NjI2YTQzNWQ3Mjk4OWFlNDMyMTJkZWZlNzgiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQ2hlbmcgWW9zYW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS2xFYnNtZTZxWkxtNldBNmJtQWh5TDVRc1JOQXluMG5XaUhCVkxWSXdoaHc9czk2LWMiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaG12b2QtMTUzOTMzNzcyOTk1OSIsImF1ZCI6Imhtdm9kLTE1MzkzMzc3Mjk5NTkiLCJhdXRoX3RpbWUiOjE3MDM2NzExOTMsInVzZXJfaWQiOiI1TGZXMUpYVjdRUlhiRzB1eHJXVlhqOFlUSDYzIiwic3ViIjoiNUxmVzFKWFY3UVJYYkcwdXhyV1ZYajhZVEg2MyIsImlhdCI6MTcwMzY3MTE5MywiZXhwIjoxNzAzNjc0NzkzLCJlbWFpbCI6ImExMDQwMDMyMzA2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTAzNjQ5OTYzOTIzMTQyMzA5NzUyIl0sImVtYWlsIjpbImExMDQwMDMyMzA2QGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Imdvb2dsZS5jb20ifX0.n97hkP-P3zENJrzUUmsJQnCbgWSsVeqLS8PpSsek-8ObQx06o3nGZRNNT3G6rCxA9HoH5_IvZQx3ZcbD44hzaLYDvmBO9tVIC6V32OOjfpS4o7nile170iMKUuvE7ho6W_SFEUCnFEm1IFSzYCu6MAowCNqF6xk-XDhkBcgnY81fkHmA5mMWt5xlQxxZRLp7CvkS732TtlEWLG-drzw4d5xIzSy_XYYPhLBj3xJ59zLmXbm_05oREPYcY3NqIEjkU_1kxhQfceuun9YO2DwtIDm9lO3A08AiNbaS_wb3MLmlTliNMxf3B10jjpdVOOlpBl2Cc9MSD8ssfRVIKPDXMA",
+      "expirationTime": 1703674793346
+    },
+    "createdAt": "1703578479383",
+    "lastLoginAt": "1703671154809",
+    "apiKey": "AIzaSyAg_Qto2qsBPbhrnghuHZ0iQn7gMFpYxZo",
+    "appName": "[DEFAULT]"
+  },
+  "providerId": "google.com",
+  "_tokenResponse": {
+    "federatedId": "https://accounts.google.com/103649963923142309752",
+    "providerId": "google.com",
+    "email": "a1040032306@gmail.com",
+    "emailVerified": true,
+    "firstName": "Cheng",
+    "fullName": "Cheng Yosan",
+    "lastName": "Yosan",
+    "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocKlEbsme6qZLm6WA6bmAhyL5QsRNAyn0nWiHBVLVIwhhw=s96-c",
+    "localId": "5LfW1JXV7QRXbG0uxrWVXj8YTH63",
+    "displayName": "Cheng Yosan",
+    "idToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzMmNjMWNiMjg5ZGQ0NjI2YTQzNWQ3Mjk4OWFlNDMyMTJkZWZlNzgiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQ2hlbmcgWW9zYW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS2xFYnNtZTZxWkxtNldBNmJtQWh5TDVRc1JOQXluMG5XaUhCVkxWSXdoaHc9czk2LWMiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaG12b2QtMTUzOTMzNzcyOTk1OSIsImF1ZCI6Imhtdm9kLTE1MzkzMzc3Mjk5NTkiLCJhdXRoX3RpbWUiOjE3MDM2NzExOTMsInVzZXJfaWQiOiI1TGZXMUpYVjdRUlhiRzB1eHJXVlhqOFlUSDYzIiwic3ViIjoiNUxmVzFKWFY3UVJYYkcwdXhyV1ZYajhZVEg2MyIsImlhdCI6MTcwMzY3MTE5MywiZXhwIjoxNzAzNjc0NzkzLCJlbWFpbCI6ImExMDQwMDMyMzA2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTAzNjQ5OTYzOTIzMTQyMzA5NzUyIl0sImVtYWlsIjpbImExMDQwMDMyMzA2QGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Imdvb2dsZS5jb20ifX0.n97hkP-P3zENJrzUUmsJQnCbgWSsVeqLS8PpSsek-8ObQx06o3nGZRNNT3G6rCxA9HoH5_IvZQx3ZcbD44hzaLYDvmBO9tVIC6V32OOjfpS4o7nile170iMKUuvE7ho6W_SFEUCnFEm1IFSzYCu6MAowCNqF6xk-XDhkBcgnY81fkHmA5mMWt5xlQxxZRLp7CvkS732TtlEWLG-drzw4d5xIzSy_XYYPhLBj3xJ59zLmXbm_05oREPYcY3NqIEjkU_1kxhQfceuun9YO2DwtIDm9lO3A08AiNbaS_wb3MLmlTliNMxf3B10jjpdVOOlpBl2Cc9MSD8ssfRVIKPDXMA",
+    "context": "",
+    "oauthAccessToken": "ya29.a0AfB_byDig-LMRzozga_UdwghlBqCFonoYin0-0yXbrJy5ad8mipkkWMxsYvoneoPP1NeRaqOSvKLHohAZTzF4TM_AuvWg82Qb-q1kUaRP7b4EwmZwoLeuaVD09akoZUQhRDd8FAiIdvR7TGv76t16214nct8r2XsQmoaCgYKAZUSARISFQHGX2MimRZc7E9M2pdsDfs8Ym6zTg0170",
+    "oauthExpireIn": 3597,
+    "refreshToken": "AMf-vByIbGE4Z0KYzWfLUGmekJ3g24uH5f8QxXSVnR5-ECGnfUmlLxpxGRTzWylJjYu26LR7U0vcSgyKfY2DX_yTdjGS8U-MFWP9AlaZcJTxCCeku0AwZz9GsOcaSnsVbNuK-GeU6k1Ols5tv7zoq2FgNcqNY5j9zuMCoYyiWrm8G3jOWjjIJNwcb0HdKcoSfqQttAR-wZjxuXWZx-Jpv8Jk46ZX19MyH_kuHgHCrRkfM8PBcc-Ry0aHMFK0w3mCcImzH4i5zaKkRVcsyLfRPnIC-HFFaPXs_6FE4jdUb4FQqbAaEygxbePBwGiEINf5p3xGJwu3eBCTyLD8kQeCUL7sb1wmpb_CAj24LIA0wdf3rPHnBijEUkZWXfpf8R2Vv3vnbXgzc6EBWj3x9km4vQ9nlLyOLvyyvtz8gyQjebgSf2qwwgvAi9HTO4VwbZ2ptWw02FRv-xGF",
+    "expiresIn": "3600",
+    "oauthIdToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ1NmI1MmM4MWUzNmZlYWQyNTkyMzFhNjk0N2UwNDBlMDNlYTEyNjIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMjE2NDk3MTA5Mzk2LWdjdjB2cGY1cDFuNnFsc2NtZ2RlaHVsaTIwa3YxOHRuLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMjE2NDk3MTA5Mzk2LWdjdjB2cGY1cDFuNnFsc2NtZ2RlaHVsaTIwa3YxOHRuLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTAzNjQ5OTYzOTIzMTQyMzA5NzUyIiwiZW1haWwiOiJhMTA0MDAzMjMwNkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IkZIeUp6ZjQ5eXB6NTNnN2dKWXZ1MkEiLCJpYXQiOjE3MDM2NzExOTMsImV4cCI6MTcwMzY3NDc5M30.AxQC6ZJ7d2Z98Sc_PkD1rTIMahtJje94qWnVkGnbfCt-BbeZWngzPgeYjuiCmFUBOHALh2Rz3gg7oca7ga5Xnct0eFsIyKJ9wdRJJk2JhFj7qNsbtl3uqo7W5ygBFFPXBhNkySOkjR0lUvL44Ez1ZVNqZCdy1GqZs3mRSgpV0QNjuFkhqoecyi4GA1Gt6AQAlyNWRRmm9N7Uk0ox39yVviWSMBrQy5NMeNzeWz0-5LyjiQeMBBAYattBD8fXP-5cuLgLNrpJTI66Uw97DRUc5qOks-aBLjMhGEJVTOyIqNH4E55BJVMjrYw6UYBo1yV7yp9oj9JjpkL0sVtADvlekw",
+    "rawUserInfo": "{\"name\":\"Cheng Yosan\",\"granted_scopes\":\"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/contacts.readonly openid\",\"id\":\"103649963923142309752\",\"verified_email\":true,\"given_name\":\"Cheng\",\"locale\":\"zh-CN\",\"family_name\":\"Yosan\",\"email\":\"a1040032306@gmail.com\",\"picture\":\"https://lh3.googleusercontent.com/a/ACg8ocKlEbsme6qZLm6WA6bmAhyL5QsRNAyn0nWiHBVLVIwhhw=s96-c\"}",
+    "kind": "identitytoolkit#VerifyAssertionResponse"
+  },
+  "operationType": "signIn"
+}

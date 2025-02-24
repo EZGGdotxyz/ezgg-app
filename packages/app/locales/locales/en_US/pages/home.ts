@@ -1,0 +1,97 @@
+/*
+ * @Date: 2024-01-04 22:24:57
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-02-19 14:34:29
+ * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
+ */
+
+export default {
+  'home.all': 'All',
+  'home.income': 'Income',
+  'home.expense': 'Expense',
+  'home.send': 'Send',
+  'home.request': 'Request',
+  'home.topUp': 'Top Up',
+  'home.withdraw': 'Withdraw',
+  'home.balance': 'Available balance',
+  'home.portfolio': 'Portfolio',
+  'home.history': 'History',
+  'home.viewAll': 'View All',
+  'home.today': 'Today',
+  'home.receive': 'Receive',
+  'home.deposit': 'Deposit',
+
+  'home.send.search': 'email address, phone number, user ID or wallet ',
+  'home.send.recent': 'Recent',
+  'home.send.paylink': 'Paylink',
+  'home.send.currency': 'Currency',
+  'home.send.amountToSend': 'Amount to Send',
+  'home.send.continue': 'Continue',
+  'home.send.viewLink': 'View link',
+  'home.send.copyLink': 'Copy link',
+  'home.send.link': 'Link',
+  'home.send.void': 'Void',
+  'home.send.tips1': 'Copy link and send',
+  'home.send.tips2': 'View your claim link',
+
+  'home.deposit.or': 'or',
+  'home.deposit.sendTips': 'Send {{tolen}} ({{link}} ONLY) to this address',
+  'home.deposit.deposit': 'Deposit',
+
+  'home.withdraw.withdraw': 'Withdraw',
+
+  'home.request.amountRequesting': 'Amount Requesting',
+  'home.request.amountToRequest': 'Amount to Request',
+  'home.request.requestCrypto': 'Request Crypto',
+
+  'home.order.youSent': 'You sent',
+  'home.order.youRequest': 'You Request',
+  'home.order.youWithdraw': 'You withdraw',
+  'home.order.youDeposit': 'You Deposit',
+  'home.order.youReceived': 'You received',
+  'home.order.youTopUp': 'You top up',
+  'home.order.youRequested': 'You requested',
+  'home.order.amountRequested': 'Amount requested',
+
+  'home.order.networkFee': 'Network Fee',
+  'home.order.date': 'Date',
+  'home.order.to': 'To',
+  'home.order.transactionHash': 'Transaction Hash',
+  'home.order.deposit': 'Deposit',
+  'home.order.status': 'Status',
+  'home.order.status.unpaid': 'Unpaid',
+  'home.order.status.paid': 'Paid',
+  'home.order.status.void': 'Void',
+  'home.order.status.declined': 'Declined',
+  'home.order.withdrawTips': 'You withdraw from ezgg,balance',
+  'home.order.depositTips': 'You deposited to ezgg. Balance',
+  'home.order.decline': 'Decline',
+  'home.order.acceptRequest': 'Accept Request',
+  'home.order.sendTo': 'Send to',
+  'home.order.amountRequested2': 'Amount requested',
+  'home.order.amountReceivedTips': 'This amount will be charged from your balance.',
+  'home.order.share': 'Share',
+  'home.order.done': 'Done',
+  'home.order.declineRequest': 'Decline Request',
+  'home.order.declineTips': 'Decline request {{amount}} from {{ name}}?',
+  'home.order.noDecline': `No, Don't Decline`,
+  'home.order.yesDecline': 'Yes, Decline',
+  'home.order.declinedTips2': 'Request declined!',
+  'home.order.noTransactions2': `You haven't made any transactions.`,
+  'home.order.noTransactions': 'No Transactions',
+
+  'home.paylink.recipient': 'Recipient',
+  'home.paylink.anyoneLink ': 'Anyone with the link ',
+  'home.paylink.privateLink': 'Private link',
+  'home.paylink.amountToSend': 'Amount to send',
+  'home.paylink.addMessage': 'Add Message',
+  'home.paylink.sendCrypto': 'Send Crypto',
+
+  'home.qr.title': 'Scan QR Code',
+  'home.qr.sub': 'Point the camera at the QR Code to scan.',
+
+  'home.qr.title2': 'My QR Code',
+  'home.qr.sub2': 'Recipient Address',
+  'home.qr.save': 'save',
+  'home.qr.share': 'share',
+};

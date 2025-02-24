@@ -1,0 +1,11 @@
+{
+  "applinks": {
+      "apps": [],
+      "details": [
+          {
+              "appID": "L26295535G.cn.labs.limited.bitenet",
+              "paths": [ "*" ]
+          }
+      ]
+  }
+}

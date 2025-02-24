@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "850147072438",
+    "project_id": "bitenet",
+    "storage_bucket": "bitenet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850147072438:android:b7ced1cdac2401adda0917",
+        "android_client_info": {
+          "package_name": "cn.labs.limited.bitenet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "850147072438-44n4nnhbchdjnrf1rncs3q5j6uhphrng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5JfegcFIv4n3uwt9JJ8DrX2nivoVg8Vg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "850147072438-44n4nnhbchdjnrf1rncs3q5j6uhphrng.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "850147072438-jstclmhl56sfmmmfl7upjbqvlhs3oh0f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "cn.labs.limited.bitenet",
+                "app_store_id": "6477260172"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

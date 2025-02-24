@@ -1,0 +1,12 @@
+{
+  "version": "1",
+  "cognitoConfig": {
+    "identityPoolName": "snpax_identitypool_56e20374",
+    "allowUnauthenticatedIdentities": true,
+    "authSelections": "identityPoolOnly",
+    "resourceName": "snpax",
+    "sharedId": "56e20374",
+    "serviceName": "Cognito",
+    "useDefault": "manual"
+  }
+}
