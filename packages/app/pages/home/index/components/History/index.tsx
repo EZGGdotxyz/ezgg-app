@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:53:14
+ * @LastEditTime: 2025-02-25 14:34:39
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/History/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -20,28 +20,18 @@ const History: React.FC<any> = (props: HistoryProps) => {
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
 
-  const list = [
-    {
-      name: 'From Request (@Elvan123)',
-      link: 'Thank you for your good work! 🍻',
-      amount: '100',
-    },
-    {
-      name: 'USDC',
-      link: 'Polygon',
-      amount: '100',
-    },
-  ];
   const list2 = [
     {
       day: getRelativeDate(new Date()),
       list: [
         {
+          id: 1,
           name: 'From Request (@Elvan123)',
           link: 'Thank you for your good work! 🍻',
           amount: '100',
         },
         {
+          id: 1,
           name: 'USDC',
           link: 'Polygon',
           amount: '100',
@@ -52,11 +42,13 @@ const History: React.FC<any> = (props: HistoryProps) => {
       day: getRelativeDate('2025-02-22'),
       list: [
         {
+          id: 1,
           name: 'From Request (@Elvan123)',
           link: 'Thank you for your good work! 🍻',
           amount: '100',
         },
         {
+          id: 3,
           name: 'USDC',
           link: 'Polygon',
           amount: '100',
@@ -67,9 +59,16 @@ const History: React.FC<any> = (props: HistoryProps) => {
 
   return (
     <YStack pt={appScale(8)}>
-      <XStack ai="center" jc="flex-end" h={appScale(36)} pl={appScale(24)} pr={appScale(24)} onPress={() => {
-        push('/home/history');
-      }}>
+      <XStack
+        ai="center"
+        jc="flex-end"
+        h={appScale(36)}
+        pl={appScale(24)}
+        pr={appScale(24)}
+        onPress={() => {
+          push('/home/history');
+        }}
+      >
         <SizableText fontSize={'$5'} color={'$color11'} mr={'$2'}>
           {t('home.viewAll')}
         </SizableText>

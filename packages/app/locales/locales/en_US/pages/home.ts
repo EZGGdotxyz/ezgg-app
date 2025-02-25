@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:44:40
+ * @LastEditTime: 2025-02-25 10:37:04
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -36,7 +36,7 @@ export default {
   'home.send.tips2': 'View your claim link',
 
   'home.deposit.or': 'or',
-  'home.deposit.sendTips': 'Send {{tolen}} ({{link}} ONLY) to this address',
+  'home.deposit.sendTips': 'Send {{token}} ({{chain}} ONLY) to this address',
   'home.deposit.deposit': 'Deposit',
 
   'home.withdraw.withdraw': 'Withdraw',
@@ -53,6 +53,8 @@ export default {
   'home.order.youTopUp': 'You top up',
   'home.order.youRequested': 'You requested',
   'home.order.amountRequested': 'Amount requested',
+  'home.order.sentTo': 'Sent to',
+  'home.order.from': 'From',
 
   'home.order.networkFee': 'Network Fee',
   'home.order.date': 'Date',

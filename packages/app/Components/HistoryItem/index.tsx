@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 16:19:49
+ * @LastEditTime: 2025-02-25 14:33:31
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -19,7 +19,7 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
   const [{demoniator}] = useRematchModel('app');
 
   return (
-    <YStack
+    <Button
       pt={appScale(16)}
       ai="flex-end"
       jc="flex-end"
@@ -28,6 +28,11 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
       mb={appScale(8)}
       pl={appScale(40)}
       pr={appScale(24)}
+      unstyled
+      onPress={() => push(`/home/history/${item?.id}`)}
+      pressStyle={{
+        opacity: 0.70,
+      }}
     >
       <XStack flex={1} mb={appScale(16)} w="100%" ai={'center'} jc={'space-between'}>
         <YStack gap={appScale(2)}>
@@ -48,7 +53,7 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
         </YStack>
       </XStack>
       {!isBottom && <XStack h={2} width={'80%'} bc={'rgba(238, 238, 238, 1)'}></XStack>}
-    </YStack>
+    </Button>
   );
 };
 

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:53:49
+ * @LastEditTime: 2025-02-25 14:11:06
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -62,7 +62,35 @@ export const getRelativeDate = (date: any) => {
   }
 };
 
-export const formatDateTime = (date: Date | number) => {
+export const formatDateTime = (date: any) => {
   const d = dayjs(date);
   return d.format('MMM DD, YYYY • h:mm A');
+};
+
+/**
+ * 格式化数字，显示两位小数并用千分位分隔
+ * @param num 需要格式化的数字
+ * @returns 格式化后的字符串，例如：1,234.56
+ */
+export const formatNumber = (num: number) => {
+  return Number(num).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};
+
+/**
+ * 截断文本，超出指定长度时显示省略号
+ * @param text 需要截断的文本
+ * @param maxLength 最大长度，默认为12
+ * @returns 处理后的文本
+ */
+export const truncateText = (text: string, maxLength: number = 12) => {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength) + '…';
+};
+
+export const truncateAddress = (address: string) => {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };

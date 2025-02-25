@@ -1,15 +1,17 @@
 /*
  * @Date: 2024-01-10 22:57:56
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:07:47
+ * @LastEditTime: 2025-02-25 11:12:03
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/screen.ts
  */
 export default {
   'screen.login.title': '登入',
   'screen.home.title': '首頁',
   'screen.home.history': '交易歷史',
+  'screen.home.detail.title': '交易詳情',
   'screen.home.amount': '發送的金額',
   'screen.home.send': '發送',
+  'screen.home.sent': '已發送',
   'screen.home.sendNow': '現在發送',
   'screen.home.sendTo': '發送到',
   'screen.home.paylink': '支付連結',
@@ -22,6 +24,7 @@ export default {
   'screen.home.topUp': '充值',
   'screen.home.incomingRequest': '接收請求',
   'screen.home.notification.title': '通知',
+  'screen.home.success.title': '成功',
   'screen.explore.title': '掃描 QR 碼',
 
   'screen.profile.title': '賬戶',

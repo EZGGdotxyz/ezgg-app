@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-19 11:39:59
+ * @LastEditTime: 2025-02-25 15:02:59
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -15,4 +15,6 @@ export default {
   'tips.list.noData.title': 'No data',
   'tips.list.loading.title': 'No more data',
   'tips.list.loading.title2': 'Loading more data',
+
+  'tips.explore.copy': 'Copy successful! ',
 };

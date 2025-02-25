@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-19 10:35:16
- * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeHeader/index.tsx
+ * @LastEditTime: 2025-02-19 10:34:42
+ * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeHeader/index.web.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
@@ -13,7 +13,7 @@ import {useRouter} from 'solito/router';
 import {useState} from 'react';
 import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
-import { AppName } from 'app/config';
+import { AppName, PrimaryColor } from 'app/config';
 
 export type HomeHeaderProps = {isLogin: boolean};
 // 首页 头部
@@ -24,7 +24,7 @@ const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
   const {t, i18n} = useTranslation();
 
   return (
-    <XStack width={'100%'} pt={0} ai={'center'} backgroundColor={'$background'} flexShrink={0}>
+    <XStack width={'100%'} pt={0} ai={'center'} backgroundColor={PrimaryColor} flexShrink={0}>
       <XStack
         flex={1}
         pl={appScale(24)}

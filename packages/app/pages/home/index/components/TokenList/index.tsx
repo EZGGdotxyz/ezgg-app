@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 19:22:39
+ * @LastEditTime: 2025-02-25 09:37:31
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/TokenList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -28,6 +28,11 @@ const TokenList: React.FC<any> = (props: TokenListProps) => {
     {
       token: 'USDC',
       chain: 'Polygon',
+      amount: '100',
+    },
+    {
+      token: 'USDC',
+      chain: 'Base',
       amount: '100',
     },
   ];

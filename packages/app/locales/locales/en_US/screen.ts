@@ -1,15 +1,17 @@
 /*
  * @Date: 2024-01-10 22:57:56
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 16:56:34
+ * @LastEditTime: 2025-02-25 14:35:57
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/screen.ts
  */
 export default {
   'screen.login.title': 'Login',
   'screen.home.title': 'Home',
   'screen.home.history': 'Transaction History',
+  'screen.home.detail.title': 'Transaction Detail',
   'screen.home.amount': 'Amount To Send',
   'screen.home.send': 'Send',
+  'screen.home.sent': 'Sent',
   'screen.home.sendNow': 'Send Now',
   'screen.home.sendTo': 'Send To',
   'screen.home.paylink': 'Paylink',
@@ -22,6 +24,7 @@ export default {
   'screen.home.topUp': 'Top Up',
   'screen.home.incomingRequest': 'Incoming Request',
   'screen.home.notification.title': 'Notification',
+  'screen.home.success.title': 'Success',
   'screen.explore.title': 'Scan QR Code',
 
   'screen.profile.title': 'Account',

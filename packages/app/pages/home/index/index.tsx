@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:04:42
+ * @LastEditTime: 2025-02-25 14:28:05
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -94,7 +94,7 @@ const HomeScreen = (props: HomeScreenProps) => {
             >
               {availableBalance}
             </SizableText>
-            <SizableText col={'##212121'} ta={'center'} fontSize={'$6'} fow={'600'}>
+            <SizableText col={'212121'} ta={'center'} fontSize={'$6'} fow={'600'}>
               $
             </SizableText>
           </XStack>

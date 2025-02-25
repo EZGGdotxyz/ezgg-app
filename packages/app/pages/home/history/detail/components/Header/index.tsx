@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-19 10:34:42
- * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeHeader/index.web.tsx
+ * @LastEditTime: 2025-02-25 15:22:45
+ * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/Header/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
@@ -13,16 +13,29 @@ import {useRouter} from 'solito/router';
 import {useState} from 'react';
 import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
-import { AppName, PrimaryColor } from 'app/config';
+import {AppName, PrimaryColor} from 'app/config';
 
-export type HomeHeaderProps = {isLogin: boolean};
-// 首页 头部
-const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
+export type HeaderProps = {title: string; onBack?: () => void; fallbackUrl?: string};
+//  头部
+const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/'}: HeaderProps) => {
+  const {back, push} = useRouter();
   const [{unread}] = useRematchModel('app');
-  const {push} = useRouter();
   const [statusBarHeight, setStatusBarHeight] = useState(46);
   const {t, i18n} = useTranslation();
 
+  const onBackPress = () => {
+    if (onBack) {
+      return onBack();
+    }
+    const canGoBack =
+      // @ts-expect-error navigation type definition is nowhere to be found yet
+      window.navigation?.canGoBack ?? window.history.length > 2;
+    if (canGoBack) {
+      back();
+    } else {
+      push(fallbackUrl);
+    }
+  };
   return (
     <XStack width={'100%'} pt={0} ai={'center'} backgroundColor={PrimaryColor} flexShrink={0}>
       <XStack
@@ -35,17 +48,17 @@ const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
         ai={'center'}
         jc={'space-between'}
       >
-        <XStack h={'100%'} ai={'center'}>
+        <Button unstyled onPress={onBackPress} h={'100%'} ai={'center'} jc={'center'}>
           <AppImage
-            width={appScale(48)}
-            height={appScale(32)}
-            src={require('app/assets/images/logo_interior.png')}
+            width={appScale(28)}
+            height={appScale(28)}
+            src={require('app/assets/images/left.png')}
             type="local"
           />
-        </XStack>
+        </Button>
         <XStack ai={'center'} h={'100%'}>
           <SizableText col={'$color'} fontSize={'$8'} fow={'700'}>
-            {AppName}
+            {title}
           </SizableText>
         </XStack>
         <Button
@@ -55,19 +68,13 @@ const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
           h={'100%'}
           pos={'relative'}
           onPress={() => {
-            push('/my');
+            // push('/my');
           }}
         >
-          {unread > 0 && (
-            <XStack pos="absolute" p="$4" t={0} r={0} h={'100%'}>
-              <XStack mt={10} mr={4} w={8} h={8} borderRadius={4} bc={'red'}></XStack>
-            </XStack>
-          )}
-          {/* <AlignJustify color={'$color'} /> */}
           <AppImage
             width={appScale(28)}
             height={appScale(28)}
-            src={require('app/assets/images/notification.png')}
+            src={require('app/assets/images/more.png')}
             type="local"
           />
         </Button>
@@ -76,4 +83,4 @@ const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
   );
 };
 
-export default HomeHeader;
+export default Header;

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 18:52:24
+ * @LastEditTime: 2025-02-25 09:30:20
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -36,7 +36,7 @@ import {Dispatch} from 'app/store';
 import useRequest from 'app/hooks/useRequest';
 import Header from './components/Header';
 import {appScale} from 'app/utils';
-import CountryPopup from './components/CountryPopup';
+import ChainPopup from './components/ChainPopup';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
 
 // 我的
@@ -48,7 +48,7 @@ const MyScreen = () => {
   const {makeRequest} = useRequest();
   const [{unread, demoniator}] = useRematchModel('app');
   const [{isLogin}] = useRematchModel('user');
-  const [areaCodeList, setAreaCodeList] = useState<any[]>([
+  const [chainList, setChainList] = useState<any[]>([
     {
       id: '1',
       emoji: '🇺🇸',
@@ -65,7 +65,7 @@ const MyScreen = () => {
     },
   ]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [phoneAreaCode, setPhoneAreaCode] = useState<any>({
+  const [chainData, setChainData] = useState<any>({
     id: '1',
     emoji: '🇺🇸',
     chineseName: '美国',
@@ -205,8 +205,8 @@ const MyScreen = () => {
     );
   };
 
-  const selectCountry = (item) => {
-    setPhoneAreaCode(item);
+  const selectChain = (item) => {
+    setChainData(item);
     setModalVisible(false);
     dispatch.app.updateState({
       demoniator: item.code,
@@ -274,12 +274,12 @@ const MyScreen = () => {
           )}
         </XStack>
       </ScrollView>
-      <CountryPopup
-        areaCodeList={areaCodeList}
+      <ChainPopup
+        chainList={chainList}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        selectCountry={selectCountry}
-        phoneAreaCode={phoneAreaCode}
+        selectChain={selectChain}
+        chainData={chainData}
       />
     </PermissionPage>
   );

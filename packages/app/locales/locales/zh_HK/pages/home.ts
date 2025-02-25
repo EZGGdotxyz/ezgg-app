@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:44:52
+ * @LastEditTime: 2025-02-25 14:57:02
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -36,7 +36,7 @@ export default {
   'home.send.tips2': '查看您已發送的連結',
 
   'home.deposit.or': '或 ',
-  'home.deposit.sendTips': '發送 {{tolen}} ({{link}} ONLY) 至如下地址',
+  'home.deposit.sendTips': '發送 {{token}} ({{chain}} ONLY) 至如下地址',
   'home.deposit.deposit': '存款',
 
   'home.withdraw.withdraw': '提取',
@@ -53,6 +53,8 @@ export default {
   'home.order.youTopUp': '您已充值',
   'home.order.youRequested': '您已請求',
   'home.order.amountRequested': '請求金額',
+  'home.order.sentTo': '發送到',
+  'home.order.from': '從',
 
   'home.order.networkFee': '網絡費用',
   'home.order.date': '日期',

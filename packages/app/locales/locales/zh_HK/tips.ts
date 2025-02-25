@@ -15,4 +15,6 @@ export default {
   'tips.list.noData.title': '沒有數據',
   'tips.list.loading.title': '沒有更多數據了',
   'tips.list.loading.title2': '正在載入更多數據',
+
+  'tips.explore.copy': '複製成功！',
 };
