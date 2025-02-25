@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 10:37:04
+ * @LastEditTime: 2025-02-25 17:54:46
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -27,6 +27,7 @@ export default {
   'home.send.paylink': 'Paylink',
   'home.send.currency': 'Currency',
   'home.send.amountToSend': 'Amount to Send',
+  'home.send.amountToSend.tips': 'Please enter the amount to send',
   'home.send.continue': 'Continue',
   'home.send.viewLink': 'View link',
   'home.send.copyLink': 'Copy link',
@@ -84,10 +85,11 @@ export default {
   'home.order.noTransactions': 'No Transactions',
 
   'home.paylink.recipient': 'Recipient',
-  'home.paylink.anyoneLink ': 'Anyone with the link ',
+  'home.paylink.anyoneLink': 'Anyone with the link ',
   'home.paylink.privateLink': 'Private link',
   'home.paylink.amountToSend': 'Amount to send',
   'home.paylink.addMessage': 'Add Message',
+  'home.paylink.addMessage.tips': 'Please enter your message',
   'home.paylink.sendCrypto': 'Send Crypto',
 
   'home.qr.title': 'Scan QR Code',

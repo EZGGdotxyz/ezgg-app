@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 16:59:00
+ * @LastEditTime: 2025-02-25 20:20:16
  * @FilePath: /ezgg-app/apps/next/pages/index.tsx
  */
 import HomeScreen from 'app/pages/home/index';
@@ -18,6 +18,7 @@ export default function Page() {
     <>
       <Head>
         <title>{t('screen.home.title')}</title>
+        <meta name="theme-color" content="#FEB54F" />
       </Head>
       <HomeScreen />
       <TabBar state={dfState} descriptors={undefined} navigation={undefined} />

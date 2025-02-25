@@ -1,10 +1,10 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 14:31:37
+ * @LastEditTime: 2025-02-25 18:22:40
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
-import {AppHeader, AppHeaderProps, HeaderBackButton, Paragraph, XStack, YStack, SizableText, AppImage} from '@my/ui';
+import {AppHeader, AppHeaderProps, HeaderBackButton, Paragraph, XStack, YStack, SizableText, AppImage, useToastController} from '@my/ui';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
@@ -29,8 +29,13 @@ const WithdrawScreen = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const {back, push} = useRouter();
+  const toast = useToastController();
 
   const submit = () => {
+    if (!inputValue || inputValue === '0') {
+      toast.show(t('home.send.amountToSend.tips'));
+      return;
+    }
     setButtonLoading(true);
     setTimeout(() => {
       setButtonLoading(false);
@@ -59,7 +64,7 @@ const WithdrawScreen = () => {
 
   return (
     <PermissionPage>
-      <AppHeader2 title={t('screen.home.withdraw')} fallbackUrl="/home" />
+      <AppHeader2 title={t('screen.home.withdraw')} fallbackUrl="/" />
       <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
         <Currency token={token} chain={chain} updateCurrency={updateCurrency} />
         <YStack w="100%" mb={appScale(24)}>

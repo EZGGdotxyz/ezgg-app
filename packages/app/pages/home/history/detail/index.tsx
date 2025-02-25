@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 15:56:26
+ * @LastEditTime: 2025-02-25 17:14:12
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {AppHeader, AppHeaderProps, AppImage, HeaderBackButton, Paragraph, SizableText, XStack, YStack} from '@my/ui';
@@ -12,11 +12,14 @@ import Header from './components/Header';
 import {appScale, formatDateTime, formatNumber, truncateAddress, truncateText} from 'app/utils';
 import CopyButton from 'app/Components/CopyButton';
 import {PrimaryColor} from 'app/config';
+import {createParam} from 'solito';
+const {useParams} = createParam<any>();
 
 // 订单详情
 const HistoryDetailScreen = () => {
   const {t} = useTranslation();
   const [infoData, setInfoData] = useState<any>({});
+  const {params} = useParams();
 
   const type = 'incomingRequest';
 
@@ -211,14 +214,14 @@ const HistoryDetailScreen = () => {
   };
 
   useEffect(() => {
-    type &&
+    params?.type &&
       setInfoData({
-        infoList: infoDataDefault[type].infoList,
+        infoList: infoDataDefault[params?.type].infoList,
         userName: `@${orderData?.userName || ''}`,
-        title: t(`screen.home.${type}`),
-        icon: infoDataDefault[type].icon,
+        title: t(`screen.home.${params?.type}`),
+        icon: infoDataDefault[params?.type].icon,
       });
-  }, [type]);
+  }, [params]);
 
   return (
     <PermissionPage>

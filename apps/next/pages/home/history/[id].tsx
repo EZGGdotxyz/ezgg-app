@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 16:49:48
- * @FilePath: /ezgg-app/apps/next/pages/home/withdraw.tsx
+ * @LastEditTime: 2025-02-25 20:21:05
+ * @FilePath: /ezgg-app/apps/next/pages/home/history/[id].tsx
  */
 import HistoryDetailScreen from 'app/pages/home/history/detail';
 import Head from 'next/head';
@@ -15,6 +15,7 @@ export default function Page() {
     <>
       <Head>
         <title>{t('screen.home.detail.title')}</title>
+        <meta name="theme-color" content="#FEB54F" />
       </Head>
       <HistoryDetailScreen />
     </>

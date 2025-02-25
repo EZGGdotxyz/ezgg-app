@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 16:58:23
+ * @LastEditTime: 2025-02-25 20:21:10
  * @FilePath: /ezgg-app/apps/next/pages/explore.tsx
  */
 import ExploreScreen from 'app/pages/explore/index';
@@ -13,6 +13,7 @@ export default function Page() {
     <>
       <Head>
         <title>{t('screen.explore.titl')}</title>
+        <meta name="theme-color" content="#1F222A" />
       </Head>
       <ExploreScreen />
     </>

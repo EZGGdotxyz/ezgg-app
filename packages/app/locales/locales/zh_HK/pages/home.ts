@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 14:57:02
+ * @LastEditTime: 2025-02-25 18:08:15
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -27,6 +27,7 @@ export default {
   'home.send.paylink': '支付連結',
   'home.send.currency': '貨幣',
   'home.send.amountToSend': '請輸入要發送的金額',
+  'home.send.amountToSend.tips': '請輸入要發送的金額',
   'home.send.continue': '繼續',
   'home.send.viewLink': '查看連結',
   'home.send.copyLink': '複製連結',
@@ -83,10 +84,11 @@ export default {
   'home.order.noTransactions2': `您尚未進行任何交易。`,
 
   'home.paylink.recipient': '接收方',
-  'home.paylink.anyoneLink ': '任何擁有連結的人',
+  'home.paylink.anyoneLink': '任何擁有連結的人',
   'home.paylink.privateLink': '私人連結',
   'home.paylink.amountToSend': '發送的金額',
   'home.paylink.addMessage': '添加訊息',
+  'home.paylink.addMessage.tips': '請輸入您的訊息',
   'home.paylink.sendCrypto': '發送加密貨幣',
 
   'home.qr.title': '掃描QR碼',

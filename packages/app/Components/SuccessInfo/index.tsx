@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 15:15:23
+ * @LastEditTime: 2025-02-25 18:01:05
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -23,7 +23,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
   const [infoData, setInfoData] = useState<any>({});
   const infoDataDefault = {
     sent: {
-      title: t('home.order.sentTo'),
+      title: orderData?.name ? `${t('home.order.sentTo')} @${orderData?.name}` : '',
       infoList: [
         {
           label: t('home.order.youSent'),
