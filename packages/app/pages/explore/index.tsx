@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 20:07:36
+ * @LastEditTime: 2025-02-26 17:52:57
  * @FilePath: /ezgg-app/packages/app/pages/explore/index.tsx
  */
 import {
@@ -23,6 +23,7 @@ import jsQR from 'jsqr';
 import {appScale} from 'app/utils';
 import AppButton from 'app/Components/AppButton';
 import {useRouter} from 'solito/router';
+import AppLoading from 'app/Components/AppLoading';
 
 // 掃描
 const ExploreScreen = () => {
@@ -33,6 +34,7 @@ const ExploreScreen = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const {push} = useRouter();
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     checkCameraPermission();
@@ -66,6 +68,7 @@ const ExploreScreen = () => {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        await videoRef.current.play();
         videoRef.current.onloadedmetadata = () => {
           setScanning(true);
           scanQRCode();
@@ -110,7 +113,6 @@ const ExploreScreen = () => {
 
     const code = jsQR(imageData.data, imageData.width, imageData.height);
     if (code) {
-      stopScanning();
       onPush(code?.data);
       // TODO: 处理扫描到的二维码数据
       // 这里可以添加成功扫描的回调
@@ -159,7 +161,12 @@ const ExploreScreen = () => {
   const onPush = (code) => {
     if (code) {
       console.log('Found QR code in image:', code);
-      push('/home/send');
+      setIsLoading(true);
+      setTimeout(() => {
+        stopScanning();
+        push('/home/send');
+        setIsLoading(false);
+      }, 1000);
     }
   };
 
@@ -197,6 +204,7 @@ const ExploreScreen = () => {
             ref={videoRef}
             autoPlay
             playsInline
+            muted
             style={{
               marginTop: appScale(3),
               marginRight: appScale(3),
@@ -267,6 +275,9 @@ const ExploreScreen = () => {
           />
         </Button>
       </XStack>
+      {isLoading && (
+        <AppLoading />
+      )}
     </PermissionPage>
   );
 };

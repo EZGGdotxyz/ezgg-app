@@ -58,8 +58,29 @@
   opacity: 0;
 }
 
-
 @keyframes cursorBlink {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  height: 100%;
+}
+
+body,
+#root,
+#__next {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  min-width: calc(100vw - (100vw - 100%));
+  margin: 0;
 }

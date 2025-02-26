@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 15:57:14
+ * @LastEditTime: 2025-02-26 20:49:43
  * @FilePath: /ezgg-app/packages/app/pages/home/success/index.tsx
  */
 import {
@@ -43,14 +43,6 @@ const {useParams} = createParam<any>();
 // 成功页面
 const SuccessScreen = () => {
   const {push, replace, back, parseNextPath} = useRouter();
-  const {t, i18n} = useTranslation();
-  const {userLogout} = useUser();
-  const dispatch = useDispatch<Dispatch>();
-  const {makeRequest} = useRequest();
-  const [{unread, demoniator}] = useRematchModel('app');
-  const [{isLogin}] = useRematchModel('user');
-  const [isLoading, setIsLoading] = React.useState(false);
-
   const {params} = useParams();
 
   console.log('🚀 ~ SuccessScreen ~ params:', params);

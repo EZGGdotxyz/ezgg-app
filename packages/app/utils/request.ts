@@ -1,17 +1,17 @@
 /*
  * @Date: 2023-12-08 10:10:20
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-07-31 21:13:51
- * @FilePath: /snapx-nfc-app-merchants/packages/app/utils/request.ts
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-02-26 21:44:57
+ * @FilePath: /ezgg-app/packages/app/utils/request.ts
  */
 // index.ts
 import axios from 'axios';
-import {getLanguage, getUserToken} from './auth';
+import {getLanguage, getUserIdToken, getUserToken} from './auth';
 import {APP_URL, DefaultLanguage} from 'app/config';
 
 // 配置新建一个 axios 实例
 const service = axios.create({
-  baseURL: APP_URL + '/api/api/restaurant',
+  baseURL: APP_URL + '/',
   timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
@@ -21,10 +21,16 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
   async (config) => {
+    // const token = localStorage.getItem('privy:token');
+    // const idToken = localStorage.getItem('privy:id_token');
     const token = await getUserToken();
+    const idToken = await getUserIdToken();
     const locale = (await getLanguage()) || DefaultLanguage;
     if (token) {
-      config.headers!.Authorization = 'Bearer ' + token;
+      config.headers!.Authorization = `Bearer ${token}`;
+    }
+    if (idToken) {
+      config.headers['privy-id-token'] = `${idToken}`;
     }
     config.headers!['Accept-Language'] = locale === 'en_US' ? 'en' : 'zh-hk';
     return config;

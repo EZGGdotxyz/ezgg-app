@@ -1,11 +1,11 @@
 /*
  * @Date: 2023-12-08 10:37:32
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-08-04 14:36:13
- * @FilePath: /snapx-nfc-app-merchants/packages/app/hooks/useInit.ts
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-02-26 22:10:13
+ * @FilePath: /ezgg-app/packages/app/hooks/useInit.ts
  */
 import {Dispatch} from 'app/store';
-import {getDeviceToken, getLanguage, getUserInfo, getUserToken, setInviteCode, setLanguage} from 'app/utils/auth';
+import {getDeviceToken, getLanguage, getUserIdToken, getUserInfo, getUserToken, setInviteCode, setLanguage} from 'app/utils/auth';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {Dimensions, Platform} from 'react-native';
@@ -23,11 +23,11 @@ export default function useInit() {
 
   const _init = async () => {
     const token: any = await getUserToken();
+    const idToken: any = await getUserIdToken();
     const userInfo: any = await getUserInfo();
-
     // 设置 token
-    if (token) {
-      initLogin(token);
+    if (token && idToken) {
+      initLogin(token, idToken);
     }
     // 获取用户信息
     if (userInfo?.id) {

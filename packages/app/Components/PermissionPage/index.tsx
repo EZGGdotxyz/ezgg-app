@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:03:27
+ * @LastEditTime: 2025-02-26 22:33:21
  * @FilePath: /ezgg-app/packages/app/Components/PermissionPage/index.tsx
  */
 import {PrimaryColor} from 'app/config';

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 14:17:09
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-18 11:28:13
+ * @LastEditTime: 2025-02-26 22:10:25
  * @FilePath: /ezgg-app/packages/app/Components/TabBar/index.tsx
  */
 import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
@@ -13,12 +13,11 @@ import {XStack} from '@my/ui';
 
 const TabBar = ({state, descriptors, navigation}) => {
   const {push, replace, back, parseNextPath} = useRouter();
-  console.log('🚀 ~ TabBar ~ isIphoneX():', isIphoneX());
   return (
     <XStack
       height={appScale(isIphoneX() ? 82 + 8 : 48 + 8)}
       pt={8}
-      pb={appScale(isIphoneX() ? 34 : 0)}
+      pb={appScale(isIphoneX() ? 44 : 8)}
       bc="$background"
       style={styles.tabbar}
     >

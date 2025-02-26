@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-26 14:21:05
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-19 10:15:06
+ * @LastEditTime: 2025-02-26 17:47:24
  * @FilePath: /ezgg-app/apps/next/pages/_app.tsx
  */
 import '@tamagui/core/reset.css';
@@ -30,7 +30,7 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
         <meta name="description" content="Bitenet" />
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
         ></meta>
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

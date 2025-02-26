@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 09:30:20
+ * @LastEditTime: 2025-02-26 22:34:36
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -37,6 +37,8 @@ import useRequest from 'app/hooks/useRequest';
 import Header from './components/Header';
 import {appScale} from 'app/utils';
 import ChainPopup from './components/ChainPopup';
+import MyQrCodePopup from './components/MyQrCodePopup';
+import {usePrivy} from '@privy-io/react-auth';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
 
 // 我的
@@ -44,6 +46,8 @@ const MyScreen = () => {
   const {push, replace, back, parseNextPath} = useRouter();
   const {t, i18n} = useTranslation();
   const {userLogout} = useUser();
+  const {ready, authenticated, logout} = usePrivy();
+
   const dispatch = useDispatch<Dispatch>();
   const {makeRequest} = useRequest();
   const [{unread, demoniator}] = useRematchModel('app');
@@ -65,6 +69,7 @@ const MyScreen = () => {
     },
   ]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const [chainData, setChainData] = useState<any>({
     id: '1',
     emoji: '🇺🇸',
@@ -130,6 +135,7 @@ const MyScreen = () => {
 
   const onLogout = async () => {
     setIsLoading(true);
+    logout();
     await userLogout();
     setIsLoading(false);
     push('/');
@@ -216,63 +222,73 @@ const MyScreen = () => {
   return (
     <PermissionPage isHomePage={true}>
       <Header isLogin={isLogin} />
-      <ScrollView w={'100%'} bc="$background" pl={appScale(24)} pr={appScale(24)} pb={appScale(24)} pt={appScale(12)}>
-        {isLogin && (
-          <XStack w={'100%'} ai="center" jc={'space-between'} pb={appScale(24)}>
-            <SizableText fontSize={'$5'} color={'#212121'} h={appScale(28)} lh={appScale(28)}>
-              {t('profile.home.general')}
-            </SizableText>
-            <YStack w={appScale(28)} height={appScale(28)}>
-              <AppImage
-                width={appScale(28)}
-                height={appScale(28)}
-                src={require(`app/assets/images/qr.png`)}
-                type="local"
-              />
-            </YStack>
-          </XStack>
-        )}
-        <YStack w={'100%'} ai="center" br={'$3'} bc={'$background'} p={'$3'}>
-          <XStack w={'100%'} ai="center">
-            <SizableText fontSize={'$3'} color={'#9E9E9E'} mr={'$4'}>
-              {t('profile.home.general')}
-            </SizableText>
-            <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
-          </XStack>
-          {GeneralItems.map((item) => {
-            return Row(item);
-          })}
-        </YStack>
-        <YStack w={'100%'} ai="center" br={'$3'} bc={'$background'} p={'$3'}>
-          <XStack w={'100%'} ai="center">
-            <SizableText fontSize={'$3'} color={'#9E9E9E'} mr={'$4'}>
-              {t('profile.home.about')}
-            </SizableText>
-            <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
-          </XStack>
-          {AboutItems.map((item) => {
-            return Row(item);
-          })}
-        </YStack>
-        <XStack w={'100%'} pl="$4" pr="$4" mt="$6" pb="$10">
+      <ScrollView flex={1} w={'100%'} bc="#fff">
+        <YStack pl={appScale(24)} pr={appScale(24)} pb={appScale(24)} pt={appScale(12)}>
           {!isLogin && (
-            <Button
-              borderRadius={25}
-              h={50}
-              w={'100%'}
-              jc={'center'}
-              ai={'center'}
-              bc={'$color'}
-              onPress={() => {
-                push('/login');
-              }}
-            >
-              <Paragraph col={'$color1'} fontSize={'$3'}>
-                {t('operate.button.login')}
-              </Paragraph>
-            </Button>
+            <XStack w={'100%'} ai="center" jc={'space-between'} pb={appScale(24)}>
+              <SizableText fontSize={'$5'} color={'#212121'} h={appScale(28)} lh={appScale(28)}>
+                {t('profile.home.general')}
+              </SizableText>
+              <Button
+                unstyled
+                onPress={() => setModalVisible2(true)}
+                pressStyle={{
+                  opacity: 0.85,
+                }}
+                w={appScale(28)}
+                height={appScale(28)}
+              >
+                <AppImage
+                  width={appScale(28)}
+                  height={appScale(28)}
+                  src={require(`app/assets/images/qr.png`)}
+                  type="local"
+                />
+              </Button>
+            </XStack>
           )}
-        </XStack>
+          <YStack w={'100%'} ai="center" br={'$3'} bc={'$background'} p={'$3'}>
+            <XStack w={'100%'} ai="center">
+              <SizableText fontSize={'$3'} color={'#9E9E9E'} mr={'$4'}>
+                {t('profile.home.general')}
+              </SizableText>
+              <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
+            </XStack>
+            {GeneralItems.map((item) => {
+              return Row(item);
+            })}
+          </YStack>
+          <YStack w={'100%'} ai="center" br={'$3'} bc={'$background'} p={'$3'}>
+            <XStack w={'100%'} ai="center">
+              <SizableText fontSize={'$3'} color={'#9E9E9E'} mr={'$4'}>
+                {t('profile.home.about')}
+              </SizableText>
+              <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
+            </XStack>
+            {AboutItems.map((item) => {
+              return Row(item);
+            })}
+          </YStack>
+          <XStack w={'100%'} pl="$4" pr="$4" mt="$6" pb="$10">
+            {!isLogin && (
+              <Button
+                borderRadius={25}
+                h={50}
+                w={'100%'}
+                jc={'center'}
+                ai={'center'}
+                bc={'$color'}
+                onPress={() => {
+                  push('/login');
+                }}
+              >
+                <Paragraph col={'$color1'} fontSize={'$3'}>
+                  {t('operate.button.login')}
+                </Paragraph>
+              </Button>
+            )}
+          </XStack>
+        </YStack>
       </ScrollView>
       <ChainPopup
         chainList={chainList}
@@ -281,6 +297,7 @@ const MyScreen = () => {
         selectChain={selectChain}
         chainData={chainData}
       />
+      <MyQrCodePopup modalVisible={modalVisible2} setModalVisible={setModalVisible2} />
     </PermissionPage>
   );
 };

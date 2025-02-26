@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-01-10 22:19:40
  * @LastEditors: yosan
- * @LastEditTime: 2024-01-11 23:49:35
- * @FilePath: /snapx-nfc-app/packages/app/utils/auth/local-storage.ts
+ * @LastEditTime: 2025-02-26 21:24:08
+ * @FilePath: /ezgg-app/packages/app/utils/auth/local-storage.ts
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -36,7 +36,7 @@ function validateNull(val: any) {
 /**
  * 设置key名
  */
-const keyName = 'qxh' + '_';
+const keyName = 'eagg' + '_';
 
 /**
  * 存储localStorage

@@ -1,8 +1,8 @@
 /*
  * @Author: Yosan
  * @Date: 2022-11-12 12:53:29
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-07-29 17:42:31
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-02-26 21:48:03
  * @Description:
  */
 import {getStore, removeStore, setStore} from './local-storage';
@@ -15,6 +15,7 @@ import {
   SIGN_CODE,
   HISTORY_LIST,
   IS_RECEIVE,
+  USER_ID_TOKEN,
 } from './constant';
 
 export const getIsReceive = async () => {
@@ -96,6 +97,25 @@ export const setLanguage = async (language: string) => {
 export const getUserToken = async () => {
   return getStore({
     name: USER_TOKEN,
+  });
+};
+
+export const getUserIdToken = async () => {
+  return getStore({
+    name: USER_ID_TOKEN,
+  });
+};
+
+export const setUserIdToken = async (token: string) => {
+  return setStore({
+    name: USER_ID_TOKEN,
+    content: token,
+  });
+};
+
+export const removeUserIdToken = async () => {
+  return removeStore({
+    name: USER_ID_TOKEN,
   });
 };
 

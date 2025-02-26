@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-21 18:55:13
+ * @LastEditTime: 2025-02-26 21:25:00
  * @FilePath: /ezgg-app/packages/app/provider/index.tsx
  */
 import {CustomToast, TamaguiProvider, TamaguiProviderProps, ToastProvider, config} from '@my/ui';
@@ -33,11 +33,15 @@ export function Provider({children, ...rest}: Omit<TamaguiProviderProps, 'config
           <PrivyProvider
             appId="cm74gcbre00h972np2f6bdut8"
             config={{
+              loginMethods: ['email', 'wallet', 'google','sms'],
               // Customize Privy's appearance in your app
               appearance: {
+                landingHeader: 'Your custom header text',
+                loginMessage: 'You123',
                 theme: 'light',
                 accentColor: '#676FFF',
                 logo: 'https://your-logo-url',
+                showWalletLoginFirst: true,
               },
               // Create embedded wallets for users who don't have a wallet
               embeddedWallets: {

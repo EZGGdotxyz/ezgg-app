@@ -2,7 +2,7 @@ import {DefaultTheme} from '@react-navigation/native';
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-19 10:34:00
+ * @LastEditTime: 2025-02-26 20:48:33
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
 export const ExternalLinkData = {
@@ -25,7 +25,7 @@ export const DefaultLanguage = 'en_US';
 export const AppName = 'ezgg.app';
 
 // 测试环境api
-export const APP_URL = 'https://app.bitenet.io';
+export const APP_URL = 'https://api.catfoodworks.com';
 // 生产环境api
 // export const APP_URL = 'https://app.bitenet.io';
 
