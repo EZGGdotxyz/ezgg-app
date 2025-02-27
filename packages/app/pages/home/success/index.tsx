@@ -27,7 +27,6 @@ export const ESTIMATED_ITEM_SIZE = 90;
 import {ComponentProps} from 'react';
 import {ActivityIndicator, Platform} from 'react-native';
 import {Link} from 'solito/link';
-import {ExternalLinkData, PrimaryColor} from 'app/config';
 import PermissionPage from 'app/Components/PermissionPage';
 import useUser from 'app/hooks/useUser';
 import {useDispatch} from 'react-redux';

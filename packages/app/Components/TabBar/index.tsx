@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 14:17:09
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 22:10:25
+ * @LastEditTime: 2025-02-27 15:22:02
  * @FilePath: /ezgg-app/packages/app/Components/TabBar/index.tsx
  */
 import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
@@ -10,9 +10,12 @@ import TabBarButton from '../TabBarButton';
 import {useRouter} from 'solito/router';
 import {appScale, isIphoneX} from 'app/utils';
 import {XStack} from '@my/ui';
+import {useRematchModel} from 'app/store/model';
 
 const TabBar = ({state, descriptors, navigation}) => {
   const {push, replace, back, parseNextPath} = useRouter();
+  const [{isLogin}] = useRematchModel('user');
+
   return (
     <XStack
       height={appScale(isIphoneX() ? 82 + 8 : 48 + 8)}
@@ -40,6 +43,10 @@ const TabBar = ({state, descriptors, navigation}) => {
 
         const onPress = () => {
           if (Platform.OS === 'web') {
+            if (route.name === 'explore' && !isLogin) {
+              return push('/login');
+            }
+
             push('/' + (route.name === 'home' ? '' : route.name));
           } else {
             const event = navigation.emit({
@@ -49,6 +56,9 @@ const TabBar = ({state, descriptors, navigation}) => {
             });
 
             if (!isFocused && !event.defaultPrevented) {
+              if (route.name === 'explore' && !isLogin) {
+                return navigation.navigate('/login', route.params);
+              }
               navigation.navigate(route.name, route.params);
             }
           }
@@ -56,6 +66,9 @@ const TabBar = ({state, descriptors, navigation}) => {
 
         const onLongPress = () => {
           if (Platform.OS === 'web') {
+            if (route.name === 'explore' && !isLogin) {
+              return push('/login');
+            }
             push('/' + (route.name === 'home' ? '' : route.name));
           } else {
             navigation.emit({

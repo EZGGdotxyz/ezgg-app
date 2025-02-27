@@ -81,8 +81,10 @@ export default {
   'home.order.noDecline': `No, Don't Decline`,
   'home.order.yesDecline': 'Yes, Decline',
   'home.order.declinedTips2': 'Request declined!',
-  'home.order.noTransactions2': `You haven't made any transactions.`,
   'home.order.noTransactions': 'No Transactions',
+  'home.order.noTransactions2': `You haven't made any transactions.`,
+  'home.order.noPortfolio': 'No Portfolio',
+  'home.order.noPortfolio2': `You don't have any portfolio.`,
 
   'home.paylink.recipient': 'Recipient',
   'home.paylink.anyoneLink': 'Anyone with the link ',
@@ -99,4 +101,5 @@ export default {
   'home.qr.sub2': 'Recipient Address',
   'home.qr.save': 'save',
   'home.qr.share': 'share',
+  'home.qr.invalid':'Invalid QR code, please scan the QR code provided by ezgg'
 };

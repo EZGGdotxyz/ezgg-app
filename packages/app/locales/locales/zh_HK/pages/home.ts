@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 18:08:15
+ * @LastEditTime: 2025-02-27 16:59:37
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -82,6 +82,8 @@ export default {
   'home.order.declinedTips2': '請求已被拒絕！',
   'home.order.noTransactions': '無交易記錄',
   'home.order.noTransactions2': `您尚未進行任何交易。`,
+  'home.order.noPortfolio': '無投資組合',
+  'home.order.noPortfolio2': `您尚未擁有任何投資組合。`,
 
   'home.paylink.recipient': '接收方',
   'home.paylink.anyoneLink': '任何擁有連結的人',
@@ -98,4 +100,5 @@ export default {
   'home.qr.sub2': '地址',
   'home.qr.save': '保存',
   'home.qr.share': '分享',
+  'home.qr.invalid': '二維碼無效，請掃描ezgg提供的二維碼',
 };

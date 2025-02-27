@@ -7,12 +7,12 @@ import {DefaultTheme} from '@react-navigation/native';
  */
 export const ExternalLinkData = {
   webPageHome: 'https://www.bitenet.io',
-  webPageAgreement: 'https://agreement.bitenet.io',
-  webPagePrivacy: 'https://privacy.bitenet.io',
-  webPageContact: 'https://www.bitenet.io/contact',
-  webPageRestaurant: 'https://www.bitenet.io/restaurant',
-  webPageMarketplace: 'https://www.bitenet.io/marketplace',
-  appDownload: 'https://itunes.apple.com/cn/app/6477260172',
+  // webPageAgreement: 'https://agreement.bitenet.io',
+  // webPagePrivacy: 'https://privacy.bitenet.io',
+  // webPageContact: 'https://www.bitenet.io/contact',
+  // webPageRestaurant: 'https://www.bitenet.io/restaurant',
+  // webPageMarketplace: 'https://www.bitenet.io/marketplace',
+  // appDownload: 'https://itunes.apple.com/cn/app/6477260172',
 };
 
 // 主题色
@@ -26,6 +26,8 @@ export const AppName = 'ezgg.app';
 
 // 测试环境api
 export const APP_URL = 'https://api.catfoodworks.com';
+
+
 // 生产环境api
 // export const APP_URL = 'https://app.bitenet.io';
 

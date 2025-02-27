@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-26 14:21:05
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 17:47:24
+ * @LastEditTime: 2025-02-27 11:22:24
  * @FilePath: /ezgg-app/apps/next/pages/_app.tsx
  */
 import '@tamagui/core/reset.css';
@@ -10,6 +10,7 @@ import '../style/global.css';
 import '../style/react-photo-view.css';
 import '@tamagui/font-inter/css/700.css';
 import 'raf/polyfill';
+import {PrimaryColor} from 'app/config';
 
 import {NextThemeProvider, useRootTheme} from '@tamagui/next-theme';
 import i18n from 'app/locales/index';
@@ -17,6 +18,10 @@ import {Provider} from 'app/provider';
 import Head from 'next/head';
 import React, {useEffect} from 'react';
 import type {SolitoAppProps} from 'solito';
+import {useColorScheme} from 'react-native';
+import {SmartWalletsProvider} from '@privy-io/react-auth/smart-wallets';
+import {PrivyProvider} from '@privy-io/react-auth';
+
 i18n.language;
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css');
@@ -40,9 +45,23 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
           rel="stylesheet"
         />
       </Head>
-      <ThemeProvider>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <PrivyProvider
+        appId="cm74gcbre00h972np2f6bdut8"
+        config={{
+          loginMethods: ['email', 'google', 'sms', 'wallet'],
+          appearance: {
+            logo: '/images/logo.png',
+            theme: 'light',
+            accentColor: PrimaryColor,
+          },
+        }}
+      >
+        <SmartWalletsProvider>
+          <ThemeProvider>
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </SmartWalletsProvider>
+      </PrivyProvider>
     </>
   );
 }

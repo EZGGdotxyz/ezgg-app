@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 22:34:05
+ * @LastEditTime: 2025-02-27 16:45:29
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {
@@ -36,23 +36,27 @@ import SuccessPopup from './components/SuccessPopup';
 import {AppName, PrimaryColor} from 'app/config';
 import useUser from 'app/hooks/useUser';
 import {postUserUpdateMember} from 'app/servers/api/member';
+import {View} from 'react-native';
 
 const LoginScreen = () => {
   const {t} = useTranslation();
   const {authenticated, ready, getAccessToken} = usePrivy();
+  const {push, replace, back, parseNextPath} = useRouter();
 
   const router = useRouter();
 
   const {initLogin, initUserInfo, onLink} = useUser();
   const [modalVisible, setModalVisible] = useState(false);
+  const [isSetInfo, setIsSetInfo] = useState(false);
+  const [accountForm, setAccountForm] = useState({
+    nickname: '',
+    avatar: '',
+  });
 
   const {login} = useLogin({
     onComplete: async (user) => {
       setModalVisible(true);
-      setTimeout(async () => {
-        await handleLogin(user);
-        setModalVisible(false);
-      }, 1000);
+      await handleLogin(user);
     },
   });
   // const {signMessage} = usePrivy();
@@ -71,14 +75,33 @@ const LoginScreen = () => {
     const token = localStorage.getItem('privy:token');
     const idToken = localStorage.getItem('privy:id_token');
     if (token && idToken) {
-      const data = await postUserUpdateMember({
-        nickname: user?.user?.nickname || '',
-        avatar: user?.user?.avatar || '',
-      });
-
       initLogin(JSON.parse(token), JSON.parse(idToken));
-      await initUserInfo();
-      onLink();
+      const _userInfo = await initUserInfo();
+      if (_userInfo?.nickname) {
+        handleSuccess(_userInfo);
+      } else {
+        setAccountForm({
+          nickname: _userInfo?.nickname || '',
+          avatar: _userInfo?.avatar || '',
+        });
+        setIsSetInfo(true);
+      }
+    }
+  };
+
+  const handleSuccess = async (_userInfo: any) => {
+    try {
+      setIsSetInfo(false);
+      setTimeout(async () => {
+        await postUserUpdateMember({
+          nickname: _userInfo?.customMetadata?.nickname || '',
+          avatar: _userInfo?.customMetadata?.avatar || '',
+        });
+        setModalVisible(false);
+        onLink();
+      }, 1500);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -86,8 +109,8 @@ const LoginScreen = () => {
     <PermissionPage isLoginPage>
       <AppHeader2 title={''} fallbackUrl="/" />
       <YStack f={1} pt={'20%'} ai="center" bc="$background">
-        <YStack pb={appScale(32)}>
-          <SizableText color="$color" ta="center" fontSize={appScale(24)} fontWeight="700" mb={appScale(32)}>
+        <YStack pb={appScale(32 + 24)}>
+          <SizableText color="$color" ta="center" fontSize={appScale(24)} fontWeight="700" mb={appScale(32 + 24)}>
             {AppName}
           </SizableText>
           <AppImage
@@ -97,7 +120,7 @@ const LoginScreen = () => {
             type="local"
           />
         </YStack>
-        <YStack w="100%" p={appScale(24)}>
+        <YStack w="100%" pl={appScale(24)} pr={appScale(24)}>
           <Button
             backgroundColor={PrimaryColor}
             h={appScale(58)}
@@ -117,6 +140,31 @@ const LoginScreen = () => {
             </SizableText>
           </Button>
         </YStack>
+        <View
+          style={{
+            display: 'block',
+            padding: appScale(24),
+          }}
+        >
+          <SizableText style={{display: 'inline'}} color="#212121" fontSize={appScale(14)} fontWeight="500">
+            {t('login.loginAgreement1')}
+          </SizableText>
+          <Button
+            unstyled
+            style={{display: 'inline'}}
+            pressStyle={{opacity: 0.7}}
+            onPress={() => {
+              push('/profile/privacyPolicy');
+            }}
+          >
+            <SizableText ml={appScale(4)} mr={appScale(4)} color="#212121" fontSize={appScale(14)} fontWeight="700">
+              {t('login.loginAgreement2')}
+            </SizableText>
+          </Button>
+          <SizableText style={{display: 'inline'}} color="#212121" fontSize={appScale(14)} fontWeight="500">
+            {t('login.loginAgreement3')}
+          </SizableText>
+        </View>
         {/* <Button
           onPress={async () => {
             const message = 'Hello world';
@@ -168,7 +216,14 @@ const LoginScreen = () => {
           Login with wallet
         </Button> */}
       </YStack>
-      <SuccessPopup modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      <SuccessPopup
+        handleSuccess={handleSuccess}
+        accountForm={accountForm}
+        setAccountForm={setAccountForm}
+        isSetInfo={isSetInfo}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </PermissionPage>
   );
 };

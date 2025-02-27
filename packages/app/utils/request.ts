@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:10:20
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 21:44:57
+ * @LastEditTime: 2025-02-27 15:50:52
  * @FilePath: /ezgg-app/packages/app/utils/request.ts
  */
 // index.ts
@@ -32,7 +32,7 @@ service.interceptors.request.use(
     if (idToken) {
       config.headers['privy-id-token'] = `${idToken}`;
     }
-    config.headers!['Accept-Language'] = locale === 'en_US' ? 'en' : 'zh-hk';
+    config.headers['Accept-Language'] = locale === 'en_US' ? 'en' : 'zh-hk';
     return config;
   },
   (error) => {

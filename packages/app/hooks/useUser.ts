@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 22:07:51
+ * @LastEditTime: 2025-02-27 16:02:36
  * @FilePath: /ezgg-app/packages/app/hooks/useUser.ts
  */
 import {useToastController} from '@my/ui';
@@ -78,6 +78,7 @@ export default function useUser() {
         userInfo: res?.data,
       });
     }
+    return res?.data || {};
   };
 
   // 登出

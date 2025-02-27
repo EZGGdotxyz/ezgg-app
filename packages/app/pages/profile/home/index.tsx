@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 22:34:36
+ * @LastEditTime: 2025-02-27 17:02:50
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -28,7 +28,6 @@ export const ESTIMATED_ITEM_SIZE = 90;
 import {ComponentProps} from 'react';
 import {ActivityIndicator, Platform} from 'react-native';
 import {Link} from 'solito/link';
-import {ExternalLinkData, PrimaryColor} from 'app/config';
 import PermissionPage from 'app/Components/PermissionPage';
 import useUser from 'app/hooks/useUser';
 import {useDispatch} from 'react-redux';
@@ -39,6 +38,8 @@ import {appScale} from 'app/utils';
 import ChainPopup from './components/ChainPopup';
 import MyQrCodePopup from './components/MyQrCodePopup';
 import {usePrivy} from '@privy-io/react-auth';
+import AppButton from 'app/Components/AppButton';
+import AppLoading from 'app/Components/AppLoading';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
 
 // 我的
@@ -47,11 +48,13 @@ const MyScreen = () => {
   const {t, i18n} = useTranslation();
   const {userLogout} = useUser();
   const {ready, authenticated, logout} = usePrivy();
+  const {initUserInfo} = useUser();
 
   const dispatch = useDispatch<Dispatch>();
   const {makeRequest} = useRequest();
   const [{unread, demoniator}] = useRematchModel('app');
-  const [{isLogin}] = useRematchModel('user');
+  const [{isLogin, userInfo}] = useRematchModel('user');
+
   const [chainList, setChainList] = useState<any[]>([
     {
       id: '1',
@@ -80,27 +83,29 @@ const MyScreen = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const InfoItems = [
-    {
-      title: t('profile.home.security'),
-      icon: 'security2',
-      url: '/profile/security',
-      id: 'security',
-    },
-  ];
-  const GeneralItems = [
-    ...(isLogin ? InfoItems : []),
-    {
-      title: t('profile.home.language'),
-      icon: 'document',
-      url: '/language',
-      id: 'language',
-    },
+    // {
+    //   title: t('profile.home.security'),
+    //   icon: 'security2',
+    //   url: '/profile/security',
+    //   id: 'security',
+    // },
     {
       title: t('profile.home.demoniator'),
       icon: 'show',
       url: '/profile/demoniator',
       id: 'demoniator',
     },
+  ];
+  const GeneralItems = [
+    // ...(isLogin ? InfoItems : []),
+    {
+      title: t('profile.home.language'),
+      icon: 'document',
+      url: '/language',
+      id: 'language',
+    },
+
+    ...(isLogin ? InfoItems : []),
   ];
 
   const LogoutItems = [
@@ -133,6 +138,12 @@ const MyScreen = () => {
     ...(isLogin ? LogoutItems : []),
   ];
 
+  useEffect(() => {
+    if (isLogin) {
+      initUserInfo();
+    }
+  }, [isLogin]);
+
   const onLogout = async () => {
     setIsLoading(true);
     logout();
@@ -157,9 +168,13 @@ const MyScreen = () => {
         jc={'space-between'}
         onPress={async () => {
           if (item.id === 'language') {
-            const locale = i18n?.language === 'zh_HK' ? 'en_US' : 'zh_HK';
-            setLanguage(locale);
-            i18n?.changeLanguage(locale);
+            setIsLoading(true);
+            setTimeout(() => {
+              const locale = i18n?.language === 'zh_HK' ? 'en_US' : 'zh_HK';
+              setLanguage(locale);
+              i18n?.changeLanguage(locale);
+              setIsLoading(false);
+            }, 1000);
           } else if (item.id === 'logout') {
             onLogout();
           } else if (item.type === '_blank') {
@@ -224,10 +239,10 @@ const MyScreen = () => {
       <Header isLogin={isLogin} />
       <ScrollView flex={1} w={'100%'} bc="#fff">
         <YStack pl={appScale(24)} pr={appScale(24)} pb={appScale(24)} pt={appScale(12)}>
-          {!isLogin && (
+          {isLogin && (
             <XStack w={'100%'} ai="center" jc={'space-between'} pb={appScale(24)}>
               <SizableText fontSize={'$5'} color={'#212121'} h={appScale(28)} lh={appScale(28)}>
-                {t('profile.home.general')}
+                @{userInfo?.customMetadata?.nickname}
               </SizableText>
               <Button
                 unstyled
@@ -269,23 +284,15 @@ const MyScreen = () => {
               return Row(item);
             })}
           </YStack>
-          <XStack w={'100%'} pl="$4" pr="$4" mt="$6" pb="$10">
+          <XStack w={'100%'} mt="$6" pb="$10">
             {!isLogin && (
-              <Button
-                borderRadius={25}
-                h={50}
-                w={'100%'}
-                jc={'center'}
-                ai={'center'}
-                bc={'$color'}
+              <AppButton
                 onPress={() => {
                   push('/login');
                 }}
               >
-                <Paragraph col={'$color1'} fontSize={'$3'}>
-                  {t('operate.button.login')}
-                </Paragraph>
-              </Button>
+                {t('login.loginButton')}
+              </AppButton>
             )}
           </XStack>
         </YStack>
@@ -297,7 +304,12 @@ const MyScreen = () => {
         selectChain={selectChain}
         chainData={chainData}
       />
-      <MyQrCodePopup modalVisible={modalVisible2} setModalVisible={setModalVisible2} />
+      <MyQrCodePopup
+        userId={userInfo?.customMetadata?.id}
+        modalVisible={modalVisible2}
+        setModalVisible={setModalVisible2}
+      />
+      {isLoading && <AppLoading />}
     </PermissionPage>
   );
 };

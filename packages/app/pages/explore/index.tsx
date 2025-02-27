@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 17:52:57
+ * @LastEditTime: 2025-02-27 16:57:48
  * @FilePath: /ezgg-app/packages/app/pages/explore/index.tsx
  */
 import {
@@ -14,6 +14,7 @@ import {
   SizableText,
   AppImage,
   Button,
+  useToastController,
 } from '@my/ui';
 import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -24,6 +25,7 @@ import {appScale} from 'app/utils';
 import AppButton from 'app/Components/AppButton';
 import {useRouter} from 'solito/router';
 import AppLoading from 'app/Components/AppLoading';
+import {ExternalLinkData} from 'app/config';
 
 // 掃描
 const ExploreScreen = () => {
@@ -35,6 +37,7 @@ const ExploreScreen = () => {
   const {push} = useRouter();
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToastController();
 
   useEffect(() => {
     checkCameraPermission();
@@ -161,12 +164,20 @@ const ExploreScreen = () => {
   const onPush = (code) => {
     if (code) {
       console.log('Found QR code in image:', code);
-      setIsLoading(true);
-      setTimeout(() => {
-        stopScanning();
-        push('/home/send');
-        setIsLoading(false);
-      }, 1000);
+      let userId = '';
+      if (code.indexOf(ExternalLinkData.webPageHome + '?userId=') !== -1) {
+        userId = code.replace(ExternalLinkData.webPageHome + '?userId=', '');
+      }
+      if (userId) {
+        setIsLoading(true);
+        setTimeout(() => {
+          stopScanning();
+          push('/home/send');
+          setIsLoading(false);
+        }, 1000);
+      } else {
+        toast.show(t('home.qr.invalid'));
+      }
     }
   };
 
@@ -275,9 +286,7 @@ const ExploreScreen = () => {
           />
         </Button>
       </XStack>
-      {isLoading && (
-        <AppLoading />
-      )}
+      {isLoading && <AppLoading />}
     </PermissionPage>
   );
 };

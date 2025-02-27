@@ -1,25 +1,26 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 14:40:44
+ * @LastEditTime: 2025-02-27 16:56:27
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/MyQrCodePopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import AppModal from 'app/Components/AppModal';
 import QrCode from 'app/Components/QrCode';
-import {PrimaryColor} from 'app/config';
+import {ExternalLinkData, PrimaryColor} from 'app/config';
 import {appScale} from 'app/utils';
 import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
 
 export type MyQrCodePopupProps = {
+  userId: string;
   modalVisible: any;
   setModalVisible: (values) => void;
 };
 
-const MyQrCodePopup: React.FC<any> = ({modalVisible, setModalVisible}: MyQrCodePopupProps) => {
+const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible}: MyQrCodePopupProps) => {
   const {t, i18n} = useTranslation();
   return (
     <AppModal zIndex={12} setModalVisible={setModalVisible} modalVisible={modalVisible}>
@@ -45,7 +46,7 @@ const MyQrCodePopup: React.FC<any> = ({modalVisible, setModalVisible}: MyQrCodeP
           </SizableText>
           <XStack w="100%" mb={appScale(24)} h={1} bc={'#eeeeee'}></XStack>
           <XStack w="100%" ai={'center'} jc={'center'} p={appScale(24)} borderColor={'#eeeeee'} borderWidth={1}>
-            <QrCode size={appScale(334)} url={'https://www.bitenet.io'} />
+            <QrCode size={appScale(334)} url={`${ExternalLinkData.webPageHome}?userId=${userId}`} />
           </XStack>
         </YStack>
       </YStack>

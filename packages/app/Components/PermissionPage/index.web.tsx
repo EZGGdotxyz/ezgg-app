@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 22:33:28
+ * @LastEditTime: 2025-02-27 15:52:14
  * @FilePath: /ezgg-app/packages/app/Components/PermissionPage/index.web.tsx
  */
 import {Button, Paragraph, YStack} from '@my/ui';
@@ -27,7 +27,6 @@ export default function PermissionPage(props: PermissionPageProps) {
   const dispatch = useDispatch<Dispatch>();
   // const {params} = useParams();
   const [app] = useRematchModel('app');
-  const scheme = 'light'
   const {replace} = useRouter();
 
   const checkUserPermission = async () => {

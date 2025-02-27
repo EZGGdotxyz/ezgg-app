@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-19 10:34:42
- * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeHeader/index.web.tsx
+ * @LastEditTime: 2025-02-27 15:26:40
+ * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeHeader/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
@@ -13,7 +13,7 @@ import {useRouter} from 'solito/router';
 import {useState} from 'react';
 import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
-import { AppName, PrimaryColor } from 'app/config';
+import {AppName, PrimaryColor} from 'app/config';
 
 export type HomeHeaderProps = {isLogin: boolean};
 // 首页 头部
@@ -55,7 +55,11 @@ const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
           h={'100%'}
           pos={'relative'}
           onPress={() => {
-            push('/my');
+            if (isLogin) {
+              push('/home/notification');
+            } else {
+              push('/login');
+            }
           }}
         >
           {unread > 0 && (
