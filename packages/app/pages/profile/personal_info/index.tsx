@@ -34,6 +34,7 @@ import {memberProfileDeleteAccount} from 'app/servers/api/1002Huiyuangerenxinxi'
 import {useRouter} from 'solito/router';
 import useRequest from 'app/hooks/useRequest';
 import {appScale} from 'app/utils';
+import AppHeader2 from 'app/Components/AppHeader2';
 
 // 个人信息
 const PersonalInfoScreen = () => {
@@ -80,7 +81,8 @@ const PersonalInfoScreen = () => {
 
   return (
     <PermissionPage>
-      <AppHeader title={t('screen.personal_info.title')} headerLeft={HeaderLeft} />
+      <AppHeader2 title={t('screen.profile.personal_info.title')} fallbackUrl="/profile" />
+
       <YStack w={'100%'} p={appScale(16)} flex={1}>
         <YStack
           w={appScale(343)}

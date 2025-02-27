@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 16:45:46
+ * @LastEditTime: 2025-02-27 17:51:09
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -52,7 +52,7 @@ const SuccessPopup: React.FC<any> = ({
   const toast = useToastController();
 
   const accountContinue = () => {
-    if (accountForm?.nickname && accountForm?.nickname.length <= 4) {
+    if (accountForm?.nickname && accountForm?.nickname.length < 4) {
       toast.show(t('login.profile.nikeName.error'));
       return;
     }

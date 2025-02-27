@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:39:48
+ * @LastEditTime: 2025-02-27 18:07:32
  * @FilePath: /ezgg-app/packages/app/pages/home/history/list/index.tsx
  */
 import {
@@ -28,6 +28,8 @@ import ListEmpty from 'app/Components/ListEmpty';
 import dayjs from 'dayjs';
 import {ChevronRight} from '@tamagui/lucide-icons';
 import {PrimaryColor} from 'app/config';
+import AppHeader2 from 'app/Components/AppHeader2';
+import SearchHeader from 'app/Components/SearchHeader';
 
 const {useParam} = createParam<{id: string}>();
 
@@ -200,6 +202,7 @@ const HistoryScreen = (props: any) => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   const [writeData, setWriteData] = useState<any>({});
 
@@ -247,6 +250,11 @@ const HistoryScreen = (props: any) => {
     }
   }, [isRefresh]);
 
+  const onSearch = (text) => {
+    // setSearchText(text);
+    console.log('🚀 ~ onSearch ~ text:', text);
+  };
+
   /**
    * 加载时加载动画
    */
@@ -293,7 +301,13 @@ const HistoryScreen = (props: any) => {
 
   return (
     <PermissionPage>
-      <AppHeader title={t('screen.home.history')} headerLeft={HeaderLeft} />
+      <AppHeader2 title={t('screen.home.history')} fallbackUrl="/" />
+      <SearchHeader
+        placeholder={t('home.send.search')}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        onSearch={onSearch}
+      />
       <FlatList
         data={data}
         refreshing={loading}

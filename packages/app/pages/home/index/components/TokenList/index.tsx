@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 15:55:06
+ * @LastEditTime: 2025-02-27 17:04:07
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/TokenList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -99,10 +99,10 @@ const TokenList: React.FC<any> = (props: TokenListProps) => {
             type="local"
           />
           <SizableText mt={appScale(32)} col={'#212121'} fontSize={'$7'} fow={'700'}>
-            {t('home.order.noTransactions')}
+            {t('home.order.noPortfolio')}
           </SizableText>
           <SizableText mt={appScale(16)} col={'#212121'} fontSize={'$3'} fow="400">
-            {t('home.order.noTransactions2')}
+            {t('home.order.noPortfolio2')}
           </SizableText>
         </YStack>
       ) : (

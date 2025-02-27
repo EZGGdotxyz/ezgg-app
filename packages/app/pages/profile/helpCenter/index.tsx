@@ -8,6 +8,7 @@ import {AppHeader, AppHeaderProps, HeaderBackButton, Paragraph, YStack} from '@m
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
+import AppHeader2 from 'app/Components/AppHeader2';
 
 // 幫助中心
 const HelpCenterScreen = () => {
@@ -15,7 +16,8 @@ const HelpCenterScreen = () => {
   const HeaderLeft: AppHeaderProps['headerRight'] = () => <HeaderBackButton fallbackUrl="/my"></HeaderBackButton>;
   return (
     <PermissionPage isHomePage={true}>
-      <AppHeader title={t('screen.profile.helpCenter.title')} headerLeft={HeaderLeft} />
+      <AppHeader2 title={t('screen.profile.helpCenter.title')} fallbackUrl="/profile" />
+
       <YStack>
         <Paragraph> HelpCenter 幫助中心</Paragraph>
       </YStack>

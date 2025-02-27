@@ -2,7 +2,7 @@ import {DefaultTheme} from '@react-navigation/native';
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 20:48:33
+ * @LastEditTime: 2025-02-27 17:25:07
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
 export const ExternalLinkData = {
@@ -24,12 +24,11 @@ export const DefaultLanguage = 'en_US';
 
 export const AppName = 'ezgg.app';
 
-// 测试环境api
-export const APP_URL = 'https://api.catfoodworks.com';
+// 是否生产环境
+const isRelease = false;
 
+// api 请求接口
+export const APP_URL = isRelease ? 'https://api.catfoodworks.com' : 'https://api.catfoodworks.com';
 
-// 生产环境api
-// export const APP_URL = 'https://app.bitenet.io';
-
-// 主题色
-// export const PrimaryColor = '#F26F21';
+// 区块链网路类型：MAIN 主网；TEST 测试网；DEV 开发网
+export const NETWORK = isRelease ? 'MAIN' : 'TEST';

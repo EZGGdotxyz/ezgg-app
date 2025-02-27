@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 16:50:03
+ * @LastEditTime: 2025-02-27 18:09:52
  * @FilePath: /ezgg-app/packages/app/Components/SearchHeader/index.tsx
  */
 import {AppImage, Button, Input, SizableText, Text, XStack, useToastController} from '@my/ui';
@@ -20,15 +20,15 @@ import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 
 export type SearchHeaderProps = {
-  searchName: string;
-  setSearchName: (searchName: string) => void;
+  searchText: string;
+  setSearchText: (searchText: string) => void;
   onSearch: (data: any) => void;
+  placeholder: string;
 };
 // 首页 餐厅详情
-const SearchHeader: React.FC<any> = ({searchName, setSearchName, onSearch}: SearchHeaderProps) => {
+const SearchHeader: React.FC<any> = ({searchText, setSearchText, onSearch, placeholder}: SearchHeaderProps) => {
   const [{unread}] = useRematchModel('app');
   const {push, back, replace} = useRouter();
-  const [searchText, setSearchText] = useState('');
   const {t, i18n} = useTranslation();
   const toast = useToastController();
   const scheme = 'light';
@@ -85,21 +85,21 @@ const SearchHeader: React.FC<any> = ({searchName, setSearchName, onSearch}: Sear
                 flex: 1,
                 color: '#212121',
               }}
-              value={searchName}
+              value={searchText}
               onChangeText={(text) => {
                 // setSearchText(text);
-                setSearchName(text);
+                setSearchText(text);
               }}
               onKeyPress={(e) => {
                 if (e.nativeEvent.key === 'Enter') {
-                  onSearch(searchName);
+                  onSearch(searchText);
                 }
               }}
               // color={'$color'}
               size={'$2'}
               fow={'400'}
               keyboardType="default"
-              placeholder={t('home.send.search')}
+              placeholder={placeholder}
             />
           </XStack>
           {/* <Button
@@ -119,7 +119,7 @@ const SearchHeader: React.FC<any> = ({searchName, setSearchName, onSearch}: Sear
             flexShrink={0}
             onPress={() => {
               inputRef?.current?.blur();
-              onSearch(searchName);
+              onSearch(searchText);
             }}
           >
             <SizableText size="$3" color={'$color1'} fow={'500'}>

@@ -8,14 +8,14 @@ import {AppHeader, AppHeaderProps, HeaderBackButton, Paragraph, YStack} from '@m
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
+import AppHeader2 from 'app/Components/AppHeader2';
 
 // 關於
 const AboutScreen = () => {
   const {t} = useTranslation();
-  const HeaderLeft: AppHeaderProps['headerRight'] = () => <HeaderBackButton fallbackUrl="/my"></HeaderBackButton>;
   return (
     <PermissionPage isHomePage={true}>
-      <AppHeader title={t('screen.profile.aboutEzgg.title')} headerLeft={HeaderLeft} />
+      <AppHeader2 title={t('screen.profile.aboutEzgg.title')} fallbackUrl="/profile" />
       <YStack>
         <Paragraph> About 關於</Paragraph>
       </YStack>

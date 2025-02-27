@@ -1,13 +1,13 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 17:06:33
- * @FilePath: /ezgg-app/apps/next/pages/home/history/index.tsx
+ * @LastEditTime: 2025-02-27 18:15:52
+ * @FilePath: /ezgg-app/apps/next/pages/home/notification.tsx
  */
-import HistoryScreen from 'app/pages/home/history/list';
+import NotificationScreen from 'app/pages/home/notification';
 import Head from 'next/head';
+import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import { useEffect, useState } from 'react';
 
 export default function Page() {
   const {t} = useTranslation();
@@ -23,9 +23,9 @@ export default function Page() {
   return (
     <>
       <Head>
-        <title>{t('screen.home.history')}</title>
+        <title>{t('screen.home.notification.title')}</title>
       </Head>
-      <HistoryScreen  isRefresh={isRefresh}/>
+      <NotificationScreen isRefresh={isRefresh} />
     </>
   );
 }

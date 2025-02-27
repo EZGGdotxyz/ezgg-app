@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 18:28:15
+ * @LastEditTime: 2025-02-27 18:03:57
  * @FilePath: /ezgg-app/packages/app/Components/AppHeader2/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -23,6 +23,8 @@ export type AppHeader2Props = {
   type?: string;
   isClosure?: boolean;
   isDark?: boolean;
+  isSearch?: boolean;
+  isSettings?: boolean;
 };
 // 首页 头部
 const AppHeader2: React.FC<any> = ({
@@ -33,6 +35,8 @@ const AppHeader2: React.FC<any> = ({
   type = '',
   isClosure = false,
   isDark = false,
+  isSearch = false,
+  isSettings = false,
 }: AppHeader2Props) => {
   const {back, push, replace} = useRouter();
   const [statusBarHeight, setStatusBarHeight] = useState(46);
@@ -84,7 +88,7 @@ const AppHeader2: React.FC<any> = ({
             {title}
           </SizableText>
         </XStack>
-        <XStack h={'100%'} w={appScale(48)} ai={'center'}>
+        <XStack h={'100%'} w={appScale(48)} jc={'flex-end'} ai={'center'}>
           {isQr && (
             <Button
               unstyled
@@ -99,6 +103,42 @@ const AppHeader2: React.FC<any> = ({
                 width={appScale(48)}
                 height={appScale(48)}
                 src={require('app/assets/images/qr2.png')}
+                type="local"
+              />
+            </Button>
+          )}
+          {isSearch && (
+            <Button
+              unstyled
+              h={'100%'}
+              ai={'center'}
+              jc={'center'}
+              onPress={() => {
+              //  onSearch();
+              }}
+            >
+              <AppImage
+                width={appScale(28)}
+                height={appScale(28)}
+                src={require('app/assets/images/search.png')}
+                type="local"
+              />
+            </Button>
+          )}
+          {isSettings && (
+            <Button
+              unstyled
+              h={'100%'}
+              ai={'center'}
+              jc={'center'}
+              onPress={() => {
+                replace('/profile/notification');
+              }}
+            >
+              <AppImage
+                width={appScale(28)}
+                height={appScale(28)}
+                src={require('app/assets/images/setting.png')}
                 type="local"
               />
             </Button>

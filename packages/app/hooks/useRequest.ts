@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-08 10:37:32
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-08-04 13:10:50
- * @FilePath: /snapx-nfc-app-merchants/packages/app/hooks/useRequest.ts
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-02-27 17:28:19
+ * @FilePath: /ezgg-app/packages/app/hooks/useRequest.ts
  */
 import {useToastController} from '@my/ui';
 import {useTranslation} from 'react-i18next';
@@ -37,17 +37,17 @@ export default function useRequest() {
   const makeRequest = async (req: any) => {
     return Promise.resolve(req)
       .then((res) => {
-        if (!res?.message && res) {
+        if (res?.code==='0' && res) {
           // Callback(res);
           return res;
         } else {
-          if (res?.message) {
+          if (res?.msg) {
             // if (data?.errCode === '21005' || data?.errCode === '21004' || data?.errCode === '21006') {
             //   window?.myEvent?.emit('locallyLogout');
             // } else {
             //   return RequestError(data?.errMessage);
             // }
-            return RequestError(res?.message);
+            return RequestError(res?.msg);
           }
         }
       })
@@ -62,8 +62,8 @@ export default function useRequest() {
           });
           return RequestError(i18n.t('tips.error.request.unauthorized'));
         }
-        if (error?.response?.data?.message) {
-          return RequestError(error?.response?.data?.message);
+        if (error?.response?.data?.msg) {
+          return RequestError(error?.response?.data?.msg);
         }
         // switch (error?.response?.status) {
         //   case 400:

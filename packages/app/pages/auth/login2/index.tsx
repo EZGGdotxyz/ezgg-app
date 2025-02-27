@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 16:45:29
+ * @LastEditTime: 2025-02-27 17:50:33
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {
@@ -78,7 +78,10 @@ const LoginScreen = () => {
       initLogin(JSON.parse(token), JSON.parse(idToken));
       const _userInfo = await initUserInfo();
       if (_userInfo?.nickname) {
-        handleSuccess(_userInfo);
+        handleSuccess({
+          nickname: _userInfo?.customMetadata?.nickname || '',
+          avatar: _userInfo?.customMetadata?.avatar || '',
+        });
       } else {
         setAccountForm({
           nickname: _userInfo?.nickname || '',
@@ -94,8 +97,8 @@ const LoginScreen = () => {
       setIsSetInfo(false);
       setTimeout(async () => {
         await postUserUpdateMember({
-          nickname: _userInfo?.customMetadata?.nickname || '',
-          avatar: _userInfo?.customMetadata?.avatar || '',
+          nickname: _userInfo.nickname || '',
+          avatar: _userInfo.avatar || '',
         });
         setModalVisible(false);
         onLink();

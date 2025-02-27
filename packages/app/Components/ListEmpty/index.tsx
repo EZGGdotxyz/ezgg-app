@@ -1,14 +1,15 @@
 /*
  * @Date: 2023-12-08 16:25:15
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-07-22 15:40:55
- * @FilePath: /snapx-nfc-app/packages/app/Components/ListEmpty/index.tsx
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-02-27 18:13:26
+ * @FilePath: /ezgg-app/packages/app/Components/ListEmpty/index.tsx
  */
 import {AppImage, Button, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
 import {useRematchModel} from 'app/store/model';
+import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {ActivityIndicator} from 'react-native';
 import {Link} from 'solito/link';
@@ -29,24 +30,14 @@ const ListEmpty: React.FC<any> = ({loading}: ListEmptypProps) => {
         <>
           <XStack>
             <AppImage
-              web={{
-                alt: '',
-                src: require('app/assets/images/empty.png'),
-                width: 120,
-                height: 120,
-              }}
+              width={appScale(160)}
+              height={appScale(156)}
+              src={require('app/assets/images/empty2.png')}
               type="local"
-              native={{
-                source: {
-                  height: 120,
-                  uri: require('app/assets/images/empty.png'),
-                  width: 120,
-                },
-              }}
             />
           </XStack>
           <XStack>
-            <SizableText col={'$color11'} fontSize={'$5'}>
+          <SizableText mt={appScale(32)} col={'#212121'} fontSize={'$7'} fow={'700'}>
               {t('tips.list.noData.title')}
             </SizableText>
           </XStack>
