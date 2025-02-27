@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 18:11:58
+ * @LastEditTime: 2025-02-27 21:21:03
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/index.tsx
  */
 import {
@@ -18,7 +18,6 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
-import History from '../../index/components/History';
 import {appScale} from 'app/utils';
 import useRequest from 'app/hooks/useRequest';
 import {createParam} from 'solito';
@@ -44,15 +43,9 @@ const Item: React.FC<any> = ({item, isBorderBottom, itemKey, onWrite}: ItemProps
   const {push} = useRouter();
   const scheme = 'light';
 
-  const onPress = () => {
-    onWrite(item);
-  };
   return (
     <YStack
-      w={appScale(343)}
-      p="$3"
-      borderRadius={16}
-      mb="$2"
+      p={appScale(24)}
       bc={'$background'}
       style={{
         backgroundColor: '#fff',
@@ -62,128 +55,49 @@ const Item: React.FC<any> = ({item, isBorderBottom, itemKey, onWrite}: ItemProps
       jc={'space-between'}
     >
       <XStack jc={'space-between'} w="100%">
-        <YStack width={'100%'}>
-          {/* <Button
-                    unstyled       pressStyle={{
-                  opacity: 0.85,
-                }}
-            mb={'$2'}
-            w={'100%'}
-            flexDirection="row"
-            onPress={() => {
-              push('/restaurant/' + item?.restaurant?.id);
-            }}
-          >
-            <SizableText w="100%" color={'$blue11'} size={'$3'} numberOfLines={1}>
-              {i18n.language === 'zh_HK' ? item?.restaurant?.name : item?.restaurant?.en_name}
+        <YStack flex={1}>
+          <XStack w={'100%'} jc={'space-between'} mb={'$2'}>
+            <SizableText color={'#212121'} w="100%" fow="600" size={'$6'} pr={'$1'}>
+              {item?.title}
             </SizableText>
-          </Button> */}
-          <XStack w={'100%'} mb={'$2'}>
-            <SizableText color={'$color'} w="100%" fow="600" size={'$4'} numberOfLines={1}>
-              {i18n.language === 'zh_HK' ? item?.luckyDrawRuleTitle : item?.luckyDrawRuleEn_title}
-            </SizableText>
+            <XStack space="$3">
+              {item?.status === 'unread' && (
+                <Button unstyled>
+                  <AppImage
+                    width={appScale(32)}
+                    height={appScale(32)}
+                    src={require('app/assets/images/error.png')}
+                    type="local"
+                  />
+                </Button>
+              )}
+              {item?.status === 'unread' && (
+                <Button unstyled>
+                  <AppImage
+                    width={appScale(32)}
+                    height={appScale(32)}
+                    src={require('app/assets/images/success.png')}
+                    type="local"
+                  />
+                </Button>
+              )}
+            </XStack>
           </XStack>
 
-          {item?.luckyDrawGiftName && (
-            <XStack w="100%" jc={'space-between'}>
-              <XStack width="70%" ai="center">
-                <XStack flexShrink={0} h={appScale(54)} borderRadius={8} overflow="hidden">
-                  <AppImage
-                    web={{
-                      alt: '',
-                      src: item?.luckyDrawGiftPhoto || require('app/assets/images/v2/gift2.png'),
-                      width: appScale(54),
-                      height: appScale(54),
-                    }}
-                    type={item?.luckyDrawGiftPhoto ? '' : 'local'}
-                    native={{
-                      source: {
-                        width: appScale(54),
-                        height: appScale(54),
-                        uri: item?.luckyDrawGiftPhoto || require('app/assets/images/v2/gift2.png'),
-                      },
-                    }}
-                  />
-                </XStack>
-                <YStack w="100%" flex={1} pl="$2">
-                  <Button
-                    mb={'$2'}
-                    unstyled
-                    flexDirection="row"
-                    space={0}
-                    pressStyle={{opacity: 0.85}}
-                    onPress={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      push('/card/' + item?.brandId);
-                    }}
-                  >
-                    <SizableText color={'$color'} fow="600" size={'$2'} numberOfLines={1}>
-                      {i18n.language === 'zh_HK' ? item?.restaurant?.name : item?.restaurant?.en_name}
-                    </SizableText>
-                    <ChevronRight color={'$color'} />
-                  </Button>
-                  <XStack width="100%" ai={'center'}>
-                    <XStack flexShrink={0} pr="$2">
-                      <AppImage
-                        width={appScale(16)}
-                        height={appScale(16)}
-                        src={require('app/assets/images/v2/dark/currency.png')}
-                        type="local"
-                      />
-                    </XStack>
-                    <SizableText
-                      color={PrimaryColor}
-                      fow="600"
-                      size={'$3'}
-                      flex={1}
-                      numberOfLines={2}
-                      style={{overflowWrap: 'break-word'}}
-                    >
-                      {`${i18n.language === 'zh_HK' ? item?.luckyDrawGiftName : item?.luckyDrawGiftEN_name}`}
-                      {`x ${item?.luckyDrawRuleQuantity}`}
-                    </SizableText>
-                  </XStack>
-                </YStack>
-              </XStack>
-              <XStack w="30%" ai={'center'} jc={'flex-end'}>
-                <Button
-                  unstyled
-                  pressStyle={{
-                    opacity: 0.85,
-                  }}
-                  ai="center"
-                  jc={'center'}
-                  style={{
-                    height: 40,
-                    width: '100%',
-                    borderRadius: 10,
-                  }}
-                  bc={item?.isSettlement ? '#afafaf' : '$color'}
-                  color={'$color1'}
-                  disabled={item?.isSettlement}
-                  onPress={() => {
-                    push({
-                      pathname: '/my/prize/use/' + item?.memberGiftExchangeId,
-                      query: {
-                        type: 'luckyDraw',
-                        restaurantId: item?.restaurant?.id,
-                      },
-                    });
-                  }}
-                  fontSize={'$3'}
-                >
-                  {item?.isSettlement ? t('operate.button.onWrite') : t('operate.button.write')}
-                </Button>
-              </XStack>
-            </XStack>
+          {item?.description && (
+            <SizableText color={'#424242'} size={'$3'} fow={'500'}>
+              {item?.description}
+            </SizableText>
           )}
-          <XStack>
-            <SizableText color={'#868686'} size={'$2'}>
-              {dayjs(item?.createAt).format('YYYY-MM-DD HH:mm:ss')}
+          <XStack w="100%" jc={'space-between'} mb={'$2'}>
+            <SizableText color={'#616161'} size={'$1'} fow={'500'}>
+              {dayjs(item?.createAt).format('HH:mm A')}
             </SizableText>
           </XStack>
         </YStack>
+        <XStack flexShrink={0} jc={'flex-end'} ai={'center'} w={36}>
+          <ChevronRight color={'#757575'} size={24} />
+        </XStack>
       </XStack>
     </YStack>
   );
@@ -195,7 +109,6 @@ const NotificationScreen = (props: any) => {
   const {t} = useTranslation();
   const scheme = 'light';
 
-  const HeaderLeft: AppHeaderProps['headerRight'] = () => <HeaderBackButton fallbackUrl="/my"></HeaderBackButton>;
   const {makeRequest} = useRequest();
   const [data, setData] = useState<any>([]);
   const [page, setPage] = useState(1);
@@ -221,8 +134,46 @@ const NotificationScreen = (props: any) => {
       params.brandId = Number(id);
     }
     // const res = await makeRequest(memberLuckyDrawRouterPageMemberLuchyDraw(params));
-    const res: any = [];
-    if (res?.record && res?.record.length > 0) {
+    const res: any = {
+      record: [
+        {
+          id: 1,
+          title: '系统更新通知',
+          description: '我们的应用已更新到最新版本，新增了多项实用功能，欢迎体验！',
+          createAt: '2024-02-27 09:30:00',
+          status: 'unread',
+        },
+        {
+          id: 2,
+          title: '账户安全提醒',
+          description: '检测到您的账户在新设备上登录，如非本人操作请及时修改密码。',
+          createAt: '2024-02-27 10:15:00',
+          status: 'read',
+        },
+        {
+          id: 3,
+          title: '交易成功提醒',
+          description: '您的转账交易已成功完成，交易金额：$1,000.00',
+          createAt: '2024-02-27 11:20:00',
+          status: 'read',
+        },
+        {
+          id: 4,
+          title: '优惠活动通知',
+          description: '限时优惠活动即将开始，参与即可获得额外奖励！',
+          createAt: '2024-02-27 13:45:00',
+          status: 'unread',
+        },
+        {
+          id: 5,
+          title: '系统维护通知',
+          description: '系统将于今晚23:00-次日凌晨2:00进行例行维护，请提前做好相关安排。',
+          createAt: '2024-02-27 15:00:00',
+          status: 'unread',
+        },
+      ],
+    };
+    if (res?.record?.length > 0) {
       if (_page === 1) {
         setData(res.record);
       } else {
@@ -314,7 +265,7 @@ const NotificationScreen = (props: any) => {
         }}
         contentContainerStyle={{
           flexGrow: 1,
-          padding: appScale(16),
+          // padding: appScale(16),
           backgroundColor: '#fff',
         }}
         onEndReached={() => {

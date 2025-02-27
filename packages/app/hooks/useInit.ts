@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 17:30:57
+ * @LastEditTime: 2025-02-27 23:23:48
  * @FilePath: /ezgg-app/packages/app/hooks/useInit.ts
  */
 import {Dispatch} from 'app/store';
@@ -64,7 +64,7 @@ export default function useInit() {
     if (token && idToken) {
       initLogin(token, idToken);
       // 获取用户信息
-      if (userInfo?.id) {
+      if (userInfo?.customMetadata?.id) {
         initUserInfo();
       }
       _getInfrastructureListBlockchain();

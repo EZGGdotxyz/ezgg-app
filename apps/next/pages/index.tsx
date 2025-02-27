@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 20:20:16
+ * @LastEditTime: 2025-02-27 22:49:48
  * @FilePath: /ezgg-app/apps/next/pages/index.tsx
  */
 import HomeScreen from 'app/pages/home/index';
