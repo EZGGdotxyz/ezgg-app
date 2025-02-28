@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 23:23:48
+ * @LastEditTime: 2025-02-28 11:23:02
  * @FilePath: /ezgg-app/packages/app/hooks/useInit.ts
  */
 import {Dispatch} from 'app/store';
@@ -23,6 +23,7 @@ import useRequest from './useRequest';
 import {createParam} from 'solito';
 import {DefaultLanguage, NETWORK} from 'app/config';
 import {getInfrastructureListBlockchain} from 'app/servers/api/infrastructure';
+import {getBalanceListBalance} from 'app/servers/api/balance';
 
 export default function useInit() {
   const {i18n} = useTranslation();
@@ -41,6 +42,7 @@ export default function useInit() {
     );
     if (res?.data && res?.data?.length > 0) {
       _blockchainList = res?.data;
+      // _getBalanceListBalance('ETH', _blockchainList[0]?.id, 'USD');
     }
     const res2 = await makeRequest(
       getInfrastructureListBlockchain({
@@ -55,6 +57,13 @@ export default function useInit() {
       blockchainList: _blockchainList,
     });
   };
+
+  // const _getBalanceListBalance = async (platform, chainId, currency) => {
+  //   const res = await makeRequest(getBalanceListBalance({platform, chainId, currency}));
+  //   console.log('🚀 ~ const_getBalanceListBalance= ~ res:', res);
+  //   if (res?.data) {
+  //   }
+  // };
 
   const _init = async () => {
     const token: any = await getUserToken();

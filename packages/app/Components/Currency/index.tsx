@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 10:12:26
+ * @LastEditTime: 2025-02-28 11:13:13
  * @FilePath: /ezgg-app/packages/app/Components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -18,7 +18,6 @@ export type CurrencyProps = {token: string; chain: string; updateCurrency: (curr
 const Currency: React.FC<any> = ({token, chain, updateCurrency}: CurrencyProps) => {
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
-  const [{demoniator}] = useRematchModel('app');
   const [modalVisible, setModalVisible] = useState(false);
   const [currencyData, setCurrencyData] = useState<any>({
     id: 1,
@@ -77,9 +76,6 @@ const Currency: React.FC<any> = ({token, chain, updateCurrency}: CurrencyProps) 
     setCurrencyData(item);
     setModalVisible(false);
     updateCurrency(item);
-    // dispatch.app.updateState({
-    //   demoniator: item.code,
-    // });
   };
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 16:59:37
+ * @LastEditTime: 2025-02-28 10:51:46
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -21,6 +21,7 @@ export default {
   'home.yesterday': '昨天',
   'home.receive': '接收',
   'home.deposit': '存款',
+  'home.search':'搜索',
 
   'home.send.search': '郵件地址, 電話號碼, 用戶ID 或錢包',
   'home.send.recent': '最近',

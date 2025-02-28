@@ -2,6 +2,7 @@
 /* eslint-disable */
 // API 更新时间：
 // API 唯一标识：
+import * as balance from './balance';
 import * as infrastructure from './infrastructure';
 import * as member from './member';
 import * as setting from './setting';
@@ -13,4 +14,5 @@ export default {
   transactionPayLink,
   setting,
   transactionHistory,
+  balance,
 };

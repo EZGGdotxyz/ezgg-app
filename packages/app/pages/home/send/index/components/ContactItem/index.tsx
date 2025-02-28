@@ -1,14 +1,14 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 17:40:55
+ * @LastEditTime: 2025-02-28 11:30:42
  * @FilePath: /ezgg-app/packages/app/pages/home/send/index/components/ContactItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
 import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
-import {appScale} from 'app/utils';
+import {appScale, truncateAddress} from 'app/utils';
 import {useEffect, useState} from 'react';
 
 export type ContactListProps = {
@@ -22,6 +22,22 @@ const ContactItem: React.FC<any> = ({item, itemKey, onSubmit}: ContactListProps)
 
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
+
+  const getSubName = () => {
+    for (let index = 0; index < item?.memberLinkedAccount?.length; index++) {
+      const element = item?.memberLinkedAccount[index];
+      if (element?.type === 'phone') {
+        return element?.search;
+      }
+      if (element?.type === 'email') {
+        return element?.search;
+      }
+      if (element?.type === 'smart_wallet') {
+        return truncateAddress(element?.search);
+      }
+    }
+    return '';
+  };
 
   return (
     <Button
@@ -57,8 +73,7 @@ const ContactItem: React.FC<any> = ({item, itemKey, onSubmit}: ContactListProps)
             @{item?.nickname}
           </SizableText>
           <SizableText fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
-            {item?.subName}
-            {item?.id}
+            {getSubName()}
           </SizableText>
         </YStack>
       </XStack>

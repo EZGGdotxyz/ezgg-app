@@ -1,10 +1,10 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 10:26:55
+ * @LastEditTime: 2025-02-28 14:32:46
  * @FilePath: /ezgg-app/packages/app/Components/CurrencyPopup/index.tsx
  */
-import {AppImage, Button, ScrollView, SizableText, Text, XStack, YStack} from '@my/ui';
+import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
@@ -66,7 +66,7 @@ const CurrencyPopup: React.FC<any> = ({
 
       // 如果找到目标币种，计算最终滚动位置并执行滚动
       if (tokenIndex !== -1) {
-        const finalScrollY = scrollY + tokenIndex * 80;
+        const finalScrollY = scrollY + tokenIndex * 56;
         setTimeout(() => {
           scrollViewRef?.current && scrollViewRef?.current.scrollTo({x: 0, y: finalScrollY, animated: true});
         });
@@ -75,10 +75,19 @@ const CurrencyPopup: React.FC<any> = ({
   }, [currencyData, currencyList, scrollViewRef, modalVisible]);
 
   return (
-    <AppModal zIndex={12} setModalVisible={setModalVisible} modalVisible={modalVisible}>
-      <YStack h={400} w="100%" pos={'absolute'} ai={'center'} jc={'center'} b={0} l={0} bc="$background">
-        <ScrollView ref={scrollViewRef} w="100%" bc="$background">
-          <YStack pt="$4" pb="$4">
+    <Sheet
+      animation="medium"
+      modal
+      dismissOnSnapToBottom
+      open={modalVisible}
+      onOpenChange={setModalVisible}
+      snapPoints={[50]}
+    >
+      <Sheet.Overlay animation="medium" enterStyle={{opacity: 0}} exitStyle={{opacity: 0}} />
+      <Sheet.Handle />
+      <Sheet.Frame justifyContent="center" w="100%" alignItems="center">
+        <Sheet.ScrollView ref={scrollViewRef} w="100%" bc="$background">
+          <YStack pt="$4" pb="$4" style={{width: '100vw'}}>
             {currencyList &&
               currencyList.length > 0 &&
               currencyList?.map((item: any, index: number) => {
@@ -102,7 +111,7 @@ const CurrencyPopup: React.FC<any> = ({
                         key={dayItem?.id + 'id' + index}
                         flexDirection="column"
                         w="100%"
-                        h={80}
+                        h={56}
                         // pb={appScale(16)}
                         // pt={appScale(16)}
                         ai="flex-end"
@@ -140,9 +149,9 @@ const CurrencyPopup: React.FC<any> = ({
                 );
               })}
           </YStack>
-        </ScrollView>
-      </YStack>
-    </AppModal>
+        </Sheet.ScrollView>
+      </Sheet.Frame>
+    </Sheet>
   );
 };
 

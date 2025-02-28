@@ -21,6 +21,7 @@ export default {
   'home.yesterday': 'Yesterday',
   'home.receive': 'Receive',
   'home.deposit': 'Deposit',
+  'home.search':'Search',
 
   'home.send.search': 'email address, phone number, user ID or wallet ',
   'home.send.recent': 'Recent',

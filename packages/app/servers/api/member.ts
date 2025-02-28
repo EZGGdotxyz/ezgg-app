@@ -42,6 +42,18 @@ export async function getUserPageMember(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
       }[];
     };
   }>('/member/user/page-member', {
@@ -81,6 +93,18 @@ export async function getUserPageMember2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
       }[];
     };
   }>('/member/user/page-member', {

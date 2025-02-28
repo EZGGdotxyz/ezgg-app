@@ -9,8 +9,8 @@ export async function postTransactionHistoryCreateTransactionHistory(
     platform: 'ETH' | 'SOLANA';
     /** 区块链id */
     chainId: number;
-    /** 代币符号 */
-    tokenSymbol: string;
+    /** 代币地址 */
+    tokenContractAddress: string;
     /** 交易分类 */
     transactionCategory: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
     /** 交易类型 */
@@ -58,6 +58,52 @@ export async function postTransactionHistoryCreateTransactionHistory(
       amount?: number;
       networkFee?: number;
       message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
     };
   }>('/member/transaction/history/create-transaction-history', {
     method: 'POST',
@@ -76,8 +122,8 @@ export async function postTransactionHistoryCreateTransactionHistory2(
     platform: 'ETH' | 'SOLANA';
     /** 区块链id */
     chainId: number;
-    /** 代币符号 */
-    tokenSymbol: string;
+    /** 代币地址 */
+    tokenContractAddress: string;
     /** 交易分类 */
     transactionCategory: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
     /** 交易类型 */
@@ -125,6 +171,52 @@ export async function postTransactionHistoryCreateTransactionHistory2(
       amount?: number;
       networkFee?: number;
       message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
     };
   }>('/member/transaction/history/create-transaction-history', {
     method: 'POST',
@@ -178,6 +270,52 @@ export async function postTransactionHistoryDeclineTransactionHistory(
       amount?: number;
       networkFee?: number;
       message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
     };
   }>('/member/transaction/history/decline-transaction-history', {
     method: 'POST',
@@ -231,6 +369,52 @@ export async function postTransactionHistoryDeclineTransactionHistory2(
       amount?: number;
       networkFee?: number;
       message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
     };
   }>('/member/transaction/history/decline-transaction-history', {
     method: 'POST',
@@ -283,6 +467,52 @@ export async function getTransactionHistoryFindTransactionHistoryId(
       amount?: number;
       networkFee?: number;
       message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
     };
   }>(`/member/transaction/history/find-transaction-history/${param0}`, {
     method: 'GET',
@@ -332,8 +562,244 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
       amount?: number;
       networkFee?: number;
       message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
     };
   }>(`/member/transaction/history/find-transaction-history/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 通过transactionCode获取交易历史记录详情 GET /member/transaction/history/find-transaction-history/code/${param0} */
+export async function getTransactionHistoryFindTransactionHistoryCodeTransactionCode(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getTransactionHistoryFindTransactionHistoryCodeTransactionCodeParams,
+  options?: { [key: string]: any },
+) {
+  const { transactionCode: param0, ...queryParams } = params;
+  return request<{
+    code: string;
+    msg: string;
+    data?: {
+      transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
+      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      business?: 'LINK' | 'VAULT' | 'TRANSFER';
+      transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
+      platform?: 'ETH' | 'SOLANA';
+      network?: 'MAIN' | 'TEST' | 'DEV';
+      id?: number;
+      createBy?: number;
+      updateBy?: number;
+      createAt?: string;
+      updateAt?: string;
+      memberId?: number;
+      transactionCode?: string;
+      bizContractAddress?: string;
+      senderMemberId?: number;
+      senderDid?: string;
+      senderWalletAddress?: string;
+      receiverMemberId?: number;
+      receiverDid?: string;
+      receiverWalletAddress?: string;
+      transactionTime?: string;
+      transactionConfirmAt?: string;
+      transactionHash?: string;
+      chainId?: number;
+      tokenSymbol?: string;
+      tokenDecimals?: number;
+      tokenContractAddress?: string;
+      amount?: number;
+      networkFee?: number;
+      message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+    };
+  }>(`/member/transaction/history/find-transaction-history/code/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 通过transactionCode获取交易历史记录详情 GET /member/transaction/history/find-transaction-history/code/${param0} */
+export async function getTransactionHistoryFindTransactionHistoryCodeTransactionCode2(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getTransactionHistoryFindTransactionHistoryCodeTransactionCodeParams,
+  options?: { [key: string]: any },
+) {
+  const { transactionCode: param0, ...queryParams } = params;
+  return request<{
+    code: string;
+    msg: string;
+    data?: {
+      transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
+      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      business?: 'LINK' | 'VAULT' | 'TRANSFER';
+      transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
+      platform?: 'ETH' | 'SOLANA';
+      network?: 'MAIN' | 'TEST' | 'DEV';
+      id?: number;
+      createBy?: number;
+      updateBy?: number;
+      createAt?: string;
+      updateAt?: string;
+      memberId?: number;
+      transactionCode?: string;
+      bizContractAddress?: string;
+      senderMemberId?: number;
+      senderDid?: string;
+      senderWalletAddress?: string;
+      receiverMemberId?: number;
+      receiverDid?: string;
+      receiverWalletAddress?: string;
+      transactionTime?: string;
+      transactionConfirmAt?: string;
+      transactionHash?: string;
+      chainId?: number;
+      tokenSymbol?: string;
+      tokenDecimals?: number;
+      tokenContractAddress?: string;
+      amount?: number;
+      networkFee?: number;
+      message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+    };
+  }>(`/member/transaction/history/find-transaction-history/code/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
     ...(options || {}),
@@ -385,6 +851,52 @@ export async function getTransactionHistoryPageTransactionHistory(
         amount?: number;
         networkFee?: number;
         message?: string;
+        senderMember: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          did?: string;
+          createdAt?: string;
+          nickname?: string;
+          avatar?: string;
+          memberLinkedAccount?: {
+            id?: number;
+            createBy?: number;
+            updateBy?: number;
+            createAt?: string;
+            updateAt?: string;
+            memberId?: number;
+            did?: string;
+            type?: string;
+            detail?: string;
+            search?: string;
+          }[];
+        };
+        receiverMember: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          did?: string;
+          createdAt?: string;
+          nickname?: string;
+          avatar?: string;
+          memberLinkedAccount?: {
+            id?: number;
+            createBy?: number;
+            updateBy?: number;
+            createAt?: string;
+            updateAt?: string;
+            memberId?: number;
+            did?: string;
+            type?: string;
+            detail?: string;
+            search?: string;
+          }[];
+        };
       }[];
     };
   }>('/member/transaction/history/page-transaction-history', {
@@ -446,6 +958,52 @@ export async function getTransactionHistoryPageTransactionHistory2(
         amount?: number;
         networkFee?: number;
         message?: string;
+        senderMember: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          did?: string;
+          createdAt?: string;
+          nickname?: string;
+          avatar?: string;
+          memberLinkedAccount?: {
+            id?: number;
+            createBy?: number;
+            updateBy?: number;
+            createAt?: string;
+            updateAt?: string;
+            memberId?: number;
+            did?: string;
+            type?: string;
+            detail?: string;
+            search?: string;
+          }[];
+        };
+        receiverMember: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          did?: string;
+          createdAt?: string;
+          nickname?: string;
+          avatar?: string;
+          memberLinkedAccount?: {
+            id?: number;
+            createBy?: number;
+            updateBy?: number;
+            createAt?: string;
+            updateAt?: string;
+            memberId?: number;
+            did?: string;
+            type?: string;
+            detail?: string;
+            search?: string;
+          }[];
+        };
       }[];
     };
   }>('/member/transaction/history/page-transaction-history', {
@@ -506,6 +1064,52 @@ export async function postTransactionHistoryUpdateTransactionHash(
       amount?: number;
       networkFee?: number;
       message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
     };
   }>('/member/transaction/history/update-transaction-hash', {
     method: 'POST',
@@ -561,6 +1165,52 @@ export async function postTransactionHistoryUpdateTransactionHash2(
       amount?: number;
       networkFee?: number;
       message?: string;
+      senderMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
+      receiverMember: {
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        did?: string;
+        createdAt?: string;
+        nickname?: string;
+        avatar?: string;
+        memberLinkedAccount?: {
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          memberId?: number;
+          did?: string;
+          type?: string;
+          detail?: string;
+          search?: string;
+        }[];
+      };
     };
   }>('/member/transaction/history/update-transaction-hash', {
     method: 'POST',

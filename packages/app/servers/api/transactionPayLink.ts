@@ -17,7 +17,6 @@ export async function postTransactionPayLinkCreatePayLink(
       transactionCode?: string;
       platform?: 'ETH' | 'SOLANA';
       chainId?: number;
-      tokenSymbol?: string;
       tokenContractAddress?: string;
       senderWalletAddress?: string;
       bizContractAddress?: string;
@@ -48,7 +47,6 @@ export async function postTransactionPayLinkCreatePayLink2(
       transactionCode?: string;
       platform?: 'ETH' | 'SOLANA';
       chainId?: number;
-      tokenSymbol?: string;
       tokenContractAddress?: string;
       senderWalletAddress?: string;
       bizContractAddress?: string;
@@ -79,7 +77,6 @@ export async function postTransactionPayLinkFindPayLink(
       transactionCode?: string;
       platform?: 'ETH' | 'SOLANA';
       chainId?: number;
-      tokenSymbol?: string;
       tokenContractAddress?: string;
       senderWalletAddress?: string;
       bizContractAddress?: string;
@@ -110,7 +107,6 @@ export async function postTransactionPayLinkFindPayLink2(
       transactionCode?: string;
       platform?: 'ETH' | 'SOLANA';
       chainId?: number;
-      tokenSymbol?: string;
       tokenContractAddress?: string;
       senderWalletAddress?: string;
       bizContractAddress?: string;

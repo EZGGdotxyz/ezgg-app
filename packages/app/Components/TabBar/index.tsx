@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 14:17:09
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 15:22:02
+ * @LastEditTime: 2025-02-28 14:22:27
  * @FilePath: /ezgg-app/packages/app/Components/TabBar/index.tsx
  */
 import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
@@ -18,9 +18,9 @@ const TabBar = ({state, descriptors, navigation}) => {
 
   return (
     <XStack
-      height={appScale(isIphoneX() ? 82 + 8 : 48 + 8)}
+      height={appScale(isIphoneX() ? 64 + 34 : 64)}
       pt={8}
-      pb={appScale(isIphoneX() ? 44 : 8)}
+      pb={appScale(isIphoneX() ? 8 + 34 : 8)}
       bc="$background"
       style={styles.tabbar}
     >

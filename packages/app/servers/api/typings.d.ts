@@ -1,4 +1,20 @@
 declare namespace API {
+  type getBalanceFindBalanceParams = {
+    platform: 'ETH' | 'SOLANA';
+    chainId: number;
+    /** 货币符号：usd/hkd/cny */
+    currency: string;
+    /** 代币合约地址 */
+    address: string;
+  };
+
+  type getBalanceListBalanceParams = {
+    platform: 'ETH' | 'SOLANA';
+    chainId: number;
+    /** 货币符号：usd/hkd/cny */
+    currency: string;
+  };
+
   type getInfrastructureListBlockchainParams = {
     /** 区块链平台: ETH 以太坊；SOLANA Solana; */
     platform: 'ETH' | 'SOLANA';
@@ -22,6 +38,11 @@ declare namespace API {
     chainId?: number;
     /** 区块链网路类型：MAIN 主网；TEST 测试网；DEV 开发网 */
     network?: 'MAIN' | 'TEST' | 'DEV';
+  };
+
+  type getTransactionHistoryFindTransactionHistoryCodeTransactionCodeParams = {
+    /** 交易编码 */
+    transactionCode: string;
   };
 
   type getTransactionHistoryFindTransactionHistoryIdParams = {

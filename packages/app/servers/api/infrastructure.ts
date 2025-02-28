@@ -23,6 +23,7 @@ export async function getInfrastructureListBlockchain(
       name?: string;
       show?: boolean;
       sort?: number;
+      alchemyNetwork?: string;
     }[];
   }>('/member/infrastructure/list-blockchain', {
     method: 'GET',
@@ -54,6 +55,7 @@ export async function getInfrastructureListBlockchain2(
       name?: string;
       show?: boolean;
       sort?: number;
+      alchemyNetwork?: string;
     }[];
   }>('/member/infrastructure/list-blockchain', {
     method: 'GET',
@@ -151,8 +153,13 @@ export async function getInfrastructureListTokenContract(
       tokenName?: string;
       tokenSymbol?: string;
       tokenDecimals?: number;
+      logo?: string;
       show?: boolean;
       sort?: number;
+      priceCurrency?: string;
+      priceValue?: string;
+      priceUpdateAt?: string;
+      priceAutoUpdate?: boolean;
     }[];
   }>('/member/infrastructure/list-token-contract', {
     method: 'GET',
@@ -186,8 +193,13 @@ export async function getInfrastructureListTokenContract2(
       tokenName?: string;
       tokenSymbol?: string;
       tokenDecimals?: number;
+      logo?: string;
       show?: boolean;
       sort?: number;
+      priceCurrency?: string;
+      priceValue?: string;
+      priceUpdateAt?: string;
+      priceAutoUpdate?: boolean;
     }[];
   }>('/member/infrastructure/list-token-contract', {
     method: 'GET',

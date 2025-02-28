@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 18:08:46
+ * @LastEditTime: 2025-02-28 11:31:27
  * @FilePath: /ezgg-app/packages/app/pages/home/send/index/index.tsx
  */
 import {
@@ -26,10 +26,10 @@ import {PrimaryColor} from 'app/config';
 import ContactItem from './components/ContactItem';
 import {useRouter} from 'solito/router';
 import {createParam} from 'solito';
-import {getUserPageMember} from 'app/servers/api/member';
 import {FlatList} from 'react-native';
 import ListEmpty from 'app/Components/ListEmpty';
 import useRequest from 'app/hooks/useRequest';
+import {getUserPageMember} from 'app/servers/api/member';
 const {useParams} = createParam<any>();
 
 // 发送
@@ -61,19 +61,14 @@ const SendToScreen = ({isRefresh}: any) => {
     }
     const res = await makeRequest(getUserPageMember(params));
     if (res?.data?.record && res?.data?.record.length > 0) {
-      const _record = res.data.record.map((item: any) => {
-        const _item = item;
-        return _item;
-      });
-
       if (_page === 1) {
-        setData(_record);
+        setData(res.data.record);
       } else {
-        setData([...data, ..._record]);
+        setData([...data, ...res.data.record]);
       }
       setPage(_page);
       setLoading(false);
-      setTotal(res?.data?.totalCount);
+      setTotal(res?.data?.totalCount||0);
     } else {
       setData([]);
       setTotal(0);

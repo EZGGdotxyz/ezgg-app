@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 17:02:50
+ * @LastEditTime: 2025-02-28 11:15:53
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -59,16 +59,30 @@ const MyScreen = () => {
     {
       id: '1',
       emoji: '🇺🇸',
-      chineseName: '美国',
-      englishName: 'USA',
+      chineseName: '美元',
+      englishName: 'US dollar',
       code: 'USD',
     },
     {
       id: '2',
       emoji: '🇨🇳',
-      chineseName: '中国',
-      englishName: 'China',
+      chineseName: '人民幣',
+      englishName: 'Chinese yuan',
       code: 'CNY',
+    },
+    {
+      id: '3',
+      emoji: '🇭🇰',
+      chineseName: '港幣',
+      englishName: 'Hong Kong dollar',
+      code: 'HKD',
+    },
+    {
+      id: '4',
+      emoji: '🇸🇬',
+      chineseName: '新加坡幣',
+      englishName: 'Singapore dollar',
+      code: 'SGD',
     },
   ]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -76,8 +90,8 @@ const MyScreen = () => {
   const [chainData, setChainData] = useState<any>({
     id: '1',
     emoji: '🇺🇸',
-    chineseName: '美国',
-    englishName: 'USA',
+    chineseName: '美元',
+    englishName: 'US dollar',
     code: 'USD',
   });
   const [isLoading, setIsLoading] = React.useState(false);

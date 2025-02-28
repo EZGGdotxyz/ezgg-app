@@ -1,25 +1,17 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 17:50:33
+ * @LastEditTime: 2025-02-28 10:21:00
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
-import {
-  YStack,
-  SizableText,
-  AppImage,
-  Button,
-} from '@my/ui';
+import {YStack, SizableText, AppImage, Button} from '@my/ui';
 import React, {useState, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {appScale} from 'app/utils';
 import {useRouter} from 'solito/router';
-import {
-  useLogin,
-  usePrivy,
-} from '@privy-io/react-auth';
+import {useLogin, usePrivy} from '@privy-io/react-auth';
 import SuccessPopup from './components/SuccessPopup';
 import {AppName, PrimaryColor} from 'app/config';
 import useUser from 'app/hooks/useUser';
@@ -46,58 +38,64 @@ const LoginScreen = () => {
     },
   });
 
-  const handleLogin = useCallback(async (user: any) => {
-    try {
-      const token = localStorage.getItem('privy:token');
-      const idToken = localStorage.getItem('privy:id_token');
-      
-      if (!token || !idToken) {
-        console.error('登录失败: 无法获取令牌');
-        return;
-      }
-      
-      initLogin(JSON.parse(token), JSON.parse(idToken));
-      const _userInfo = await initUserInfo();
-      
-      if (_userInfo?.nickname) {
-        handleSuccess({
-          nickname: _userInfo?.customMetadata?.nickname || '',
-          avatar: _userInfo?.customMetadata?.avatar || '',
-        });
-      } else {
-        setAccountForm({
-          nickname: _userInfo?.nickname || '',
-          avatar: _userInfo?.avatar || '',
-        });
-        setIsSetInfo(true);
-      }
-    } catch (error) {
-      console.error('登录处理失败:', error);
-      setModalVisible(false);
-    }
-  }, [initLogin, initUserInfo]);
+  const handleLogin = useCallback(
+    async (user: any) => {
+      try {
+        const token = localStorage.getItem('privy:token');
+        const idToken = localStorage.getItem('privy:id_token');
 
-  const handleSuccess = useCallback(async (_userInfo: any) => {
-    try {
-      setIsSetInfo(false);
-      setTimeout(async () => {
-        try {
-          await postUserUpdateMember({
-            nickname: _userInfo.nickname || '',
-            avatar: _userInfo.avatar || '',
-          });
-          setModalVisible(false);
-          onLink();
-        } catch (error) {
-          console.error('更新用户信息失败:', error);
-          setModalVisible(false);
+        if (!token || !idToken) {
+          console.error('登录失败: 无法获取令牌');
+          return;
         }
-      }, 1500);
-    } catch (error) {
-      console.error('处理成功回调失败:', error);
-      setModalVisible(false);
-    }
-  }, [onLink]);
+
+        initLogin(JSON.parse(token), JSON.parse(idToken));
+        const _userInfo = await initUserInfo();
+
+        if (_userInfo?.nickname) {
+          handleSuccess({
+            nickname: _userInfo?.customMetadata?.nickname || '',
+            avatar: _userInfo?.customMetadata?.avatar || '',
+          });
+        } else {
+          setAccountForm({
+            nickname: _userInfo?.nickname || '',
+            avatar: _userInfo?.avatar || '',
+          });
+          setIsSetInfo(true);
+        }
+      } catch (error) {
+        console.error('登录处理失败:', error);
+        setModalVisible(false);
+      }
+    },
+    [initLogin, initUserInfo],
+  );
+
+  const handleSuccess = useCallback(
+    async (_userInfo: any) => {
+      try {
+        setIsSetInfo(false);
+        setTimeout(async () => {
+          try {
+            await postUserUpdateMember({
+              nickname: _userInfo.nickname || '',
+              avatar: _userInfo.avatar || '',
+            });
+            setModalVisible(false);
+            onLink();
+          } catch (error) {
+            console.error('更新用户信息失败:', error);
+            setModalVisible(false);
+          }
+        }, 1500);
+      } catch (error) {
+        console.error('处理成功回调失败:', error);
+        setModalVisible(false);
+      }
+    },
+    [onLink],
+  );
 
   return (
     <PermissionPage isLoginPage>
@@ -108,8 +106,8 @@ const LoginScreen = () => {
             {AppName}
           </SizableText>
           <AppImage
-            width={appScale(160)}
-            height={appScale(160)}
+            width={appScale(285 / 2)}
+            height={appScale(322 / 2)}
             src={require('app/assets/images/logo.png')}
             type="local"
           />
@@ -159,7 +157,6 @@ const LoginScreen = () => {
             {t('login.loginAgreement3')}
           </SizableText>
         </View>
-
       </YStack>
       <SuccessPopup
         handleSuccess={handleSuccess}

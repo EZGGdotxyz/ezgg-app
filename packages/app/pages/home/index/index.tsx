@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 15:12:21
+ * @LastEditTime: 2025-02-28 14:20:40
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -21,6 +21,7 @@ import {appScale} from 'app/utils';
 import {PrimaryColor} from 'app/config';
 import TokenList from './components/TokenList';
 import History from './components/History';
+import {getBalanceListBalance} from 'app/servers/api/balance';
 
 interface HomeScreenProps {}
 // 首页
@@ -94,7 +95,7 @@ const HomeScreen = (props: HomeScreenProps) => {
             >
               {availableBalance}
             </SizableText>
-            <SizableText col={'212121'} ta={'center'} fontSize={'$6'} fow={'600'}>
+            <SizableText col={'#212121'} ta={'center'} fontSize={'$6'} fow={'600'}>
               $
             </SizableText>
           </XStack>
@@ -168,7 +169,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         </XStack>
       </XStack>
       <YStack f={1}>
-        <ScrollView bc="$background">
+        <ScrollView f={1} bc="$background">
           <YStack pb={appScale(104)}>
             {!switchOn && <TokenList />}
             {switchOn && <History />}

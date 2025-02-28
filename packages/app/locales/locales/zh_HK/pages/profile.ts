@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 15:45:17
+ * @LastEditTime: 2025-02-28 10:26:32
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/profile.ts
  */
 export default {
@@ -32,4 +32,32 @@ export default {
   'profile.notification.app1': '應用程式更新與增強',
   'profile.notification.app2': '促銷優惠與更新',
   'profile.notification.app3': '參與調研',
+
+  'profile.help.faq': 'FAQ',
+  'profile.help.faq.general.title': '普通',
+  'profile.help.faq.account.title': '帳戶',
+  'profile.help.faq.payment.title': '支付',
+  'profile.help.faq.balance.title': '餘額',
+
+  'profile.help.faq.general.1.title': '什麼是 ezgg.app?',
+  'profile.help.faq.general.1.content':
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+
+  'profile.help.contactSupport': '聯係客服',
+  'profile.help.contactSupport.1': '客戶服務',
+  'profile.help.contactSupport.2': 'WhatsApp',
+  'profile.help.contactSupport.3': 'Website',
+  'profile.help.contactSupport.4': 'Facebook',
+  'profile.help.contactSupport.5': 'Twitter',
+  'profile.help.contactSupport.6': 'Instagram',
+
+  'profile.about.1': '工作機會',
+  'profile.about.2': '開發者',
+  'profile.about.3': '合作夥伴',
+  'profile.about.4': '可及性',
+  'profile.about.5': '使用條款',
+  'profile.about.6': '反饋',
+  'profile.about.7': '評價我們',
+  'profile.about.8': '訪問我們的網站',
+  'profile.about.9': '關注我們的社交媒體',
 };

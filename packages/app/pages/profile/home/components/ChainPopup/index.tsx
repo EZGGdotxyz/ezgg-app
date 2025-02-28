@@ -1,10 +1,10 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 09:33:09
+ * @LastEditTime: 2025-02-28 14:27:39
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/ChainPopup/index.tsx
  */
-import {AppImage, Button, ScrollView, SizableText, Text, XStack, YStack} from '@my/ui';
+import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
@@ -42,10 +42,19 @@ const ChainPopup: React.FC<any> = ({
   }, [chainData, chainList, scrollViewRef, modalVisible]);
 
   return (
-    <AppModal zIndex={12} setModalVisible={setModalVisible} modalVisible={modalVisible}>
-      <YStack h={400} w="100%" pos={'absolute'} ai={'center'} jc={'center'} b={0} l={0} bc="$background">
-        <ScrollView ref={scrollViewRef} w="100%" bc="$background">
-          <YStack pt="$3" pb="$3">
+    <Sheet
+      animation="medium"
+      modal
+      dismissOnSnapToBottom
+      open={modalVisible}
+      onOpenChange={setModalVisible}
+      snapPoints={[40]}
+    >
+      <Sheet.Overlay animation="medium" enterStyle={{opacity: 0}} exitStyle={{opacity: 0}} />
+      <Sheet.Handle />
+      <Sheet.Frame justifyContent="center" w="100%" alignItems="center">
+        <Sheet.ScrollView ref={scrollViewRef}>
+          <YStack pt="$3" pb="$3" style={{width: '100vw'}}>
             {chainList &&
               chainList.length > 0 &&
               chainList?.map((item: any, index: number) => {
@@ -70,7 +79,7 @@ const ChainPopup: React.FC<any> = ({
                       selectChain(item);
                     }}
                   >
-                    <SizableText color={'#212121'} size={'$6'} fow={'700'}>
+                    <SizableText color={'#212121'} size={'$5'} fow={'600'}>
                       {item?.emoji} &nbsp;&nbsp;&nbsp;{' '}
                       {`${i18n.language === 'zh_HK' ? item?.chineseName : item?.englishName}`}
                     </SizableText>
@@ -82,9 +91,9 @@ const ChainPopup: React.FC<any> = ({
                 );
               })}
           </YStack>
-        </ScrollView>
-      </YStack>
-    </AppModal>
+        </Sheet.ScrollView>
+      </Sheet.Frame>
+    </Sheet>
   );
 };
 
