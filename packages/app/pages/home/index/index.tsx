@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 10:34:38
+ * @LastEditTime: 2025-03-03 21:18:07
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -17,7 +17,7 @@ import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import {Platform, useColorScheme} from 'react-native';
 // import {pushingRegisterDevice} from 'app/servers/api/2000Yidongtuisongguanli';
-import {appScale} from 'app/utils';
+import {appScale, formatNumber} from 'app/utils';
 import {PrimaryColor} from 'app/config';
 import HomeList from './components/HomeList';
 import AppLoading from 'app/Components/AppLoading';
@@ -93,7 +93,7 @@ const HomeScreen = (props: HomeScreenProps) => {
               fontSize={'$10'}
               fow={'700'}
             >
-              {availableBalance}
+              {formatNumber(availableBalance)}
             </SizableText>
             <SizableText col={'#212121'} ta={'center'} fontSize={'$6'} fow={'600'}>
               $

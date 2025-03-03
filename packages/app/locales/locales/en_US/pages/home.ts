@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 11:58:11
+ * @LastEditTime: 2025-03-03 21:25:00
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -38,6 +38,7 @@ export default {
   'home.send.void': 'Void',
   'home.send.tips1': 'Copy link and send',
   'home.send.tips2': 'View your claim link',
+  'home.send.number.tips': 'The number of decimal places cannot exceed the token decimals',
 
   'home.deposit.or': 'or',
   'home.deposit.sendTips': 'Send {{token}} ({{chain}} ONLY) to this address',
@@ -47,6 +48,8 @@ export default {
 
   'home.request.amountRequesting': 'Amount Requesting',
   'home.request.amountToRequest': 'Amount to Request',
+  'home.request.amountToRequest.tips': 'Please enter the amount to request',
+  'home.request.amountToRequest.tips2': 'Please enter an amount that is less than your balance',
   'home.request.requestCrypto': 'Request Crypto',
 
   'home.order.youSent': 'You sent',

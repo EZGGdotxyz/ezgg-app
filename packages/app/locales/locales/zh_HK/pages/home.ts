@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 15:17:42
+ * @LastEditTime: 2025-03-03 21:56:16
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -38,6 +38,7 @@ export default {
   'home.send.void': '取消',
   'home.send.tips1': '複製連結並發送',
   'home.send.tips2': '查看您已發送的連結',
+  'home.send.number.tips': '小數位數不能超過代幣的小數位數',
 
   'home.deposit.or': '或 ',
   'home.deposit.sendTips': '發送 {{token}} ({{chain}} ONLY) 至如下地址',
@@ -47,6 +48,8 @@ export default {
 
   'home.request.amountRequesting': '請輸入您想要請求的金額',
   'home.request.amountToRequest': '請求的金額',
+  'home.request.amountToRequest.tips': '請輸入要請求的金額',
+  'home.request.amountToRequest.tips2': '請輸入小於您的餘額的金額',
   'home.request.requestCrypto': '請求加密貨幣',
 
   'home.order.youSent': '您已發送',

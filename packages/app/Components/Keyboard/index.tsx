@@ -1,6 +1,7 @@
-import {AppImage, Button, SizableText, XStack, YStack} from '@my/ui';
+import {AppImage, Button, SizableText, useToastController, XStack, YStack} from '@my/ui';
 import {appScale} from 'app/utils';
 import React, {useCallback, useEffect, useState} from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface KeyboardProps {
   /** 键盘输入值改变时的回调 */
@@ -10,10 +11,13 @@ interface KeyboardProps {
   maxLength?: number;
   /** 初始值 */
   value?: string;
+  decimals?: number;
 }
 
-const Keyboard: React.FC<KeyboardProps> = ({onChange, maxLength = 12, value = ''}) => {
+const Keyboard: React.FC<KeyboardProps> = ({onChange, maxLength = 12, value = '', decimals = 6}) => {
   const [inputValue, setInputValue] = useState(value);
+  const toast = useToastController();
+  const {t} = useTranslation();
 
   // 数字按键布局
   const keys = [
@@ -31,16 +35,30 @@ const Keyboard: React.FC<KeyboardProps> = ({onChange, maxLength = 12, value = ''
 
     if (key === 'del') {
       newValue = inputValue.slice(0, -1);
-    } else if (key === '.' && inputValue.includes('.')) {
-      return;
+    } else if (key === '.') {
+      // 如果已经包含小数点，直接返回
+      if (inputValue.includes('.')) {
+        return;
+      }
+      // 如果是空值或第一个字符就是小数点，自动补0
+      if (!inputValue || inputValue === '') {
+        newValue = '0.';
+      } else {
+        newValue = inputValue + key;
+      }
     } else if (inputValue.length < maxLength) {
-      if (key !== '.') {
-        const decimalParts = inputValue.split('.');
-        if (decimalParts.length > 1 && decimalParts[1].length >= 2) {
-          return;
-        }
+      // 检查小数位数是否超过代币的 decimals
+      const decimalParts = inputValue.split('.');
+      if (decimalParts.length > 1 && decimalParts[1].length >= decimals) {
+        toast.show(t('home.send.number.tips'));
+        return; // 如果小数位数已达到限制，不再添加数字
       }
       newValue = inputValue + key;
+    }
+
+    // 验证数字格式
+    if (!/^\d*\.?\d*$/.test(newValue)) {
+      return;
     }
 
     if (newValue !== inputValue) {

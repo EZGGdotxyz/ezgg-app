@@ -1,10 +1,20 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 18:22:40
+ * @LastEditTime: 2025-03-03 22:25:01
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
-import {AppHeader, AppHeaderProps, HeaderBackButton, Paragraph, XStack, YStack, SizableText, AppImage, useToastController} from '@my/ui';
+import {
+  AppHeader,
+  AppHeaderProps,
+  HeaderBackButton,
+  Paragraph,
+  XStack,
+  YStack,
+  SizableText,
+  AppImage,
+  useToastController,
+} from '@my/ui';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
@@ -16,6 +26,7 @@ import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
 import PageLoading from 'app/Components/PageLoading';
+import AppLoading from 'app/Components/AppLoading';
 
 // 提取
 const WithdrawScreen = () => {
@@ -116,7 +127,7 @@ const WithdrawScreen = () => {
         </XStack>
       </YStack>
       {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
-      {isLoading && <PageLoading />}
+      {isLoading && <AppLoading />}
     </PermissionPage>
   );
 };

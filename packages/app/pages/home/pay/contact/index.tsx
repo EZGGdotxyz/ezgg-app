@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 11:31:27
- * @FilePath: /ezgg-app/packages/app/pages/home/send/index/index.tsx
+ * @LastEditTime: 2025-03-03 22:29:32
+ * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/index.tsx
  */
 import {
   AppHeader,
@@ -30,14 +30,19 @@ import {FlatList} from 'react-native';
 import ListEmpty from 'app/Components/ListEmpty';
 import useRequest from 'app/hooks/useRequest';
 import {getUserPageMember} from 'app/servers/api/member';
+import {useDispatch} from 'react-redux';
+import {Dispatch} from 'app/store';
+import {useRematchModel} from 'app/store/model';
 const {useParams} = createParam<any>();
 
 // 发送
-const SendToScreen = ({isRefresh}: any) => {
+const SendToScreen = ({isRefresh, type}: any) => {
   const {t} = useTranslation();
   const {params} = useParams();
   const {push} = useRouter();
   const {makeRequest} = useRequest();
+  const dispatch = useDispatch<Dispatch>();
+  const [{payLinkData}] = useRematchModel('user');
 
   const [searchText, setSearchText] = useState('');
   const [search, setSearch] = useState('');
@@ -68,7 +73,7 @@ const SendToScreen = ({isRefresh}: any) => {
       }
       setPage(_page);
       setLoading(false);
-      setTotal(res?.data?.totalCount||0);
+      setTotal(res?.data?.totalCount || 0);
     } else {
       setData([]);
       setTotal(0);
@@ -90,12 +95,30 @@ const SendToScreen = ({isRefresh}: any) => {
     }
   }, [search, isRefresh]);
 
-  const onSubmit = (userId = 'anyone') => {
-    push(
-      `/home/send/amount?userId=${userId}&token=${params?.token || ''}&chain=${params?.chain || ''}&amount=${
-        params?.amount || ''
-      }`,
-    );
+  const onSubmit = (item: any) => {
+    if (params?.id && params?.id === payLinkData?.id) {
+      dispatch.user.updateState({
+        payLinkData: {
+          ...payLinkData,
+          userId: item?.id,
+          user: item,
+          transactionType: item?.id === 'anyone' ? 'PAY_LINK' : type === 'send' ? 'SEND' : 'REQUEST',
+        },
+      });
+      push(`/home/${type}/amount?id=${payLinkData?.id}`);
+    } else {
+      const id = new Date().getTime() + Math.random();
+      dispatch.user.updateState({
+        payLinkData: {
+          currencyData: {},
+          id: id,
+          userId: item?.id,
+          user: item,
+          transactionType: item?.id === 'anyone' ? 'PAY_LINK' : type === 'send' ? 'SEND' : 'REQUEST',
+        },
+      });
+      push(`/home/${type}/amount?id=${id}`);
+    }
   };
 
   const onSearch = (text) => {
@@ -135,7 +158,16 @@ const SendToScreen = ({isRefresh}: any) => {
 
   return (
     <PermissionPage>
-      <AppHeader2 title={t('screen.home.sendTo')} isQr={true} type={'send'} fallbackUrl="/" />
+      <AppHeader2
+        title={t('screen.home.sendTo')}
+        onBack={() => {
+          dispatch.user.updateState({payLinkData: {}});
+          push('/home');
+        }}
+        isQr={true}
+        type={type}
+        fallbackUrl="/"
+      />
       <SearchHeader
         searchText={searchText}
         setSearchText={setSearchText}
@@ -217,7 +249,7 @@ const SendToScreen = ({isRefresh}: any) => {
       >
         <AppButton
           onPress={() => {
-            onSubmit();
+            onSubmit({id: 'anyone'});
           }}
         >
           {t('home.send.paylink')}

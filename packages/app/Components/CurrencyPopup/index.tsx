@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 15:59:17
+ * @LastEditTime: 2025-03-03 21:51:07
  * @FilePath: /ezgg-app/packages/app/Components/CurrencyPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -33,23 +33,29 @@ const CurrencyPopup: React.FC<any> = ({
   const scrollViewRef = useRef<any>(null);
 
   useEffect(() => {
-    if (modalVisible && scrollViewRef?.current && currencyData?.id && currencyList && currencyList.length > 0) {
+    if (
+      modalVisible &&
+      scrollViewRef?.current &&
+      currencyData?.token?.address &&
+      currencyList &&
+      currencyList.length > 0
+    ) {
       let scrollY = 0;
 
       // 计算链类型对应的基础滚动位置
-      switch (currencyData.chain) {
-        case 'BSC':
-          scrollY = 48;
-          break;
-        case 'Polygon':
-          scrollY = 48 * 2;
-          break;
-        case 'Base':
-          scrollY = 48 * 3;
-          break;
-        default:
-          break;
-      }
+      // switch (currencyData.chain) {
+      //   case 'BSC':
+      //     scrollY = 48;
+      //     break;
+      //   case 'Polygon':
+      //     scrollY = 48 * 2;
+      //     break;
+      //   case 'Base':
+      //     scrollY = 48 * 3;
+      //     break;
+      //   default:
+      //     break;
+      // }
 
       // 计算目标币种在列表中的位置
       let tokenIndex = -1;
@@ -57,7 +63,7 @@ const CurrencyPopup: React.FC<any> = ({
         const chainGroup = currencyList[chainIndex];
         for (let itemIndex = 0; itemIndex < chainGroup.tokenList.length; itemIndex++) {
           const token = chainGroup.tokenList[itemIndex];
-          if (token?.id === currencyData?.id) {
+          if (token?.token?.address === currencyData?.token?.address) {
             tokenIndex = itemIndex;
             break;
           }
@@ -108,8 +114,8 @@ const CurrencyPopup: React.FC<any> = ({
                         }}
                         // bbw={1}
                         // bbc={index !== item.tokenList.length - 1 ? '#E1E1E1' : '$background'}
-                        bc={currencyData?.id === dayItem?.id ? PrimaryColor : '#fff'}
-                        key={dayItem?.id + 'id' + index}
+                        bc={currencyData?.token?.address === dayItem?.token?.address ? PrimaryColor : '#fff'}
+                        key={dayItem?.token?.address + 'id' + index}
                         flexDirection="column"
                         w="100%"
                         h={56}
@@ -123,14 +129,18 @@ const CurrencyPopup: React.FC<any> = ({
                       >
                         <XStack flex={1} h={appScale(48)} w="100%" ai={'center'} jc={'space-between'}>
                           <XStack flex={1} h={appScale(48)} pr={appScale(24)} pl={appScale(24)} ai={'center'}>
-                            {dayItem?.tokenSymbol && (
+                            {dayItem?.token?.tokenSymbol && (
                               <YStack
                                 height={appScale(48)}
                                 width={appScale(48)}
                                 borderRadius={appScale(24)}
                                 overflow={'hidden'}
                               >
-                                <TokenIcon symbol={dayItem.tokenSymbol} variant="background" size={appScale(48)} />
+                                <TokenIcon
+                                  symbol={dayItem?.token?.tokenSymbol}
+                                  variant="background"
+                                  size={appScale(48)}
+                                />
                               </YStack>
                             )}
 
@@ -141,13 +151,12 @@ const CurrencyPopup: React.FC<any> = ({
                             type="local"
                           /> */}
                             <SizableText ml={appScale(16)} color={'#212121'} size={'$5'} fow={'400'}>
-                              {dayItem?.tokenSymbol}
+                              {dayItem?.token?.tokenSymbol}
                             </SizableText>
                           </XStack>
                           <XStack flexShrink={0} ai={'center'} jc={'center'} pl={appScale(24)} pr={appScale(24)}>
                             <SizableText color={'#212121'} size={'$5'} fow={'600'}>
-                              {/* {formatNumber(Number(item?.tokenAmount))} */}
-                              {dayItem?.tokenAmount}
+                              {dayItem?.token?.tokenAmount}
                             </SizableText>
                           </XStack>
                         </XStack>

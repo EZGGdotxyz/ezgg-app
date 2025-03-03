@@ -1,10 +1,10 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 16:54:05
+ * @LastEditTime: 2025-03-03 21:15:29
  * @FilePath: /ezgg-app/apps/next/pages/home/request/paylink.tsx
  */
-import PayLinkScreen from 'app/pages/home/request/paylink';
+import PayLinkScreen from 'app/pages/home/pay/paylink';
 import Head from 'next/head';
 import {useTranslation} from 'react-i18next';
 
@@ -16,7 +16,7 @@ export default function Page() {
       <Head>
         <title>{t('screen.home.paylink')}</title>
       </Head>
-      <PayLinkScreen />
+      <PayLinkScreen type="request" />
     </>
   );
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 15:49:51
+ * @LastEditTime: 2025-03-03 22:40:51
  * @FilePath: /ezgg-app/packages/app/Components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -21,17 +21,18 @@ export type CurrencyProps = {
   currencyData: any;
   setCurrencyData: (currency: any) => void;
   updateCurrency: (currency: any) => void;
+  setIsLoading: (isLoading: boolean) => void;
 };
 // 交易历史item
-const Currency: React.FC<any> = ({currencyData, setCurrencyData}: CurrencyProps) => {
+const Currency: React.FC<any> = ({currencyData, setCurrencyData, setIsLoading}: CurrencyProps) => {
   const {push} = useRouter();
   const {makeRequest} = useRequest();
 
   const [{currency, blockchainList}] = useRematchModel('app');
+  const [{tokenList}] = useRematchModel('user');
   const {t, i18n} = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
   const [list, setList] = useState<any>([]);
-
   const selectCurrency = (item) => {
     setCurrencyData(item);
     setModalVisible(false);
@@ -45,18 +46,49 @@ const Currency: React.FC<any> = ({currencyData, setCurrencyData}: CurrencyProps)
     return null;
   };
 
-  type GroupedToken = {
-    id: string;
-    chainName: string;
-    tokenSymbol: string;
-    tokenAmount: string;
-    currencyAmount: string;
+  // 将tokenList转换为chainGroups
+  const convertToChainGroups = (tokenList: any[]): any[] => {
+    const groupedData = tokenList.reduce<any[]>((acc, token) => {
+      const chainInfo = getChainInfo(token?.token?.chainId);
+      if (!chainInfo) return acc;
+
+      const tokenData: any = {
+        chainName: chainInfo?.name,
+        chainIcon: chainInfo?.icon,
+        ...token,
+      };
+
+      const existingChainGroup = acc.find((group) => group.chainName === chainInfo.name);
+      if (existingChainGroup) {
+        existingChainGroup.tokenList.push(tokenData);
+      } else {
+        acc.push({
+          chainName: chainInfo.name,
+          tokenList: [tokenData],
+        });
+      }
+
+      return acc;
+    }, []);
+
+    return groupedData.sort((a, b) => a.chainName.localeCompare(b.chainName));
   };
 
-  type ChainGroup = {
-    chainName: string;
-    tokenList: GroupedToken[];
+  const getTokenList = () => {
+    return convertToChainGroups(tokenList);
   };
+
+  useEffect(() => {
+    if (tokenList?.length > 0) {
+      const _tokenList = getTokenList();
+      setList(_tokenList);
+      setCurrencyData(_tokenList[0].tokenList[0]);
+    } else {
+      if (blockchainList?.length > 0) {
+        fetchAllBalances();
+      }
+    }
+  }, [tokenList, blockchainList, setIsLoading]);
 
   const fetchAllBalances = async () => {
     if (!blockchainList?.length) {
@@ -65,6 +97,7 @@ const Currency: React.FC<any> = ({currencyData, setCurrencyData}: CurrencyProps)
     }
 
     try {
+      setIsLoading(true);
       // 并行获取所有链的余额数据
       const results = await Promise.all(
         blockchainList.map((chain) =>
@@ -75,54 +108,43 @@ const Currency: React.FC<any> = ({currencyData, setCurrencyData}: CurrencyProps)
         ),
       );
 
-      // 处理和转换数据
-      const processedData = results.filter(Boolean).reduce<ChainGroup[]>((chains, result) => {
-        // 如果没有代币数据，跳过处理
-        if (!result?.tokens?.length) return chains;
+      // 将API返回的数据转换为tokenList格式
+      const formattedTokenList = results.filter(Boolean).flatMap((result) => {
+        if (result.tokens?.length > 0) {
+          return result.tokens.map((item) => {
+            const chainInfo = getChainInfo(item?.token?.chainId);
+            return {
+              chainName: chainInfo?.name,
+              chainIcon: chainInfo?.icon,
+              ...item,
+            };
+          });
+        }
+        return [];
+      });
 
-        // 处理每个代币数据
-        result.tokens.forEach((item) => {
-          const chainInfo = getChainInfo(item?.token?.chainId);
-          if (!chainInfo) return;
+      // 使用convertToChainGroups处理数据
+      const sortedData = convertToChainGroups(formattedTokenList);
 
-          const tokenData: GroupedToken = {
-            id: `${item?.token?.chainId}-${item?.token?.address}`,
-            chainName: chainInfo.name,
-            tokenSymbol: item?.token?.tokenSymbol,
-            tokenAmount: item?.tokenAmount || '0',
-            currencyAmount: item?.currencyAmount || '0',
-          };
-
-          // 查找或创建链组
-          const chainGroup = chains.find((g) => g.chainName === chainInfo.name);
-          if (chainGroup) {
-            chainGroup.tokenList.push(tokenData);
-          } else {
-            chains.push({
-              chainName: chainInfo.name,
-              tokenList: [tokenData],
-            });
-          }
-        });
-
-        return chains;
-      }, []);
-
-      // 按链名称排序
-      const sortedData = processedData.sort((a, b) => a.chainName.localeCompare(b.chainName));
-      setList(sortedData);
-      setCurrencyData(sortedData[0].tokenList[0]);
+      if (sortedData.length > 0 && sortedData[0].tokenList.length > 0) {
+        setList(sortedData);
+        setCurrencyData(sortedData[0].tokenList[0]);
+      } else {
+        setList([]);
+      }
     } catch (error) {
       console.error('获取余额列表失败:', error);
       setList([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (blockchainList && blockchainList.length > 0) {
-      fetchAllBalances();
-    }
-  }, [blockchainList]);
+  // useEffect(() => {
+  //   if (blockchainList && blockchainList.length > 0) {
+  //     fetchAllBalances();
+  //   }
+  // }, [blockchainList]);
 
   return (
     <>
@@ -149,9 +171,9 @@ const Currency: React.FC<any> = ({currencyData, setCurrencyData}: CurrencyProps)
         >
           <XStack h={appScale(50)}>
             <XStack flexShrink={0} pos={'relative'} w={appScale(72)}>
-              {currencyData?.tokenSymbol && (
+              {currencyData?.token?.tokenSymbol && (
                 <YStack height={appScale(48)} width={appScale(48)} borderRadius={appScale(24)} overflow={'hidden'}>
-                  <TokenIcon symbol={currencyData?.tokenSymbol} variant="background" size={appScale(48)} />
+                  <TokenIcon symbol={currencyData?.token?.tokenSymbol} variant="background" size={appScale(48)} />
                 </YStack>
               )}
               {currencyData?.chainIcon && (
@@ -182,7 +204,7 @@ const Currency: React.FC<any> = ({currencyData, setCurrencyData}: CurrencyProps)
                 />
               </XStack>
             </YStack> */}
-            {currencyData?.tokenSymbol && (
+            {currencyData?.token?.tokenSymbol && (
               <SizableText
                 fontSize={'$8'}
                 h={appScale(50)}
@@ -191,7 +213,7 @@ const Currency: React.FC<any> = ({currencyData, setCurrencyData}: CurrencyProps)
                 fontWeight={'600'}
                 pos="relative"
               >
-                {`${currencyData?.tokenSymbol} (${currencyData?.chainName})`}
+                {`${currencyData?.token?.tokenSymbol} (${currencyData?.chainName})`}
               </SizableText>
             )}
           </XStack>

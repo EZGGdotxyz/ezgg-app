@@ -4,7 +4,7 @@
  * @LastEditTime: 2025-02-24 16:53:04
  * @FilePath: /ezgg-app/apps/next/pages/home/request/index.tsx
  */
-import RequestFromScreen from 'app/pages/home/request/index';
+import RequestFromScreen from 'app/pages/home/pay/contact';
 import Head from 'next/head';
 import {useTranslation} from 'react-i18next';
 import { useEffect, useState } from 'react';
@@ -25,7 +25,7 @@ export default function Page() {
       <Head>
         <title>{t('screen.home.requestFrom')}</title>
       </Head>
-      <RequestFromScreen isRefresh={isRefresh} />
+      <RequestFromScreen type="request" isRefresh={isRefresh} />
     </>
   );
 }

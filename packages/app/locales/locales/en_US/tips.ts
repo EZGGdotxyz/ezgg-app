@@ -17,4 +17,5 @@ export default {
   'tips.list.loading.title2': 'Loading more data',
 
   'tips.explore.copy': 'Copy successful! ',
+  'tips.error.networkError': 'Network error, please try again later',
 };

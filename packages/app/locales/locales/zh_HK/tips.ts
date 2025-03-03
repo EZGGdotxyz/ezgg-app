@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-19 11:39:23
+ * @LastEditTime: 2025-03-03 22:04:03
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/tips.ts
  */
 export default {
@@ -17,4 +17,5 @@ export default {
   'tips.list.loading.title2': '正在載入更多數據',
 
   'tips.explore.copy': '複製成功！',
+  'tips.error.networkError': '網絡錯誤，請稍後再試',
 };

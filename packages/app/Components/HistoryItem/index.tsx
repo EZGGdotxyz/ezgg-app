@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 15:00:45
+ * @LastEditTime: 2025-03-03 20:45:40
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -43,7 +43,7 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
         };
       case 'WITHDRAW':
         return {
-         title: t('home.withdraw'),
+          title: t('home.withdraw'),
           sub: t('home.withdraw'),
         };
       case 'PAY_LINK':
@@ -84,7 +84,7 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
       }}
     >
       <XStack flex={1} mb={appScale(16)} w="100%" ai={'center'} jc={'space-between'}>
-        <YStack gap={appScale(2)}>
+        <YStack gap={appScale(2)} w={'70%'}>
           <SizableText fontSize={'$6'} color={'#26273C'} fontWeight={'500'}>
             {dealType().title}
           </SizableText>
@@ -92,14 +92,15 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
             {dealType().sub}
           </SizableText>
         </YStack>
-        <YStack gap={appScale(2)}>
+        <YStack gap={appScale(2)} w={'30%'}>
           <SizableText ta={'right'} fontSize={'$6'} color={'#26273C'} fontWeight={'500'}>
-            {item?.transactionType === 'SEND' ? '+' : '-'} $ {formatTokenAmount(item?.amount, item?.tokenDecimals)}
+            {item?.transactionType === 'SEND' ? '+' : '-'} $ {Number(item?.amount)}
             {getCurrency(currency)?.label}
           </SizableText>
           <SizableText ta={'right'} fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
-            {item?.transactionType === 'SEND' ? '+' : '-'} {formatTokenAmount(item?.amount, item?.tokenDecimals)}{' '}
-            {getCurrency(currency)?.label} ({getChainInfo(item?.chainId)?.name})
+            {`${item?.transactionType === 'SEND' ? '+' : '-'} ${formatTokenAmount(item?.amount, item?.tokenDecimals)} ${
+              item?.tokenSymbol
+            } (${getChainInfo(item?.chainId)?.name})`}
           </SizableText>
         </YStack>
       </XStack>

@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 18:21:20
- * @FilePath: /ezgg-app/packages/app/pages/home/send/amount/index.tsx
+ * @LastEditTime: 2025-03-03 22:31:41
+ * @FilePath: /ezgg-app/packages/app/pages/home/pay/amount/index.tsx
  */
 import {
   AppHeader,
@@ -27,17 +27,21 @@ import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
 import PageLoading from 'app/Components/PageLoading';
 import {createParam} from 'solito';
+import {useDispatch} from 'react-redux';
+import {Dispatch} from 'app/store';
+import {useRematchModel} from 'app/store/model';
+import AppLoading from 'app/Components/AppLoading';
+
 const {useParams} = createParam<any>();
 
 // 存款
-const AmountScreen = () => {
+const AmountScreen = ({type}: any) => {
   const {t} = useTranslation();
+  const [{payLinkData}] = useRematchModel('user');
+  const dispatch = useDispatch<Dispatch>();
   const [inputValue, setInputValue] = React.useState('');
   const [showKeyboard, setShowKeyboard] = React.useState(false);
-
-  const [balance, setBalance] = React.useState(0);
-  const [token, setToken] = React.useState('USDC');
-  const [chain, setChain] = React.useState('Polygon');
+  const [currencyData, setCurrencyData] = React.useState<any>();
   const [isLoading, setIsLoading] = React.useState(false);
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const {back, push} = useRouter();
@@ -45,25 +49,37 @@ const AmountScreen = () => {
   const toast = useToastController();
 
   useEffect(() => {
-    if (params?.userId) {
-      setToken(params?.token || 'USDC');
-      setChain(params?.chain || 'Polygon');
-      setInputValue(params?.amount || '0');
+    if (payLinkData?.id && payLinkData?.currencyData?.token?.tokenSymbol) {
+      const {amount, currencyData: _currencyData} = payLinkData;
+      setCurrencyData(_currencyData);
+      setInputValue(amount);
     }
-  }, [params]);
+  }, [payLinkData?.id]);
 
   const submit = () => {
-    if (!inputValue || inputValue === '') {
-      toast.show(t('home.send.amountToSend.tips'));
+    if (!inputValue || inputValue === '0') {
+      toast.show(type === 'send' ? t('home.send.amountToSend.tips') : t('home.request.amountToRequest.tips'));
+      return;
+    }
+    if (type === 'send' && Number(inputValue) > Number(currencyData?.token?.tokenAmount)) {
+      toast.show(t('home.send.amountToSend.tips2'));
       return;
     }
 
     setButtonLoading(true);
     setTimeout(() => {
       setButtonLoading(false);
-      push(`/home/send/paylink?userId=${params?.userId}&token=${token}&chain=${chain}&amount=${inputValue}`);
-    }, 2000);
-    console.log('🚀 ~ DepositScreen ~ inputValue:', inputValue);
+      const id = new Date().getTime() + Math.random();
+      push(`/home/${type}/paylink?id=${id}`);
+      dispatch.user.updateState({
+        payLinkData: {
+          ...payLinkData,
+          id: id,
+          amount: inputValue,
+          currencyData: currencyData,
+        },
+      });
+    });
   };
 
   const handlePagePress = () => {
@@ -75,24 +91,15 @@ const AmountScreen = () => {
     setShowKeyboard(true);
   };
 
-  const updateCurrency = (data) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setToken(data.token);
-      setChain(data.chain);
-      setIsLoading(false);
-    }, 1000);
-  };
-
   return (
     <PermissionPage>
       <AppHeader2 title={t('screen.home.amount')} fallbackUrl="/" />
       <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
-        <Currency token={token} chain={chain} updateCurrency={updateCurrency} />
+        <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
         <YStack w="100%" mb={appScale(24)}>
           <XStack mb={appScale(8)} w="100%">
             <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-              {t('home.send.amountToSend')}
+              {type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
             </SizableText>
           </XStack>
           <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
@@ -125,22 +132,27 @@ const AmountScreen = () => {
             </SizableText>
           </XStack>
         </YStack>
-        <XStack mb={appScale(24)} w="100%" ai={'center'} jc={'center'}>
-          <SizableText h={appScale(24)} lh={appScale(24)} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>{`${t(
-            'home.balance',
-          )}: ${balance} ${token} (${chain})`}</SizableText>
+        <XStack mb={appScale(24)} h={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+          {currencyData?.tokenAmount && (
+            <SizableText h={appScale(24)} lh={appScale(24)} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>{`${t(
+              'home.balance',
+            )}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
+              currencyData?.chainName
+            })`}</SizableText>
+          )}
         </XStack>
 
-        <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}         borderTopWidth={1}
-        borderColor={'#F2F2F2'}>
+        <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'} borderTopWidth={1} borderColor={'#F2F2F2'}>
           <AppButton isLoading={buttonLoading} onPress={submit}>
             {t('home.send.continue')}
           </AppButton>
         </XStack>
       </YStack>
 
-      {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
-      {isLoading && <PageLoading />}
+      {showKeyboard && (
+        <Keyboard decimals={currencyData?.token?.tokenDecimals || 6} onChange={setInputValue} value={inputValue} />
+      )}
+      {isLoading && <AppLoading />}
     </PermissionPage>
   );
 };

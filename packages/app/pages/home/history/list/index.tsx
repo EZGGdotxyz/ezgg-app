@@ -156,7 +156,7 @@ const HistoryScreen = (props: any) => {
         }}
         contentContainerStyle={{
           flexGrow: 1,
-          padding: appScale(16),
+          // padding: appScale(16),
           backgroundColor: '#fff',
         }}
         onEndReached={() => {

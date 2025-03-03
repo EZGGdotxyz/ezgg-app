@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 15:10:30
+ * @LastEditTime: 2025-03-03 21:13:22
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -92,19 +92,16 @@ export const truncateText = (text: string, maxLength: number = 12) => {
   return text.slice(0, maxLength) + '…';
 };
 
-
 // 截断地址
 export const truncateAddress = (address: string) => {
   if (!address) return '';
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };
 
-
 // 获取货币信息
 export const getCurrency = (currency: string) => {
   return CurrencyList.find((item) => item.code === currency);
 };
-
 
 // 处理历史列表结构
 export const dealtHistoryList = (data): any[] => {
@@ -133,7 +130,6 @@ export const dealtHistoryList = (data): any[] => {
     return [];
   }
 };
-
 
 // 恢复历史列表结构
 export const restoreHistoryList = (groupedData) => {
@@ -173,10 +169,9 @@ export const getUserSubName = (item) => {
   return '';
 };
 
-
 // 格式化token数量
 export const formatTokenAmount = (amount: string | number, decimals: number = 18) => {
   if (!amount) return '0';
   const value = Number(amount) / Math.pow(10, decimals);
-  return formatNumber(value);
+  return value;
 };

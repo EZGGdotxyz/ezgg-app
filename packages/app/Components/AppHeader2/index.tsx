@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 18:03:57
+ * @LastEditTime: 2025-03-03 22:17:19
  * @FilePath: /ezgg-app/packages/app/Components/AppHeader2/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -43,11 +43,11 @@ const AppHeader2: React.FC<any> = ({
   const {t, i18n} = useTranslation();
 
   const onBackPress = () => {
-    if (isClosure) {
-      return push('/');
-    }
     if (onBack) {
       return onBack();
+    }
+    if (isClosure) {
+      return push('/');
     }
     const canGoBack =
       // @ts-expect-error navigation type definition is nowhere to be found yet
@@ -114,7 +114,7 @@ const AppHeader2: React.FC<any> = ({
               ai={'center'}
               jc={'center'}
               onPress={() => {
-              //  onSearch();
+                //  onSearch();
               }}
             >
               <AppImage

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 15:13:56
+ * @LastEditTime: 2025-03-03 21:11:35
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {AppHeader, AppHeaderProps, AppImage, HeaderBackButton, Paragraph, SizableText, XStack, YStack} from '@my/ui';
@@ -23,16 +23,21 @@ const {useParams} = createParam<any>();
 // 订单详情
 const HistoryDetailScreen = () => {
   const {t} = useTranslation();
-  const [infoData, setInfoData] = useState<any>({});
+  const [infoData, setInfoData] = useState<any>({
+    icon: '',
+    title: '',
+    infoList: [],
+    userName: '',
+  });
+
   const {params} = useParams();
   const [{userInfo}] = useRematchModel('user');
   const {makeRequest} = useRequest();
   const [orderData, setOrderData] = useState<any>({});
-
   const statusList = {
     PENDING: {
       title: t('home.order.status.unpaid'),
-      backgroundColor: '##F75555',
+      backgroundColor: '#F75555',
     },
     ACCEPTED: {
       title: t('home.order.status.paid'),
@@ -50,29 +55,41 @@ const HistoryDetailScreen = () => {
       infoList: [
         {
           label: t('home.order.youSent'),
-                value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
             getChainInfo(orderData?.chainId)?.name
           })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.networkFee'),
           value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
             getChainInfo(orderData?.chainId)?.name
           })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.date'),
           value: `${formatDateTime(orderData?.transactionTime)}`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.to'),
           value: `@${orderData?.receiverMember?.nickname}`,
           isCopyable: true,
+          isStatus: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash}`,
-          isCopyable: true,
+          value: `${orderData?.transactionHash || ''}`,
+          isCopyable: orderData?.transactionHash ? true : false,
+          isStatus: false,
           isTruncated: true,
         },
       ],
@@ -82,29 +99,41 @@ const HistoryDetailScreen = () => {
       infoList: [
         {
           label: t('home.order.youReceived'),
-                value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
             getChainInfo(orderData?.chainId)?.name
           })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.networkFee'),
           value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
             getChainInfo(orderData?.chainId)?.name
           })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.date'),
           value: `${formatDateTime(orderData?.transactionTime)}`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.from'),
-              value: `@${orderData?.receiverMember?.nickname}`,
+          value: `@${orderData?.receiverMember?.nickname}`,
           isCopyable: true,
+          isStatus: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.transactionHash'),
-           value: `${orderData?.transactionHash}`,
-          isCopyable: true,
+          value: `${orderData?.transactionHash || ''}`,
+          isCopyable: orderData?.transactionHash ? true : false,
+          isStatus: false,
           isTruncated: true,
         },
       ],
@@ -114,32 +143,48 @@ const HistoryDetailScreen = () => {
       infoList: [
         {
           label: t('home.order.youRequested'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.token}(${orderData?.chain})`,
+          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.networkFee'),
-            value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
             getChainInfo(orderData?.chainId)?.name
           })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.status'),
-          value: orderData?.status,
+          value: orderData?.transactionStatus,
           isStatus: true,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.date'),
-           value: `${formatDateTime(orderData?.transactionTime)}`,
+          value: `${formatDateTime(orderData?.transactionTime)}`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.to'),
-              value: `@${orderData?.receiverMember?.nickname}`,
+          value: `@${orderData?.receiverMember?.nickname}`,
           isCopyable: true,
+          isStatus: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.transactionHash'),
-           value: `${orderData?.transactionHash}`,
-          isCopyable: true,
+          value: `${orderData?.transactionHash}`,
+          isCopyable: orderData?.transactionHash ? true : false,
+          isStatus: false,
           isTruncated: true,
         },
       ],
@@ -149,32 +194,48 @@ const HistoryDetailScreen = () => {
       infoList: [
         {
           label: t('home.order.amountRequested'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.token}(${orderData?.chain})`,
+          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.networkFee'),
-            value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
             getChainInfo(orderData?.chainId)?.name
           })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.status'),
-          value: orderData?.status,
+          value: orderData?.transactionStatus,
           isStatus: true,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.date'),
-           value: `${formatDateTime(orderData?.transactionTime)}`,
+          value: `${formatDateTime(orderData?.transactionTime)}`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.to'),
-              value: `@${orderData?.senderMember?.nickname}`,
+          value: `@${orderData?.senderMember?.nickname}`,
           isCopyable: true,
+          isStatus: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.transactionHash'),
-           value: `${orderData?.transactionHash}`,
-          isCopyable: true,
+          value: `${orderData?.transactionHash}`,
+          isCopyable: orderData?.transactionHash ? true : false,
+          isStatus: false,
           isTruncated: true,
         },
       ],
@@ -184,16 +245,25 @@ const HistoryDetailScreen = () => {
       infoList: [
         {
           label: t('home.order.youWithdraw'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.token}(${orderData?.chain})`,
+          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.date'),
-           value: `${formatDateTime(orderData?.transactionTime)}`,
+          value: `${formatDateTime(orderData?.transactionTime)}`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.transactionHash'),
-           value: `${orderData?.transactionHash}`,
-          isCopyable: true,
+          value: `${orderData?.transactionHash}`,
+          isCopyable: orderData?.transactionHash ? true : false,
+          isStatus: false,
           isTruncated: true,
         },
       ],
@@ -203,16 +273,25 @@ const HistoryDetailScreen = () => {
       infoList: [
         {
           label: t('home.order.youTopUp'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.token}(${orderData?.chain})`,
+          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.date'),
-           value: `${formatDateTime(orderData?.transactionTime)}`,
+          value: `${formatDateTime(orderData?.transactionTime)}`,
+          isStatus: false,
+          isCopyable: false,
+          isTruncated: false,
         },
         {
           label: t('home.order.transactionHash'),
-           value: `${orderData?.transactionHash}`,
-          isCopyable: true,
+          value: `${orderData?.transactionHash}`,
+          isCopyable: orderData?.transactionHash ? true : false,
+          isStatus: false,
           isTruncated: true,
         },
       ],
@@ -235,7 +314,7 @@ const HistoryDetailScreen = () => {
           _type = 'topUp';
           break;
         case 'REQUEST':
-          if (_orderData?.senderMember?.id === userInfo?.customMetadata?.id) {
+          if (_orderData?.receiverMember?.id === userInfo?.customMetadata?.id) {
             _type = 'outgoingRequest';
           } else {
             _type = 'incomingRequest';
@@ -276,7 +355,7 @@ const HistoryDetailScreen = () => {
       <Header title={infoData?.title} />
       <YStack pb={appScale(24)}>
         <YStack ai={'center'} jc={'center'} p={appScale(20)} bc={PrimaryColor}>
-          {infoData?.icon && (
+          {infoData?.icon !== '' && (
             <XStack w={'100%'} mb={appScale(12)} ai={'center'} jc={'center'}>
               <AppImage
                 width={appScale(100)}
@@ -308,6 +387,7 @@ const HistoryDetailScreen = () => {
 
         <YStack mt={appScale(20)} p={appScale(24)}>
           {infoData?.infoList &&
+            infoData?.infoList.length > 0 &&
             infoData?.infoList.map((item, index) => (
               <XStack
                 key={item.label}
@@ -321,10 +401,10 @@ const HistoryDetailScreen = () => {
                 <SizableText h={appScale(26)} lh={appScale(26)} fontSize={'$5'} color={'#616161'} fontWeight={'500'}>
                   {item.label}
                 </SizableText>
-                {item?.isStatus ? (
+                {item?.isStatus && item?.value && (
                   <XStack
                     ai={'center'}
-                    bc={statusList[item.value]?.backgroundColor}
+                    // bc={statusList[item.value]?.backgroundColor}
                     borderRadius={appScale(8)}
                     p={appScale(12)}
                   >
@@ -335,11 +415,12 @@ const HistoryDetailScreen = () => {
                       color={'#212121'}
                       fontWeight={'700'}
                     >
-                      {statusList[item.value].title}
+                      {statusList[item.value]?.title}
                     </SizableText>
                   </XStack>
-                ) : (
-                  <XStack ai={'center'} space="$2">
+                )}
+                {!item?.isStatus && (
+                  <XStack ai={'center'} jc={'center'}>
                     <SizableText
                       h={appScale(26)}
                       lh={appScale(26)}
@@ -347,17 +428,19 @@ const HistoryDetailScreen = () => {
                       color={'#424242'}
                       fontWeight={'600'}
                     >
-                      {item?.isTruncated ? truncateAddress(item.value) : item.value}
+                      {item?.isTruncated ? (item?.value ? truncateAddress(item?.value) : '-') : item?.value}
                     </SizableText>
-                    {item.isCopyable && (
-                      <CopyButton unstyled text={item?.value}>
-                        <AppImage
-                          width={appScale(18)}
-                          height={appScale(18)}
-                          src={require('app/assets/images/copy.png')}
-                          type="local"
-                        />
-                      </CopyButton>
+                    {item?.isCopyable && (
+                      <XStack ai={'center'} jc={'center'} ml={appScale(6)}>
+                        <CopyButton unstyled text={item?.value}>
+                          <AppImage
+                            width={appScale(18)}
+                            height={appScale(18)}
+                            src={require('app/assets/images/copy.png')}
+                            type="local"
+                          />
+                        </CopyButton>
+                      </XStack>
                     )}
                   </XStack>
                 )}

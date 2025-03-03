@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 14:23:26
+ * @LastEditTime: 2025-03-03 21:43:06
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet, ScrollView} from '@my/ui';
@@ -20,7 +20,8 @@ import {getChainInfo} from 'app/utils/chain';
 import TokenList from '../TokenList';
 import History from '../History';
 import {getTransactionHistoryPageTransactionHistory} from 'app/servers/api/transactionHistory';
-
+import {useDispatch} from 'react-redux';
+import {Dispatch} from 'app/store';
 export type HomeListProps = {
   switchOn: boolean;
   setIsLoading: (isLoading: boolean) => void;
@@ -30,6 +31,7 @@ const HomeList: React.FC<any> = ({switchOn, setIsLoading}: HomeListProps) => {
   const [{currency, blockchainList}] = useRematchModel('app');
   const [{isLogin}] = useRematchModel('user');
   const {makeRequest} = useRequest();
+  const dispatch = useDispatch<Dispatch>();
 
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
@@ -100,7 +102,7 @@ const HomeList: React.FC<any> = ({switchOn, setIsLoading}: HomeListProps) => {
       const results = await Promise.all(promises);
 
       // 过滤掉空结果并格式化数据
-      const balanceData = results
+      const _tokenList = results
         .filter((result) => result !== null)
         .flatMap((result, index) => {
           if (result.summary?.balance) {
@@ -109,28 +111,27 @@ const HomeList: React.FC<any> = ({switchOn, setIsLoading}: HomeListProps) => {
 
           if (result.tokens?.length > 0) {
             return result.tokens.map((item) => {
+              console.log('🚀 ~ returnresult.tokens.map ~ item:', item);
+
               const chainInfo = getChainInfo(item?.token?.chainId);
               return {
-                tokenAddress: item?.token?.address,
-                tokenName: item?.token?.tokenName,
-                tokenSymbol: item?.token?.tokenSymbol,
-                tokenDecimals: item?.token?.tokenDecimals,
-                // tokenImage:item?.token?.image,
-                priceAutoUpdate: item?.token?.priceAutoUpdate,
-                chainId: item?.token?.chainId,
-                tokenAmount: item?.tokenAmount,
-                currencyAmount: item?.currencyAmount,
                 chainName: chainInfo?.name,
                 chainIcon: chainInfo?.icon,
+                ...item,
               };
             });
           }
           return [];
         });
 
+      dispatch.user.updateState({
+        availableBalance: summaryBalance,
+        tokenList: _tokenList,
+      });
+
       // 如果有数据，更新列表
-      if (balanceData.length > 0) {
-        setList(balanceData);
+      if (_tokenList.length > 0) {
+        setList(_tokenList);
       } else {
         setList([]);
       }

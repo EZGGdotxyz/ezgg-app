@@ -2,7 +2,7 @@
  * @Author: Yosan
  * @Date: 2022-11-12 12:19:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 10:42:03
+ * @LastEditTime: 2025-03-03 16:29:43
  * @Description:
  */
 import {createModel} from '@rematch/core';
