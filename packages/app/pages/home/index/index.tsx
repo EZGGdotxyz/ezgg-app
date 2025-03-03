@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 14:20:40
+ * @LastEditTime: 2025-03-03 10:34:38
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -19,22 +19,22 @@ import {Platform, useColorScheme} from 'react-native';
 // import {pushingRegisterDevice} from 'app/servers/api/2000Yidongtuisongguanli';
 import {appScale} from 'app/utils';
 import {PrimaryColor} from 'app/config';
-import TokenList from './components/TokenList';
-import History from './components/History';
-import {getBalanceListBalance} from 'app/servers/api/balance';
+import HomeList from './components/HomeList';
+import AppLoading from 'app/Components/AppLoading';
 
 interface HomeScreenProps {}
 // 首页
 const HomeScreen = (props: HomeScreenProps) => {
   const {t, i18n} = useTranslation();
   const {makeRequest} = useRequest();
-  const [{demoniator}] = useRematchModel('app');
+  const [{currency}] = useRematchModel('app');
   const [{isLogin, availableBalance}] = useRematchModel('user');
   const {push} = useRouter();
   const dispatch = useDispatch<Dispatch>();
 
   const [unread, setUnread] = useState(0);
   const [navSelected, setNavSelected] = useState('send');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [switchOn, setSwitchOn] = useState(false);
   useEffect(() => {
@@ -168,14 +168,8 @@ const HomeScreen = (props: HomeScreenProps) => {
           </XStack>
         </XStack>
       </XStack>
-      <YStack f={1}>
-        <ScrollView f={1} bc="$background">
-          <YStack pb={appScale(104)}>
-            {!switchOn && <TokenList />}
-            {switchOn && <History />}
-          </YStack>
-        </ScrollView>
-      </YStack>
+      <HomeList switchOn={switchOn} setIsLoading={setIsLoading} />
+      {isLoading && <AppLoading />}
     </PermissionPage>
   );
 };

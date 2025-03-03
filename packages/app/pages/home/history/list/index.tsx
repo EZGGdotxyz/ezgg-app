@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 18:07:32
+ * @LastEditTime: 2025-03-03 14:34:40
  * @FilePath: /ezgg-app/packages/app/pages/home/history/list/index.tsx
  */
 import {
@@ -19,7 +19,7 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import History from '../../index/components/History';
-import {appScale} from 'app/utils';
+import {appScale, dealtHistoryList, restoreHistoryList} from 'app/utils';
 import useRequest from 'app/hooks/useRequest';
 import {createParam} from 'solito';
 import {useRouter} from 'solito/router';
@@ -30,164 +30,10 @@ import {ChevronRight} from '@tamagui/lucide-icons';
 import {PrimaryColor} from 'app/config';
 import AppHeader2 from 'app/Components/AppHeader2';
 import SearchHeader from 'app/Components/SearchHeader';
+import {getTransactionHistoryPageTransactionHistory} from 'app/servers/api/transactionHistory';
+import HistoryDayItem from 'app/Components/HistoryDayItem';
 
 const {useParam} = createParam<{id: string}>();
-
-type ItemProps = {
-  item: any;
-  isBorderBottom: boolean;
-  onWrite: (item: any) => void;
-  itemKey: any;
-};
-const Item: React.FC<any> = ({item, isBorderBottom, itemKey, onWrite}: ItemProps) => {
-  const {t, i18n} = useTranslation();
-  const {push} = useRouter();
-  const scheme = 'light';
-
-  const onPress = () => {
-    onWrite(item);
-  };
-  return (
-    <YStack
-      w={appScale(343)}
-      p="$3"
-      borderRadius={16}
-      mb="$2"
-      bc={'$background'}
-      style={{
-        backgroundColor: '#fff',
-      }}
-      ai="center"
-      width={'100%'}
-      jc={'space-between'}
-    >
-      <XStack jc={'space-between'} w="100%">
-        <YStack width={'100%'}>
-          {/* <Button
-                    unstyled       pressStyle={{
-                  opacity: 0.85,
-                }}
-            mb={'$2'}
-            w={'100%'}
-            flexDirection="row"
-            onPress={() => {
-              push('/restaurant/' + item?.restaurant?.id);
-            }}
-          >
-            <SizableText w="100%" color={'$blue11'} size={'$3'} numberOfLines={1}>
-              {i18n.language === 'zh_HK' ? item?.restaurant?.name : item?.restaurant?.en_name}
-            </SizableText>
-          </Button> */}
-          <XStack w={'100%'} mb={'$2'}>
-            <SizableText color={'$color'} w="100%" fow="600" size={'$4'} numberOfLines={1}>
-              {i18n.language === 'zh_HK' ? item?.luckyDrawRuleTitle : item?.luckyDrawRuleEn_title}
-            </SizableText>
-          </XStack>
-
-          {item?.luckyDrawGiftName && (
-            <XStack w="100%" jc={'space-between'}>
-              <XStack width="70%" ai="center">
-                <XStack flexShrink={0} h={appScale(54)} borderRadius={8} overflow="hidden">
-                  <AppImage
-                    web={{
-                      alt: '',
-                      src: item?.luckyDrawGiftPhoto || require('app/assets/images/v2/gift2.png'),
-                      width: appScale(54),
-                      height: appScale(54),
-                    }}
-                    type={item?.luckyDrawGiftPhoto ? '' : 'local'}
-                    native={{
-                      source: {
-                        width: appScale(54),
-                        height: appScale(54),
-                        uri: item?.luckyDrawGiftPhoto || require('app/assets/images/v2/gift2.png'),
-                      },
-                    }}
-                  />
-                </XStack>
-                <YStack w="100%" flex={1} pl="$2">
-                  <Button
-                    mb={'$2'}
-                    unstyled
-                    flexDirection="row"
-                    space={0}
-                    pressStyle={{opacity: 0.85}}
-                    onPress={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      push('/card/' + item?.brandId);
-                    }}
-                  >
-                    <SizableText color={'$color'} fow="600" size={'$2'} numberOfLines={1}>
-                      {i18n.language === 'zh_HK' ? item?.restaurant?.name : item?.restaurant?.en_name}
-                    </SizableText>
-                    <ChevronRight color={'$color'} />
-                  </Button>
-                  <XStack width="100%" ai={'center'}>
-                    <XStack flexShrink={0} pr="$2">
-                      <AppImage
-                        width={appScale(16)}
-                        height={appScale(16)}
-                        src={require('app/assets/images/v2/dark/currency.png')}
-                        type="local"
-                      />
-                    </XStack>
-                    <SizableText
-                      color={PrimaryColor}
-                      fow="600"
-                      size={'$3'}
-                      flex={1}
-                      numberOfLines={2}
-                      style={{overflowWrap: 'break-word'}}
-                    >
-                      {`${i18n.language === 'zh_HK' ? item?.luckyDrawGiftName : item?.luckyDrawGiftEN_name}`}
-                      {`x ${item?.luckyDrawRuleQuantity}`}
-                    </SizableText>
-                  </XStack>
-                </YStack>
-              </XStack>
-              <XStack w="30%" ai={'center'} jc={'flex-end'}>
-                <Button
-                  unstyled
-                  pressStyle={{
-                    opacity: 0.85,
-                  }}
-                  ai="center"
-                  jc={'center'}
-                  style={{
-                    height: 40,
-                    width: '100%',
-                    borderRadius: 10,
-                  }}
-                  bc={item?.isSettlement ? '#afafaf' : '$color'}
-                  color={'$color1'}
-                  disabled={item?.isSettlement}
-                  onPress={() => {
-                    push({
-                      pathname: '/my/prize/use/' + item?.memberGiftExchangeId,
-                      query: {
-                        type: 'luckyDraw',
-                        restaurantId: item?.restaurant?.id,
-                      },
-                    });
-                  }}
-                  fontSize={'$3'}
-                >
-                  {item?.isSettlement ? t('operate.button.onWrite') : t('operate.button.write')}
-                </Button>
-              </XStack>
-            </XStack>
-          )}
-          <XStack>
-            <SizableText color={'#868686'} size={'$2'}>
-              {dayjs(item?.createAt).format('YYYY-MM-DD HH:mm:ss')}
-            </SizableText>
-          </XStack>
-        </YStack>
-      </XStack>
-    </YStack>
-  );
-};
 
 // 關於
 const HistoryScreen = (props: any) => {
@@ -195,18 +41,14 @@ const HistoryScreen = (props: any) => {
   const {t} = useTranslation();
   const scheme = 'light';
 
-  const HeaderLeft: AppHeaderProps['headerRight'] = () => <HeaderBackButton fallbackUrl="/my"></HeaderBackButton>;
   const {makeRequest} = useRequest();
   const [data, setData] = useState<any>([]);
+  const [dataTotal, setDataTotal] = useState<any>(0);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [searchText, setSearchText] = useState('');
-
-  const [writeData, setWriteData] = useState<any>({});
-
-  const [modalVisible, setModalVisible] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(false);
 
   const [id] = useParam('id');
@@ -220,24 +62,33 @@ const HistoryScreen = (props: any) => {
     if (id && id !== 'all') {
       params.brandId = Number(id);
     }
-    // const res = await makeRequest(memberLuckyDrawRouterPageMemberLuchyDraw(params));
-    const res: any = [];
-    if (res?.record && res?.record.length > 0) {
-      if (_page === 1) {
-        setData(res.record);
-      } else {
-        setData([...data, ...res.record]);
+    const res = await makeRequest(
+      getTransactionHistoryPageTransactionHistory({
+        page: 1,
+        pageSize: 10,
+      }),
+    );
+    if (res?.data?.record && res?.data?.record.length > 0) {
+      let _recordData = res.data.record;
+      if (_page !== 1) {
+        _recordData = [...restoreHistoryList(data), ...res.data.record];
       }
+      setDataTotal(_recordData.length);
+      const _data = await dealtHistoryList(_recordData);
+      setData(_data);
+
       setPage(_page);
       setLoading(false);
-      setTotal(res.totalCount);
+      setTotal(res?.data?.totalCount || 0);
     } else {
+      setData([]);
+      setTotal(0);
       setLoading(false);
     }
   };
 
   const fetchMoreData = async () => {
-    if (!loadingMore && data.length < total) {
+    if (!loadingMore && dataTotal < total) {
       setLoadingMore(true);
       await fetchData(page + 1);
       setLoadingMore(false);
@@ -260,7 +111,7 @@ const HistoryScreen = (props: any) => {
    */
   const _renderFooter = () => {
     if (!loading) {
-      if (data.length === total) {
+      if (dataTotal === total) {
         return (
           <XStack w="100%" jc={'center'}>
             <SizableText col={'$color11'} fontSize={'$3'}>
@@ -284,26 +135,11 @@ const HistoryScreen = (props: any) => {
     }
   };
 
-  const onWrite = (item: any) => {
-    setWriteData({
-      restaurantId: item?.restaurant?.id,
-      recordType: 'luckyDraw',
-      recordId: item?.memberGiftExchangeId,
-      name: item?.luckyDrawGiftName,
-      en_name: item?.luckyDrawGiftEN_name,
-      description: item?.luckyDrawGiftDescription,
-      en_description: item?.luckyDrawGiftEn_description,
-      photo: item?.luckyDrawGiftPhoto,
-      quantity: item?.luckyDrawRuleQuantity,
-    });
-    setModalVisible(true);
-  };
-
   return (
     <PermissionPage>
       <AppHeader2 title={t('screen.home.history')} fallbackUrl="/" />
       <SearchHeader
-        placeholder={t('home.send.search')}
+        placeholder={t('home.search')}
         searchText={searchText}
         setSearchText={setSearchText}
         onSearch={onSearch}
@@ -311,7 +147,7 @@ const HistoryScreen = (props: any) => {
       <FlatList
         data={data}
         refreshing={loading}
-        keyExtractor={(item, index) => item?.id}
+        keyExtractor={(item, index) => item?.day}
         style={{
           width: '100%',
           height: '100%',
@@ -338,11 +174,9 @@ const HistoryScreen = (props: any) => {
         }}
         ListFooterComponent={_renderFooter}
         ListEmptyComponent={<ListEmpty loading={loading} />}
-        renderItem={({item, index}) => (
-          <XStack w="100%" jc={'center'} key={item.id + 'id' + index}>
-            <Item isBorderBottom={index === data.length - 1} onWrite={onWrite} item={item} itemKey={item.id} />
-          </XStack>
-        )}
+        renderItem={({item, index}) => {
+          return <HistoryDayItem key={item.day} item={item} />;
+        }}
       />
     </PermissionPage>
   );

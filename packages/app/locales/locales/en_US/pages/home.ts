@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 17:54:46
+ * @LastEditTime: 2025-03-03 11:58:11
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -10,6 +10,7 @@ export default {
   'home.income': 'Income',
   'home.expense': 'Expense',
   'home.send': 'Send',
+  'home.sent': 'Sent',
   'home.request': 'Request',
   'home.topUp': 'Top Up',
   'home.withdraw': 'Withdraw',
@@ -29,6 +30,7 @@ export default {
   'home.send.currency': 'Currency',
   'home.send.amountToSend': 'Amount to Send',
   'home.send.amountToSend.tips': 'Please enter the amount to send',
+  'home.send.amountToSend.tips2': 'Please enter an amount that is less than your balance',
   'home.send.continue': 'Continue',
   'home.send.viewLink': 'View link',
   'home.send.copyLink': 'Copy link',
@@ -86,6 +88,13 @@ export default {
   'home.order.noTransactions2': `You haven't made any transactions.`,
   'home.order.noPortfolio': 'No Portfolio',
   'home.order.noPortfolio2': `You don't have any portfolio.`,
+
+  'home.order.qrCode.title': `~ QR Code (@{{name}})`,
+  'home.order.payLink.title': `~PayLink (@{{name}})`,
+
+  'home.order.send.title': `~Sent to (@{{name}})`,
+  'home.order.request.title': `From Request (@{{name}})`,
+
 
   'home.paylink.recipient': 'Recipient',
   'home.paylink.anyoneLink': 'Anyone with the link ',

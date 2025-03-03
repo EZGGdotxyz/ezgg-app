@@ -1,13 +1,14 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 14:11:06
+ * @LastEditTime: 2025-03-03 15:10:30
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
 import {Dimensions, Platform} from 'react-native';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
+import {CurrencyList} from 'app/config';
 
 export const appScale = (width: number) => baseScale((width * 350) / 430);
 
@@ -91,6 +92,91 @@ export const truncateText = (text: string, maxLength: number = 12) => {
   return text.slice(0, maxLength) + '…';
 };
 
+
+// 截断地址
 export const truncateAddress = (address: string) => {
+  if (!address) return '';
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
+
+
+// 获取货币信息
+export const getCurrency = (currency: string) => {
+  return CurrencyList.find((item) => item.code === currency);
+};
+
+
+// 处理历史列表结构
+export const dealtHistoryList = (data): any[] => {
+  if (!data || data.length === 0) return [];
+  try {
+    // 按日期分组处理数据
+    const groupedData = data.reduce((acc, item) => {
+      const date = dayjs(item.createAt).format('YYYY-MM-DD');
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(item);
+      return acc;
+    }, {});
+
+    // 转换为数组格式
+    const formattedData = Object.entries(groupedData).map(([date, items]) => ({
+      day: date,
+      list: items,
+    }));
+
+    // 按日期倒序排序
+    formattedData.sort((a, b) => dayjs(b.day).unix() - dayjs(a.day).unix());
+    return formattedData;
+  } catch (error) {
+    return [];
+  }
+};
+
+
+// 恢复历史列表结构
+export const restoreHistoryList = (groupedData) => {
+  if (!groupedData || groupedData.length === 0) return [];
+  try {
+    // 将所有日期组中的列表合并成一个数组
+    const restoredData = groupedData.reduce((acc, group) => {
+      if (group.list && Array.isArray(group.list)) {
+        return [...acc, ...group.list];
+      }
+      return acc;
+    }, []);
+
+    // 按创建时间倒序排序，保持原始顺序
+    restoredData.sort((a, b) => dayjs(b.createAt).unix() - dayjs(a.createAt).unix());
+
+    return restoredData;
+  } catch (error) {
+    return [];
+  }
+};
+
+// 获取用户子称呼
+export const getUserSubName = (item) => {
+  for (let index = 0; index < item?.memberLinkedAccount?.length; index++) {
+    const element = item?.memberLinkedAccount[index];
+    if (element?.type === 'phone') {
+      return element?.search;
+    }
+    if (element?.type === 'email') {
+      return element?.search;
+    }
+    if (element?.type === 'smart_wallet') {
+      return truncateAddress(element?.search);
+    }
+  }
+  return '';
+};
+
+
+// 格式化token数量
+export const formatTokenAmount = (amount: string | number, decimals: number = 18) => {
+  if (!amount) return '0';
+  const value = Number(amount) / Math.pow(10, decimals);
+  return formatNumber(value);
 };

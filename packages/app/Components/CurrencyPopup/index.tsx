@@ -1,14 +1,15 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 14:32:46
+ * @LastEditTime: 2025-03-03 15:59:17
  * @FilePath: /ezgg-app/packages/app/Components/CurrencyPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
+import {TokenIcon} from '@web3icons/react';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
-import {appScale} from 'app/utils';
+import {appScale, formatNumber} from 'app/utils';
 import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
@@ -17,7 +18,7 @@ export type CurrencyPopupProps = {
   modalVisible: any;
   setModalVisible: (values) => void;
   currencyList: any;
-  seleCtcurrency: any;
+  selectCurrency: any;
   currencyData: any;
 };
 // 币种选择弹窗
@@ -25,7 +26,7 @@ const CurrencyPopup: React.FC<any> = ({
   modalVisible,
   setModalVisible,
   currencyList,
-  seleCtcurrency,
+  selectCurrency,
   currencyData,
 }: CurrencyPopupProps) => {
   const {t, i18n} = useTranslation();
@@ -95,7 +96,7 @@ const CurrencyPopup: React.FC<any> = ({
                   <YStack key={item?.chain + 'id' + index}>
                     <XStack ai="center" pl={appScale(24)} pr={appScale(24)} h={48}>
                       <SizableText fontSize={'$5'} color={'#212121'} mr={'$4'}>
-                        {item?.chain}
+                        {item?.chainName}
                       </SizableText>
                       <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
                     </XStack>
@@ -117,27 +118,38 @@ const CurrencyPopup: React.FC<any> = ({
                         ai="flex-end"
                         jc="flex-end"
                         onPress={() => {
-                          seleCtcurrency(dayItem);
+                          selectCurrency(dayItem);
                         }}
                       >
-                        <XStack
-                          flex={1}
-                          h={appScale(48)}
-                          pr={appScale(24)}
-                          pl={appScale(24)}
-                          w="100%"
-                          ai={'center'}
-                          jc={'space-between'}
-                        >
-                          <AppImage
+                        <XStack flex={1} h={appScale(48)} w="100%" ai={'center'} jc={'space-between'}>
+                          <XStack flex={1} h={appScale(48)} pr={appScale(24)} pl={appScale(24)} ai={'center'}>
+                            {dayItem?.tokenSymbol && (
+                              <YStack
+                                height={appScale(48)}
+                                width={appScale(48)}
+                                borderRadius={appScale(24)}
+                                overflow={'hidden'}
+                              >
+                                <TokenIcon symbol={dayItem.tokenSymbol} variant="background" size={appScale(48)} />
+                              </YStack>
+                            )}
+
+                            {/* <AppImage
                             width={appScale(48)}
                             height={appScale(48)}
                             src={require(`app/assets/images/token/${dayItem.token}.png`)}
                             type="local"
-                          />
-                          <SizableText color={'#212121'} size={'$5'} fow={'600'}>
-                            {dayItem?.token}
-                          </SizableText>
+                          /> */}
+                            <SizableText ml={appScale(16)} color={'#212121'} size={'$5'} fow={'400'}>
+                              {dayItem?.tokenSymbol}
+                            </SizableText>
+                          </XStack>
+                          <XStack flexShrink={0} ai={'center'} jc={'center'} pl={appScale(24)} pr={appScale(24)}>
+                            <SizableText color={'#212121'} size={'$5'} fow={'600'}>
+                              {/* {formatNumber(Number(item?.tokenAmount))} */}
+                              {dayItem?.tokenAmount}
+                            </SizableText>
+                          </XStack>
                         </XStack>
 
                         {index !== item.tokenList.length - 1 && (

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 17:14:12
+ * @LastEditTime: 2025-03-03 15:13:56
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {AppHeader, AppHeaderProps, AppImage, HeaderBackButton, Paragraph, SizableText, XStack, YStack} from '@my/ui';
@@ -9,10 +9,15 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import Header from './components/Header';
-import {appScale, formatDateTime, formatNumber, truncateAddress, truncateText} from 'app/utils';
+import {appScale, formatDateTime, formatNumber, truncateAddress, formatTokenAmount} from 'app/utils';
 import CopyButton from 'app/Components/CopyButton';
 import {PrimaryColor} from 'app/config';
 import {createParam} from 'solito';
+import {getTransactionHistoryFindTransactionHistoryId} from 'app/servers/api/transactionHistory';
+import {useRematchModel} from 'app/store/model';
+import useRequest from 'app/hooks/useRequest';
+import {getChainInfo} from 'app/utils/chain';
+
 const {useParams} = createParam<any>();
 
 // 订单详情
@@ -20,60 +25,53 @@ const HistoryDetailScreen = () => {
   const {t} = useTranslation();
   const [infoData, setInfoData] = useState<any>({});
   const {params} = useParams();
-
-  const type = 'incomingRequest';
+  const [{userInfo}] = useRematchModel('user');
+  const {makeRequest} = useRequest();
+  const [orderData, setOrderData] = useState<any>({});
 
   const statusList = {
-    unpaid: {
+    PENDING: {
       title: t('home.order.status.unpaid'),
       backgroundColor: '##F75555',
     },
-    paid: {
+    ACCEPTED: {
       title: t('home.order.status.paid'),
       backgroundColor: '#FEB54F',
     },
-    declined: {
+    DECLINED: {
       title: t('home.order.status.declined'),
       backgroundColor: '#F75555',
     },
   };
 
-  const orderData = {
-    amount: 100,
-    fee: 1,
-    token: 'USDC',
-    chain: 'BSC',
-    createdAt: '2024-10-21 14:35:30',
-    toAddress: '123',
-    txHash: '2024102114353001',
-    status: 'paid',
-    userName: 'yosan',
-  };
-
   const infoDataDefault = {
-    sent: {
+    send: {
       icon: '',
       infoList: [
         {
           label: t('home.order.youSent'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.token}(${orderData?.chain})`,
+                value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
         },
         {
           label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.fee)} ${orderData?.token}(${orderData?.chain})`,
+          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
         },
         {
           label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.createdAt)}`,
+          value: `${formatDateTime(orderData?.transactionTime)}`,
         },
         {
           label: t('home.order.to'),
-          value: `@${orderData?.toAddress}`,
+          value: `@${orderData?.receiverMember?.nickname}`,
           isCopyable: true,
         },
         {
           label: t('home.order.transactionHash'),
-          value: `${orderData?.txHash}`,
+          value: `${orderData?.transactionHash}`,
           isCopyable: true,
           isTruncated: true,
         },
@@ -84,24 +82,28 @@ const HistoryDetailScreen = () => {
       infoList: [
         {
           label: t('home.order.youReceived'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.token}(${orderData?.chain})`,
+                value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
         },
         {
           label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.fee)} ${orderData?.token}(${orderData?.chain})`,
+          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
         },
         {
           label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.createdAt)}`,
+          value: `${formatDateTime(orderData?.transactionTime)}`,
         },
         {
           label: t('home.order.from'),
-          value: `@${orderData?.toAddress}`,
+              value: `@${orderData?.receiverMember?.nickname}`,
           isCopyable: true,
         },
         {
           label: t('home.order.transactionHash'),
-          value: `${orderData?.txHash}`,
+           value: `${orderData?.transactionHash}`,
           isCopyable: true,
           isTruncated: true,
         },
@@ -116,7 +118,9 @@ const HistoryDetailScreen = () => {
         },
         {
           label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.fee)} ${orderData?.token}(${orderData?.chain})`,
+            value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
         },
         {
           label: t('home.order.status'),
@@ -125,16 +129,16 @@ const HistoryDetailScreen = () => {
         },
         {
           label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.createdAt)}`,
+           value: `${formatDateTime(orderData?.transactionTime)}`,
         },
         {
           label: t('home.order.to'),
-          value: `@${orderData?.toAddress}`,
+              value: `@${orderData?.receiverMember?.nickname}`,
           isCopyable: true,
         },
         {
           label: t('home.order.transactionHash'),
-          value: `${orderData?.txHash}`,
+           value: `${orderData?.transactionHash}`,
           isCopyable: true,
           isTruncated: true,
         },
@@ -149,7 +153,9 @@ const HistoryDetailScreen = () => {
         },
         {
           label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.fee)} ${orderData?.token}(${orderData?.chain})`,
+            value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
+            getChainInfo(orderData?.chainId)?.name
+          })`,
         },
         {
           label: t('home.order.status'),
@@ -158,16 +164,16 @@ const HistoryDetailScreen = () => {
         },
         {
           label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.createdAt)}`,
+           value: `${formatDateTime(orderData?.transactionTime)}`,
         },
         {
           label: t('home.order.to'),
-          value: `@${orderData?.toAddress}`,
+              value: `@${orderData?.senderMember?.nickname}`,
           isCopyable: true,
         },
         {
           label: t('home.order.transactionHash'),
-          value: `${orderData?.txHash}`,
+           value: `${orderData?.transactionHash}`,
           isCopyable: true,
           isTruncated: true,
         },
@@ -182,11 +188,11 @@ const HistoryDetailScreen = () => {
         },
         {
           label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.createdAt)}`,
+           value: `${formatDateTime(orderData?.transactionTime)}`,
         },
         {
           label: t('home.order.transactionHash'),
-          value: `${orderData?.txHash}`,
+           value: `${orderData?.transactionHash}`,
           isCopyable: true,
           isTruncated: true,
         },
@@ -201,11 +207,11 @@ const HistoryDetailScreen = () => {
         },
         {
           label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.createdAt)}`,
+           value: `${formatDateTime(orderData?.transactionTime)}`,
         },
         {
           label: t('home.order.transactionHash'),
-          value: `${orderData?.txHash}`,
+           value: `${orderData?.transactionHash}`,
           isCopyable: true,
           isTruncated: true,
         },
@@ -213,14 +219,56 @@ const HistoryDetailScreen = () => {
     },
   };
 
-  useEffect(() => {
-    params?.type &&
+  const _getTransactionHistoryFindTransactionHistoryId = async () => {
+    const res = await makeRequest(getTransactionHistoryFindTransactionHistoryId({id: params?.id}));
+    if (res?.code === '0') {
+      const _orderData = res?.data;
+      let _type: string = _orderData?.transactionCategory || '';
+      switch (_type) {
+        case 'SEND':
+          _type = 'send';
+          break;
+        case 'WITHDRAW':
+          _type = 'withdraw';
+          break;
+        case 'DEPOSIT':
+          _type = 'topUp';
+          break;
+        case 'REQUEST':
+          if (_orderData?.senderMember?.id === userInfo?.customMetadata?.id) {
+            _type = 'outgoingRequest';
+          } else {
+            _type = 'incomingRequest';
+          }
+          break;
+        default:
+          break;
+      }
+      setOrderData(_orderData);
       setInfoData({
-        infoList: infoDataDefault[params?.type].infoList,
-        userName: `@${orderData?.userName || ''}`,
-        title: t(`screen.home.${params?.type}`),
-        icon: infoDataDefault[params?.type].icon,
+        infoList: infoDataDefault[_type].infoList,
+        title: t(`screen.home.${_type}`),
+        icon: infoDataDefault[_type].icon,
+        userName:
+          _orderData?.transactionType === 'SEND' || _orderData?.transactionType === 'REQUEST'
+            ? `@${_type === 'send' ? _orderData?.receiverMember?.nickname : _orderData?.senderMember?.nickname || ''}`
+            : '',
       });
+    }
+  };
+
+  useEffect(() => {
+    if (params?.id) {
+      _getTransactionHistoryFindTransactionHistoryId();
+    }
+
+    // params?.type &&
+    //   setInfoData({
+    //     infoList: infoDataDefault[params?.type].infoList,
+    //     userName: `@${orderData?.userName || ''}`,
+    //     title: t(`screen.home.${params?.type}`),
+    //     icon: infoDataDefault[params?.type].icon,
+    //   });
   }, [params]);
 
   return (
@@ -246,7 +294,7 @@ const HistoryDetailScreen = () => {
               color={'#212121'}
               fontWeight={'700'}
             >
-              {`${formatNumber(orderData?.amount)} ${orderData?.token}`}
+              {`${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol}`}
             </SizableText>
           </XStack>
           {infoData?.userName && (

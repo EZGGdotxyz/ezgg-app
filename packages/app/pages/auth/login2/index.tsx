@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 10:21:00
+ * @LastEditTime: 2025-03-03 14:17:04
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {YStack, SizableText, AppImage, Button} from '@my/ui';
@@ -76,22 +76,26 @@ const LoginScreen = () => {
     async (_userInfo: any) => {
       try {
         setIsSetInfo(false);
-        setTimeout(async () => {
-          try {
-            await postUserUpdateMember({
-              nickname: _userInfo.nickname || '',
-              avatar: _userInfo.avatar || '',
-            });
+        try {
+          await postUserUpdateMember({
+            nickname: _userInfo.nickname || '',
+            avatar: _userInfo.avatar || '',
+          });
+          setTimeout(async () => {
             setModalVisible(false);
-            onLink();
-          } catch (error) {
-            console.error('更新用户信息失败:', error);
+          }, 1500);
+          onLink();
+        } catch (error) {
+          console.error('更新用户信息失败:', error);
+          setTimeout(async () => {
             setModalVisible(false);
-          }
-        }, 1500);
+          }, 1500);
+        }
       } catch (error) {
         console.error('处理成功回调失败:', error);
-        setModalVisible(false);
+        setTimeout(async () => {
+          setModalVisible(false);
+        }, 1500);
       }
     },
     [onLink],

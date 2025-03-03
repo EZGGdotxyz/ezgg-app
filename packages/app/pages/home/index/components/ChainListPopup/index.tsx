@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 14:17:33
- * @FilePath: /ezgg-app/packages/app/pages/home/send/index/components/ChainListPopup/index.tsx
+ * @LastEditTime: 2025-03-03 11:01:25
+ * @FilePath: /ezgg-app/packages/app/pages/home/index/components/ChainListPopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify, Check, ChevronRight, GalleryVerticalEnd} from '@tamagui/lucide-icons';
@@ -12,10 +12,10 @@ import {useTranslation} from 'react-i18next';
 
 export type ChainListPopupProps = {
   selectedType: any;
-  setSelectedType: (values: string) => void;
+  setSelectedType: (values: any) => void;
   sheetOpen: any;
   setSheetOpen: (values) => void;
-  tokenTypes: {value: string; label: string; icon: string}[];
+  tokenTypes: {chainId: string; name: string; chainIcon: string}[];
 };
 
 const ChainListPopup: React.FC<any> = ({
@@ -25,8 +25,6 @@ const ChainListPopup: React.FC<any> = ({
   setSheetOpen,
   tokenTypes,
 }: ChainListPopupProps) => {
-  console.log('🚀 ~ selectedType:', selectedType);
-
   const {t, i18n} = useTranslation();
   return (
     <Sheet
@@ -48,8 +46,8 @@ const ChainListPopup: React.FC<any> = ({
                 pressStyle={{
                   opacity: 0.85,
                 }}
-                bc={selectedType === type?.value ? PrimaryColor : '#fff'}
-                key={type.value}
+                bc={selectedType?.chainId === type?.chainId ? PrimaryColor : '#fff'}
+                key={type.chainId}
                 // jc={'space-between'}
                 flexDirection="row"
                 w="100%"
@@ -58,23 +56,24 @@ const ChainListPopup: React.FC<any> = ({
                 pr={appScale(24)}
                 ai="center"
                 onPress={() => {
-                  setSelectedType(type.value);
+                  setSelectedType(type);
                   setSheetOpen(false);
                 }}
               >
-                {type?.icon ? (
+                {type?.chainIcon ? (
                   <AppImage
                     width={appScale(28)}
                     height={appScale(28)}
-                    src={require(`app/assets/images/chain/${type.icon}.png`)}
+                    src={require(`app/assets/images/chain/${type.chainIcon}.png`)}
                     type="local"
                   />
+
                 ) : (
                   <GalleryVerticalEnd size="$1" color={'#212121'} />
                 )}
 
                 <SizableText color={'#212121'} size={'$4'} fow={'600'}>
-                  {type.label}
+                  {type?.name}
                 </SizableText>
                 {/* <ChevronRight size="$2" color={'#212121'} /> */}
               </Button>

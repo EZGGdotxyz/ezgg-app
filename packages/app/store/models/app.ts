@@ -2,7 +2,7 @@
  * @Author: Yosan
  * @Date: 2022-11-12 12:19:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 22:11:25
+ * @LastEditTime: 2025-03-03 10:42:03
  * @Description:
  */
 import {createModel} from '@rematch/core';
@@ -20,7 +20,7 @@ export const app = createModel<RootModel>()({
     // 未读消息数
     unread: 0,
     // 法币品种
-    demoniator: 'USD',
+    currency: 'usd',
     // 区块链列表
     blockchainList: [],
   } as AppStoreModel,

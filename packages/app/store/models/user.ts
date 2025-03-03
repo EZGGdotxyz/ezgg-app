@@ -2,13 +2,13 @@
  * @Author: Yosan
  * @Date: 2022-11-12 12:19:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 16:20:45
+ * @LastEditTime: 2025-03-03 14:18:04
  * @Description:
  */
 import {createModel} from '@rematch/core';
 import {UserStoreModel} from 'app/types/user';
 import {RootModel} from './index';
-import {removeUserInfo, removeUserToken} from 'app/utils/auth';
+import {removeUserIdToken, removeUserInfo, removeUserToken} from 'app/utils/auth';
 
 export const user = createModel<RootModel>()({
   state: {
@@ -39,10 +39,11 @@ export const user = createModel<RootModel>()({
       dispatch.app.updateState({
         globalConfig: {},
         unread: 0,
-        demoniator: 'USD',
+        currency: 'usd',
       });
       removeUserInfo();
       removeUserToken();
+      removeUserIdToken();
     },
   }),
 });

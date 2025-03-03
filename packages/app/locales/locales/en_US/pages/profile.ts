@@ -10,7 +10,7 @@ export default {
   'profile.home.language': 'Language',
   'profile.home.language.zh_hk': 'English (US)',
   'profile.home.language.en_us': '繁體中文',
-  'profile.home.demoniator': 'Demoniator',
+  'profile.home.currency': 'Demoniator',
   'profile.home.about': 'About',
   'profile.home.helpCenter': 'Help Center',
   'profile.home.privacyPolicy': 'Privacy Policy',

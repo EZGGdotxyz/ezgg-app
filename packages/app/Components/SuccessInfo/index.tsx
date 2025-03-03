@@ -18,7 +18,7 @@ export type SuccessInfoProps = {type: string; orderData: any};
 const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) => {
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
-  const [{demoniator}] = useRematchModel('app');
+  const [{currency}] = useRematchModel('app');
 
   const [infoData, setInfoData] = useState<any>({});
   const infoDataDefault = {

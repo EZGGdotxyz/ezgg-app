@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 15:17:23
+ * @LastEditTime: 2025-03-03 11:06:11
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/History/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -15,9 +15,11 @@ import HistoryDayItem from 'app/Components/HistoryDayItem';
 import {useState} from 'react';
 import AppButton from 'app/Components/AppButton';
 
-export type HistoryProps = {};
+export type HistoryProps = {
+  history: any[];
+};
 // 首页 History
-const History: React.FC<any> = (props: HistoryProps) => {
+const History: React.FC<any> = ({history}: HistoryProps) => {
   const [{isLogin}] = useRematchModel('user');
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
@@ -58,11 +60,10 @@ const History: React.FC<any> = (props: HistoryProps) => {
   //     ],
   //   },
   // ];
-  const [list, setList] = useState([]);
 
   return (
     <YStack pt={appScale(8)} flex={1}>
-      {list.length > 0 ? (
+      {history.length > 0 ? (
         <>
           <XStack
             ai="center"
@@ -79,7 +80,7 @@ const History: React.FC<any> = (props: HistoryProps) => {
             </SizableText>
             <ChevronRight size="$3" color={'$color11'} />
           </XStack>
-          {list.map((item, index) => (
+          {history.map((item, index) => (
             <HistoryDayItem key={index} item={item} />
           ))}
         </>

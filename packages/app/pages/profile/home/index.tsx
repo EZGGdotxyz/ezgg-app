@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 11:15:53
+ * @LastEditTime: 2025-03-03 14:15:18
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -34,12 +34,13 @@ import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import useRequest from 'app/hooks/useRequest';
 import Header from './components/Header';
-import {appScale} from 'app/utils';
+import {appScale, getCurrency} from 'app/utils';
 import ChainPopup from './components/ChainPopup';
 import MyQrCodePopup from './components/MyQrCodePopup';
 import {usePrivy} from '@privy-io/react-auth';
 import AppButton from 'app/Components/AppButton';
 import AppLoading from 'app/Components/AppLoading';
+import {CurrencyList} from 'app/config';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
 
 // 我的
@@ -52,48 +53,13 @@ const MyScreen = () => {
 
   const dispatch = useDispatch<Dispatch>();
   const {makeRequest} = useRequest();
-  const [{unread, demoniator}] = useRematchModel('app');
+  const [{unread, currency}] = useRematchModel('app');
   const [{isLogin, userInfo}] = useRematchModel('user');
 
-  const [chainList, setChainList] = useState<any[]>([
-    {
-      id: '1',
-      emoji: '🇺🇸',
-      chineseName: '美元',
-      englishName: 'US dollar',
-      code: 'USD',
-    },
-    {
-      id: '2',
-      emoji: '🇨🇳',
-      chineseName: '人民幣',
-      englishName: 'Chinese yuan',
-      code: 'CNY',
-    },
-    {
-      id: '3',
-      emoji: '🇭🇰',
-      chineseName: '港幣',
-      englishName: 'Hong Kong dollar',
-      code: 'HKD',
-    },
-    {
-      id: '4',
-      emoji: '🇸🇬',
-      chineseName: '新加坡幣',
-      englishName: 'Singapore dollar',
-      code: 'SGD',
-    },
-  ]);
+  const [chainList, setChainList] = useState<any[]>(CurrencyList);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
-  const [chainData, setChainData] = useState<any>({
-    id: '1',
-    emoji: '🇺🇸',
-    chineseName: '美元',
-    englishName: 'US dollar',
-    code: 'USD',
-  });
+  const [chainData, setChainData] = useState<any>(CurrencyList[0]);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const InfoItems = [
@@ -104,10 +70,9 @@ const MyScreen = () => {
     //   id: 'security',
     // },
     {
-      title: t('profile.home.demoniator'),
+      title: t('profile.home.currency'),
       icon: 'show',
-      url: '/profile/demoniator',
-      id: 'demoniator',
+      id: 'currency',
     },
   ];
   const GeneralItems = [
@@ -160,10 +125,12 @@ const MyScreen = () => {
 
   const onLogout = async () => {
     setIsLoading(true);
-    logout();
+    // logout();
     await userLogout();
-    setIsLoading(false);
-    push('/');
+    setTimeout(() => {
+      setIsLoading(false);
+      push('/');
+    });
   };
 
   const Row = (item: any) => {
@@ -198,7 +165,7 @@ const MyScreen = () => {
             } else {
               window.open(item.url, '_blank');
             }
-          } else if (item.id === 'demoniator') {
+          } else if (item.id === 'currency') {
             setModalVisible(true);
           } else {
             push(item.url);
@@ -229,9 +196,9 @@ const MyScreen = () => {
               {t('profile.home.language.zh_hk')}
             </SizableText>
           )}
-          {item.id === 'demoniator' && (
+          {item.id === 'currency' && (
             <SizableText fow={'600'} color={'#212121'} fontSize="$2">
-              {demoniator}
+              {getCurrency(currency)?.label}
             </SizableText>
           )}
           {item.id !== 'logout' && <ChevronRight color={'#212121'} />}
@@ -244,7 +211,7 @@ const MyScreen = () => {
     setChainData(item);
     setModalVisible(false);
     dispatch.app.updateState({
-      demoniator: item.code,
+      currency: item.code,
     });
   };
 

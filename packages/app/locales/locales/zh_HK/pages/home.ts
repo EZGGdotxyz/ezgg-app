@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 10:51:46
+ * @LastEditTime: 2025-03-03 15:17:42
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -10,6 +10,7 @@ export default {
   'home.income': '收入',
   'home.expense': '支出',
   'home.send': '發送',
+  'home.sent': 'Sent',
   'home.request': '請求',
   'home.topUp': '充值',
   'home.withdraw': '提現',
@@ -21,7 +22,7 @@ export default {
   'home.yesterday': '昨天',
   'home.receive': '接收',
   'home.deposit': '存款',
-  'home.search':'搜索',
+  'home.search': '搜索',
 
   'home.send.search': '郵件地址, 電話號碼, 用戶ID 或錢包',
   'home.send.recent': '最近',
@@ -29,6 +30,7 @@ export default {
   'home.send.currency': '貨幣',
   'home.send.amountToSend': '請輸入要發送的金額',
   'home.send.amountToSend.tips': '請輸入要發送的金額',
+  'home.send.amountToSend.tips2': '請輸入小於您的餘額的金額',
   'home.send.continue': '繼續',
   'home.send.viewLink': '查看連結',
   'home.send.copyLink': '複製連結',
@@ -85,6 +87,12 @@ export default {
   'home.order.noTransactions2': `您尚未進行任何交易。`,
   'home.order.noPortfolio': '無投資組合',
   'home.order.noPortfolio2': `您尚未擁有任何投資組合。`,
+
+  'home.order.qrCode.title': `~ QR碼 (@{{name}})`,
+  'home.order.payLink.title': `~支付連結 (@{{name}})`,
+
+  'home.order.send.title': `~發送到 (@{{name}})`,
+  'home.order.request.title': `請求 (@{{name}})`,
 
   'home.paylink.recipient': '接收方',
   'home.paylink.anyoneLink': '任何擁有連結的人',

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 11:23:02
+ * @LastEditTime: 2025-03-03 10:46:33
  * @FilePath: /ezgg-app/packages/app/hooks/useInit.ts
  */
 import {Dispatch} from 'app/store';
@@ -24,12 +24,14 @@ import {createParam} from 'solito';
 import {DefaultLanguage, NETWORK} from 'app/config';
 import {getInfrastructureListBlockchain} from 'app/servers/api/infrastructure';
 import {getBalanceListBalance} from 'app/servers/api/balance';
+import { useRematchModel } from 'app/store/model';
 
 export default function useInit() {
   const {i18n} = useTranslation();
   const dispatch = useDispatch<Dispatch>();
   const {makeRequest} = useRequest();
   const {initLogin, initUserInfo} = useUser();
+  const [{currency}] = useRematchModel('app');
 
   // 获取区块链列表
   const _getInfrastructureListBlockchain = async () => {
@@ -42,7 +44,7 @@ export default function useInit() {
     );
     if (res?.data && res?.data?.length > 0) {
       _blockchainList = res?.data;
-      // _getBalanceListBalance('ETH', _blockchainList[0]?.id, 'USD');
+      _getBalanceListBalance('ETH', _blockchainList[0]?.chainId, currency);
     }
     const res2 = await makeRequest(
       getInfrastructureListBlockchain({
@@ -58,12 +60,12 @@ export default function useInit() {
     });
   };
 
-  // const _getBalanceListBalance = async (platform, chainId, currency) => {
-  //   const res = await makeRequest(getBalanceListBalance({platform, chainId, currency}));
-  //   console.log('🚀 ~ const_getBalanceListBalance= ~ res:', res);
-  //   if (res?.data) {
-  //   }
-  // };
+  const _getBalanceListBalance = async (platform, chainId, currency) => {
+    const res = await makeRequest(getBalanceListBalance({platform, chainId, currency}));
+    console.log('🚀 ~ const_getBalanceListBalance= ~ res:', res);
+    if (res?.data) {
+    }
+  };
 
   const _init = async () => {
     const token: any = await getUserToken();

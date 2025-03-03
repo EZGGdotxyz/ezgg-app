@@ -2,7 +2,7 @@ import {DefaultTheme} from '@react-navigation/native';
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 17:25:07
+ * @LastEditTime: 2025-03-03 10:48:36
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
 export const ExternalLinkData = {
@@ -23,6 +23,41 @@ export const SubColor = '#f39965';
 export const DefaultLanguage = 'en_US';
 
 export const AppName = 'ezgg.app';
+
+export const CurrencyList = [
+  {
+    id: '1',
+    emoji: '🇺🇸',
+    chineseName: '美元',
+    englishName: 'US dollar',
+    code: 'usd',
+    label: 'USD',
+  },
+  {
+    id: '2',
+    emoji: '🇨🇳',
+    chineseName: '人民幣',
+    englishName: 'Chinese yuan',
+    code: 'cny',
+    label: 'CNY',
+  },
+  {
+    id: '3',
+    emoji: '🇭🇰',
+    chineseName: '港幣',
+    englishName: 'Hong Kong dollar',
+    code: 'hkd',
+    label: 'HKD',
+  },
+  {
+    id: '4',
+    emoji: '🇸🇬',
+    chineseName: '新加坡幣',
+    englishName: 'Singapore dollar',
+    code: 'sgd',
+    label: 'SGD',
+  },
+];
 
 // 是否生产环境
 const isRelease = false;

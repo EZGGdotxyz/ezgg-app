@@ -8,7 +8,7 @@ import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
 import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
-import {appScale, truncateAddress} from 'app/utils';
+import {appScale, getUserSubName, truncateAddress} from 'app/utils';
 import {useEffect, useState} from 'react';
 
 export type ContactListProps = {
@@ -18,26 +18,12 @@ export type ContactListProps = {
 };
 // 联系人列表
 const ContactItem: React.FC<any> = ({item, itemKey, onSubmit}: ContactListProps) => {
-  const [{demoniator}] = useRematchModel('app');
+  const [{currency}] = useRematchModel('app');
 
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
 
-  const getSubName = () => {
-    for (let index = 0; index < item?.memberLinkedAccount?.length; index++) {
-      const element = item?.memberLinkedAccount[index];
-      if (element?.type === 'phone') {
-        return element?.search;
-      }
-      if (element?.type === 'email') {
-        return element?.search;
-      }
-      if (element?.type === 'smart_wallet') {
-        return truncateAddress(element?.search);
-      }
-    }
-    return '';
-  };
+
 
   return (
     <Button
@@ -73,7 +59,7 @@ const ContactItem: React.FC<any> = ({item, itemKey, onSubmit}: ContactListProps)
             @{item?.nickname}
           </SizableText>
           <SizableText fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
-            {getSubName()}
+            {getUserSubName(item)}
           </SizableText>
         </YStack>
       </XStack>
