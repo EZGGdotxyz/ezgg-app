@@ -2,7 +2,7 @@
  * @Author: Yosan
  * @Date: 2022-11-12 12:53:29
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 21:48:03
+ * @LastEditTime: 2025-03-04 13:07:00
  * @Description:
  */
 import {getStore, removeStore, setStore} from './local-storage';
@@ -95,15 +95,27 @@ export const setLanguage = async (language: string) => {
 
 // 获取用户token
 export const getUserToken = async () => {
-  return getStore({
-    name: USER_TOKEN,
-  });
+  const token = localStorage.getItem('privy:token');
+  if (token) {
+    return JSON.parse(token);
+  } else {
+    return '';
+  }
+  // return getStore({
+  //   name: USER_TOKEN,
+  // });
 };
 
 export const getUserIdToken = async () => {
-  return getStore({
-    name: USER_ID_TOKEN,
-  });
+  const token = localStorage.getItem('privy:id_token');
+  if (token) {
+    return JSON.parse(token);
+  } else {
+    return '';
+  }
+  // return getStore({
+  //   name: USER_ID_TOKEN,
+  // });
 };
 
 export const setUserIdToken = async (token: string) => {
@@ -114,14 +126,14 @@ export const setUserIdToken = async (token: string) => {
 };
 
 export const removeUserIdToken = async () => {
-  return removeStore({
-    name: USER_ID_TOKEN,
-  });
+  return localStorage.removeItem('privy:id_token');
+  // return removeStore({
+  //   name: USER_ID_TOKEN,
+  // });
 };
 
 // 设置用户token
 export const setUserToken = async (token: string) => {
-  // setCookie(USER_TOKEN, token);
   return setStore({
     name: USER_TOKEN,
     content: token,
@@ -130,9 +142,10 @@ export const setUserToken = async (token: string) => {
 
 // 删除用户token
 export const removeUserToken = async () => {
-  return removeStore({
-    name: USER_TOKEN,
-  });
+  return localStorage.removeItem('privy:token');
+  // return removeStore({
+  //   name: USER_TOKEN,
+  // });
 };
 
 // 获取用户 注册邀请码

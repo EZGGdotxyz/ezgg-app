@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-26 14:21:05
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 23:47:25
+ * @LastEditTime: 2025-03-04 15:03:52
  * @FilePath: /ezgg-app/apps/next/pages/_app.tsx
  */
 import '@tamagui/core/reset.css';
@@ -53,6 +53,9 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
             logo: '/images/logo.png',
             theme: 'light',
             accentColor: PrimaryColor,
+          },
+          embeddedWallets: {
+            createOnLogin: 'all-users',
           },
           // useFirstPartyCookies:true
         }}

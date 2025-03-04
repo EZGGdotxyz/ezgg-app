@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-08 16:25:15
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-07-08 18:05:17
- * @FilePath: /snapx-nfc-app/packages/app/pages/my/personal_info/components/UpdateNamePopup/index.tsx
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-03-04 15:40:37
+ * @FilePath: /ezgg-app/packages/app/pages/profile/personal_info/components/UpdateNamePopup/index.tsx
  */
 import {AppImage, Button, Input, SizableText, Text, XStack, YStack, useToastController} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
@@ -38,6 +38,7 @@ const UpdateNamePopup: React.FC<any> = ({modalVisible, setModalVisible, userInfo
     if (!name) {
       toast.show(t('my.personal_info.name.placeholder'), {
         type: 'error',
+        duration: 3000,
       });
       return;
     }

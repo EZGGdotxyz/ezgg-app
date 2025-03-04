@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 22:42:55
+ * @LastEditTime: 2025-03-04 13:15:24
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/index.tsx
  */
 import {
@@ -74,15 +74,17 @@ const SendToScreen = ({isRefresh, type}: any) => {
       setPage(_page);
       setLoading(false);
       setTotal(res?.data?.totalCount || 0);
+      setCanLoadMore(res.data.record.length < (res?.data?.totalCount || 0));
     } else {
       setData([]);
       setTotal(0);
       setLoading(false);
+      setCanLoadMore(false);
     }
   };
 
   const fetchMoreData = async () => {
-    if (!loadingMore && data.length < total) {
+    if (!loadingMore && canLoadMore) {
       setLoadingMore(true);
       await fetchData(page + 1);
       setLoadingMore(false);
@@ -132,9 +134,9 @@ const SendToScreen = ({isRefresh, type}: any) => {
    */
   const _renderFooter = () => {
     if (!loading) {
-      if (data.length === total) {
+      if (data.length === 0) {
         return (
-          <XStack w="100%" jc={'center'}>
+          <XStack w="100%" jc={'center'} py={appScale(24)}>
             <SizableText col={'$color11'} fontSize={'$3'}>
               {t('tips.list.loading.title')}
             </SizableText>
@@ -143,7 +145,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
       } else {
         if (data.length > 0) {
           return (
-            <XStack w="100%" jc={'center'}>
+            <XStack w="100%" jc={'center'} py={appScale(24)}>
               <SizableText col={'$color11'} fontSize={'$3'}>
                 {t('tips.list.loading.title2')}
               </SizableText>
@@ -152,7 +154,13 @@ const SendToScreen = ({isRefresh, type}: any) => {
         }
       }
     } else {
-      return <XStack w="100%" jc={'center'}></XStack>;
+      return (
+        <XStack w="100%" jc={'center'} py={appScale(24)}>
+          <SizableText col={'$color11'} fontSize={'$3'}>
+            {t('tips.list.loading.title2')}
+          </SizableText>
+        </XStack>
+      );
     }
   };
 
@@ -215,9 +223,8 @@ const SendToScreen = ({isRefresh, type}: any) => {
           backgroundColor: '#f8f8f8',
         }}
         onEndReached={() => {
-          if (canLoadMore) {
+          if (canLoadMore && !loadingMore) {
             fetchMoreData();
-            setCanLoadMore(false);
           }
         }}
         onMomentumScrollBegin={() => {

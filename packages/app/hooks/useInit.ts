@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 10:46:33
+ * @LastEditTime: 2025-03-04 15:12:54
  * @FilePath: /ezgg-app/packages/app/hooks/useInit.ts
  */
 import {Dispatch} from 'app/store';
@@ -24,7 +24,7 @@ import {createParam} from 'solito';
 import {DefaultLanguage, NETWORK} from 'app/config';
 import {getInfrastructureListBlockchain} from 'app/servers/api/infrastructure';
 import {getBalanceListBalance} from 'app/servers/api/balance';
-import { useRematchModel } from 'app/store/model';
+import {useRematchModel} from 'app/store/model';
 
 export default function useInit() {
   const {i18n} = useTranslation();
@@ -62,7 +62,6 @@ export default function useInit() {
 
   const _getBalanceListBalance = async (platform, chainId, currency) => {
     const res = await makeRequest(getBalanceListBalance({platform, chainId, currency}));
-    console.log('🚀 ~ const_getBalanceListBalance= ~ res:', res);
     if (res?.data) {
     }
   };
@@ -98,5 +97,5 @@ export default function useInit() {
     _init();
   }, []);
 
-  return {_init};
+  return {_init, _getInfrastructureListBlockchain};
 }

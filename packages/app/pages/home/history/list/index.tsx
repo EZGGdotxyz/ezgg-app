@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 14:34:40
+ * @LastEditTime: 2025-03-04 13:12:24
  * @FilePath: /ezgg-app/packages/app/pages/home/history/list/index.tsx
  */
 import {
@@ -67,7 +67,7 @@ const HistoryScreen = (props: any) => {
     }
     const res = await makeRequest(
       getTransactionHistoryPageTransactionHistory({
-        page: 1,
+        page: _page,
         pageSize: 10,
       }),
     );
@@ -83,15 +83,17 @@ const HistoryScreen = (props: any) => {
       setPage(_page);
       setLoading(false);
       setTotal(res?.data?.totalCount || 0);
+      setCanLoadMore(_recordData.length < (res?.data?.totalCount || 0));
     } else {
       setData([]);
       setTotal(0);
       setLoading(false);
+      setCanLoadMore(false);
     }
   };
 
   const fetchMoreData = async () => {
-    if (!loadingMore && dataTotal < total) {
+    if (!loadingMore && canLoadMore) {
       setLoadingMore(true);
       await fetchData(page + 1);
       setLoadingMore(false);
@@ -116,7 +118,7 @@ const HistoryScreen = (props: any) => {
     if (!loading) {
       if (dataTotal === total) {
         return (
-          <XStack w="100%" jc={'center'}>
+          <XStack w="100%" jc={'center'} py={appScale(24)}>
             <SizableText col={'$color11'} fontSize={'$3'}>
               {t('tips.list.loading.title')}
             </SizableText>
@@ -125,7 +127,7 @@ const HistoryScreen = (props: any) => {
       } else {
         if (data.length > 0) {
           return (
-            <XStack w="100%" jc={'center'}>
+            <XStack w="100%" jc={'center'} py={appScale(24)}>
               <SizableText col={'$color11'} fontSize={'$3'}>
                 {t('tips.list.loading.title2')}
               </SizableText>
@@ -134,7 +136,13 @@ const HistoryScreen = (props: any) => {
         }
       }
     } else {
-      return <XStack w="100%" jc={'center'}></XStack>;
+      return (
+        <XStack w="100%" jc={'center'} py={appScale(24)}>
+          <SizableText col={'$color11'} fontSize={'$3'}>
+            {t('tips.list.loading.title2')}
+          </SizableText>
+        </XStack>
+      );
     }
   };
 
@@ -159,13 +167,11 @@ const HistoryScreen = (props: any) => {
         }}
         contentContainerStyle={{
           flexGrow: 1,
-          // padding: appScale(16),
           backgroundColor: '#fff',
         }}
         onEndReached={() => {
-          if (canLoadMore) {
+          if (canLoadMore && !loadingMore) {
             fetchMoreData();
-            setCanLoadMore(false);
           }
         }}
         onMomentumScrollBegin={() => {

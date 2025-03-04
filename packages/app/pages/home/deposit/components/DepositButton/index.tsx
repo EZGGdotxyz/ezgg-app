@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 11:39:32
+ * @LastEditTime: 2025-03-04 21:28:23
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/components/DepositButton/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController} from '@my/ui';
@@ -89,6 +89,9 @@ const TokenBalance = ({tokenAddress, userAddress}) => {
   return <div>余额: {balance?.toString() || '0'}</div>;
 };
 
+ // 接收地址
+const recipient = '0x902765D3796F1BF0C18fB864eeedb4f17779f877' as const;
+
 export type DepositButtonProps = {
   setIsLoading: (isLoading: boolean) => void;
   isLogin: boolean;
@@ -167,15 +170,11 @@ const DepositButton: React.FC<any> = ({setIsLoading, inputValue, currencyData, s
 
       // 将输入金额转换为 USDT 的最小单位（6位小数）
 
-      const _amount = Number(
-        convertAmountToTokenDecimals(inputValue, 6), // USDT 通常使用 6 位小数
-      );
-
       const params: any = {
         platform: currencyData?.token?.platform,
         chainId: Number(currencyData?.token?.chainId),
         tokenContractAddress: currencyData?.token?.address,
-        amount: _amount,
+        amount: Number(inputValue),
         message: inputValue,
         transactionCategory: 'DEPOSIT',
         transactionType: 'DEPOSIT',
@@ -184,17 +183,17 @@ const DepositButton: React.FC<any> = ({setIsLoading, inputValue, currencyData, s
 
       setIsLoading(true);
       setButtonLoading(true);
-      const transaction = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
+      const transaction: any = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
 
       if (transaction?.data?.id) {
+        const amount = BigInt(transaction?.data?.amount);
         setTransaction(transaction?.data);
-        const recipient = '0x902765D3796F1BF0C18fB864eeedb4f17779f877' as const;
         // 调用 USDT 转账，指定链 ID
         await writeContract({
           address: currencyData?.token?.address,
           abi: erc20Abi,
           functionName: 'transfer',
-          args: [recipient, BigInt(_amount)],
+          args: [recipient, BigInt(amount)],
           chainId: Number(currencyData?.token?.chainId), // 这里设置你想要使用的链 ID
         });
       }

@@ -176,7 +176,7 @@ const Currency: React.FC<any> = ({currencyData, setCurrencyData, setIsLoading}: 
                   <TokenIcon symbol={currencyData?.token?.tokenSymbol} variant="background" size={appScale(48)} />
                 </YStack>
               )}
-              {currencyData?.chainIcon && (
+              {/* {currencyData?.chainIcon && (
                 <XStack pos={'absolute'} bottom={appScale(-4)} right={appScale(12)}>
                   <AppImage
                     width={appScale(24)}
@@ -185,7 +185,7 @@ const Currency: React.FC<any> = ({currencyData, setCurrencyData, setIsLoading}: 
                     type="local"
                   />
                 </XStack>
-              )}
+              )} */}
             </XStack>
 
             {/* <YStack pos={'relative'} w={appScale(72)} flexShrink={0}>

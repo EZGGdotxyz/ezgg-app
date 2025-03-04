@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 21:25:00
+ * @LastEditTime: 2025-03-04 13:54:52
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -22,7 +22,7 @@ export default {
   'home.yesterday': 'Yesterday',
   'home.receive': 'Receive',
   'home.deposit': 'Deposit',
-  'home.search':'Search',
+  'home.search': 'Search',
 
   'home.send.search': 'email address, phone number, user ID or wallet ',
   'home.send.recent': 'Recent',
@@ -99,7 +99,6 @@ export default {
   'home.order.send.title': `~Sent to (@{{name}})`,
   'home.order.request.title': `From Request (@{{name}})`,
 
-
   'home.paylink.recipient': 'Recipient',
   'home.paylink.anyoneLink': 'Anyone with the link ',
   'home.paylink.privateLink': 'Private link',
@@ -115,12 +114,17 @@ export default {
   'home.qr.sub2': 'Recipient Address',
   'home.qr.save': 'save',
   'home.qr.share': 'share',
-  'home.qr.invalid':'Invalid QR code, please scan the QR code provided by ezgg',
+  'home.qr.invalid': 'Invalid QR code, please scan the QR code provided by ezgg',
 
   'home.deposit.selectWallet': 'Select Wallet',
   'home.deposit.noWalletsFound': 'No external wallets found',
   'home.deposit.walletDetectionError': 'Failed to detect wallets',
   'home.deposit.walletSelected': 'Selected wallet: {{wallet}}',
   'home.deposit.walletConnectionError': 'Failed to connect wallet',
-  'common.cancel': 'Cancel'
+
+  'home.take.tips': 'Here is ${{amount}} in crypto!',
+  'home.take.tips2': 'Send ${{amount}} to @{{name}}',
+  'home.take.message': 'Message',
+  'home.take.claim': 'Claim',
+  'home.take.balance': 'Balance',
 };

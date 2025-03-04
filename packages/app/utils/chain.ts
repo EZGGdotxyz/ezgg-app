@@ -70,3 +70,45 @@ export function getChainInfo(chainId?: any): ChainInfo {
       };
   }
 }
+
+/**
+ * 根据链路ID和交易哈希获取区块链浏览器链接
+ * @param chainId 链路ID
+ * @param hash 交易哈希
+ * @returns 区块链浏览器链接
+ */
+export function getExplorerUrl(chainId?: any, hash?: string): string {
+  if (!chainId || !hash) {
+    return '';
+  }
+
+  switch (chainId) {
+    case bsc.id:
+    case 56:
+      return `https://bscscan.com/tx/${hash}`;
+    case bscTestnet.id:
+    case 97:
+      return `https://testnet.bscscan.com/tx/${hash}`;
+    case polygon.id:
+    case 137:
+      return `https://polygonscan.com/tx/${hash}`;
+    case polygonAmoy.id:
+    case 80002:
+    case 80001:
+      return `https://mumbai.polygonscan.com/tx/${hash}`;
+    case base.id:
+    case 8453:
+      return `https://basescan.org/tx/${hash}`;
+    case baseSepolia.id:
+    case 84532:
+      return `https://sepolia.basescan.org/tx/${hash}`;
+    // tron
+    case 100001:
+      return `https://tronscan.org/#/transaction/${hash}`;
+    // solana
+    case 9999:
+      return `https://solscan.io/tx/${hash}`;
+    default:
+      return '';
+  }
+}

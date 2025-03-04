@@ -32,7 +32,10 @@ import TokenTransferContract from 'app/abi/TokenTransfer.json';
 import {encodeFunctionData, erc721Abi, erc20Abi, createPublicClient, http, getAddress} from 'viem';
 import {useSmartWallets} from '@privy-io/react-auth/smart-wallets';
 import {useRematchModel} from 'app/store/model';
-import {postTransactionHistoryCreateTransactionHistory, postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
+import {
+  postTransactionHistoryCreateTransactionHistory,
+  postTransactionHistoryUpdateTransactionHash,
+} from 'app/servers/api/transactionHistory';
 import {postTransactionPayLinkUpdateTransactionHash} from 'app/servers/api/transactionPayLink';
 import useRequest from 'app/hooks/useRequest';
 
@@ -137,26 +140,13 @@ const WithdrawScreen = () => {
 
         // 创建交易请求
         const transactionRequest = {
-          calls: [
-            {
-              // 调用 USDT 代币的 approve 方法，授权给业务合约
-              to: tokenContractAddress as `0x${string}`,
-              data: encodeFunctionData({
-                abi: erc20Abi,
-                functionName: 'approve',
-                args: [receiverAddress as `0x${string}`, BigInt(_amount)],
-              }),
-            },
-            {
-              // 调用 USDT 代币的 transfer 方法，将代币转给接收方
-              to: tokenContractAddress as `0x${string}`,
-              data: encodeFunctionData({
-                abi: erc20Abi,
-                functionName: 'transfer',
-                args: [receiverAddress as `0x${string}`, BigInt(_amount)],
-              }),
-            },
-          ],
+          // 调用 USDT 代币的 transfer 方法，将代币转给接收方
+          to: tokenContractAddress as `0x${string}`,
+          data: encodeFunctionData({
+            abi: erc20Abi,
+            functionName: 'transfer',
+            args: [receiverAddress as `0x${string}`, BigInt(_amount)],
+          }),
         };
 
         const uiOptions = {

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:10:20
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 15:50:52
+ * @LastEditTime: 2025-03-04 13:08:18
  * @FilePath: /ezgg-app/packages/app/utils/request.ts
  */
 // index.ts

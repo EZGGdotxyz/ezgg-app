@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 11:38:05
+ * @LastEditTime: 2025-03-04 15:39:13
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -12,7 +12,7 @@ import {ChevronDown, ChevronRight} from '@tamagui/lucide-icons';
 import {appScale, formatDateTime, formatNumber, formatTokenAmount, truncateAddress} from 'app/utils';
 import {useEffect, useState} from 'react';
 import CopyButton from '../CopyButton';
-import {getChainInfo} from 'app/utils/chain';
+import {getChainInfo, getExplorerUrl} from 'app/utils/chain';
 import {
   createTransactionInfoItem,
   createBaseTransactionInfoList,
@@ -141,7 +141,10 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
                 </SizableText>
                 {item?.isCopyable && (
                   <XStack ai={'center'} jc={'center'} ml={appScale(6)}>
-                    <CopyButton unstyled text={item?.value}>
+                    <CopyButton
+                      unstyled
+                      text={item?.isHx ? getExplorerUrl(orderData?.chainId, item?.value) : item?.value}
+                    >
                       <AppImage
                         width={appScale(18)}
                         height={appScale(18)}

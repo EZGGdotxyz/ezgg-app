@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 09:26:33
+ * @LastEditTime: 2025-03-04 13:55:07
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -120,5 +120,10 @@ export default {
   'home.deposit.walletDetectionError': '檢測錢包失敗',
   'home.deposit.walletSelected': '已選擇錢包：{{wallet}}',
   'home.deposit.walletConnectionError': '連接錢包失敗',
-  'common.cancel': '取消'
+
+  'home.take.tips': '這裡有{{amount}}的加密貨幣！',
+  'home.take.tips2': '發送{{amount}}給@{{name}}',
+  'home.take.message': '訊息',
+  'home.take.claim': '領取',
+  'home.take.balance': '餘額',
 };

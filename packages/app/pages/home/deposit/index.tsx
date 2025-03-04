@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 11:33:10
+ * @LastEditTime: 2025-03-04 21:27:56
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -14,6 +14,7 @@ import {
   SizableText,
   AppImage,
   useToastController,
+  Button,
 } from '@my/ui';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
@@ -26,6 +27,7 @@ import Currency from 'app/Components/Currency';
 import ConnectorsPopup from 'app/Components/ConnectorsPopup';
 import AppLoading from 'app/Components/AppLoading';
 import DepositButton from './components/DepositButton';
+import {useFundWallet} from '@privy-io/react-auth';
 
 const depositToken = '0x52435264BFDB';
 
@@ -50,6 +52,27 @@ const DepositScreen = () => {
     e.stopPropagation();
     setShowKeyboard(true);
   };
+
+  // const {fundWallet} = useFundWallet({
+  //   onUserExited({balance}: any) {
+  //     console.log('🚀 ~ onUserExited ~ balance:', balance);
+
+  //     if (balance < 1000n) {
+  //       // router.push('/insufficient-funds');
+  //     } else {
+  //       // router.push('/dashboard');
+  //     }
+  //   },
+  // });
+
+  // const test = async () => {
+  //   console.log('🚀 ~ test ~ currencyData?.token?.chainId:', currencyData?.token?.chainId);
+  //   await fundWallet('0xEd9a084Fb713195B19Db2176719eAa5F6F5fd453', {
+  //     chain: base,
+  //     amount: '1',
+  //     // asset: {erc20: currencyData?.token?.address},
+  //   });
+  // };
 
   return (
     <PermissionPage>

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-03 23:26:42
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 10:52:27
+ * @LastEditTime: 2025-03-04 15:22:25
  * @FilePath: /ezgg-app/packages/app/utils/transactionInfo.ts
  */
 import {formatDateTime, formatTokenAmount} from './index';
@@ -15,6 +15,7 @@ export const createTransactionInfoItem = (
     isStatus?: boolean;
     isCopyable?: boolean;
     isTruncated?: boolean;
+    isHx?: boolean;
   } = {},
 ) => ({
   label,
@@ -22,6 +23,7 @@ export const createTransactionInfoItem = (
   isStatus: false,
   isCopyable: false,
   isTruncated: false,
+  isHx: false,
   ...options,
 });
 
@@ -43,6 +45,7 @@ export const createBaseTransactionInfoList = (orderData: any, t: any, isTo = tru
     createTransactionInfoItem(t('home.order.transactionHash'), orderData?.transactionHash || '', {
       isCopyable: !!orderData?.transactionHash,
       isTruncated: true,
+      isHx: true,
     }),
   );
   return infoList;

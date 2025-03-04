@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 21:21:03
+ * @LastEditTime: 2025-03-04 13:16:04
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/index.tsx
  */
 import {
@@ -29,6 +29,7 @@ import {ChevronRight} from '@tamagui/lucide-icons';
 import {PrimaryColor} from 'app/config';
 import AppHeader2 from 'app/Components/AppHeader2';
 import SearchHeader from 'app/Components/SearchHeader';
+import {getNotificationPageNotification} from 'app/servers/api/notification';
 
 const {useParam} = createParam<{id: string}>();
 
@@ -130,65 +131,30 @@ const NotificationScreen = (props: any) => {
       page: _page,
       pageSize: 10,
     };
-    if (id && id !== 'all') {
-      params.brandId = Number(id);
-    }
-    // const res = await makeRequest(memberLuckyDrawRouterPageMemberLuchyDraw(params));
-    const res: any = {
-      record: [
-        {
-          id: 1,
-          title: '系统更新通知',
-          description: '我们的应用已更新到最新版本，新增了多项实用功能，欢迎体验！',
-          createAt: '2024-02-27 09:30:00',
-          status: 'unread',
-        },
-        {
-          id: 2,
-          title: '账户安全提醒',
-          description: '检测到您的账户在新设备上登录，如非本人操作请及时修改密码。',
-          createAt: '2024-02-27 10:15:00',
-          status: 'read',
-        },
-        {
-          id: 3,
-          title: '交易成功提醒',
-          description: '您的转账交易已成功完成，交易金额：$1,000.00',
-          createAt: '2024-02-27 11:20:00',
-          status: 'read',
-        },
-        {
-          id: 4,
-          title: '优惠活动通知',
-          description: '限时优惠活动即将开始，参与即可获得额外奖励！',
-          createAt: '2024-02-27 13:45:00',
-          status: 'unread',
-        },
-        {
-          id: 5,
-          title: '系统维护通知',
-          description: '系统将于今晚23:00-次日凌晨2:00进行例行维护，请提前做好相关安排。',
-          createAt: '2024-02-27 15:00:00',
-          status: 'unread',
-        },
-      ],
-    };
-    if (res?.record?.length > 0) {
+    // if (id && id !== 'all') {
+    //   params.brandId = Number(id);
+    // }
+    const res = await makeRequest(getNotificationPageNotification(params));
+    if (res?.data?.record && res?.data?.record?.length > 0) {
       if (_page === 1) {
-        setData(res.record);
+        setData(res?.data?.record);
       } else {
-        setData([...data, ...res.record]);
+        setData([...data, ...res?.data?.record]);
       }
       setPage(_page);
       setLoading(false);
-      setTotal(res.totalCount);
+      setTotal(res?.data?.totalCount || 0);
+      setCanLoadMore(res?.data?.record?.length < (res?.data?.totalCount || 0));
     } else {
+      setData([]);
+      setTotal(0);
+      setCanLoadMore(false);
       setLoading(false);
     }
   };
 
   const fetchMoreData = async () => {
-    if (!loadingMore && data.length < total) {
+    if (!loadingMore && canLoadMore) {
       setLoadingMore(true);
       await fetchData(page + 1);
       setLoadingMore(false);
@@ -213,7 +179,7 @@ const NotificationScreen = (props: any) => {
     if (!loading) {
       if (data.length === total) {
         return (
-          <XStack w="100%" jc={'center'}>
+          <XStack w="100%" jc={'center'} py={appScale(24)}>
             <SizableText col={'$color11'} fontSize={'$3'}>
               {t('tips.list.loading.title')}
             </SizableText>
@@ -222,7 +188,7 @@ const NotificationScreen = (props: any) => {
       } else {
         if (data.length > 0) {
           return (
-            <XStack w="100%" jc={'center'}>
+            <XStack w="100%" jc={'center'} py={appScale(24)}>
               <SizableText col={'$color11'} fontSize={'$3'}>
                 {t('tips.list.loading.title2')}
               </SizableText>
@@ -231,7 +197,13 @@ const NotificationScreen = (props: any) => {
         }
       }
     } else {
-      return <XStack w="100%" jc={'center'}></XStack>;
+      return (
+        <XStack w="100%" jc={'center'} py={appScale(24)}>
+          <SizableText col={'$color11'} fontSize={'$3'}>
+            {t('tips.list.loading.title2')}
+          </SizableText>
+        </XStack>
+      );
     }
   };
 
@@ -269,9 +241,8 @@ const NotificationScreen = (props: any) => {
           backgroundColor: '#fff',
         }}
         onEndReached={() => {
-          if (canLoadMore) {
+          if (canLoadMore && !loadingMore) {
             fetchMoreData();
-            setCanLoadMore(false);
           }
         }}
         onMomentumScrollBegin={() => {

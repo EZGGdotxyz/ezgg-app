@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 14:17:04
+ * @LastEditTime: 2025-03-04 15:26:50
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {YStack, SizableText, AppImage, Button} from '@my/ui';
@@ -11,18 +11,20 @@ import PermissionPage from 'app/Components/PermissionPage';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {appScale} from 'app/utils';
 import {useRouter} from 'solito/router';
-import {useLogin, usePrivy} from '@privy-io/react-auth';
+import {useLogin, usePrivy, useUser as usePrivyUser} from '@privy-io/react-auth';
 import SuccessPopup from './components/SuccessPopup';
 import {AppName, PrimaryColor} from 'app/config';
 import useUser from 'app/hooks/useUser';
 import {postUserUpdateMember} from 'app/servers/api/member';
 import {View} from 'react-native';
+import useInit from 'app/hooks/useInit';
 
 const LoginScreen = () => {
   const {t} = useTranslation();
   const {ready} = usePrivy();
   const {push} = useRouter();
 
+  const {_getInfrastructureListBlockchain} = useInit();
   const {initLogin, initUserInfo, onLink} = useUser();
   const [modalVisible, setModalVisible] = useState(false);
   const [isSetInfo, setIsSetInfo] = useState(false);
@@ -30,6 +32,7 @@ const LoginScreen = () => {
     nickname: '',
     avatar: '',
   });
+  const {refreshUser} = usePrivyUser();
 
   const {login} = useLogin({
     onComplete: async (user) => {
@@ -81,9 +84,11 @@ const LoginScreen = () => {
             nickname: _userInfo.nickname || '',
             avatar: _userInfo.avatar || '',
           });
+          await refreshUser();
           setTimeout(async () => {
             setModalVisible(false);
           }, 1500);
+          _getInfrastructureListBlockchain();
           onLink();
         } catch (error) {
           console.error('更新用户信息失败:', error);

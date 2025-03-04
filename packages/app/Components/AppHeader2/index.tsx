@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 22:17:19
+ * @LastEditTime: 2025-03-04 13:41:30
  * @FilePath: /ezgg-app/packages/app/Components/AppHeader2/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -25,6 +25,7 @@ export type AppHeader2Props = {
   isDark?: boolean;
   isSearch?: boolean;
   isSettings?: boolean;
+  isLogo?: boolean;
 };
 // 首页 头部
 const AppHeader2: React.FC<any> = ({
@@ -37,6 +38,7 @@ const AppHeader2: React.FC<any> = ({
   isDark = false,
   isSearch = false,
   isSettings = false,
+  isLogo = false,
 }: AppHeader2Props) => {
   const {back, push, replace} = useRouter();
   const [statusBarHeight, setStatusBarHeight] = useState(46);
@@ -72,18 +74,30 @@ const AppHeader2: React.FC<any> = ({
         jc={'space-between'}
       >
         <Button unstyled onPress={onBackPress} h={'100%'} ai={'center'} jc={'center'}>
-          <AppImage
-            width={appScale(28)}
-            height={appScale(28)}
-            src={
-              isClosure
-                ? require(isDark ? 'app/assets/images/dark/closure.png' : 'app/assets/images/closure.png')
-                : require('app/assets/images/left.png')
-            }
-            type="local"
-          />
+          {!isLogo && (
+            <AppImage
+              width={appScale(28)}
+              height={appScale(28)}
+              src={
+                isClosure
+                  ? require(isDark ? 'app/assets/images/dark/closure.png' : 'app/assets/images/closure.png')
+                  : require('app/assets/images/left.png')
+              }
+              type="local"
+            />
+          )}
         </Button>
         <XStack ai={'center'} h={'100%'}>
+          {isLogo && (
+            <XStack mr={appScale(24)}>
+              <AppImage
+                width={appScale(285 / 7)}
+                height={appScale(322 / 7)}
+                src={require('app/assets/images/logo.png')}
+                type="local"
+              />
+            </XStack>
+          )}
           <SizableText col={'$color'} fontSize={'$8'} fow={'700'}>
             {title}
           </SizableText>

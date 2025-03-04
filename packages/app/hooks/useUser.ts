@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 23:27:51
+ * @LastEditTime: 2025-03-04 13:07:24
  * @FilePath: /ezgg-app/packages/app/hooks/useUser.ts
  */
 import {Dispatch} from 'app/store';
@@ -70,8 +70,8 @@ export default function useUser() {
   const initLogin = async (token: string, idToken: string): Promise<void> => {
     if (token && idToken) {
       dispatch.user.updateState({isLogin: true});
-      setUserToken(token);
-      setUserIdToken(idToken);
+      // setUserToken(token);
+      // setUserIdToken(idToken);
     }
   };
 
