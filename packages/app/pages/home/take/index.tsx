@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 16:52:51
+ * @LastEditTime: 2025-03-04 22:45:45
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -60,6 +60,7 @@ import AppLoading from 'app/Components/AppLoading';
 import {getChainInfo} from 'app/utils/chain';
 import {TokenIcon} from '@web3icons/react';
 import TokenLinkContract from 'app/abi/TokenLink.json';
+import {useTransaction} from 'app/hooks/useTransaction';
 
 const {useParams} = createParam<any>();
 
@@ -82,10 +83,15 @@ const TakeScreen = (any) => {
 
   console.log('🚀 ~ TakeScreen ~ orderData:', orderData);
 
-  const {back, push} = useRouter();
+  const {back, push,replace} = useRouter();
+
+  const {onSendPayLinkSubmit, onRequestSubmit} = useTransaction();
 
   const createTransactionParams = (type: 'SEND' | 'REQUEST') => {
     const _amount = Number(convertAmountToTokenDecimals(orderData?.amount, orderData?.orderData?.tokenDecimals));
+
+    console.log('🚀 ~ createTransactionParams ~ orderData:', orderData);
+
 
     const params: any = {
       platform: orderData?.token?.platform,
@@ -95,7 +101,6 @@ const TakeScreen = (any) => {
       message: inputValue,
       transactionCategory: type,
       transactionType: orderData?.transactionType,
-      senderMemberId: userInfo?.customMetadata?.id,
     };
 
     if (orderData?.userId !== 'anyone') {
@@ -109,41 +114,33 @@ const TakeScreen = (any) => {
     return params;
   };
 
-  const handleTransactionSuccess = async (transaction: any, transactionHash?: string) => {
-    if (transaction?.transactionCode && transactionHash) {
-      const res: any = await makeRequest(
-        postTransactionPayLinkUpdateTransactionHash({
-          // id: transaction?.id,
-          transactionCode:transaction?.transactionCode,
-          transactionHash,
-        }),
-      );
-      if (res?.data) {
-        setIsLoading(false);
-
-        toast.show(t('home.take.success'), {
-          duration: 3000,
-        });
-      }
-    }
-  };
-
-  const onSendSubmit = async () => {
+  const handleSubmit = async (type: 'SEND' | 'REQUEST') => {
     try {
       setIsLoading(true);
-      const params = createTransactionParams('REQUEST');
-      const transaction = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
+      const params = createTransactionParams(type);
 
-      if (transaction?.data?.id) {
-        setOrderData(transaction?.data);
-        setIsSuccess(true);
+      console.log('🚀 ~ handleSubmit ~ params:', params);
+      if (type === 'SEND') {
+        await onSendPayLinkSubmit(orderData, (data) => {
+          // setIsLoading(false);
+          // setOrderData(data);
+          // setIsSuccess(true);
+          toast.show(t('tips.success.transactionSuccess'), {
+            duration: 3000,
+          });
+          setTimeout(() => {
+            window.history.pushState(null, '', '/');
+            replace('/');
+          }, 500);
+        });
       } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
+        await onRequestSubmit(params, (data) => {
+          setOrderData(data);
+          setIsSuccess(true);
         });
       }
     } catch (error) {
-      console.error('Request transaction error:', error);
+      console.error(`${type} transaction error:`, error);
       toast.show(t('tips.error.networkError'), {
         duration: 3000,
       });
@@ -152,72 +149,7 @@ const TakeScreen = (any) => {
     }
   };
 
-  const onRequestSubmit = async () => {
-    try {
-      setIsLoading(true);
-
-      const payLink = await makeRequest(
-        postTransactionPayLinkFindPayLink({
-          transactionCode: orderData?.transactionCode,
-        }),
-      );
-
-      console.log('🚀 ~ onRequestSubmit ~ payLink:', payLink);
-
-      if (!payLink?.data?.transactionCode) {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
-        return;
-      }
-
-      // 代币合约地址
-      const tokenContractAddress = orderData?.token?.address!;
-      // 转账业务合约地址
-      const bizContractAddress: any = orderData?.bizContractAddress;
-
-      console.log('🚀 ~ onRequestSubmit ~ bizContractAddress:', bizContractAddress);
-
-      // 转账金额
-      const amount = BigInt(orderData?.amount);
-      console.log('🚀 ~ onRequestSubmit ~ amount:', orderData?.amount);
-
-      console.log('🚀 ~ onRequestSubmit ~ amount:', amount);
-
-      const baseClient = await getClientForChain({
-        id: Number(orderData?.chainId),
-      });
-      if (!baseClient) {
-        throw new Error('Failed to get client for chain');
-      }
-
-      // 3. 执行智能合约调用
-
-      const transactionHash = await baseClient.sendTransaction({
-        calls: [
-          {
-            // 调用PayLink业务合约的withdraw方法，将先前存入的USDC转给调用合约的用户
-            to: getAddress(payLink?.data?.bizContractAddress!),
-            data: encodeFunctionData({
-              abi: TokenLinkContract.abi,
-              functionName: 'withdraw',
-              args: [getAddress(payLink?.data?.senderWalletAddress!), payLink?.data?.otp],
-            }),
-          },
-        ],
-      });
-      await handleTransactionSuccess(orderData, transactionHash);
-    } catch (error) {
-      console.error('Send transaction error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const _postTransactionPayLinkFindPayLink = async () => {
+  const _getTransactionHistoryFindTransactionHistoryCodeTransactionCode = async () => {
     setIsLoading(true);
     const res = await makeRequest(
       getTransactionHistoryFindTransactionHistoryCodeTransactionCode({transactionCode: params?.code}),
@@ -233,7 +165,7 @@ const TakeScreen = (any) => {
 
   useEffect(() => {
     if (params?.code) {
-      _postTransactionPayLinkFindPayLink();
+      _getTransactionHistoryFindTransactionHistoryCodeTransactionCode();
     }
   }, [params]);
 
@@ -341,7 +273,7 @@ const TakeScreen = (any) => {
         <XStack w="100%" mb={appScale(24)}>
           <AppButton
             onPress={() => {
-              orderData?.transactionCategory === 'SEND' ? onRequestSubmit() : onSendSubmit();
+              orderData?.transactionCategory === 'SEND' ? handleSubmit('SEND') : handleSubmit('REQUEST');
             }}
           >
             {orderData?.transactionCategory === 'SEND' ? t('home.take.claim') : t('home.send')}

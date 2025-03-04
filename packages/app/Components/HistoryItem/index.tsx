@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 10:58:42
+ * @LastEditTime: 2025-03-04 22:50:45
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -71,11 +71,14 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
   // 判断增加还是减少
   const judgeAmountType = (orderData: any) => {
     if (orderData?.transactionType === 'WITHDRAW') {
-      return '+';
+      return '-';
     }
 
     if (orderData?.transactionType === 'DEPOSIT') {
-      return '-';
+      return '+';
+    }
+    if (orderData?.transactionType === 'PAY_LINK') {
+      return orderData?.transactionCategory === 'SEND' ? '-' : '+';
     }
 
     if (orderData?.transactionType === 'SEND') {

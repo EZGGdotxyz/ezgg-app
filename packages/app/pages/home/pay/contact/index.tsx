@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 13:15:24
+ * @LastEditTime: 2025-03-04 22:37:45
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/index.tsx
  */
 import {
@@ -39,7 +39,7 @@ const {useParams} = createParam<any>();
 const SendToScreen = ({isRefresh, type}: any) => {
   const {t} = useTranslation();
   const {params} = useParams();
-  const {push} = useRouter();
+  const {replace} = useRouter();
   const {makeRequest} = useRequest();
   const dispatch = useDispatch<Dispatch>();
   const [{payLinkData}] = useRematchModel('user');
@@ -107,7 +107,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
           transactionType: item?.id === 'anyone' ? 'PAY_LINK' : type === 'send' ? 'SEND' : 'REQUEST',
         },
       });
-      push(`/home/${type}/amount?id=${payLinkData?.id}`);
+      replace(`/home/${type}/amount?id=${payLinkData?.id}`);
     } else {
       const id = new Date().getTime() + Math.random();
       dispatch.user.updateState({
@@ -119,7 +119,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
           transactionType: item?.id === 'anyone' ? 'PAY_LINK' : type === 'send' ? 'SEND' : 'REQUEST',
         },
       });
-      push(`/home/${type}/amount?id=${id}`);
+      replace(`/home/${type}/amount?id=${id}`);
     }
   };
 
@@ -170,7 +170,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
         title={type === 'send' ? t('screen.home.sendTo') : t('screen.home.requestFrom')}
         onBack={() => {
           dispatch.user.updateState({payLinkData: {}});
-          push('/');
+          replace('/');
         }}
         isQr={true}
         type={type}

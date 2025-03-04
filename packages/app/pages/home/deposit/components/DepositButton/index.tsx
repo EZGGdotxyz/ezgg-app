@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 21:28:23
+ * @LastEditTime: 2025-03-04 22:03:38
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/components/DepositButton/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController} from '@my/ui';
@@ -28,6 +28,7 @@ import {
   postTransactionHistoryCreateTransactionHistory,
   postTransactionHistoryUpdateTransactionHash,
 } from 'app/servers/api/transactionHistory';
+import {useTransaction} from 'app/hooks/useTransaction';
 
 // USDT 合约 ABI
 const USDT_ABI = [
@@ -89,7 +90,7 @@ const TokenBalance = ({tokenAddress, userAddress}) => {
   return <div>余额: {balance?.toString() || '0'}</div>;
 };
 
- // 接收地址
+// 接收地址
 const recipient = '0x902765D3796F1BF0C18fB864eeedb4f17779f877' as const;
 
 export type DepositButtonProps = {
@@ -112,6 +113,7 @@ const DepositButton: React.FC<any> = ({setIsLoading, inputValue, currencyData, s
   const [buttonLoading, setButtonLoading] = useState(false);
   const [{userInfo}] = useRematchModel('user');
   const {makeRequest} = useRequest();
+  const {onDeposit} = useTransaction();
 
   // USDT 转账合约调用
   const {writeContract, data: hash} = useWriteContract();
@@ -152,7 +154,7 @@ const DepositButton: React.FC<any> = ({setIsLoading, inputValue, currencyData, s
     }
   };
 
-  const submit = async () => {
+  const onDepositSubmit = async () => {
     if (!inputValue || inputValue === '0') {
       toast.show(t('home.send.amountToSend.tips'));
       return;
@@ -168,35 +170,38 @@ const DepositButton: React.FC<any> = ({setIsLoading, inputValue, currencyData, s
         return;
       }
 
-      // 将输入金额转换为 USDT 的最小单位（6位小数）
-
-      const params: any = {
-        platform: currencyData?.token?.platform,
-        chainId: Number(currencyData?.token?.chainId),
-        tokenContractAddress: currencyData?.token?.address,
-        amount: Number(inputValue),
-        message: inputValue,
-        transactionCategory: 'DEPOSIT',
-        transactionType: 'DEPOSIT',
-        receiverMemberId: userInfo?.customMetadata?.id,
-      };
-
       setIsLoading(true);
       setButtonLoading(true);
-      const transaction: any = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
+      const _amount = Number(convertAmountToTokenDecimals(inputValue, currencyData?.token?.tokenDecimals));
+      await onDeposit(
+        {
+          platform: currencyData?.token?.platform,
+          chainId: Number(currencyData?.token?.chainId),
+          tokenContractAddress: currencyData?.token?.address,
+          amount: _amount,
+          message: inputValue,
+          transactionCategory: 'DEPOSIT',
+          transactionType: 'DEPOSIT',
+          receiverMemberId: userInfo?.customMetadata?.id,
+        },
+        async (data) => {
+          setTransaction(data);
+          const amount = BigInt(data.amount);
+          // 调用 USDT 转账，指定链 ID
+          await writeContract({
+            address: currencyData?.token?.address,
+            abi: erc20Abi,
+            functionName: 'transfer',
+            args: [recipient, amount],
+            chainId: Number(currencyData?.token?.chainId), // 这里设置你想要使用的链 ID
+          });
+          // const tokenContractAddress = data.tokenContractAddress;
+          // const bizContractAddress = transaction.bizContractAddress;
 
-      if (transaction?.data?.id) {
-        const amount = BigInt(transaction?.data?.amount);
-        setTransaction(transaction?.data);
-        // 调用 USDT 转账，指定链 ID
-        await writeContract({
-          address: currencyData?.token?.address,
-          abi: erc20Abi,
-          functionName: 'transfer',
-          args: [recipient, BigInt(amount)],
-          chainId: Number(currencyData?.token?.chainId), // 这里设置你想要使用的链 ID
-        });
-      }
+          // setIsLoading(false);
+          // push('/home/success?type=deposit&id=' + data?.id);
+        },
+      );
     } catch (error) {
       setIsLoading(false);
       console.error('Transaction error:', error);
@@ -207,7 +212,7 @@ const DepositButton: React.FC<any> = ({setIsLoading, inputValue, currencyData, s
   };
 
   return (
-    <AppButton isLoading={buttonLoading} onPress={submit}>
+    <AppButton isLoading={buttonLoading} onPress={onDepositSubmit}>
       {t('home.deposit')}
     </AppButton>
   );

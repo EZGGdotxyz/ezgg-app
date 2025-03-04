@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 10:44:13
+ * @LastEditTime: 2025-03-04 21:48:39
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -38,6 +38,7 @@ import {
 } from 'app/servers/api/transactionHistory';
 import {postTransactionPayLinkUpdateTransactionHash} from 'app/servers/api/transactionPayLink';
 import useRequest from 'app/hooks/useRequest';
+import {useTransaction} from 'app/hooks/useTransaction';
 
 // 提取
 const WithdrawScreen = () => {
@@ -56,6 +57,8 @@ const WithdrawScreen = () => {
 
   const {wallets} = useWallets();
 
+  const {onWithdraw} = useTransaction();
+
   const submit = async () => {
     if (!inputValue || inputValue === '0') {
       toast.show(t('home.send.amountToSend.tips'));
@@ -67,128 +70,27 @@ const WithdrawScreen = () => {
       return;
     }
 
-    const wallet = wallets?.[0];
-
-    console.log('🚀 ~ submit ~ wallet:', wallet);
-
-    onTransfer(Number(currencyData?.token?.chainId), inputValue, '0xDCBE0c047D539c6a077161c59239Bff20540fa92');
-    // const {wallets} = useWallets();
-
-    // const wallet = wallets?.[0];
-
-    // const provider = await wallet.getEthereumProvider();
-
-    // console.log('🚀 ~ submit ~ provider:', provider);
-
-    // if (!provider) {
-    //   toast.show(t('home.withdraw.tips'));
-    //   return;
-    // }
-
-    // const transactionRequest = {
-    //   to: '0xTheContractAddress',
-    //   data: data,
-    //   value: 100000, // Only necessary for payable methods
-    // };
-    // const transactionHash = await provider.request({
-    //   method: 'eth_sendTransaction',
-    //   params: [transactionRequest],
-    // });
-
-    // console.log('🚀 ~ submit ~ transactionHash:', transactionHash);
-
-    // setButtonLoading(true);
-    // setTimeout(() => {
-    //   setButtonLoading(false);
-    //   push('/home/success?type=withdraw');
-    // }, 2000);
-    console.log('🚀 ~ WithdrawScreen ~ inputValue:', inputValue);
-  };
-
-  const onTransfer = async (chainId: number, amount: string, receiverAddress: string) => {
+    setIsLoading(true);
     try {
-      const _amount = Number(
-        convertAmountToTokenDecimals(amount, 6), // USDT 通常使用 6 位小数
-      );
-
-      const params: any = {
-        platform: currencyData?.token?.platform,
-        chainId: Number(currencyData?.token?.chainId),
-        tokenContractAddress: currencyData?.token?.address,
-        amount: _amount,
-        message: inputValue,
-        transactionCategory: 'WITHDRAW',
-        transactionType: 'WITHDRAW',
-        senderMemberId: userInfo?.customMetadata?.id,
-      };
-
-      setIsLoading(true);
-      const transaction = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
-
-      if (transaction?.data?.id) {
-        const tokenContractAddress = transaction?.data?.tokenContractAddress!;
-        const baseClient = await getClientForChain({
-          id: Number(chainId),
-        });
-        if (!baseClient) {
+      await onWithdraw(
+        {
+          platform: currencyData?.token?.platform,
+          chainId: Number(currencyData?.token?.chainId),
+          tokenContractAddress: currencyData?.token?.address,
+          amount: Number(inputValue),
+          message: inputValue,
+          transactionCategory: 'WITHDRAW',
+          transactionType: 'WITHDRAW',
+          senderMemberId: userInfo?.customMetadata?.id,
+          receiverAddress: '0xDCBE0c047D539c6a077161c59239Bff20540fa92',
+        },
+        (data) => {
           setIsLoading(false);
-          toast.show(t('tips.error.networkError'), {
-            duration: 3000,
-          });
-          return;
-        }
-
-        // 创建交易请求
-        const transactionRequest = {
-          // 调用 USDT 代币的 transfer 方法，将代币转给接收方
-          to: tokenContractAddress as `0x${string}`,
-          data: encodeFunctionData({
-            abi: erc20Abi,
-            functionName: 'transfer',
-            args: [receiverAddress as `0x${string}`, BigInt(_amount)],
-          }),
-        };
-
-        const uiOptions = {
-          title: t('home.withdraw.confirmTitle'),
-          description: t('home.withdraw.confirmDescription', {
-            amount: amount,
-            token: currencyData?.token?.tokenSymbol,
-            receiver: receiverAddress,
-          }),
-          buttonText: t('home.withdraw.confirmButton'),
-        };
-
-        const transactionHash = await baseClient.sendTransaction(transactionRequest, {uiOptions});
-        if (transaction?.data?.transactionCode && transactionHash) {
-          // 更新交易记录的交易哈希字段
-          const res: any = await makeRequest(
-            postTransactionHistoryUpdateTransactionHash({
-              id: transaction?.data?.id,
-              transactionCode: transaction?.data?.transactionCode,
-              transactionHash,
-            }),
-          );
-          if (res?.data) {
-            setIsLoading(false);
-            push('/home/success?type=withdraw&id=' + transaction?.data?.id);
-          } else {
-            setIsLoading(false);
-            // setOrderData(transaction?.data);
-            // setIsSuccess(true);
-            // toast.show(t('tips.error.networkError'), {
-            //   duration: 3000,
-            //   // message: 'Just showing how toast works...',
-            // });
-          }
-        }
-      }
+          push('/home/success?type=withdraw&id=' + data?.id);
+        },
+      );
     } catch (error) {
-      console.error('Transaction error:', error);
       setIsLoading(false);
-      toast.show(t('tips.error.transactionFailed'), {
-        duration: 3000,
-      });
     }
   };
 

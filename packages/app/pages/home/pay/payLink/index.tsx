@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 21:28:51
+ * @LastEditTime: 2025-03-04 23:09:52
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -33,6 +33,7 @@ import {createParam} from 'solito';
 import {ExternalLinkData, PrimaryColor} from 'app/config';
 import SuccessInfo from 'app/Components/SuccessInfo';
 import {
+  getTransactionHistoryFindTransactionHistoryCodeTransactionCode,
   postTransactionHistoryCreateTransactionHistory,
   postTransactionHistoryUpdateTransactionHash,
 } from 'app/servers/api/transactionHistory';
@@ -49,6 +50,7 @@ import {
 } from 'app/servers/api/transactionPayLink';
 import AppLoading from 'app/Components/AppLoading';
 import TokenLinkContract from 'app/abi/TokenLink.json';
+import {useTransaction} from 'app/hooks/useTransaction';
 
 const {useParams} = createParam<any>();
 
@@ -69,7 +71,8 @@ const PayLinkScreen = ({type}: any) => {
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [orderData, setOrderData] = React.useState<any>();
 
-  const {back, push, replace} = useRouter();
+  const {back, replace, push} = useRouter();
+  const {onSendSubmit, onRequestSubmit} = useTransaction();
 
   const createTransactionParams = (type: 'SEND' | 'REQUEST') => {
     const _amount = Number(
@@ -85,7 +88,6 @@ const PayLinkScreen = ({type}: any) => {
       transactionCategory: type,
       transactionType: payLinkData?.transactionType,
     };
-
     if (payLinkData?.userId !== 'anyone') {
       if (type === 'SEND') {
         params.receiverMemberId = Number(payLinkData?.userId);
@@ -93,168 +95,33 @@ const PayLinkScreen = ({type}: any) => {
         params.senderMemberId = Number(payLinkData?.userId);
       }
     }
+    console.log('🚀 ~ createTransactionParams ~ payLinkData:', payLinkData);
+
+    console.log('🚀 ~ createTransactionParams ~ params:', params);
 
     return params;
   };
 
-  const handleTransactionSuccess = async (transaction: any, transactionHash?: string) => {
-    if (transaction?.data?.transactionCode && transactionHash) {
-      const res: any = await makeRequest(
-        postTransactionHistoryUpdateTransactionHash({
-          id: transaction?.data?.id,
-          transactionHash,
-        }),
-      );
-      if (res?.data) {
-        setIsLoading(false);
-        setOrderData(res?.data);
-        setIsSuccess(true);
-      }
-    }
-  };
-
-  const onRequestSubmit = async () => {
+  const handleSubmit = async (type: 'SEND' | 'REQUEST') => {
     try {
       setIsLoading(true);
-      const params = createTransactionParams('REQUEST');
-      const transaction = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
-
-      if (transaction?.data?.id) {
-        setOrderData(transaction?.data);
-        setIsSuccess(true);
+      const params = createTransactionParams(type);
+      if (type === 'SEND') {
+        await onSendSubmit(params, (data) => {
+          setIsLoading(false);
+          setOrderData(data);
+          setIsSuccess(true);
+          dispatch.user.updateState({payLinkData: {}});
+        });
       } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
+        await onRequestSubmit(params, (data) => {
+          setOrderData(data);
+          setIsSuccess(true);
+          dispatch.user.updateState({payLinkData: {}});
         });
       }
     } catch (error) {
-      console.error('Request transaction error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDeposit = async (transaction: any) => {
-    try {
-      // 2. 创建支付链接
-      const payLink = await makeRequest(
-        postTransactionPayLinkCreatePayLink({
-          transactionCode: transaction?.data?.transactionCode,
-        }),
-      );
-
-      if (!payLink?.data) {
-        throw new Error('Failed to create pay link');
-      }
-
-      // USDC代币合约地址
-      const tokenContractAddress = getAddress(payLink?.data?.tokenContractAddress!);
-      // PayLink业务合约地址
-      const bizContractAddress = getAddress(payLink?.data?.bizContractAddress!);
-
-      // 3. 执行智能合约调用
-      const amount = BigInt(transaction?.data?.amount);
-
-      const baseClient = await getClientForChain({
-        id: Number(payLinkData?.currencyData?.token?.chainId),
-      });
-
-      if (!baseClient) {
-        throw new Error('Failed to get client for chain');
-      }
-
-      const transactionHash = await baseClient.sendTransaction({
-        calls: [
-          {
-            // 调用代币的approve方法，授信给PayLink业务合约
-            to: tokenContractAddress,
-            data: encodeFunctionData({
-              abi: erc20Abi,
-              functionName: 'approve',
-              args: [bizContractAddress, amount],
-            }),
-          },
-          {
-            // 调用PayLink业务合约的deposit方法，存入代币（并收取手续费）
-            to: bizContractAddress,
-            data: encodeFunctionData({
-              abi: TokenLinkContract.abi,
-              functionName: 'deposit',
-              args: [tokenContractAddress, amount, payLink?.data?.otp],
-            }),
-          },
-        ],
-      });
-
-      await handleTransactionSuccess(transaction, transactionHash);
-    } catch (error) {
-      console.error('Deposit transaction error:', error);
-      setIsLoading(false);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
-    }
-  };
-
-  const onSendSubmit = async () => {
-    try {
-      setIsLoading(true);
-      const params = createTransactionParams('SEND');
-      const transaction = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
-
-      if (!transaction?.data?.id) {
-        throw new Error('Transaction creation failed');
-      }
-
-      if (payLinkData?.transactionType === 'PAY_LINK') {
-        handleDeposit(transaction);
-        return;
-      }
-
-      // 代币合约地址
-      const tokenContractAddress = transaction?.data?.tokenContractAddress!;
-      // 转账业务合约地址
-      const bizContractAddress: any = transaction?.data?.bizContractAddress;
-      // 转账金额
-      const amount = BigInt(params.amount);
-
-      const baseClient = await getClientForChain({
-        id: Number(payLinkData?.currencyData?.token?.chainId),
-      });
-
-      if (!baseClient) {
-        throw new Error('Failed to get client for chain');
-      }
-
-      // 使用Privy的SmartWallet发起ERC4337标准的批量打包交易
-      const transactionHash = await baseClient.sendTransaction({
-        calls: [
-          {
-            // 调用USDC代币的approve方法，授信给转账业务合约
-            to: tokenContractAddress,
-            data: encodeFunctionData({
-              abi: erc20Abi,
-              functionName: 'approve',
-              args: [bizContractAddress, amount],
-            }),
-          },
-          {
-            // 调用转账业务合约的transfer方法，将代币转给接收方（并收取手续费）
-            to: bizContractAddress,
-            data: encodeFunctionData({
-              abi: TokenTransferContract.abi,
-              functionName: 'transfer',
-              args: [transaction?.data?.receiverWalletAddress!, tokenContractAddress, amount],
-            }),
-          },
-        ],
-      });
-      await handleTransactionSuccess(transaction, transactionHash);
-    } catch (error) {
-      console.error('Send transaction error:', error);
+      console.error(`${type} transaction error:`, error);
       toast.show(t('tips.error.networkError'), {
         duration: 3000,
       });
@@ -308,7 +175,8 @@ const PayLinkScreen = ({type}: any) => {
         isClosure
         onBack={() => {
           dispatch.user.updateState({payLinkData: {}});
-          push('/');
+          window.history.pushState(null, '', '/');
+          replace('/');
         }}
         title={t('screen.home.paylink')}
         fallbackUrl="/"
@@ -349,10 +217,11 @@ const PayLinkScreen = ({type}: any) => {
                 bc: '#FAFAFA',
               }}
               onPress={() => {
-                push(`/home/${type}/paylink?userId=${params?.userId}`);
+                console.log('🚀 ~ PayLinkScreen ~ type:', type);
+                push(`/home/${type}?userId=${payLinkData?.userId}`);
               }}
             >
-              {params?.userId === 'anyone' ? (
+              {payLinkData?.userId === 'anyone' ? (
                 <SizableText fontSize={'$6'} color={PrimaryColor} fontWeight={'700'}>
                   {t('home.paylink.anyoneLink')}
                 </SizableText>
@@ -451,13 +320,14 @@ const PayLinkScreen = ({type}: any) => {
           borderColor={PrimaryColor}
           onPress={() => {
             if (isSuccess) {
+              window.history.pushState(null, '', '/');
               replace(`/home/history/${orderData?.id}`);
-              window.history.replaceState(null, '', window.location.href); // 可选：直接覆盖当前历史
+              dispatch.user.updateState({payLinkData: {}});
+              window.history.replaceState(null, '', window.location.href);
             } else {
               back();
             }
           }}
-          // disabled={isLoading}
           pressStyle={{
             opacity: 0.85,
           }}
@@ -473,7 +343,7 @@ const PayLinkScreen = ({type}: any) => {
             if (isSuccess) {
               onCopy(`${ExternalLinkData.webPageHome}/home/take/${orderData?.transactionCode}`);
             } else {
-              type === 'send' ? onSendSubmit() : onRequestSubmit();
+              handleSubmit(type === 'send' ? 'SEND' : 'REQUEST');
             }
           }}
         >
