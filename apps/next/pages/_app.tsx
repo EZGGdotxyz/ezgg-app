@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-26 14:21:05
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 11:22:24
+ * @LastEditTime: 2025-03-03 23:47:25
  * @FilePath: /ezgg-app/apps/next/pages/_app.tsx
  */
 import '@tamagui/core/reset.css';
@@ -54,6 +54,7 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
             theme: 'light',
             accentColor: PrimaryColor,
           },
+          // useFirstPartyCookies:true
         }}
       >
         <SmartWalletsProvider>

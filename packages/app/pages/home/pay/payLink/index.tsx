@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 22:41:06
+ * @LastEditTime: 2025-03-04 10:16:16
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -23,7 +23,7 @@ import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
 import AppButton from 'app/Components/AppButton';
 import {StyleSheet} from 'react-native';
-import {appScale, formatNumber, getUserSubName, isIphoneX} from 'app/utils';
+import {appScale, convertAmountToTokenDecimals, formatNumber, getUserSubName, isIphoneX} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
@@ -32,7 +32,7 @@ import {ChevronDown, ChevronRight} from '@tamagui/lucide-icons';
 import {createParam} from 'solito';
 import {PrimaryColor} from 'app/config';
 import SuccessInfo from 'app/Components/SuccessInfo';
-import {postTransactionHistoryCreateTransactionHistory} from 'app/servers/api/transactionHistory';
+import {postTransactionHistoryCreateTransactionHistory, postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
 import useRequest from 'app/hooks/useRequest';
 import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
@@ -66,24 +66,6 @@ const PayLinkScreen = ({type}: any) => {
 
   const {back, push} = useRouter();
 
-  // 添加金额转换工具函数
-  const convertAmountToTokenDecimals = (amount: string, decimals: number): string => {
-    try {
-      // 移除金额中的所有逗号
-      const cleanAmount = amount.replace(/,/g, '');
-      // 将字符串转换为数字
-      const amountNumber = parseFloat(cleanAmount);
-      // 计算转换后的值 (amount * 10^decimals)
-      const multiplier = Math.pow(10, decimals);
-      const convertedAmount = (amountNumber * multiplier).toString();
-      // 移除可能的小数点和尾随的零
-      return convertedAmount.split('.')[0];
-    } catch (error) {
-      console.error('金额转换错误:', error);
-      return '0';
-    }
-  };
-
   const onRequestSubmit = async () => {
     const _amount = Number(
       convertAmountToTokenDecimals(payLinkData?.amount, payLinkData?.currencyData?.token?.tokenDecimals),
@@ -102,7 +84,19 @@ const PayLinkScreen = ({type}: any) => {
     if (payLinkData?.userId !== 'anyone') {
       params.senderMemberId = Number(payLinkData?.userId);
     }
+    setIsLoading(true);
+
     const transaction = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
+    setIsLoading(false);
+    if (transaction?.data?.id) {
+      setOrderData(transaction?.data);
+      setIsSuccess(true);
+    } else {
+      setIsLoading(false);
+      toast.show(t('tips.error.networkError'), {
+        duration: 3000,
+      });
+    }
   };
 
   const onSendSubmit = async () => {
@@ -129,8 +123,8 @@ const PayLinkScreen = ({type}: any) => {
       setIsLoading(true);
       const transaction = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
 
-      if (transaction?.data?.tokenContractAddress) {
-        // USDC代币合约地址
+      if (transaction?.data?.id) {
+        // 代币合约地址
         const tokenContractAddress = transaction?.data?.tokenContractAddress!;
         // 转账业务合约地址
         const bizContractAddress: any = transaction?.data?.bizContractAddress;
@@ -177,7 +171,7 @@ const PayLinkScreen = ({type}: any) => {
         if (transaction?.data?.transactionCode && transactionHash) {
           // 更新交易记录的交易哈希字段
           const res: any = await makeRequest(
-            postTransactionPayLinkUpdateTransactionHash({
+            postTransactionHistoryUpdateTransactionHash({
               id: transaction?.data?.id,
               transactionCode: transaction?.data?.transactionCode,
               transactionHash,
@@ -185,7 +179,7 @@ const PayLinkScreen = ({type}: any) => {
           );
           if (res?.data) {
             setIsLoading(false);
-            setOrderData(transaction?.data);
+            setOrderData(res?.data);
             setIsSuccess(true);
           } else {
             setIsLoading(false);

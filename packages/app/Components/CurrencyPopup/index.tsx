@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 21:51:07
+ * @LastEditTime: 2025-03-03 23:37:56
  * @FilePath: /ezgg-app/packages/app/Components/CurrencyPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -9,7 +9,7 @@ import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import {TokenIcon} from '@web3icons/react';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
-import {appScale, formatNumber} from 'app/utils';
+import {appScale, formatNumber, formatTokenAmount} from 'app/utils';
 import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
@@ -156,7 +156,8 @@ const CurrencyPopup: React.FC<any> = ({
                           </XStack>
                           <XStack flexShrink={0} ai={'center'} jc={'center'} pl={appScale(24)} pr={appScale(24)}>
                             <SizableText color={'#212121'} size={'$5'} fow={'600'}>
-                              {dayItem?.token?.tokenAmount}
+                              {/* {formatTokenAmount(Number(dayItem?.tokenAmount), dayItem?.token?.tokenDecimals)} */}
+                              {dayItem?.tokenAmount}
                             </SizableText>
                           </XStack>
                         </XStack>

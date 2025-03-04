@@ -15,6 +15,8 @@ export async function postTransactionHistoryCreateTransactionHistory(
     transactionCategory: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
     /** 交易类型 */
     transactionType: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+    /** 付款人 - 会员id */
+    senderMemberId?: number;
     /** 收款人 - 会员id */
     receiverMemberId?: number;
     /** 交易金额（代币数量） */
@@ -55,9 +57,12 @@ export async function postTransactionHistoryCreateTransactionHistory(
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;
@@ -128,6 +133,8 @@ export async function postTransactionHistoryCreateTransactionHistory2(
     transactionCategory: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
     /** 交易类型 */
     transactionType: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+    /** 付款人 - 会员id */
+    senderMemberId?: number;
     /** 收款人 - 会员id */
     receiverMemberId?: number;
     /** 交易金额（代币数量） */
@@ -168,9 +175,12 @@ export async function postTransactionHistoryCreateTransactionHistory2(
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;
@@ -267,9 +277,12 @@ export async function postTransactionHistoryDeclineTransactionHistory(
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;
@@ -366,9 +379,12 @@ export async function postTransactionHistoryDeclineTransactionHistory2(
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;
@@ -464,9 +480,12 @@ export async function getTransactionHistoryFindTransactionHistoryId(
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;
@@ -516,7 +535,11 @@ export async function getTransactionHistoryFindTransactionHistoryId(
     };
   }>(`/member/transaction/history/find-transaction-history/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: {
+      // currency has a default value: USD
+      currency: 'USD',
+      ...queryParams,
+    },
     ...(options || {}),
   });
 }
@@ -559,9 +582,12 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;
@@ -611,7 +637,11 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
     };
   }>(`/member/transaction/history/find-transaction-history/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: {
+      // currency has a default value: USD
+      currency: 'USD',
+      ...queryParams,
+    },
     ...(options || {}),
   });
 }
@@ -654,9 +684,12 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;
@@ -706,7 +739,11 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
     };
   }>(`/member/transaction/history/find-transaction-history/code/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: {
+      // currency has a default value: USD
+      currency: 'USD',
+      ...queryParams,
+    },
     ...(options || {}),
   });
 }
@@ -749,9 +786,12 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;
@@ -801,7 +841,11 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
     };
   }>(`/member/transaction/history/find-transaction-history/code/${param0}`, {
     method: 'GET',
-    params: { ...queryParams },
+    params: {
+      // currency has a default value: USD
+      currency: 'USD',
+      ...queryParams,
+    },
     ...(options || {}),
   });
 }
@@ -848,9 +892,12 @@ export async function getTransactionHistoryPageTransactionHistory(
         tokenSymbol?: string;
         tokenDecimals?: number;
         tokenContractAddress?: string;
+        tokenPrice?: string;
         amount?: number;
         networkFee?: number;
         message?: string;
+        currency?: string;
+        currencyAmount?: string;
         senderMember: {
           id?: number;
           createBy?: number;
@@ -906,6 +953,8 @@ export async function getTransactionHistoryPageTransactionHistory(
       page: '1',
       // pageSize has a default value: 30
       pageSize: '30',
+      // currency has a default value: USD
+      currency: 'USD',
 
       ...params,
     },
@@ -955,9 +1004,12 @@ export async function getTransactionHistoryPageTransactionHistory2(
         tokenSymbol?: string;
         tokenDecimals?: number;
         tokenContractAddress?: string;
+        tokenPrice?: string;
         amount?: number;
         networkFee?: number;
         message?: string;
+        currency?: string;
+        currencyAmount?: string;
         senderMember: {
           id?: number;
           createBy?: number;
@@ -1013,6 +1065,8 @@ export async function getTransactionHistoryPageTransactionHistory2(
       page: '1',
       // pageSize has a default value: 30
       pageSize: '30',
+      // currency has a default value: USD
+      currency: 'USD',
 
       ...params,
     },
@@ -1061,9 +1115,12 @@ export async function postTransactionHistoryUpdateTransactionHash(
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;
@@ -1162,9 +1219,12 @@ export async function postTransactionHistoryUpdateTransactionHash2(
       tokenSymbol?: string;
       tokenDecimals?: number;
       tokenContractAddress?: string;
+      tokenPrice?: string;
       amount?: number;
       networkFee?: number;
       message?: string;
+      currency?: string;
+      currencyAmount?: string;
       senderMember: {
         id?: number;
         createBy?: number;

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 20:45:40
+ * @LastEditTime: 2025-03-04 10:58:42
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -18,6 +18,7 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
   const [{currency}] = useRematchModel('app');
+  const [{userInfo}] = useRematchModel('user');
 
   const dealType = () => {
     switch (item?.transactionType) {
@@ -67,6 +68,24 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
     }
   };
 
+  // 判断增加还是减少
+  const judgeAmountType = (orderData: any) => {
+    if (orderData?.transactionType === 'WITHDRAW') {
+      return '+';
+    }
+
+    if (orderData?.transactionType === 'DEPOSIT') {
+      return '-';
+    }
+
+    if (orderData?.transactionType === 'SEND') {
+      return '-';
+    }
+    if (orderData?.transactionType === 'REQUEST') {
+      return orderData?.receiverMember?.id === userInfo?.customMetadata?.id ? '+' : '-';
+    }
+  };
+
   return (
     <Button
       pt={appScale(16)}
@@ -93,14 +112,15 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
           </SizableText>
         </YStack>
         <YStack gap={appScale(2)} w={'30%'}>
-          <SizableText ta={'right'} fontSize={'$6'} color={'#26273C'} fontWeight={'500'}>
-            {item?.transactionType === 'SEND' ? '+' : '-'} $ {Number(item?.amount)}
-            {getCurrency(currency)?.label}
+          <SizableText ta={'right'} fontSize={'$5'} color={'#26273C'} fontWeight={'500'}>
+            {`${judgeAmountType(item)} ${formatNumber(Number(item?.currencyAmount || 0))} ${
+              getCurrency(currency)?.label
+            }`}
           </SizableText>
           <SizableText ta={'right'} fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
-            {`${item?.transactionType === 'SEND' ? '+' : '-'} ${formatTokenAmount(item?.amount, item?.tokenDecimals)} ${
-              item?.tokenSymbol
-            } (${getChainInfo(item?.chainId)?.name})`}
+            {`${judgeAmountType(item)} ${formatTokenAmount(item?.amount, item?.tokenDecimals)} ${item?.tokenSymbol} (${
+              getChainInfo(item?.chainId)?.name
+            })`}
           </SizableText>
         </YStack>
       </XStack>

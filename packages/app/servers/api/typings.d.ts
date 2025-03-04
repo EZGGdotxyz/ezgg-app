@@ -2,8 +2,8 @@ declare namespace API {
   type getBalanceFindBalanceParams = {
     platform: 'ETH' | 'SOLANA';
     chainId: number;
-    /** 货币符号：usd/hkd/cny */
-    currency: string;
+    /** 货币符号：USD/HKD/CNY */
+    currency?: string;
     /** 代币合约地址 */
     address: string;
   };
@@ -11,8 +11,8 @@ declare namespace API {
   type getBalanceListBalanceParams = {
     platform: 'ETH' | 'SOLANA';
     chainId: number;
-    /** 货币符号：usd/hkd/cny */
-    currency: string;
+    /** 货币符号：USD/HKD/CNY */
+    currency?: string;
   };
 
   type getInfrastructureListBlockchainParams = {
@@ -40,14 +40,31 @@ declare namespace API {
     network?: 'MAIN' | 'TEST' | 'DEV';
   };
 
+  type getNotificationPageNotificationParams = {
+    /** 页码，默认1 */
+    page?: number;
+    /** 每页记录数，默认30 */
+    pageSize?: number;
+    /** 通知主题枚举：GENERAL 普通通知；TRANS_UPDATE 交易状态更新；ALARM 欺诈或可疑活动报警；PAY_REQUEST 付款请求通知；CUSTOMER_SUPPORT 客户支持通知；BALANCE_ALARM 账户余额警报；SECURE_ALARM 安全警报；SUMMARY 每日或每周摘要；APP_UPDATE 应用程序更新与增强；SALES_PROMOTION 促销优惠与更新；SURVEY 参与调研； */
+    subject?: string;
+    /** 交易状态更新动作枚举：REQUEST_ACCEPTED 请求已接受；REQUEST_DECLINED 请求已拒绝；PAY_LINK_ACCEPTED PayLink已接受 */
+    action?: string;
+    /** 状态值：0 未读；1已读 */
+    status?: number;
+  };
+
   type getTransactionHistoryFindTransactionHistoryCodeTransactionCodeParams = {
     /** 交易编码 */
     transactionCode: string;
+    /** 货币符号：USD/HKD/CNY */
+    currency?: string;
   };
 
   type getTransactionHistoryFindTransactionHistoryIdParams = {
     /** 交易历史id */
     id: number;
+    /** 货币符号：USD/HKD/CNY */
+    currency?: string;
   };
 
   type getTransactionHistoryPageTransactionHistoryParams = {
@@ -55,6 +72,8 @@ declare namespace API {
     page?: number;
     /** 每页记录数，默认30 */
     pageSize?: number;
+    /** 货币符号：USD/HKD/CNY */
+    currency?: string;
     /** 区块链平台: ETH 以太坊；SOLANA Solana; */
     platform?: 'ETH' | 'SOLANA';
     /** 区块链id */
@@ -84,5 +103,15 @@ declare namespace API {
     pageSize?: number;
     /** 检索条件 */
     search?: string;
+  };
+
+  type postNotificationUpdateNotificationAllStatusParams = {
+    /** 通知ID */
+    id: number;
+  };
+
+  type postNotificationUpdateNotificationStatusIdParams = {
+    /** 通知ID */
+    id: number;
   };
 }

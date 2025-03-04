@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 22:39:39
+ * @LastEditTime: 2025-03-04 11:38:05
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -13,6 +13,14 @@ import {appScale, formatDateTime, formatNumber, formatTokenAmount, truncateAddre
 import {useEffect, useState} from 'react';
 import CopyButton from '../CopyButton';
 import {getChainInfo} from 'app/utils/chain';
+import {
+  createTransactionInfoItem,
+  createBaseTransactionInfoList,
+  createAmountDisplay,
+  createNetworkFeeDisplay,
+  createUserNicknameDisplay,
+  createStatusDisplay,
+} from 'app/utils/transactionInfo';
 
 export type SuccessInfoProps = {type: string; orderData: any};
 // 交易历史item
@@ -23,266 +31,54 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
 
   const [infoData, setInfoData] = useState<any>({});
 
-  const infoDataDefault = {
-    sent: {
-      title: orderData?.name ? `${t('home.order.sentTo')} @${orderData?.name}` : '',
-      infoList: [
-        {
-          label: t('home.order.youSent'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.to'),
-          value: `@${orderData?.receiverMember?.nickname}`,
-          isCopyable: true,
-          isStatus: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash || ''}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    income: {
-      icon: '',
-      infoList: [
-        {
-          label: t('home.order.youReceived'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.from'),
-          value: `@${orderData?.receiverMember?.nickname}`,
-          isCopyable: true,
-          isStatus: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash || ''}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    outgoingRequest: {
-      icon: '',
-      infoList: [
-        {
-          label: t('home.order.youRequested'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.status'),
-          value: orderData?.transactionStatus,
-          isStatus: true,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.to'),
-          value: `@${orderData?.receiverMember?.nickname}`,
-          isCopyable: true,
-          isStatus: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    incomingRequest: {
-      icon: '',
-      infoList: [
-        {
-          label: t('home.order.amountRequested'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.status'),
-          value: orderData?.transactionStatus,
-          isStatus: true,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.to'),
-          value: `@${orderData?.senderMember?.nickname}`,
-          isCopyable: true,
-          isStatus: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    withdraw: {
-      icon: 'withdraw',
-      infoList: [
-        {
-          label: t('home.order.youWithdraw'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    topUp: {
-      icon: 'topUp',
-      infoList: [
-        {
-          label: t('home.order.youTopUp'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-  };
-
   useEffect(() => {
-    type &&
+    if (type) {
+      const infoDataDefault = {
+        sent: {
+          title: orderData?.name ? `${t('home.order.sentTo')} @${orderData?.name}` : '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
+            ...createBaseTransactionInfoList(orderData, t),
+          ],
+        },
+        request: {
+          icon: '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
+            createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
+              isStatus: true,
+            }),
+            ...createBaseTransactionInfoList(orderData, t),
+          ],
+        },
+        withdraw: {
+          title: t('home.order.depositTips'),
+          icon: 'withdraw',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youWithdraw'), createAmountDisplay(orderData)),
+            ...createBaseTransactionInfoList(orderData, t, false),
+          ],
+        },
+        deposit: {
+          icon: 'topUp',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youTopUp'), createAmountDisplay(orderData)),
+            ...createBaseTransactionInfoList(orderData, t, false),
+          ],
+        },
+      };
       setInfoData({
         infoList: infoDataDefault[type].infoList,
-        title: t(`screen.home.${type}`),
+        title: infoDataDefault[type].title,
         icon: infoDataDefault[type].icon,
         userName:
           orderData?.transactionType === 'SEND' || orderData?.transactionType === 'REQUEST'
             ? `@${type === 'send' ? orderData?.receiverMember?.nickname : orderData?.senderMember?.nickname || ''}`
             : '',
       });
+    }
   }, [type, orderData]);
 
   return (
@@ -297,13 +93,22 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
       </XStack>
       <XStack mt={appScale(20)} w={'100%'} ai={'center'} jc={'center'}>
         <SizableText h={appScale(64)} lh={appScale(64)} style={{fontSize: '40px'}} color={'#212121'} fontWeight={'700'}>
-          {`${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol}`}
+          {orderData?.amount
+            ? `${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol}`
+            : '0'}
         </SizableText>
       </XStack>
       {infoData?.userName && (
         <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
           <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#616161'} fontWeight={'500'}>
             {infoData?.userName}
+          </SizableText>
+        </XStack>
+      )}
+      {infoData?.title && (
+        <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
+          <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#616161'} fontWeight={'500'}>
+            {infoData?.title}
           </SizableText>
         </XStack>
       )}

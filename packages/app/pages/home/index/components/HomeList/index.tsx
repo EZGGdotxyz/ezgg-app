@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 21:43:06
+ * @LastEditTime: 2025-03-04 10:57:36
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet, ScrollView} from '@my/ui';
@@ -74,6 +74,7 @@ const HomeList: React.FC<any> = ({switchOn, setIsLoading}: HomeListProps) => {
       getTransactionHistoryPageTransactionHistory({
         page: 1,
         pageSize: 10,
+        currency: currency,
       }),
     );
     if (res?.data?.record && res?.data?.record.length > 0) {

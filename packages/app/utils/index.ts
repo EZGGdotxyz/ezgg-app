@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 21:13:22
+ * @LastEditTime: 2025-03-04 10:06:23
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -77,6 +77,7 @@ export const formatNumber = (num: number) => {
   return Number(num).toLocaleString('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
+    roundingMode: 'trunc',
   });
 };
 
@@ -171,7 +172,30 @@ export const getUserSubName = (item) => {
 
 // 格式化token数量
 export const formatTokenAmount = (amount: string | number, decimals: number = 18) => {
-  if (!amount) return '0';
+  if (!amount) return '0.00';
   const value = Number(amount) / Math.pow(10, decimals);
-  return value;
+  const parts = value.toString().split('.');
+  if (parts.length === 1) {
+    return value.toFixed(2);
+  }
+  const decimalPlaces = parts[1].length;
+  return decimalPlaces <= 2 ? value.toFixed(2) : value.toFixed(decimals);
+};
+
+// 添加金额转换工具函数
+export const convertAmountToTokenDecimals = (amount: string, decimals: number): string => {
+  try {
+    // 移除金额中的所有逗号
+    const cleanAmount = amount.replace(/,/g, '');
+    // 将字符串转换为数字
+    const amountNumber = parseFloat(cleanAmount);
+    // 计算转换后的值 (amount * 10^decimals)
+    const multiplier = Math.pow(10, decimals);
+    const convertedAmount = (amountNumber * multiplier).toString();
+    // 移除可能的小数点和尾随的零
+    return convertedAmount.split('.')[0];
+  } catch (error) {
+    console.error('金额转换错误:', error);
+    return '0';
+  }
 };

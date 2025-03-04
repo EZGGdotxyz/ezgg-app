@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-03 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 10:20:38
+ * @LastEditTime: 2025-03-03 23:08:30
  * @FilePath: /ezgg-app/packages/app/utils/chain.ts
  */
 import {bsc, polygon, base, baseSepolia, polygonAmoy, bscTestnet} from 'wagmi/chains';
@@ -16,16 +16,27 @@ interface ChainInfo {
  * @param chainId 链路ID
  * @returns 链路信息对象，包含名称和图标
  */
-export function getChainInfo(chainId: number): ChainInfo {
+export function getChainInfo(chainId?: any): ChainInfo {
+  if (!chainId || chainId === 'undefined') {
+    return {
+      name: '',
+      icon: '',
+    };
+  }
+
   switch (chainId) {
     case bsc.id:
     case bscTestnet.id:
+    case 56:
+    case 97:
       return {
         name: 'BSC',
         icon: 'BSC',
       };
     case polygon.id:
     case polygonAmoy.id:
+    case 137:
+    case 80002:
     case 80001:
       return {
         name: 'Polygon',
@@ -34,6 +45,8 @@ export function getChainInfo(chainId: number): ChainInfo {
 
     case base.id:
     case baseSepolia.id:
+    case 8453:
+    case 84532:
       return {
         name: 'Base',
         icon: 'Base',

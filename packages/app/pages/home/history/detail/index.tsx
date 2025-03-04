@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 21:11:35
+ * @LastEditTime: 2025-03-04 10:54:14
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {AppHeader, AppHeaderProps, AppImage, HeaderBackButton, Paragraph, SizableText, XStack, YStack} from '@my/ui';
@@ -9,14 +9,22 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import Header from './components/Header';
-import {appScale, formatDateTime, formatNumber, truncateAddress, formatTokenAmount} from 'app/utils';
+import {appScale, truncateAddress, formatTokenAmount} from 'app/utils';
 import CopyButton from 'app/Components/CopyButton';
 import {PrimaryColor} from 'app/config';
 import {createParam} from 'solito';
 import {getTransactionHistoryFindTransactionHistoryId} from 'app/servers/api/transactionHistory';
 import {useRematchModel} from 'app/store/model';
 import useRequest from 'app/hooks/useRequest';
-import {getChainInfo} from 'app/utils/chain';
+import {
+  createTransactionInfoItem,
+  createBaseTransactionInfoList,
+  createAmountDisplay,
+  createNetworkFeeDisplay,
+  createUserNicknameDisplay,
+  createStatusDisplay,
+} from 'app/utils/transactionInfo';
+import AppLoading from 'app/Components/AppLoading';
 
 const {useParams} = createParam<any>();
 
@@ -34,6 +42,7 @@ const HistoryDetailScreen = () => {
   const [{userInfo}] = useRematchModel('user');
   const {makeRequest} = useRequest();
   const [orderData, setOrderData] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(false);
   const statusList = {
     PENDING: {
       title: t('home.order.status.unpaid'),
@@ -49,256 +58,26 @@ const HistoryDetailScreen = () => {
     },
   };
 
-  const infoDataDefault = {
-    send: {
-      icon: '',
-      infoList: [
-        {
-          label: t('home.order.youSent'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.to'),
-          value: `@${orderData?.receiverMember?.nickname}`,
-          isCopyable: true,
-          isStatus: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash || ''}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    income: {
-      icon: '',
-      infoList: [
-        {
-          label: t('home.order.youReceived'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.from'),
-          value: `@${orderData?.receiverMember?.nickname}`,
-          isCopyable: true,
-          isStatus: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash || ''}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    outgoingRequest: {
-      icon: '',
-      infoList: [
-        {
-          label: t('home.order.youRequested'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.status'),
-          value: orderData?.transactionStatus,
-          isStatus: true,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.to'),
-          value: `@${orderData?.receiverMember?.nickname}`,
-          isCopyable: true,
-          isStatus: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    incomingRequest: {
-      icon: '',
-      infoList: [
-        {
-          label: t('home.order.amountRequested'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.networkFee'),
-          value: `${formatNumber(orderData?.networkFee)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.status'),
-          value: orderData?.transactionStatus,
-          isStatus: true,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.to'),
-          value: `@${orderData?.senderMember?.nickname}`,
-          isCopyable: true,
-          isStatus: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    withdraw: {
-      icon: 'withdraw',
-      infoList: [
-        {
-          label: t('home.order.youWithdraw'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
-    topUp: {
-      icon: 'topUp',
-      infoList: [
-        {
-          label: t('home.order.youTopUp'),
-          value: `${formatNumber(orderData?.amount)} ${orderData?.tokenSymbol}(${
-            getChainInfo(orderData?.chainId)?.name
-          })`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.date'),
-          value: `${formatDateTime(orderData?.transactionTime)}`,
-          isStatus: false,
-          isCopyable: false,
-          isTruncated: false,
-        },
-        {
-          label: t('home.order.transactionHash'),
-          value: `${orderData?.transactionHash}`,
-          isCopyable: orderData?.transactionHash ? true : false,
-          isStatus: false,
-          isTruncated: true,
-        },
-      ],
-    },
+  // 判断增加还是减少
+  const judgeAmountType = (orderData: any) => {
+    if (orderData?.transactionType === 'WITHDRAW') {
+      return '-';
+    }
+
+    if (orderData?.transactionType === 'DEPOSIT') {
+      return '+';
+    }
+
+    if (orderData?.transactionType === 'SEND') {
+      return '-';
+    }
+    if (orderData?.transactionType === 'REQUEST') {
+      return orderData?.receiverMember?.id === userInfo?.customMetadata?.id ? '+' : '-';
+    }
   };
 
   const _getTransactionHistoryFindTransactionHistoryId = async () => {
+    setIsLoading(true);
     const res = await makeRequest(getTransactionHistoryFindTransactionHistoryId({id: params?.id}));
     if (res?.code === '0') {
       const _orderData = res?.data;
@@ -314,16 +93,74 @@ const HistoryDetailScreen = () => {
           _type = 'topUp';
           break;
         case 'REQUEST':
-          if (_orderData?.receiverMember?.id === userInfo?.customMetadata?.id) {
-            _type = 'outgoingRequest';
-          } else {
-            _type = 'incomingRequest';
-          }
+          _type =
+            _orderData?.receiverMember?.id === userInfo?.customMetadata?.id ? 'outgoingRequest' : 'incomingRequest';
           break;
         default:
           break;
       }
-      setOrderData(_orderData);
+
+      const infoDataDefault = {
+        send: {
+          icon: '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(_orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
+            ...createBaseTransactionInfoList(_orderData, t),
+          ],
+        },
+        income: {
+          icon: '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youReceived'), createAmountDisplay(_orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
+            ...createBaseTransactionInfoList(_orderData, t),
+            createTransactionInfoItem(t('home.order.from'), createUserNicknameDisplay(_orderData?.receiverMember), {
+              isCopyable: !!_orderData?.receiverMember?.nickname,
+            }),
+          ],
+        },
+        outgoingRequest: {
+          icon: '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(_orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
+            createTransactionInfoItem(t('home.order.status'), createStatusDisplay(_orderData?.transactionStatus), {
+              isStatus: true,
+            }),
+            ...createBaseTransactionInfoList(_orderData, t),
+          ],
+        },
+        incomingRequest: {
+          icon: '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.amountRequested'), createAmountDisplay(_orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
+            createTransactionInfoItem(t('home.order.status'), createStatusDisplay(_orderData?.transactionStatus), {
+              isStatus: true,
+            }),
+            ...createBaseTransactionInfoList(_orderData, t, true, true),
+          ],
+        },
+        withdraw: {
+          icon: 'withdraw',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youWithdraw'), createAmountDisplay(_orderData)),
+            ...createBaseTransactionInfoList(_orderData, t, false),
+          ],
+        },
+        topUp: {
+          icon: 'topUp',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youTopUp'), createAmountDisplay(_orderData)),
+            ...createBaseTransactionInfoList(_orderData, t, false),
+          ],
+        },
+      };
+      setOrderData({
+        ..._orderData,
+        // transactionType: _type,
+      });
       setInfoData({
         infoList: infoDataDefault[_type].infoList,
         title: t(`screen.home.${_type}`),
@@ -334,20 +171,13 @@ const HistoryDetailScreen = () => {
             : '',
       });
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
     if (params?.id) {
       _getTransactionHistoryFindTransactionHistoryId();
     }
-
-    // params?.type &&
-    //   setInfoData({
-    //     infoList: infoDataDefault[params?.type].infoList,
-    //     userName: `@${orderData?.userName || ''}`,
-    //     title: t(`screen.home.${params?.type}`),
-    //     icon: infoDataDefault[params?.type].icon,
-    //   });
   }, [params]);
 
   return (
@@ -373,10 +203,14 @@ const HistoryDetailScreen = () => {
               color={'#212121'}
               fontWeight={'700'}
             >
-              {`${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol}`}
+              {orderData?.amount
+                ? `${judgeAmountType(orderData)} ${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${
+                    orderData?.tokenSymbol
+                  }`
+                : ''}
             </SizableText>
           </XStack>
-          {infoData?.userName && (
+          {infoData?.userName !== '' && (
             <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
               <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'500'}>
                 {infoData?.userName}
@@ -404,7 +238,7 @@ const HistoryDetailScreen = () => {
                 {item?.isStatus && item?.value && (
                   <XStack
                     ai={'center'}
-                    // bc={statusList[item.value]?.backgroundColor}
+                    bc={statusList[item.value]?.backgroundColor}
                     borderRadius={appScale(8)}
                     p={appScale(12)}
                   >
@@ -448,6 +282,7 @@ const HistoryDetailScreen = () => {
             ))}
         </YStack>
       </YStack>
+      {isLoading && <AppLoading />}
     </PermissionPage>
   );
 };

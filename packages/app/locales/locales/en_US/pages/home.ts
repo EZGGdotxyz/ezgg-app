@@ -45,6 +45,7 @@ export default {
   'home.deposit.deposit': 'Deposit',
 
   'home.withdraw.withdraw': 'Withdraw',
+  'home.withdraw.tips': 'The amount you withdraw cannot exceed your balance',
 
   'home.request.amountRequesting': 'Amount Requesting',
   'home.request.amountToRequest': 'Amount to Request',
@@ -114,5 +115,12 @@ export default {
   'home.qr.sub2': 'Recipient Address',
   'home.qr.save': 'save',
   'home.qr.share': 'share',
-  'home.qr.invalid':'Invalid QR code, please scan the QR code provided by ezgg'
+  'home.qr.invalid':'Invalid QR code, please scan the QR code provided by ezgg',
+
+  'home.deposit.selectWallet': 'Select Wallet',
+  'home.deposit.noWalletsFound': 'No external wallets found',
+  'home.deposit.walletDetectionError': 'Failed to detect wallets',
+  'home.deposit.walletSelected': 'Selected wallet: {{wallet}}',
+  'home.deposit.walletConnectionError': 'Failed to connect wallet',
+  'common.cancel': 'Cancel'
 };

@@ -32,6 +32,7 @@ import AppHeader2 from 'app/Components/AppHeader2';
 import SearchHeader from 'app/Components/SearchHeader';
 import {getTransactionHistoryPageTransactionHistory} from 'app/servers/api/transactionHistory';
 import HistoryDayItem from 'app/Components/HistoryDayItem';
+import { useRematchModel } from 'app/store/model';
 
 const {useParam} = createParam<{id: string}>();
 
@@ -40,6 +41,7 @@ const HistoryScreen = (props: any) => {
   const {isRefresh} = props;
   const {t} = useTranslation();
   const scheme = 'light';
+  const [{currency}] = useRematchModel('app');
 
   const {makeRequest} = useRequest();
   const [data, setData] = useState<any>([]);
@@ -58,6 +60,7 @@ const HistoryScreen = (props: any) => {
     const params: any = {
       page: _page,
       pageSize: 10,
+      currency: currency,
     };
     if (id && id !== 'all') {
       params.brandId = Number(id);

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 20:49:43
+ * @LastEditTime: 2025-03-04 10:47:54
  * @FilePath: /ezgg-app/packages/app/pages/home/success/index.tsx
  */
 import {
@@ -36,6 +36,8 @@ import Header from './components/Header';
 import SuccessInfo from 'app/components/SuccessInfo';
 import {appScale} from 'app/utils';
 import {createParam} from 'solito';
+import {getTransactionHistoryFindTransactionHistoryId} from 'app/servers/api/transactionHistory';
+import AppLoading from 'app/Components/AppLoading';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
 const {useParams} = createParam<any>();
 
@@ -43,23 +45,35 @@ const {useParams} = createParam<any>();
 const SuccessScreen = () => {
   const {push, replace, back, parseNextPath} = useRouter();
   const {params} = useParams();
+  const [{userInfo}] = useRematchModel('user');
+  const {makeRequest} = useRequest();
+  const [isLoading, setIsLoading] = useState(false);
+  const [orderData, setOrderData] = useState<any>({});
 
-  console.log('🚀 ~ SuccessScreen ~ params:', params);
+  const _getTransactionHistoryFindTransactionHistoryId = async () => {
+    setIsLoading(true);
+    const res = await makeRequest(getTransactionHistoryFindTransactionHistoryId({id: params?.id}));
+    if (res?.code === '0') {
+      const _orderData = res?.data;
 
-  const demoOrderData = {
-    amount: 100,
-    fee: 1,
-    token: 'USDC',
-    chain: 'BSC',
-    createdAt: '2024-10-21 14:35:30',
-    toAddress: '123',
-    txHash: '2024102114353001',
+      setOrderData({
+        ..._orderData,
+      });
+    }
+    setIsLoading(false);
   };
+
+  useEffect(() => {
+    if (params?.id) {
+      _getTransactionHistoryFindTransactionHistoryId();
+    }
+  }, [params]);
 
   return (
     <PermissionPage>
       <Header />
-      <SuccessInfo type={params?.type} orderData={demoOrderData} />
+      <SuccessInfo type={params?.type} orderData={orderData} />
+      {isLoading && <AppLoading />}
     </PermissionPage>
   );
 };

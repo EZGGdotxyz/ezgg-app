@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 21:56:16
+ * @LastEditTime: 2025-03-04 09:26:33
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -45,6 +45,7 @@ export default {
   'home.deposit.deposit': '存款',
 
   'home.withdraw.withdraw': '提取',
+  'home.withdraw.tips': '您提取的金額不能超過您的餘額',
 
   'home.request.amountRequesting': '請輸入您想要請求的金額',
   'home.request.amountToRequest': '請求的金額',
@@ -113,4 +114,11 @@ export default {
   'home.qr.save': '保存',
   'home.qr.share': '分享',
   'home.qr.invalid': '二維碼無效，請掃描ezgg提供的二維碼',
+
+  'home.deposit.selectWallet': '選擇錢包',
+  'home.deposit.noWalletsFound': '未找到外部錢包',
+  'home.deposit.walletDetectionError': '檢測錢包失敗',
+  'home.deposit.walletSelected': '已選擇錢包：{{wallet}}',
+  'home.deposit.walletConnectionError': '連接錢包失敗',
+  'common.cancel': '取消'
 };

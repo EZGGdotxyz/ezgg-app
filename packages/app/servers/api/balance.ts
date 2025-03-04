@@ -41,6 +41,8 @@ export async function getBalanceFindBalance(
   }>('/member/balance/find-balance', {
     method: 'GET',
     params: {
+      // currency has a default value: USD
+      currency: 'USD',
       ...params,
     },
     ...(options || {}),
@@ -86,6 +88,8 @@ export async function getBalanceFindBalance2(
   }>('/member/balance/find-balance', {
     method: 'GET',
     params: {
+      // currency has a default value: USD
+      currency: 'USD',
       ...params,
     },
     ...(options || {}),
@@ -134,6 +138,8 @@ export async function getBalanceListBalance(
   }>('/member/balance/list-balance', {
     method: 'GET',
     params: {
+      // currency has a default value: USD
+      currency: 'USD',
       ...params,
     },
     ...(options || {}),
@@ -182,6 +188,8 @@ export async function getBalanceListBalance2(
   }>('/member/balance/list-balance', {
     method: 'GET',
     params: {
+      // currency has a default value: USD
+      currency: 'USD',
       ...params,
     },
     ...(options || {}),

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 22:31:41
+ * @LastEditTime: 2025-03-03 23:37:05
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/amount/index.tsx
  */
 import {
@@ -61,7 +61,7 @@ const AmountScreen = ({type}: any) => {
       toast.show(type === 'send' ? t('home.send.amountToSend.tips') : t('home.request.amountToRequest.tips'));
       return;
     }
-    if (type === 'send' && Number(inputValue) > Number(currencyData?.token?.tokenAmount)) {
+    if (type === 'send' && Number(inputValue) > Number(currencyData?.tokenAmount)) {
       toast.show(t('home.send.amountToSend.tips2'));
       return;
     }
@@ -93,7 +93,7 @@ const AmountScreen = ({type}: any) => {
 
   return (
     <PermissionPage>
-      <AppHeader2 title={t('screen.home.amount')} fallbackUrl="/" />
+      <AppHeader2 title={type === 'send' ? t('screen.home.amount') : t('screen.home.amountRequesting')} fallbackUrl="/" />
       <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
         <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
         <YStack w="100%" mb={appScale(24)}>
@@ -132,15 +132,17 @@ const AmountScreen = ({type}: any) => {
             </SizableText>
           </XStack>
         </YStack>
-        <XStack mb={appScale(24)} h={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+        {type === 'send' && (
+          <XStack mb={appScale(24)} h={appScale(24)} w="100%" ai={'center'} jc={'center'}>
           {currencyData?.tokenAmount && (
             <SizableText h={appScale(24)} lh={appScale(24)} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>{`${t(
               'home.balance',
             )}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
               currencyData?.chainName
             })`}</SizableText>
-          )}
-        </XStack>
+            )}
+          </XStack>
+        )}
 
         <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'} borderTopWidth={1} borderColor={'#F2F2F2'}>
           <AppButton isLoading={buttonLoading} onPress={submit}>

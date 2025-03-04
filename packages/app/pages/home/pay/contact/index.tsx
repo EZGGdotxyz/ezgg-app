@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 22:29:32
+ * @LastEditTime: 2025-03-03 22:42:55
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/index.tsx
  */
 import {
@@ -159,10 +159,10 @@ const SendToScreen = ({isRefresh, type}: any) => {
   return (
     <PermissionPage>
       <AppHeader2
-        title={t('screen.home.sendTo')}
+        title={type === 'send' ? t('screen.home.sendTo') : t('screen.home.requestFrom')}
         onBack={() => {
           dispatch.user.updateState({payLinkData: {}});
-          push('/home');
+          push('/');
         }}
         isQr={true}
         type={type}
