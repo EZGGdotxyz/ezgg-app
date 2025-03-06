@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 14:49:55
+ * @LastEditTime: 2025-03-06 13:43:03
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/MyQrCodePopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -107,7 +107,7 @@ const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible, se
               includeMargin={false}
               renderAs="svg" // 必须指定 SVG 模式
             /> */}
-            <QrCode size={appScale(334)} url={`${ExternalLinkData.webPageHome}/explore/=${userId}`} />
+            <QrCode size={appScale(334)} url={`${ExternalLinkData.webPageHome}/explore/${userId}`} />
           </XStack>
         </YStack>
         <XStack

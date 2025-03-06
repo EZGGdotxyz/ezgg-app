@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-01-10 16:44:53
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-08-05 10:54:20
- * @FilePath: /snapx-nfc-app-merchants/apps/next/next.config.js
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-03-06 17:13:29
+ * @FilePath: /ezgg-app/apps/next/next.config.js
  */
 /** @type {import('next').NextConfig} */
 const {withTamagui} = require('@tamagui/next-plugin');
@@ -60,7 +60,7 @@ module.exports = function () {
       ignoreBuildErrors: true,
     },
     output: 'export',
-    distDir: 'merchant_mobile',
+    distDir: 'mobile',
     // assetPrefix: '/mobile', //加前缀
     // basePath: '/mobile', //node
     modularizeImports: {

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 11:14:18
+ * @LastEditTime: 2025-03-06 14:36:26
  * @FilePath: /ezgg-app/packages/app/provider/index.tsx
  */
 import {CustomToast, TamaguiProvider, TamaguiProviderProps, ToastProvider, config} from '@my/ui';
@@ -20,26 +20,17 @@ export function Provider({children, ...rest}: Omit<TamaguiProviderProps, 'config
 
   return (
     <ReduxProvider store={store}>
-      <WagmiProvider config={wagmiConfig}>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider config={wagmiConfig}>
           <TamaguiProvider config={config} disableInjectCSS defaultTheme={'light'} {...rest}>
-            <ToastProvider
-              swipeDirection="horizontal"
-              duration={2000}
-              native={
-                [
-                  /* uncomment the next line to do native toasts on mobile. NOTE: it'll require you making a dev build and won't work with Expo Go */
-                  // 'mobile'
-                ]
-              }
-            >
+            <ToastProvider swipeDirection="horizontal" duration={2000}>
               <AppPage>{children}</AppPage>
               <CustomToast />
               <ToastViewport />
             </ToastProvider>
           </TamaguiProvider>
-        </QueryClientProvider>
-      </WagmiProvider>
+        </WagmiProvider>
+      </QueryClientProvider>
     </ReduxProvider>
   );
 }

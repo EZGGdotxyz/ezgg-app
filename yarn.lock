@@ -4426,18 +4426,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@privy-io/api-base@npm:1.4.3, @privy-io/api-base@npm:^1.4.3":
-  version: 1.4.3
-  resolution: "@privy-io/api-base@npm:1.4.3"
+"@privy-io/api-base@npm:1.4.4, @privy-io/api-base@npm:^1.4.4":
+  version: 1.4.4
+  resolution: "@privy-io/api-base@npm:1.4.4"
   dependencies:
     zod: "npm:^3.21.4"
-  checksum: 56973e63eea649d46614833f4ed122180345e654bbe46bd45fd324dd0775be40660aa4d08e69587c96779f4a4369acb8eba9557f0d9a3d612b94d9bb13435d76
+  checksum: edd297a0839a968a69bd668807cae199ed0fa5d4a51e1fb085c4dfd4119bad0cd6ce9dd4a31182d28aac9e63bcfad49f8908a0c7df79c2eb546689cc7e16f081
   languageName: node
   linkType: hard
 
-"@privy-io/js-sdk-core@npm:0.44.1":
-  version: 0.44.1
-  resolution: "@privy-io/js-sdk-core@npm:0.44.1"
+"@privy-io/js-sdk-core@npm:0.45.0":
+  version: 0.45.0
+  resolution: "@privy-io/js-sdk-core@npm:0.45.0"
   dependencies:
     "@ethersproject/abstract-signer": "npm:^5.7.0"
     "@ethersproject/bignumber": "npm:^5.7.0"
@@ -4445,8 +4445,8 @@ __metadata:
     "@ethersproject/providers": "npm:^5.7.2"
     "@ethersproject/transactions": "npm:^5.7.0"
     "@ethersproject/units": "npm:^5.7.0"
-    "@privy-io/api-base": "npm:^1.4.3"
-    "@privy-io/public-api": "npm:2.18.8"
+    "@privy-io/api-base": "npm:^1.4.4"
+    "@privy-io/public-api": "npm:2.19.0"
     eventemitter3: "npm:^5.0.1"
     fetch-retry: "npm:^5.0.6"
     jose: "npm:^4.15.5"
@@ -4462,26 +4462,26 @@ __metadata:
       optional: true
     viem:
       optional: true
-  checksum: 6a4d62c223446e24601e1611b5592aa5240cdff31ce2f94479bc55fe25b6be669e0524d0d5cd3c58f0db58efce73d452b2153b2f041c03008718ed67dfda94e0
+  checksum: 252a33e1c5a048882aeec782b7706dc4567035ac9e76bced64f72cd4b07f8bb5feccaaaea6ef213ee245cd52dbd9bbb9e60c32be23b1a24643c2bdf128156ffb
   languageName: node
   linkType: hard
 
-"@privy-io/public-api@npm:2.18.8":
-  version: 2.18.8
-  resolution: "@privy-io/public-api@npm:2.18.8"
+"@privy-io/public-api@npm:2.19.0":
+  version: 2.19.0
+  resolution: "@privy-io/public-api@npm:2.19.0"
   dependencies:
-    "@privy-io/api-base": "npm:1.4.3"
+    "@privy-io/api-base": "npm:1.4.4"
     bs58: "npm:^5.0.0"
     libphonenumber-js: "npm:^1.10.31"
     viem: "npm:^2"
     zod: "npm:^3.22.4"
-  checksum: 3b47be45804d34e161cb50b39560a7c64bcda2d2da5d00245533f8218e265f89e5ea3a7971ba753ba8f45afeb6b3393dd59d61fb5e5de655d83850f15c7e68f8
+  checksum: f6800b2716eccbc3fcd14a2a448bd15188b716f0a2ac58b1a1d5dca97d4d5ee43a99fd5cdca4c499d0e416ba8196a9ed3511d7a1c62c43b32152572e962c26c0
   languageName: node
   linkType: hard
 
-"@privy-io/react-auth@npm:^2.4.4":
-  version: 2.4.4
-  resolution: "@privy-io/react-auth@npm:2.4.4"
+"@privy-io/react-auth@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "@privy-io/react-auth@npm:2.6.1"
   dependencies:
     "@coinbase/wallet-sdk": "npm:4.3.0"
     "@floating-ui/react": "npm:^0.26.22"
@@ -4489,7 +4489,7 @@ __metadata:
     "@heroicons/react": "npm:^2.1.1"
     "@marsidev/react-turnstile": "npm:^0.4.1"
     "@metamask/eth-sig-util": "npm:^6.0.0"
-    "@privy-io/js-sdk-core": "npm:0.44.1"
+    "@privy-io/js-sdk-core": "npm:0.45.0"
     "@simplewebauthn/browser": "npm:^9.0.1"
     "@solana/wallet-adapter-base": "npm:^0.9.23"
     "@solana/wallet-standard-wallet-adapter-base": "npm:^1.1.2"
@@ -4516,7 +4516,7 @@ __metadata:
     stylis: "npm:^4.3.4"
     tinycolor2: "npm:^1.6.0"
     uuid: "npm:>=8 <10"
-    viem: "npm:^2.21.9"
+    viem: "npm:^2.23.5"
     zustand: "npm:^5.0.0"
   peerDependencies:
     "@abstract-foundation/agw-client": ^1.0.0
@@ -4531,7 +4531,19 @@ __metadata:
       optional: true
     permissionless:
       optional: true
-  checksum: 6e846829bdeeadf9c438e71ee1aa1f8c2733c7449f417096a3c5f88e183e1abecc260e1cbbbd80b61e198e9175307f469f2d1df674e95bc39ba2aa95acc1c67f
+  checksum: 785e2ba32e8d2bf14c30fed516d5b55bfe89d8a10b827fbe11e3064b66290114abf42168883eb01b94aac8af630ee2994f6ff4942d061fa304904ea1ae9f2190
+  languageName: node
+  linkType: hard
+
+"@privy-io/wagmi@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@privy-io/wagmi@npm:1.0.3"
+  peerDependencies:
+    "@privy-io/react-auth": ^2.0.0
+    react: ">=18"
+    viem: ^2
+    wagmi: ^2.14.11
+  checksum: ffa6a8f68d911282ed5bc75c5d0cfea118b6d57a441d1350039dae3fc21a57124475c426a4b2d28b146d77ad94c94598a4f83d69a087bf5b511f3ed75e85cb8a
   languageName: node
   linkType: hard
 
@@ -8033,21 +8045,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.66.4":
-  version: 5.66.4
-  resolution: "@tanstack/query-core@npm:5.66.4"
-  checksum: 2e646aa72f74981616c153a7f7fe335acc3697f4501a6279bbee12b434de94fe6d686cee5bc9a48107bd54fa5e7c62f630cf996b601680031447c716e8cfdc1f
+"@tanstack/query-core@npm:5.67.1":
+  version: 5.67.1
+  resolution: "@tanstack/query-core@npm:5.67.1"
+  checksum: 4225d671db8e76e8f09c869c7218eabf66d640037cffe4fca240296e1e9352bd24bd689b9c2cde212ab27902b68173cf207d325854e6e3f4bb65f697d5a3d84e
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.66.9":
-  version: 5.66.9
-  resolution: "@tanstack/react-query@npm:5.66.9"
+"@tanstack/react-query@npm:^5.67.1":
+  version: 5.67.1
+  resolution: "@tanstack/react-query@npm:5.67.1"
   dependencies:
-    "@tanstack/query-core": "npm:5.66.4"
+    "@tanstack/query-core": "npm:5.67.1"
   peerDependencies:
     react: ^18 || ^19
-  checksum: c30b7074d55f4143979550a54fe5fdcf140460bbfadebb9754ca447fa2eee45c6732e1ad30a786fcdbec86dbf90e9372c5715b70e99b987953331b0b03beeec6
+  checksum: 6031a964e0a28acfaeb40441b6ee8fccccb868c11f394608949571bae95bb6bc97b4f4a060d66ca930081bbbdf101be0bec2031bd6000ba4bb253c8e1dc615bf
   languageName: node
   linkType: hard
 
@@ -13744,17 +13756,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-clipboard@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "expo-clipboard@npm:7.0.1"
-  peerDependencies:
-    expo: "*"
-    react: "*"
-    react-native: "*"
-  checksum: 48c56d5bb51c78e0d874fb0fb672c9be95f1724995f1b722427899d61c573ea7a1f871b8a643a7b38f9c1abc1329c00ad45458706982c41575ca95599603c697
-  languageName: node
-  linkType: hard
-
 "expo-clipboard@npm:~6.0.3":
   version: 6.0.3
   resolution: "expo-clipboard@npm:6.0.3"
@@ -18063,13 +18064,14 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.18.9"
     "@manypkg/cli": "npm:^0.19.1"
-    "@privy-io/react-auth": "npm:^2.4.4"
+    "@privy-io/react-auth": "npm:^2.6.1"
+    "@privy-io/wagmi": "npm:^1.0.3"
     "@react-google-maps/api": "npm:^2.19.3"
     "@react-native-async-storage/async-storage": "npm:1.18.2"
     "@shopify/flash-list": "npm:1.6.4"
     "@solana/spl-token": "npm:^0.3.9"
     "@solana/web3.js": "npm:^1.87.6"
-    "@tanstack/react-query": "npm:^5.66.9"
+    "@tanstack/react-query": "npm:^5.67.1"
     "@tanstack/react-virtual": "npm:^3.0.1"
     "@types/lodash": "npm:^4"
     "@web3icons/react": "npm:^4.0.10"
@@ -18078,7 +18080,7 @@ __metadata:
     eslint: "npm:^8.21.0"
     ethers: "npm:^6.9.0"
     expo-camera: "npm:~15.0.14"
-    expo-clipboard: "npm:^7.0.1"
+    expo-clipboard: "npm:~6.0.3"
     expo-linear-gradient: "npm:~13.0.2"
     expo-location: "npm:~17.0.1"
     expo-web-browser: "npm:~13.0.3"
@@ -23783,7 +23785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"viem@npm:^2, viem@npm:^2.21.9":
+"viem@npm:^2":
   version: 2.23.3
   resolution: "viem@npm:2.23.3"
   dependencies:
@@ -23801,6 +23803,27 @@ __metadata:
     typescript:
       optional: true
   checksum: 373c9ad7b3a9733ee9da9d84944b7b8522ed2e25b2b18978606ed59b79b5e4a52f36e9dc8fd0d6d9dc5d587ec51bd308af81fa9ff65b2078f42fc4fce8ccec95
+  languageName: node
+  linkType: hard
+
+"viem@npm:^2.23.5":
+  version: 2.23.6
+  resolution: "viem@npm:2.23.6"
+  dependencies:
+    "@noble/curves": "npm:1.8.1"
+    "@noble/hashes": "npm:1.7.1"
+    "@scure/bip32": "npm:1.6.2"
+    "@scure/bip39": "npm:1.5.4"
+    abitype: "npm:1.0.8"
+    isows: "npm:1.0.6"
+    ox: "npm:0.6.7"
+    ws: "npm:8.18.0"
+  peerDependencies:
+    typescript: ">=5.0.4"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: e1fecd516dfc8db4e8976c82e835f20f5272d6e5662bee39c65456add4386d9e1f906794f7fe46caa3886aae3038c8264de39a47fabd7f32bd99cdd98b98df0c
   languageName: node
   linkType: hard
 

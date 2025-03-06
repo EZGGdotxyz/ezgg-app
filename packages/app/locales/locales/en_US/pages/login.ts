@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 16:38:06
+ * @LastEditTime: 2025-03-06 13:27:59
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/login.ts
  */
 export default {
@@ -9,6 +9,9 @@ export default {
   'login.loginTips1': 'Sign in Successful!',
   'login.loginTips2': 'Please wait...',
   'login.loginTips3': 'You will be directed to the homepage.',
+  'login.loginTips4': 'You will be directed to the {{type}} page',
+  'login.type./claim': 'claim',
+  'login.type./requesting': 'requesting',
 
   'login.loginAgreement1':
     'You consent to receive account notificationsfrom Ezgg. Text & data rates may apply.Message frequency varies. Reply STOP tounsubscribe. See',

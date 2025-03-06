@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 13:28:06
+ * @LastEditTime: 2025-03-06 13:34:58
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -69,20 +69,15 @@ const TakeScreen = (any) => {
   const {t} = useTranslation();
   const {makeRequest} = useRequest();
   const dispatch = useDispatch<Dispatch>();
-  const [{userInfo}] = useRematchModel('user');
+  const [{userInfo, isLogin}] = useRematchModel('user');
 
   const [inputValue, setInputValue] = React.useState('');
   const {params} = useParams();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [buttonLoading, setButtonLoading] = React.useState(false);
   const toast = useToastController();
-  const {getClientForChain} = useSmartWallets();
 
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [orderData, setOrderData] = React.useState<any>();
-
-  console.log('🚀 ~ TakeScreen ~ orderData:', orderData);
-
   const {back, push, replace} = useRouter();
 
   const {onSendPayLinkSubmit, onRequestSubmit} = useTransaction();
@@ -152,6 +147,28 @@ const TakeScreen = (any) => {
     );
     if (res?.code === '0') {
       const _orderData = res?.data;
+      if (_orderData?.transactionStatus === 'ACCEPTED') {
+        toast.show(
+          _orderData?.transactionCategory === 'SEND'
+            ? t('tips.error.transactionSuccess')
+            : t('tips.error.transactionSuccess2'),
+          {
+            duration: 3000,
+          },
+        );
+        return setTimeout(() => {
+          replace('/');
+          window.history.pushState(null, '', '/');
+        }, 500);
+      } else if (_orderData?.transactionStatus === 'DECLINED') {
+        toast.show(t('tips.error.transactionDeclined'), {
+          duration: 3000,
+        });
+        return setTimeout(() => {
+          replace('/');
+          window.history.pushState(null, '', '/');
+        }, 500);
+      }
       setOrderData({
         ..._orderData,
       });
@@ -166,7 +183,7 @@ const TakeScreen = (any) => {
   }, [params]);
 
   return (
-    <PermissionPage>
+    <PermissionPage isHomePage={true}>
       <AppHeader2
         isLogo
         onBack={() => {
@@ -271,7 +288,15 @@ const TakeScreen = (any) => {
         <XStack w="100%" mb={appScale(24)}>
           <AppButton
             onPress={() => {
-              orderData?.transactionCategory === 'SEND' ? handleSubmit('SEND') : handleSubmit('REQUEST');
+              if (!isLogin) {
+                push(
+                  `/login?redirect=/${orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'}&code=${
+                    params?.code
+                  }`,
+                );
+              } else {
+                orderData?.transactionCategory === 'SEND' ? handleSubmit('SEND') : handleSubmit('REQUEST');
+              }
             }}
           >
             {orderData?.transactionCategory === 'SEND' ? t('home.take.claim') : t('home.send')}

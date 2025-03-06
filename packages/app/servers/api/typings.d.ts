@@ -92,7 +92,8 @@ declare namespace API {
       | 'WITHDRAW'
       | 'PAY_LINK'
       | 'QR_CODE'
-      | 'REQUEST_LINK';
+      | 'REQUEST_LINK'
+      | 'REQUEST_QR_CODE';
     /** 收款人会员ID */
     receiverMemberId?: number;
     /** 交易哈希 */

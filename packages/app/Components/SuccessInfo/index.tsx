@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 15:21:29
+ * @LastEditTime: 2025-03-06 16:16:12
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -36,6 +36,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
       const infoDataDefault = {
         sent: {
           title: orderData?.name ? `${t('home.order.sentTo')} @${orderData?.name}` : '',
+          icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
@@ -44,6 +45,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
         },
         qrCode: {
           title: orderData?.name ? `${t('home.order.sentTo')} @${orderData?.name}` : '',
+          icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
@@ -51,6 +53,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           ],
         },
         request: {
+          title: '',
           icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
@@ -62,6 +65,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           ],
         },
         requestQrCode: {
+          title: '',
           icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
@@ -81,6 +85,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           ],
         },
         deposit: {
+          title: '',
           icon: 'topUp',
           infoList: [
             createTransactionInfoItem(t('home.order.youTopUp'), createAmountDisplay(orderData)),
@@ -90,7 +95,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
       };
       setInfoData({
         infoList: infoDataDefault[type].infoList,
-        title: infoDataDefault[type].title || '',
+        title: infoDataDefault[type]?.title || '',
         icon: infoDataDefault[type].icon,
         userName:
           orderData?.transactionType === 'SEND' || orderData?.transactionType === 'REQUEST'
@@ -117,14 +122,14 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
             : '0'}
         </SizableText>
       </XStack>
-      {infoData?.userName && (
+      {infoData?.userName!=='' && (
         <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
           <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#616161'} fontWeight={'500'}>
             {infoData?.userName}
           </SizableText>
         </XStack>
       )}
-      {infoData?.title && (
+      {infoData?.title!=='' && (
         <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
           <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#616161'} fontWeight={'500'}>
             {infoData?.title}

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 22:03:38
+ * @LastEditTime: 2025-03-06 15:47:32
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/components/DepositButton/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController} from '@my/ui';
@@ -30,66 +30,6 @@ import {
 } from 'app/servers/api/transactionHistory';
 import {useTransaction} from 'app/hooks/useTransaction';
 
-// USDT 合约 ABI
-const USDT_ABI = [
-  {
-    name: 'transfer',
-    type: 'function',
-    stateMutability: 'nonpayable',
-    inputs: [
-      {name: 'recipient', type: 'address'},
-      {name: 'amount', type: 'uint256'},
-    ],
-    outputs: [{name: '', type: 'bool'}],
-  },
-  {
-    name: 'balanceOf',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [{name: 'account', type: 'address'}],
-    outputs: [{name: '', type: 'uint256'}],
-  },
-] as const;
-
-// USDT 合约地址
-const USDT_ADDRESS = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as const;
-
-// 链 ID 配置
-const CHAIN_IDS = {
-  BASE: 8453,
-  BASE_GOERLI: 84531,
-  OPTIMISM: 10,
-  OPTIMISM_GOERLI: 420,
-  ARBITRUM: 42161,
-  ARBITRUM_GOERLI: 421613,
-  POLYGON: 137,
-  POLYGON_MUMBAI: 80001,
-  BSC: 56,
-  BSC_TESTNET: 97,
-  ETHEREUM: 1,
-  GOERLI: 5,
-  SEPOLIA: 11155111,
-} as const;
-
-// TokenBalance 组件
-const TokenBalance = ({tokenAddress, userAddress}) => {
-  const {
-    data: balance,
-    isLoading,
-    error,
-  } = useReadContract({
-    address: USDT_ADDRESS,
-    abi: USDT_ABI,
-    functionName: 'balanceOf',
-    args: [userAddress],
-  });
-
-  if (isLoading) return '...';
-  if (error) return <div>0</div>;
-
-  return <div>余额: {balance?.toString() || '0'}</div>;
-};
-
 // 接收地址
 const recipient = '0x902765D3796F1BF0C18fB864eeedb4f17779f877' as const;
 
@@ -114,6 +54,7 @@ const DepositButton: React.FC<any> = ({setIsLoading, inputValue, currencyData, s
   const [{userInfo}] = useRematchModel('user');
   const {makeRequest} = useRequest();
   const {onDeposit} = useTransaction();
+  const {disconnect} = useDisconnect();
 
   // USDT 转账合约调用
   const {writeContract, data: hash} = useWriteContract();
@@ -159,10 +100,8 @@ const DepositButton: React.FC<any> = ({setIsLoading, inputValue, currencyData, s
       toast.show(t('home.send.amountToSend.tips'));
       return;
     }
-    if (Number(inputValue) > Number(currencyData?.tokenAmount)) {
-      toast.show(t('home.send.amountToSend.tips2'));
-      return;
-    }
+
+    return setIsShow(true);
 
     try {
       if (!isConnected) {

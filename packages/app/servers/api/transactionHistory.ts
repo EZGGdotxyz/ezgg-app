@@ -21,7 +21,8 @@ export async function postTransactionHistoryCreateTransactionHistory(
       | 'WITHDRAW'
       | 'PAY_LINK'
       | 'QR_CODE'
-      | 'REQUEST_LINK';
+      | 'REQUEST_LINK'
+      | 'REQUEST_QR_CODE';
     /** 付款人 - 会员id */
     senderMemberId?: number;
     /** 收款人 - 会员id */
@@ -45,7 +46,8 @@ export async function postTransactionHistoryCreateTransactionHistory(
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -131,7 +133,8 @@ export async function postTransactionHistoryCreateTransactionHistory2(
       | 'WITHDRAW'
       | 'PAY_LINK'
       | 'QR_CODE'
-      | 'REQUEST_LINK';
+      | 'REQUEST_LINK'
+      | 'REQUEST_QR_CODE';
     /** 付款人 - 会员id */
     senderMemberId?: number;
     /** 收款人 - 会员id */
@@ -155,7 +158,8 @@ export async function postTransactionHistoryCreateTransactionHistory2(
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -242,7 +246,8 @@ export async function postTransactionHistoryDeclineTransactionHistory(
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -329,7 +334,8 @@ export async function postTransactionHistoryDeclineTransactionHistory2(
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -415,7 +421,8 @@ export async function getTransactionHistoryFindTransactionHistoryId(
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -502,7 +509,8 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -589,7 +597,8 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -676,7 +685,8 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -767,7 +777,8 @@ export async function getTransactionHistoryPageTransactionHistory(
           | 'WITHDRAW'
           | 'PAY_LINK'
           | 'QR_CODE'
-          | 'REQUEST_LINK';
+          | 'REQUEST_LINK'
+          | 'REQUEST_QR_CODE';
         business?: 'LINK' | 'VAULT' | 'TRANSFER';
         transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
         platform?: 'ETH' | 'SOLANA';
@@ -864,7 +875,8 @@ export async function getTransactionHistoryPageTransactionHistory2(
           | 'WITHDRAW'
           | 'PAY_LINK'
           | 'QR_CODE'
-          | 'REQUEST_LINK';
+          | 'REQUEST_LINK'
+          | 'REQUEST_QR_CODE';
         business?: 'LINK' | 'VAULT' | 'TRANSFER';
         transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
         platform?: 'ETH' | 'SOLANA';
@@ -960,7 +972,8 @@ export async function postTransactionHistoryUpdateTransactionHash(
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -1049,7 +1062,8 @@ export async function postTransactionHistoryUpdateTransactionHash2(
         | 'WITHDRAW'
         | 'PAY_LINK'
         | 'QR_CODE'
-        | 'REQUEST_LINK';
+        | 'REQUEST_LINK'
+        | 'REQUEST_QR_CODE';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';

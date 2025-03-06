@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 12:58:26
+ * @LastEditTime: 2025-03-06 13:21:06
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {YStack, SizableText, AppImage, Button} from '@my/ui';
@@ -18,11 +18,14 @@ import useUser from 'app/hooks/useUser';
 import {postUserUpdateMember} from 'app/servers/api/member';
 import {View} from 'react-native';
 import useInit from 'app/hooks/useInit';
+import {createParam} from 'solito';
+const {useParams} = createParam<any>();
 
 const LoginScreen = () => {
   const {t} = useTranslation();
   const {ready} = usePrivy();
   const {push} = useRouter();
+  const {params} = useParams();
 
   const {_getInfrastructureListBlockchain} = useInit();
   const {initLogin, initUserInfo, onLink} = useUser();
@@ -86,20 +89,20 @@ const LoginScreen = () => {
           await refreshUser();
           setTimeout(async () => {
             setModalVisible(false);
-          }, 1500);
-          _getInfrastructureListBlockchain();
-          onLink();
+            _getInfrastructureListBlockchain();
+            onLink();
+          });
         } catch (error) {
           console.error('更新用户信息失败:', error);
           setTimeout(async () => {
             setModalVisible(false);
-          }, 1500);
+          });
         }
       } catch (error) {
         console.error('处理成功回调失败:', error);
         setTimeout(async () => {
           setModalVisible(false);
-        }, 1500);
+        });
       }
     },
     [onLink],
@@ -167,6 +170,7 @@ const LoginScreen = () => {
         </View>
       </YStack>
       <SuccessPopup
+        redirect={params?.redirect}
         handleSuccess={handleSuccess}
         accountForm={accountForm}
         setAccountForm={setAccountForm}

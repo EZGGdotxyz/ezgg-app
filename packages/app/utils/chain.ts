@@ -1,9 +1,10 @@
 /*
  * @Date: 2025-03-03 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 23:08:30
+ * @LastEditTime: 2025-03-06 14:24:42
  * @FilePath: /ezgg-app/packages/app/utils/chain.ts
  */
+import {getAddress} from 'viem';
 import {bsc, polygon, base, baseSepolia, polygonAmoy, bscTestnet} from 'wagmi/chains';
 
 interface ChainInfo {
@@ -103,12 +104,49 @@ export function getExplorerUrl(chainId?: any, hash?: string): string {
     case 84532:
       return `https://sepolia.basescan.org/tx/${hash}`;
     // tron
-    case 100001:
+    case 201:
       return `https://tronscan.org/#/transaction/${hash}`;
     // solana
-    case 9999:
+    case 501:
       return `https://solscan.io/tx/${hash}`;
     default:
       return '';
   }
 }
+
+export const validateAddress = (address: string, chainId: number) => {
+  try {
+    // 根据不同的链ID进行验证
+    switch (chainId) {
+      case 1: // Ethereum Mainnet
+      case 5: // Goerli
+      case 137: // Polygon
+      case 80001: // Mumbai
+      case 80002: // Polygon Amoy
+      case 84532: // Base Sepolia
+      case 8453: // Base
+        // 检查 EVM 兼容链地址格式
+        const validAddress = getAddress(address);
+        return validAddress.startsWith('0x') && validAddress.length === 42;
+
+      case 56: // BSC
+      case 97: // BSC Testnet
+        // 检查 EVM 兼容链地址格式
+        const validAddress2 = getAddress(address);
+        return validAddress2.startsWith('0x') && validAddress2.length === 42;
+
+      case 501: // Solana
+        // Solana 地址是 base58 编码的 32 字节
+        return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
+
+      case 201: // Tron
+        // Tron 地址以 T 开头，长度为 34
+        return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(address);
+
+      default:
+        return false;
+    }
+  } catch (error) {
+    return false;
+  }
+};

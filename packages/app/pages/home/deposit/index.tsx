@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 21:27:56
+ * @LastEditTime: 2025-03-06 16:45:21
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -16,11 +16,11 @@ import {
   useToastController,
   Button,
 } from '@my/ui';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
-import {appScale} from 'app/utils';
+import {appScale, convertAmountToTokenDecimals, formatTokenAmount, truncateAddress} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
@@ -28,8 +28,21 @@ import ConnectorsPopup from 'app/Components/ConnectorsPopup';
 import AppLoading from 'app/Components/AppLoading';
 import DepositButton from './components/DepositButton';
 import {useFundWallet} from '@privy-io/react-auth';
-
-const depositToken = '0x52435264BFDB';
+import {useRematchModel} from 'app/store/model';
+import CopyButton from 'app/Components/CopyButton';
+import {erc20Abi, type Hex, parseEther, parseUnits} from 'viem';
+import {
+  useAccount,
+  useChainId,
+  useDisconnect,
+  useReadContract,
+  useSendTransaction,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi';
+import useRequest from 'app/hooks/useRequest';
+import {postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
+import {useTransaction} from 'app/hooks/useTransaction';
 
 // 存款
 const DepositScreen = () => {
@@ -37,6 +50,9 @@ const DepositScreen = () => {
   const [inputValue, setInputValue] = React.useState('');
   const [showKeyboard, setShowKeyboard] = React.useState(false);
   const [currencyData, setCurrencyData] = React.useState<any>();
+  const [{userInfo}] = useRematchModel('user');
+  const {makeRequest} = useRequest();
+  const {onDeposit} = useTransaction();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const {back, push} = useRouter();
@@ -52,27 +68,124 @@ const DepositScreen = () => {
     e.stopPropagation();
     setShowKeyboard(true);
   };
+  const {address} = useAccount();
 
-  // const {fundWallet} = useFundWallet({
-  //   onUserExited({balance}: any) {
-  //     console.log('🚀 ~ onUserExited ~ balance:', balance);
+  const {data: balanceData} = useReadContract({
+    address: currencyData?.token?.address as `0x${string}`,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: [address as `0x${string}`],
+  });
 
-  //     if (balance < 1000n) {
-  //       // router.push('/insufficient-funds');
-  //     } else {
-  //       // router.push('/dashboard');
-  //     }
-  //   },
-  // });
+  const [isSubmit, setIsSubmit] = useState(false);
 
-  // const test = async () => {
-  //   console.log('🚀 ~ test ~ currencyData?.token?.chainId:', currencyData?.token?.chainId);
-  //   await fundWallet('0xEd9a084Fb713195B19Db2176719eAa5F6F5fd453', {
-  //     chain: base,
-  //     amount: '1',
-  //     // asset: {erc20: currencyData?.token?.address},
-  //   });
-  // };
+  useEffect(() => {
+    if (balanceData && isSubmit) {
+      const _tokenBalance = formatTokenAmount(balanceData + '', currencyData?.token?.tokenDecimals);
+      if (Number(inputValue) <= Number(_tokenBalance)) {
+        onDepositSubmit();
+      } else {
+        setIsSubmit(false);
+        toast.show(t('tips.error.deposit.insufficientFunds'));
+      }
+    }
+  }, [balanceData, currencyData?.token?.decimals, inputValue, isSubmit]);
+
+  // USDT 转账合约调用
+  const {writeContract, data: hash, isError: isWriteContractError} = useWriteContract();
+
+  // 监听交易状态
+  const {isSuccess: isConfirmed} = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const [transaction, setTransaction] = useState<any>(null);
+
+  useEffect(() => {
+    if (isWriteContractError) {
+      setIsLoading(false);
+      toast.show(t('tips.error.deposit.failed'));
+    }
+  }, [isWriteContractError]);
+
+  useEffect(() => {
+    if (isConfirmed) {
+      handleSubmit();
+    }
+  }, [isConfirmed, transaction]);
+
+  const handleSubmit = async () => {
+    // 更新交易记录的交易哈希字段
+    const res: any = await makeRequest(
+      postTransactionHistoryUpdateTransactionHash({
+        id: transaction?.id,
+        transactionCode: transaction?.transactionCode,
+        transactionHash: hash || '',
+      }),
+    );
+    if (res?.data) {
+      setIsLoading(false);
+      push('/home/success?type=deposit&id=' + transaction?.id);
+    } else {
+      setIsLoading(false);
+      // setOrderData(transaction?.data);
+      // setIsSuccess(true);
+      // toast.show(t('tips.error.networkError'), {
+      //   duration: 3000,
+      //   // message: 'Just showing how toast works...',
+      // });
+    }
+  };
+
+  const onDepositSubmit = async () => {
+    try {
+      setIsLoading(true);
+      // 创建交易记录
+      const _amount = Number(convertAmountToTokenDecimals(inputValue, currencyData?.token?.tokenDecimals));
+
+      await onDeposit(
+        {
+          platform: currencyData?.token?.platform,
+          chainId: Number(currencyData?.token?.chainId),
+          tokenContractAddress: currencyData?.token?.address,
+          amount: _amount,
+          message: inputValue,
+          transactionCategory: 'DEPOSIT',
+          transactionType: 'DEPOSIT',
+          receiverMemberId: userInfo?.customMetadata?.id,
+        },
+        async (data) => {
+          setTransaction(data);
+          try {
+            // 调用 USDT 转账，指定链 ID
+            await writeContract({
+              address: currencyData?.token?.address,
+              abi: erc20Abi,
+              functionName: 'transfer',
+              args: [userInfo?.smartWallet?.address, BigInt(_amount)],
+              chainId: Number(currencyData?.token?.chainId),
+            });
+          } catch (error: any) {
+            console.log('🚀 ~ error:', error);
+
+            setIsLoading(false);
+            // 用户取消交易
+            if (error?.name === 'UserRejectedRequestError' || error?.code === 4001) {
+              toast.show(t('tips.error.deposit.userRejected'));
+            } else {
+              console.error('Transaction error:', error);
+              toast.show(t('tips.error.deposit.failed'));
+            }
+          }
+          console.log('🚀 ~ 123123:');
+        },
+      );
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Deposit error:', error);
+      toast.show(t('tips.error.deposit.failed'));
+    }
+  };
 
   return (
     <PermissionPage>
@@ -120,7 +233,7 @@ const DepositScreen = () => {
           <SizableText h={appScale(24)} lh={appScale(24)} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>{`${t(
             'home.balance',
           )}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
-            currencyData?.token?.chainName
+            currencyData?.chainName
           })`}</SizableText>
         </XStack>
 
@@ -145,27 +258,35 @@ const DepositScreen = () => {
             <XStack ai="center" jc={'center'} w="100%" mb={appScale(48)}>
               <SizableText ta={'center'} fontSize={'$5'} color={'#212121'} fow="600">
                 {t('home.deposit.sendTips', {
-                  value: depositToken,
-                  token: currencyData?.tokenSymbol,
+                  token: currencyData?.token?.tokenSymbol,
                   chain: currencyData?.chainName,
                 })}
               </SizableText>
             </XStack>
             <XStack ai="center" jc={'center'} w="100%" mb={appScale(24)}>
               <SizableText ta={'center'} fontSize={'$9'} color={'#212121'} fow="700" mr={'$4'}>
-                {depositToken}
+                {truncateAddress(userInfo?.smartWallet?.address)}
               </SizableText>
-              <AppImage
-                width={appScale(30)}
-                height={appScale(30)}
-                src={require(`app/assets/images/copy.png`)}
-                type="local"
-              />
+              <XStack ai={'center'} jc={'center'} ml={appScale(6)}>
+                <CopyButton unstyled text={userInfo?.smartWallet?.address}>
+                  <AppImage
+                    width={appScale(30)}
+                    height={appScale(30)}
+                    src={require('app/assets/images/copy.png')}
+                    type="local"
+                  />
+                </CopyButton>
+              </XStack>
             </XStack>
           </>
         )}
       </YStack>
-      <ConnectorsPopup modalVisible={isShow} setModalVisible={setIsShow} />
+      <ConnectorsPopup
+        setIsSubmit={setIsSubmit}
+        chainId={currencyData?.token?.chainId}
+        modalVisible={isShow}
+        setModalVisible={setIsShow}
+      />
       {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
       {isLoading && <AppLoading />}
     </PermissionPage>

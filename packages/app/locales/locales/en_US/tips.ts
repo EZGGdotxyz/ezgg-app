@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 15:02:59
+ * @LastEditTime: 2025-03-06 16:47:31
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -18,4 +18,19 @@ export default {
 
   'tips.explore.copy': 'Copy successful! ',
   'tips.error.networkError': 'Network error, please try again later',
+
+  'tips.error.transactionSuccess': 'This transaction has been claimed',
+  'tips.error.transactionSuccess2': 'This transaction has been paid',
+  'tips.error.transactionDeclined': 'This transaction has been declined',
+
+
+  'tips.error.cameraPermissionDenied': 'Need camera permission to scan QR code, please enable camera permission in settings',
+
+  'tips.error.withdraw.address.invalid': 'Invalid wallet address, please check the address format',
+
+  'tips.error.deposit.transactionError': 'Transaction failed, please try again',
+  'tips.error.deposit.insufficientFunds': 'Insufficient balance, please try again',
+  'tips.error.deposit.connectError': 'Connect wallet failed, please try again',
+  'tips.error.deposit.userRejected': 'You have cancelled the transaction',
+  'tips.error.deposit.failed': 'Transaction failed, please try again',
 };

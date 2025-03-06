@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 13:07:24
+ * @LastEditTime: 2025-03-06 13:44:32
  * @FilePath: /ezgg-app/packages/app/hooks/useUser.ts
  */
 import {Dispatch} from 'app/store';
@@ -33,9 +33,9 @@ export default function useUser() {
    * 处理登录后的路由跳转
    */
   const onLink = (): void => {
-    if (params?.type === 'sign' && params?.code) {
+    if ((params?.redirect === '/claim' || params?.redirect === '/requesting') && params?.code) {
       replace({
-        pathname: `/restaurant/sign/${params.code}`,
+        pathname: params?.redirect + '/' + params?.code,
       });
     } else {
       replace({

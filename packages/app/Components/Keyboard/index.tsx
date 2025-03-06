@@ -68,7 +68,7 @@ const Keyboard: React.FC<KeyboardProps> = ({onChange, maxLength = 12, value = ''
   };
 
   return (
-    <YStack w="100%" ai="center" p={appScale(12)} backgroundColor="#FAFAFA">
+    <YStack w="100%" ai="center" flexShrink={0} p={appScale(12)} backgroundColor="#FAFAFA">
       <XStack w="100%" flexWrap="wrap" jc="center">
         {keys.map((row, rowIndex) => (
           <XStack key={rowIndex} w="100%" jc="center">

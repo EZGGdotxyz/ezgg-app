@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 12:54:38
+ * @LastEditTime: 2025-03-06 14:05:44
  * @FilePath: /ezgg-app/packages/app/Components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -21,7 +21,6 @@ import React from 'react';
 export type CurrencyProps = {
   currencyData: any;
   setCurrencyData: (currency: any) => void;
-  updateCurrency: (currency: any) => void;
   setIsLoading: (isLoading: boolean) => void;
 };
 // 交易历史item

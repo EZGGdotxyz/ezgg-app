@@ -64,7 +64,8 @@ export async function getNotificationPageNotification(
             | 'WITHDRAW'
             | 'PAY_LINK'
             | 'QR_CODE'
-            | 'REQUEST_LINK';
+            | 'REQUEST_LINK'
+            | 'REQUEST_QR_CODE';
           business?: 'LINK' | 'VAULT' | 'TRANSFER';
           transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
           platform?: 'ETH' | 'SOLANA';
@@ -175,7 +176,8 @@ export async function getNotificationPageNotification2(
             | 'WITHDRAW'
             | 'PAY_LINK'
             | 'QR_CODE'
-            | 'REQUEST_LINK';
+            | 'REQUEST_LINK'
+            | 'REQUEST_QR_CODE';
           business?: 'LINK' | 'VAULT' | 'TRANSFER';
           transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
           platform?: 'ETH' | 'SOLANA';

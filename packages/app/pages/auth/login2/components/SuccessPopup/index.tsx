@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 13:05:09
+ * @LastEditTime: 2025-03-06 13:45:01
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -38,6 +38,7 @@ export type SuccessPopupProps = {
   isSetInfo: boolean;
   modalVisible: any;
   setModalVisible: (values) => void;
+  redirect: string;
 };
 
 const SuccessPopup: React.FC<any> = ({
@@ -47,6 +48,7 @@ const SuccessPopup: React.FC<any> = ({
   isSetInfo,
   modalVisible,
   setModalVisible,
+  redirect,
 }: SuccessPopupProps) => {
   const {t, i18n} = useTranslation();
   //加载状态
@@ -247,7 +249,11 @@ const SuccessPopup: React.FC<any> = ({
               color={'#212121'}
               fow={'400'}
             >
-              {t('login.loginTips3')}
+              {redirect
+                ? t('login.loginTips4', {
+                    type: redirect === '/claim' ? t('login.type./claim') : t('login.type./requesting'),
+                  })
+                : t('login.loginTips3')}
             </SizableText>
             <XStack>
               <ActivityIndicator size={'large'} color={PrimaryColor} />

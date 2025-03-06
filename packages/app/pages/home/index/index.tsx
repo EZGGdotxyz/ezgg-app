@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 15:29:56
+ * @LastEditTime: 2025-03-06 13:12:49
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -21,7 +21,7 @@ import {appScale, formatNumber} from 'app/utils';
 import {PrimaryColor} from 'app/config';
 import HomeList from './components/HomeList';
 import AppLoading from 'app/Components/AppLoading';
-import { getNotificationGetUnreadCount } from 'app/servers/api/notification';
+import {getNotificationGetUnreadCount} from 'app/servers/api/notification';
 
 interface HomeScreenProps {}
 // 首页
@@ -86,8 +86,8 @@ const HomeScreen = (props: HomeScreenProps) => {
   };
 
   useEffect(() => {
-    _getUnread();
-  }, []);
+    isLogin && _getUnread();
+  }, [isLogin]);
 
   return (
     <PermissionPage isHomePage={true}>

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 15:20:18
+ * @LastEditTime: 2025-03-06 16:47:09
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -46,7 +46,11 @@ export default {
   'home.deposit.deposit': 'Deposit',
 
   'home.withdraw.withdraw': 'Withdraw',
+  'home.withdraw.button2': 'Connect Wallet',
   'home.withdraw.tips': 'The amount you withdraw cannot exceed your balance',
+  'home.withdraw.address': 'Withdrawal address',
+  'home.withdraw.address.tips': 'Please enter the address you want to withdraw to',
+  'home.wallet.connected': 'Connected',
 
   'home.request.amountRequesting': 'Amount Requesting',
   'home.request.amountToRequest': 'Amount to Request',
@@ -144,4 +148,9 @@ export default {
 
   'home.claim.title': 'Onchain Currency with ezgg',
   'home.claim.description': 'Claim your crypto',
+
+  'home.explore.requestingPermission': 'Requesting camera permission',
+  'home.explore.noPermission': 'No camera permission',
+  'home.explore.noPermission2': 'You can also use the button below to select an image for scanning',
+  'home.explore.requestPermission': 'Request camera permission',
 };

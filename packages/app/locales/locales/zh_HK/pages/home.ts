@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 15:19:54
+ * @LastEditTime: 2025-03-06 16:38:20
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -46,7 +46,11 @@ export default {
   'home.deposit.deposit': '存款',
 
   'home.withdraw.withdraw': '提取',
+  'home.withdraw.button2': '連接錢包',
   'home.withdraw.tips': '您提取的金額不能超過您的餘額',
+  'home.withdraw.address': '提取地址',
+  'home.withdraw.address.tips': '請輸入您想要提取的地址',
+  'home.wallet.connected': '已連接',
 
   'home.request.amountRequesting': '請輸入您想要請求的金額',
   'home.request.amountToRequest': '請求的金額',
@@ -143,4 +147,9 @@ export default {
 
   'home.claim.title': '使用 ezgg 進行鏈上貨幣',
   'home.claim.description': '領取您的加密貨幣',
+
+  'home.explore.requestingPermission': '請求拍照許可',
+  'home.explore.noPermission': '無拍照許可，請在設置中開啟相機權限',
+  'home.explore.noPermission2': '你也可以使用下面的按鈕選擇圖片進行掃碼',
+  'home.explore.requestPermission': '請求拍照許可',
 };

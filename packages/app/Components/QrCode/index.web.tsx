@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 14:43:52
+ * @LastEditTime: 2025-03-06 15:03:53
  * @FilePath: /ezgg-app/packages/app/Components/QrCode/index.web.tsx
  */
 
@@ -19,6 +19,7 @@ export default function QrCode({size, url}: FeedbackProps) {
       <QRCode
         value={url}
         size={size}
+        bgColor="#FFFFFF"
         level="H" // 容错率级别 Higher
         includeMargin={false}
         renderAs="svg" // 必须指定 SVG 模式
