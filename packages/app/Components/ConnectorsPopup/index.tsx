@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 15:53:26
+ * @LastEditTime: 2025-03-05 10:45:17
  * @FilePath: /ezgg-app/packages/app/Components/ConnectorsPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -9,7 +9,7 @@ import {Airplay, AlignJustify, GalleryVerticalEnd} from '@tamagui/lucide-icons';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
 import {appScale} from 'app/utils';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState, forwardRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
 import {Connector, useConnect, useChainId} from 'wagmi';
@@ -64,7 +64,10 @@ export type CurrencyPopupProps = {
   setModalVisible: (values) => void;
 };
 // 币种选择弹窗
-const ConnectorsPopup: React.FC<any> = ({modalVisible, setModalVisible}: CurrencyPopupProps) => {
+const ConnectorsPopup = forwardRef<any, any>(({
+  modalVisible,
+  setModalVisible
+}: CurrencyPopupProps, ref) => {
   const {t, i18n} = useTranslation();
   const scrollViewRef = useRef<any>(null);
   const {connectors, connect} = useConnect();
@@ -144,6 +147,6 @@ const ConnectorsPopup: React.FC<any> = ({modalVisible, setModalVisible}: Currenc
       </Sheet.Frame>
     </Sheet>
   );
-};
+});
 
 export default ConnectorsPopup;

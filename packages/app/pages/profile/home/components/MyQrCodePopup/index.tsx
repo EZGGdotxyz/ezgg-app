@@ -1,15 +1,17 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 16:56:27
+ * @LastEditTime: 2025-03-05 14:49:55
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/MyQrCodePopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
+import AppButton from 'app/Components/AppButton';
 import AppModal from 'app/Components/AppModal';
 import QrCode from 'app/Components/QrCode';
 import {ExternalLinkData, PrimaryColor} from 'app/config';
-import {appScale} from 'app/utils';
+import {appScale, isIphoneX} from 'app/utils';
+import QRCode from 'qrcode.react';
 import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
@@ -18,10 +20,54 @@ export type MyQrCodePopupProps = {
   userId: string;
   modalVisible: any;
   setModalVisible: (values) => void;
+  setShareVisible: (values) => void;
 };
 
-const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible}: MyQrCodePopupProps) => {
+const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible, setShareVisible}: MyQrCodePopupProps) => {
   const {t, i18n} = useTranslation();
+  const qrRef = useRef<HTMLDivElement>(null); // 指定元素类型
+
+  // 转换为 PNG 并下载
+  const downloadQR = async () => {
+        console.log('🚀 ~ downloadQR ~ qrRef:', qrRef);
+    if (!qrRef.current) return;
+
+    const svgElement = qrRef.current.querySelector('svg');
+
+    console.log('🚀 ~ downloadQR ~ svgElement:', svgElement);
+
+    if (!svgElement) return;
+
+    // 将 SVG 转化为 Data URL
+    const svgString = new XMLSerializer().serializeToString(svgElement);
+    const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+    const svgUrl = URL.createObjectURL(svgBlob);
+
+    // 通过 Canvas 转换确保透明背景支持
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const img = new Image();
+
+    console.log('🚀 ~ downloadQR ~ img:', img);
+
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx?.drawImage(img, 0, 0);
+
+      // 生成 PNG 下载链接
+      const pngUrl = canvas.toDataURL('image/png', 1.0);
+      const link = document.createElement('a');
+      link.download = `QRCode_${Date.now()}.png`;
+      link.href = pngUrl;
+      link.click();
+
+      URL.revokeObjectURL(svgUrl);
+    };
+    img.src = svgUrl;
+  };
+
   return (
     <AppModal zIndex={12} setModalVisible={setModalVisible} modalVisible={modalVisible}>
       <YStack
@@ -45,10 +91,71 @@ const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible}: M
             {t('home.qr.sub2')}
           </SizableText>
           <XStack w="100%" mb={appScale(24)} h={1} bc={'#eeeeee'}></XStack>
-          <XStack w="100%" ai={'center'} jc={'center'} p={appScale(24)} borderColor={'#eeeeee'} borderWidth={1}>
-            <QrCode size={appScale(334)} url={`${ExternalLinkData.webPageHome}?userId=${userId}`} />
+          <XStack
+            ref={qrRef}
+            w="100%"
+            ai={'center'}
+            jc={'center'}
+            p={appScale(24)}
+            borderColor={'#eeeeee'}
+            borderWidth={1}
+          >
+            {/* <QRCode
+              value={`${ExternalLinkData.webPageHome}?userId=${userId}`}
+              size={appScale(334)}
+              level="H" // 容错率级别 Higher
+              includeMargin={false}
+              renderAs="svg" // 必须指定 SVG 模式
+            /> */}
+            <QrCode size={appScale(334)} url={`${ExternalLinkData.webPageHome}/explore/=${userId}`} />
           </XStack>
         </YStack>
+        <XStack
+          flexShrink={0}
+          pl={appScale(24)}
+          pr={appScale(24)}
+          pt={12}
+          pb={appScale(isIphoneX() ? 46 : 12)}
+          w="100%"
+          ai={'center'}
+          jc={'center'}
+          space="$3"
+          borderTopWidth={1}
+          borderColor={'#F2F2F2'}
+        >
+          <Button
+            h={appScale(58)}
+            w={'50%'}
+            br={appScale(28)}
+            ai={'center'}
+            jc={'center'}
+            bc={'#fff'}
+            borderWidth={2}
+            borderColor={PrimaryColor}
+            onPress={() => {
+              downloadQR();
+            }}
+            // disabled={isLoading}
+            pressStyle={{
+              opacity: 0.85,
+            }}
+            unstyled
+          >
+            {t('home.qr.save')}
+          </Button>
+          <AppButton
+            style={{
+              width: '50%',
+            }}
+            onPress={() => {
+              setModalVisible(false);
+              setShareVisible(true);
+              // setAcceptRequestVisible(true);
+            }}
+          >
+            {t('home.qr.share')}
+          </AppButton>
+        </XStack>
       </YStack>
     </AppModal>
   );

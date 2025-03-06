@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 16:57:48
- * @FilePath: /ezgg-app/packages/app/pages/explore/index.tsx
+ * @LastEditTime: 2025-03-05 14:48:45
+ * @FilePath: /ezgg-app/packages/app/pages/explore/index/index.tsx
  */
 import {
   AppHeader,
@@ -26,6 +26,7 @@ import AppButton from 'app/Components/AppButton';
 import {useRouter} from 'solito/router';
 import AppLoading from 'app/Components/AppLoading';
 import {ExternalLinkData} from 'app/config';
+import { decryptId } from 'app/utils/crypto';
 
 // 掃描
 const ExploreScreen = () => {
@@ -34,7 +35,7 @@ const ExploreScreen = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scanning, setScanning] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const {push} = useRouter();
+  const {replace} = useRouter();
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToastController();
@@ -165,14 +166,15 @@ const ExploreScreen = () => {
     if (code) {
       console.log('Found QR code in image:', code);
       let userId = '';
-      if (code.indexOf(ExternalLinkData.webPageHome + '?userId=') !== -1) {
-        userId = code.replace(ExternalLinkData.webPageHome + '?userId=', '');
+      if (code.indexOf(ExternalLinkData.webPageHome + '/explore/') !== -1) {
+        userId = code.replace(ExternalLinkData.webPageHome + '/explore/', '');
       }
       if (userId) {
+        const _decryptId = decryptId(userId);
         setIsLoading(true);
         setTimeout(() => {
           stopScanning();
-          push('/home/send');
+          replace('/explore/' + _decryptId);
           setIsLoading(false);
         }, 1000);
       } else {

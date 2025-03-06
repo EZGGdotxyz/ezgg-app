@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 15:52:14
+ * @LastEditTime: 2025-03-06 12:41:45
  * @FilePath: /ezgg-app/packages/app/Components/PermissionPage/index.web.tsx
  */
 import {Button, Paragraph, YStack} from '@my/ui';
@@ -36,16 +36,12 @@ export default function PermissionPage(props: PermissionPageProps) {
         if (!isLoginPage) {
           dispatch.user.locallyLogout();
           if (!isHomePage) {
-            replace({
-              pathname: '/',
-            });
+            replace('/');
           }
         }
       } else {
         if (isLoginPage && !isHomePage) {
-          replace({
-            pathname: '/',
-          });
+          replace('/');
         }
       }
     });

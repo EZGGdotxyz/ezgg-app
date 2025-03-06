@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 16:08:51
+ * @LastEditTime: 2025-03-06 13:05:09
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -28,6 +28,8 @@ import {ActivityIndicator} from 'react-native';
 import {Link} from 'solito/link';
 import {Check, ChevronDown, ChevronRight, ChevronUp, LockKeyhole, User} from '@tamagui/lucide-icons';
 import AppButton from 'app/Components/AppButton';
+import {postFileUpload} from 'app/servers/api/fileUpload';
+import useRequest from 'app/hooks/useRequest';
 
 export type SuccessPopupProps = {
   handleSuccess: (values: any) => void;
@@ -50,6 +52,7 @@ const SuccessPopup: React.FC<any> = ({
   //加载状态
   const [loading, setLoading] = useState(false);
   const toast = useToastController();
+  const {makeRequest} = useRequest();
 
   const accountContinue = () => {
     if (accountForm?.nickname && accountForm?.nickname.length < 4) {
@@ -97,16 +100,35 @@ const SuccessPopup: React.FC<any> = ({
                   const input = document.createElement('input');
                   input.type = 'file';
                   input.accept = 'image/*';
-                  input.onchange = (e: any) => {
+                  input.onchange = async (e: any) => {
                     const file = e.target.files[0];
                     if (file) {
                       const reader = new FileReader();
-                      reader.onload = (e: any) => {
-                        setAccountForm({
-                          ...accountForm,
-                          avatar: '',
-                          // avatar: e.target.result,
-                        });
+                      reader.onload = async (e: any) => {
+                        try {
+                          setLoading(true);
+                          const formData = new FormData();
+                          formData.append('file', file);
+                          const res = await makeRequest(
+                            postFileUpload({
+                              data: formData,
+                              headers: {
+                                'Content-Type': 'multipart/form-data',
+                              },
+                            }),
+                          );
+                          if (res?.data?.url) {
+                            setAccountForm({
+                              ...accountForm,
+                              avatar: res.data.url,
+                            });
+                          }
+                        } catch (error) {
+                          console.error('上传头像失败:', error);
+                          toast.show(t('common.upload.failed'));
+                        } finally {
+                          setLoading(false);
+                        }
                       };
                       reader.readAsDataURL(file);
                     }

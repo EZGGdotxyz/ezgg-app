@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 21:18:07
+ * @LastEditTime: 2025-03-05 15:29:56
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -21,16 +21,18 @@ import {appScale, formatNumber} from 'app/utils';
 import {PrimaryColor} from 'app/config';
 import HomeList from './components/HomeList';
 import AppLoading from 'app/Components/AppLoading';
+import { getNotificationGetUnreadCount } from 'app/servers/api/notification';
 
 interface HomeScreenProps {}
 // 首页
 const HomeScreen = (props: HomeScreenProps) => {
   const {t, i18n} = useTranslation();
   const {makeRequest} = useRequest();
+  const dispatch = useDispatch<Dispatch>();
+
   const [{currency}] = useRematchModel('app');
   const [{isLogin, availableBalance}] = useRematchModel('user');
   const {push} = useRouter();
-  const dispatch = useDispatch<Dispatch>();
 
   const [unread, setUnread] = useState(0);
   const [navSelected, setNavSelected] = useState('send');
@@ -68,6 +70,24 @@ const HomeScreen = (props: HomeScreenProps) => {
       url: '/home/withdraw',
     },
   ];
+
+  // 获取 未读消息数
+  const _getUnread = async () => {
+    const res = await makeRequest(getNotificationGetUnreadCount());
+    if (res?.data) {
+      dispatch.app.updateState({
+        unread: res?.data,
+      });
+    } else {
+      dispatch.app.updateState({
+        unread: 0,
+      });
+    }
+  };
+
+  useEffect(() => {
+    _getUnread();
+  }, []);
 
   return (
     <PermissionPage isHomePage={true}>

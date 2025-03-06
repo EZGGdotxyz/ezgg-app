@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 11:01:25
+ * @LastEditTime: 2025-03-05 11:42:58
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/ChainListPopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -9,6 +9,7 @@ import {Airplay, AlignJustify, Check, ChevronRight, GalleryVerticalEnd} from '@t
 import {PrimaryColor} from 'app/config';
 import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
+import {forwardRef, useRef} from 'react';
 
 export type ChainListPopupProps = {
   selectedType: any;
@@ -18,16 +19,19 @@ export type ChainListPopupProps = {
   tokenTypes: {chainId: string; name: string; chainIcon: string}[];
 };
 
-const ChainListPopup: React.FC<any> = ({
+const ChainListPopup = forwardRef<any, any>(({
   selectedType,
   setSelectedType,
   sheetOpen,
   setSheetOpen,
   tokenTypes,
-}: ChainListPopupProps) => {
+}: ChainListPopupProps, ref) => {
   const {t, i18n} = useTranslation();
+  const scrollViewRef = useRef<any>(null);
+
   return (
     <Sheet
+      ref={ref}
       animation="medium"
       modal
       dismissOnSnapToBottom
@@ -38,7 +42,7 @@ const ChainListPopup: React.FC<any> = ({
       <Sheet.Overlay animation="medium" enterStyle={{opacity: 0}} exitStyle={{opacity: 0}} />
       <Sheet.Handle />
       <Sheet.Frame justifyContent="center" w="100%" alignItems="center">
-        <Sheet.ScrollView>
+        <Sheet.ScrollView ref={scrollViewRef} w="100%" bc="$background">
           <YStack style={{width: '100vw'}}>
             {tokenTypes.map((type) => (
               <Button
@@ -100,6 +104,6 @@ const ChainListPopup: React.FC<any> = ({
       </Sheet.Frame>
     </Sheet>
   );
-};
+});
 
 export default ChainListPopup;

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-10 22:57:56
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 11:12:03
+ * @LastEditTime: 2025-03-05 13:22:39
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/screen.ts
  */
 export default {

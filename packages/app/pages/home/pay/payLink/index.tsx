@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 23:09:52
+ * @LastEditTime: 2025-03-05 13:27:49
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -172,11 +172,15 @@ const PayLinkScreen = ({type}: any) => {
   return (
     <PermissionPage>
       <AppHeader2
-        isClosure
+        isClosure={isSuccess}
         onBack={() => {
-          dispatch.user.updateState({payLinkData: {}});
-          window.history.pushState(null, '', '/');
-          replace('/');
+          if (isSuccess) {
+            dispatch.user.updateState({payLinkData: {}});
+            window.history.pushState(null, '', '/');
+            replace('/');
+          } else {
+            back();
+          }
         }}
         title={t('screen.home.paylink')}
         fallbackUrl="/"
@@ -320,10 +324,9 @@ const PayLinkScreen = ({type}: any) => {
           borderColor={PrimaryColor}
           onPress={() => {
             if (isSuccess) {
-              window.history.pushState(null, '', '/');
-              replace(`/home/history/${orderData?.id}`);
+              replace(`/home/history/${orderData?.id}?isHistory=true`);
               dispatch.user.updateState({payLinkData: {}});
-              window.history.replaceState(null, '', window.location.href);
+              window.history.pushState(null, '', '/');
             } else {
               back();
             }
@@ -341,7 +344,11 @@ const PayLinkScreen = ({type}: any) => {
           }}
           onPress={() => {
             if (isSuccess) {
-              onCopy(`${ExternalLinkData.webPageHome}/home/take/${orderData?.transactionCode}`);
+              onCopy(
+                `${ExternalLinkData.webPageHome}/${
+                  orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
+                }/${orderData?.transactionCode}`,
+              );
             } else {
               handleSubmit(type === 'send' ? 'SEND' : 'REQUEST');
             }

@@ -18,6 +18,64 @@ export async function getUserFindUser2(options?: { [key: string]: any }) {
   });
 }
 
+/** 获取用户信息 GET /member/user/find-user/id/${param0} */
+export async function getUserFindUserIdId(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getUserFindUserIdIdParams,
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{
+    code: string;
+    msg: string;
+    data?: {
+      id?: number;
+      createBy?: number;
+      updateBy?: number;
+      createAt?: string;
+      updateAt?: string;
+      did?: string;
+      createdAt?: string;
+      nickname?: string;
+      avatar?: string;
+      memberLinkedAccount?: { type?: string; search?: string }[];
+    };
+  }>(`/member/user/find-user/id/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** 获取用户信息 GET /member/user/find-user/id/${param0} */
+export async function getUserFindUserIdId2(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getUserFindUserIdIdParams,
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<{
+    code: string;
+    msg: string;
+    data?: {
+      id?: number;
+      createBy?: number;
+      updateBy?: number;
+      createAt?: string;
+      updateAt?: string;
+      did?: string;
+      createdAt?: string;
+      nickname?: string;
+      avatar?: string;
+      memberLinkedAccount?: { type?: string; search?: string }[];
+    };
+  }>(`/member/user/find-user/id/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
 /** 分页查询会员列表 GET /member/user/page-member */
 export async function getUserPageMember(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -42,18 +100,7 @@ export async function getUserPageMember(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       }[];
     };
   }>('/member/user/page-member', {
@@ -63,6 +110,7 @@ export async function getUserPageMember(
       page: '1',
       // pageSize has a default value: 30
       pageSize: '30',
+
       ...params,
     },
     ...(options || {}),
@@ -93,18 +141,7 @@ export async function getUserPageMember2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       }[];
     };
   }>('/member/user/page-member', {
@@ -114,6 +151,7 @@ export async function getUserPageMember2(
       page: '1',
       // pageSize has a default value: 30
       pageSize: '30',
+
       ...params,
     },
     ...(options || {}),

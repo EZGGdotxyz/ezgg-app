@@ -8,7 +8,7 @@ import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} 
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, forwardRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
 
@@ -20,13 +20,13 @@ export type ChainPopupProps = {
   chainData: any;
 };
 // 法币选择弹窗
-const ChainPopup: React.FC<any> = ({
+const ChainPopup = forwardRef<any, any>(({
   modalVisible,
   setModalVisible,
   chainList,
   selectChain,
   chainData,
-}: ChainPopupProps) => {
+}: ChainPopupProps, ref) => {
   const {t, i18n} = useTranslation();
   const scrollViewRef = useRef(null);
 
@@ -95,6 +95,6 @@ const ChainPopup: React.FC<any> = ({
       </Sheet.Frame>
     </Sheet>
   );
-};
+});
 
 export default ChainPopup;

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 15:39:13
+ * @LastEditTime: 2025-03-05 15:21:29
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -42,7 +42,26 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
             ...createBaseTransactionInfoList(orderData, t),
           ],
         },
+        qrCode: {
+          title: orderData?.name ? `${t('home.order.sentTo')} @${orderData?.name}` : '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
+            ...createBaseTransactionInfoList(orderData, t),
+          ],
+        },
         request: {
+          icon: '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
+            createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
+              isStatus: true,
+            }),
+            ...createBaseTransactionInfoList(orderData, t),
+          ],
+        },
+        requestQrCode: {
           icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
@@ -71,7 +90,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
       };
       setInfoData({
         infoList: infoDataDefault[type].infoList,
-        title: infoDataDefault[type].title,
+        title: infoDataDefault[type].title || '',
         icon: infoDataDefault[type].icon,
         userName:
           orderData?.transactionType === 'SEND' || orderData?.transactionType === 'REQUEST'

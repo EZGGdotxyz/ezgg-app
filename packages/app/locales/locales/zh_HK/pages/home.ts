@@ -1,11 +1,12 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 13:55:07
+ * @LastEditTime: 2025-03-05 15:19:54
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
 export default {
+  'home.description': '使用 ezgg 進行鏈上貨幣',
   'home.all': '全部',
   'home.income': '收入',
   'home.expense': '支出',
@@ -92,11 +93,13 @@ export default {
   'home.order.noPortfolio': '無投資組合',
   'home.order.noPortfolio2': `您尚未擁有任何投資組合。`,
 
-  'home.order.qrCode.title': `~ QR碼 (@{{name}})`,
+  'home.order.send.title': `發送到 (@{{name}})`,
   'home.order.payLink.title': `~支付連結 (@{{name}})`,
+  'home.order.qrCode.title': `~ QR 碼 (@{{name}})`,
 
-  'home.order.send.title': `~發送到 (@{{name}})`,
   'home.order.request.title': `請求 (@{{name}})`,
+  'home.order.requestLink.title': `~請求連結 (@{{name}})`,
+  'home.order.requestQrCode.title': `~請求 QR 碼 (@{{name}})`,
 
   'home.paylink.recipient': '接收方',
   'home.paylink.anyoneLink': '任何擁有連結的人',
@@ -126,4 +129,18 @@ export default {
   'home.take.message': '訊息',
   'home.take.claim': '領取',
   'home.take.balance': '餘額',
+
+  'home.share.title': '分享',
+  'home.share.facebook': 'Facebook',
+  'home.share.twitter': 'Twitter',
+  'home.share.whatsapp': 'WhatsApp',
+  'home.share.telegram': 'Telegram',
+  'home.share.tiktok': 'TikTok',
+  'home.share.instagram': 'Instagram',
+
+  'home.requesting.title': '使用 ezgg 進行鏈上貨幣',
+  'home.requesting.description': '請求付款',
+
+  'home.claim.title': '使用 ezgg 進行鏈上貨幣',
+  'home.claim.description': '領取您的加密貨幣',
 };

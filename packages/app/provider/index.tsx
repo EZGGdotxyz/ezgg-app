@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-01 16:14:21
+ * @LastEditTime: 2025-03-05 11:14:18
  * @FilePath: /ezgg-app/packages/app/provider/index.tsx
  */
 import {CustomToast, TamaguiProvider, TamaguiProviderProps, ToastProvider, config} from '@my/ui';
@@ -25,7 +25,7 @@ export function Provider({children, ...rest}: Omit<TamaguiProviderProps, 'config
           <TamaguiProvider config={config} disableInjectCSS defaultTheme={'light'} {...rest}>
             <ToastProvider
               swipeDirection="horizontal"
-              duration={3000}
+              duration={2000}
               native={
                 [
                   /* uncomment the next line to do native toasts on mobile. NOTE: it'll require you making a dev build and won't work with Expo Go */

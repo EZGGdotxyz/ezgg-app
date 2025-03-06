@@ -2,6 +2,28 @@
 /* eslint-disable */
 import request from 'app/utils/request';
 
+/** 获取未读数 GET /member/notification/get-unread-count */
+export async function getNotificationGetUnreadCount(options?: { [key: string]: any }) {
+  return request<{ code: string; msg: string; data?: number }>(
+    '/member/notification/get-unread-count',
+    {
+      method: 'GET',
+      ...(options || {}),
+    },
+  );
+}
+
+/** 获取未读数 GET /member/notification/get-unread-count */
+export async function getNotificationGetUnreadCount2(options?: { [key: string]: any }) {
+  return request<{ code: string; msg: string; data?: number }>(
+    '/member/notification/get-unread-count',
+    {
+      method: 'GET',
+      ...(options || {}),
+    },
+  );
+}
+
 /** 分页查询通知列表 GET /member/notification/page-notification */
 export async function getNotificationPageNotification(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -23,7 +45,6 @@ export async function getNotificationPageNotification(
         updateBy?: number;
         createAt?: string;
         updateAt?: string;
-        deleteAt?: number;
         source?: string;
         subject?: string;
         action?: string;
@@ -36,7 +57,14 @@ export async function getNotificationPageNotification(
         transactionHistoryId?: number;
         transaction: {
           transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-          transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+          transactionType?:
+            | 'SEND'
+            | 'REQUEST'
+            | 'DEPOSIT'
+            | 'WITHDRAW'
+            | 'PAY_LINK'
+            | 'QR_CODE'
+            | 'REQUEST_LINK';
           business?: 'LINK' | 'VAULT' | 'TRANSFER';
           transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
           platform?: 'ETH' | 'SOLANA';
@@ -76,18 +104,7 @@ export async function getNotificationPageNotification(
             createdAt?: string;
             nickname?: string;
             avatar?: string;
-            memberLinkedAccount?: {
-              id?: number;
-              createBy?: number;
-              updateBy?: number;
-              createAt?: string;
-              updateAt?: string;
-              memberId?: number;
-              did?: string;
-              type?: string;
-              detail?: string;
-              search?: string;
-            }[];
+            memberLinkedAccount?: { type?: string; search?: string }[];
           };
           receiverMember: {
             id?: number;
@@ -99,18 +116,7 @@ export async function getNotificationPageNotification(
             createdAt?: string;
             nickname?: string;
             avatar?: string;
-            memberLinkedAccount?: {
-              id?: number;
-              createBy?: number;
-              updateBy?: number;
-              createAt?: string;
-              updateAt?: string;
-              memberId?: number;
-              did?: string;
-              type?: string;
-              detail?: string;
-              search?: string;
-            }[];
+            memberLinkedAccount?: { type?: string; search?: string }[];
           };
         };
       }[];
@@ -150,7 +156,6 @@ export async function getNotificationPageNotification2(
         updateBy?: number;
         createAt?: string;
         updateAt?: string;
-        deleteAt?: number;
         source?: string;
         subject?: string;
         action?: string;
@@ -163,7 +168,14 @@ export async function getNotificationPageNotification2(
         transactionHistoryId?: number;
         transaction: {
           transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-          transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+          transactionType?:
+            | 'SEND'
+            | 'REQUEST'
+            | 'DEPOSIT'
+            | 'WITHDRAW'
+            | 'PAY_LINK'
+            | 'QR_CODE'
+            | 'REQUEST_LINK';
           business?: 'LINK' | 'VAULT' | 'TRANSFER';
           transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
           platform?: 'ETH' | 'SOLANA';
@@ -203,18 +215,7 @@ export async function getNotificationPageNotification2(
             createdAt?: string;
             nickname?: string;
             avatar?: string;
-            memberLinkedAccount?: {
-              id?: number;
-              createBy?: number;
-              updateBy?: number;
-              createAt?: string;
-              updateAt?: string;
-              memberId?: number;
-              did?: string;
-              type?: string;
-              detail?: string;
-              search?: string;
-            }[];
+            memberLinkedAccount?: { type?: string; search?: string }[];
           };
           receiverMember: {
             id?: number;
@@ -226,18 +227,7 @@ export async function getNotificationPageNotification2(
             createdAt?: string;
             nickname?: string;
             avatar?: string;
-            memberLinkedAccount?: {
-              id?: number;
-              createBy?: number;
-              updateBy?: number;
-              createAt?: string;
-              updateAt?: string;
-              memberId?: number;
-              did?: string;
-              type?: string;
-              detail?: string;
-              search?: string;
-            }[];
+            memberLinkedAccount?: { type?: string; search?: string }[];
           };
         };
       }[];

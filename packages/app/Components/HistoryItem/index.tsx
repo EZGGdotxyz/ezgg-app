@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 22:50:45
+ * @LastEditTime: 2025-03-05 15:24:25
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -22,21 +22,6 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
 
   const dealType = () => {
     switch (item?.transactionType) {
-      case 'SEND':
-        return {
-          title: t('home.order.send.title', {name: item?.receiverMember?.nickname}),
-          sub: item?.message,
-        };
-      case 'Income':
-        return {
-          title: t('home.income'),
-          sub: t('home.income'),
-        };
-      case 'REQUEST':
-        return {
-          title: t('home.order.request.title', {name: item?.senderMember?.nickname}),
-          sub: item?.message,
-        };
       case 'DEPOSIT':
         return {
           title: t('home.deposit'),
@@ -47,18 +32,40 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
           title: t('home.withdraw'),
           sub: t('home.withdraw'),
         };
+      case 'Income':
+        return {
+          title: t('home.income'),
+          sub: t('home.income'),
+        };
+      case 'SEND':
+        return {
+          title: t('home.order.send.title', {name: item?.receiverMember?.nickname}),
+          sub: item?.message,
+        };
       case 'PAY_LINK':
         return {
-          title: t('home.order.payLink.title', {
-            name: item?.transactionCategory === 'REQUEST' ? item?.senderMember?.nickname : item?.receiverMember?.name,
-          }),
+          title: t('home.order.payLink.title', {name: item?.receiverMember?.nickname}),
           sub: item?.message,
-          // sub: item?.transactionCategory === 'REQUEST' ? t('home.receive') : t('home.send'),
         };
       case 'QR_CODE':
         return {
-          title: t('home.order.qrCode.title', {name: item?.receiverWalletAddress}),
+          title: t('home.order.qrCode.title', {name: item?.receiverMember?.nickname}),
           sub: item?.transactionCategory === 'REQUEST' ? t('home.receive') : t('home.send'),
+        };
+      case 'REQUEST':
+        return {
+          title: t('home.order.request.title', {name: item?.senderMember?.nickname}),
+          sub: item?.message,
+        };
+      case 'REQUEST_LINK':
+        return {
+          title: t('home.order.requestLink.title', {name: item?.senderMember?.nickname}),
+          sub: item?.message,
+        };
+      case 'REQUEST_QR_CODE':
+        return {
+          title: t('home.order.requestQrCode.title', {name: item?.senderMember?.nickname}),
+          sub: item?.message,
         };
       default:
         return {
@@ -68,7 +75,6 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
     }
   };
 
-  // 判断增加还是减少
   const judgeAmountType = (orderData: any) => {
     if (orderData?.transactionType === 'WITHDRAW') {
       return '-';
@@ -77,16 +83,7 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
     if (orderData?.transactionType === 'DEPOSIT') {
       return '+';
     }
-    if (orderData?.transactionType === 'PAY_LINK') {
-      return orderData?.transactionCategory === 'SEND' ? '-' : '+';
-    }
-
-    if (orderData?.transactionType === 'SEND') {
-      return '-';
-    }
-    if (orderData?.transactionType === 'REQUEST') {
-      return orderData?.receiverMember?.id === userInfo?.customMetadata?.id ? '+' : '-';
-    }
+    return orderData?.receiverMember?.id === userInfo?.customMetadata?.id ? '+' : '-';
   };
 
   return (

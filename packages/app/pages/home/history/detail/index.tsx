@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 17:24:07
+ * @LastEditTime: 2025-03-05 15:23:51
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -21,7 +21,7 @@ import PermissionPage from 'app/Components/PermissionPage';
 import Header from './components/Header';
 import {appScale, truncateAddress, formatTokenAmount, isIphoneX} from 'app/utils';
 import CopyButton from 'app/Components/CopyButton';
-import {PrimaryColor} from 'app/config';
+import {ExternalLinkData, PrimaryColor} from 'app/config';
 import {createParam} from 'solito';
 import {getTransactionHistoryFindTransactionHistoryId} from 'app/servers/api/transactionHistory';
 import {useRematchModel} from 'app/store/model';
@@ -38,7 +38,10 @@ import AppLoading from 'app/Components/AppLoading';
 import {getExplorerUrl} from 'app/utils/chain';
 import AppButton from 'app/Components/AppButton';
 import Footer from './components/Footer';
-
+import SharePopup from 'app/Components/SharePopup';
+import DeclineRequestPopup from './components/DeclineRequestPopup';
+import AcceptRequestPopup from './components/AcceptRequestPopup';
+import {useRouter} from 'solito/router';
 const {useParams} = createParam<any>();
 
 // 订单详情
@@ -52,10 +55,14 @@ const HistoryDetailScreen = () => {
   });
 
   const {params} = useParams();
+  const {back, replace} = useRouter();
   const [{userInfo}] = useRematchModel('user');
   const {makeRequest} = useRequest();
   const [orderData, setOrderData] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [shareVisible, setShareVisible] = useState(false);
+  const [declineRequestVisible, setDeclineRequestVisible] = useState(false);
+  const [acceptRequestVisible, setAcceptRequestVisible] = useState(false);
   const statusList = {
     PENDING: {
       title: t('home.order.status.unpaid'),
@@ -80,16 +87,8 @@ const HistoryDetailScreen = () => {
     if (orderData?.transactionType === 'DEPOSIT') {
       return '+';
     }
-    if (orderData?.transactionType === 'PAY_LINK') {
-      return orderData?.transactionCategory === 'SEND' ? '-' : '+';
-    }
 
-    if (orderData?.transactionType === 'SEND') {
-      return '-';
-    }
-    if (orderData?.transactionType === 'REQUEST') {
-      return orderData?.receiverMember?.id === userInfo?.customMetadata?.id ? '+' : '-';
-    }
+    return orderData?.receiverMember?.id === userInfo?.customMetadata?.id ? '+' : '-';
   };
 
   const _getTransactionHistoryFindTransactionHistoryId = async () => {
@@ -101,6 +100,7 @@ const HistoryDetailScreen = () => {
       switch (_type) {
         case 'SEND':
         case 'PAY_LINK':
+        case 'QR_CODE':
           _type = 'send';
           break;
         case 'WITHDRAW':
@@ -110,6 +110,8 @@ const HistoryDetailScreen = () => {
           _type = 'topUp';
           break;
         case 'REQUEST':
+        case 'REQUEST_LINK':
+        case 'REQUEST_QR_CODE':
           _type = _orderData?.senderMember?.id === userInfo?.customMetadata?.id ? 'outgoingRequest' : 'incomingRequest';
           break;
         default:
@@ -198,7 +200,18 @@ const HistoryDetailScreen = () => {
 
   return (
     <PermissionPage>
-      <Header title={infoData?.title} />
+      <Header
+        back={() => {
+          if (params?.isHistory) {
+            replace('/');
+            window.history.pushState(null, '', '/');
+          } else {
+            back();
+          }
+        }}
+        title={infoData?.title}
+        setShareVisible={setShareVisible}
+      />
       <YStack flex={1} jc="space-between">
         <YStack pb={appScale(24)}>
           <YStack ai={'center'} jc={'center'} p={appScale(20)} bc={PrimaryColor}>
@@ -306,10 +319,31 @@ const HistoryDetailScreen = () => {
         {orderData?.transactionType === 'REQUEST' &&
           orderData?.transactionStatus === 'PENDING' &&
           orderData?.senderMember?.id === userInfo?.customMetadata?.id && (
-            <Footer orderData={orderData} setIsLoading={setIsLoading} />
+            <Footer
+              setDeclineRequestVisible={setDeclineRequestVisible}
+              setAcceptRequestVisible={setAcceptRequestVisible}
+            />
           )}
       </YStack>
-      {/* <Button onPress={() => {}}>发送</Button> */}
+      {/* <SharePopup
+        modalVisible={shareVisible}
+        setModalVisible={setShareVisible}
+        title={infoData?.title}
+        url={`${ExternalLinkData.webPageHome}/transaction/${orderData?.id}`}
+      /> */}
+
+      <DeclineRequestPopup
+        setIsLoading={setIsLoading}
+        modalVisible={declineRequestVisible}
+        setModalVisible={setDeclineRequestVisible}
+        orderData={orderData}
+      />
+      <AcceptRequestPopup
+        setIsLoading={setIsLoading}
+        modalVisible={acceptRequestVisible}
+        setModalVisible={setAcceptRequestVisible}
+        orderData={orderData}
+      />
       {isLoading && <AppLoading />}
     </PermissionPage>
   );

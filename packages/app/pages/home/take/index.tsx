@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 22:45:45
+ * @LastEditTime: 2025-03-05 13:28:06
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -83,16 +83,12 @@ const TakeScreen = (any) => {
 
   console.log('🚀 ~ TakeScreen ~ orderData:', orderData);
 
-  const {back, push,replace} = useRouter();
+  const {back, push, replace} = useRouter();
 
   const {onSendPayLinkSubmit, onRequestSubmit} = useTransaction();
 
   const createTransactionParams = (type: 'SEND' | 'REQUEST') => {
     const _amount = Number(convertAmountToTokenDecimals(orderData?.amount, orderData?.orderData?.tokenDecimals));
-
-    console.log('🚀 ~ createTransactionParams ~ orderData:', orderData);
-
-
     const params: any = {
       platform: orderData?.token?.platform,
       chainId: Number(orderData?.token?.chainId),
@@ -129,8 +125,8 @@ const TakeScreen = (any) => {
             duration: 3000,
           });
           setTimeout(() => {
-            window.history.pushState(null, '', '/');
             replace('/');
+            window.history.pushState(null, '', '/');
           }, 500);
         });
       } else {
@@ -257,16 +253,18 @@ const TakeScreen = (any) => {
               fontWeight={'600'}
               pos="relative"
             >
-              {`${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol} (${
-                getChainInfo(orderData?.chainId)?.name
-              })`}
+              {orderData?.amount
+                ? `${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol} (${
+                    getChainInfo(orderData?.chainId)?.name
+                  })`
+                : ''}
             </SizableText>
           </XStack>
         </YStack>
 
         <XStack w="100%" mb={appScale(24)}>
-          <SizableText lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'400'}>
-            {`≈ $${orderData?.currencyAmount} ${orderData?.currency}`}
+          <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'400'}>
+            {orderData?.currencyAmount ? `≈ $${orderData?.currencyAmount} ${orderData?.currency}` : ''}
           </SizableText>
         </XStack>
 
@@ -280,18 +278,20 @@ const TakeScreen = (any) => {
           </AppButton>
         </XStack>
 
-        <YStack w="100%" mb={appScale(24)}>
-          <XStack mb={appScale(8)} w="100%">
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-              {t('home.take.message')}
-            </SizableText>
-          </XStack>
-          <XStack w="100%" p={appScale(16)} h={appScale(180)} bc={'#FAFAFA'} br={appScale(8)} borderColor={'#FAFAFA'}>
-            <SizableText lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'400'}>
-              {orderData?.message}
-            </SizableText>
-          </XStack>
-        </YStack>
+        {orderData?.message && (
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
+                {t('home.take.message')}
+              </SizableText>
+            </XStack>
+            <XStack w="100%" p={appScale(16)} h={appScale(180)} bc={'#FAFAFA'} br={appScale(8)} borderColor={'#FAFAFA'}>
+              <SizableText lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'400'}>
+                {orderData?.message || ''}
+              </SizableText>
+            </XStack>
+          </YStack>
+        )}
       </YStack>
 
       {isLoading && <AppLoading />}

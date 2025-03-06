@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 14:15:18
+ * @LastEditTime: 2025-03-05 14:50:01
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -40,7 +40,9 @@ import MyQrCodePopup from './components/MyQrCodePopup';
 import {usePrivy} from '@privy-io/react-auth';
 import AppButton from 'app/Components/AppButton';
 import AppLoading from 'app/Components/AppLoading';
-import {CurrencyList} from 'app/config';
+import {CurrencyList, ExternalLinkData} from 'app/config';
+import SharePopup from 'app/Components/SharePopup';
+import { encryptId } from 'app/utils/crypto';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
 
 // 我的
@@ -61,6 +63,12 @@ const MyScreen = () => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [chainData, setChainData] = useState<any>(CurrencyList[0]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [shareVisible, setShareVisible] = useState(false);
+
+  const userId = encryptId(userInfo?.customMetadata?.id||'');
+
+  console.log('🚀 ~ MyScreen ~ userId:', userId);
+
 
   const InfoItems = [
     // {
@@ -286,9 +294,16 @@ const MyScreen = () => {
         chainData={chainData}
       />
       <MyQrCodePopup
-        userId={userInfo?.customMetadata?.id}
+        userId={userId}
         modalVisible={modalVisible2}
         setModalVisible={setModalVisible2}
+        setShareVisible={setShareVisible}
+      />
+       <SharePopup
+        modalVisible={shareVisible}
+        setModalVisible={setShareVisible}
+        title={t('home.description')}
+        url={`${ExternalLinkData.webPageHome}/explore/=${userId}`}
       />
       {isLoading && <AppLoading />}
     </PermissionPage>

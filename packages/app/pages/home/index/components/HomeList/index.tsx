@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 10:57:36
+ * @LastEditTime: 2025-03-05 11:41:56
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet, ScrollView} from '@my/ui';
@@ -112,8 +112,6 @@ const HomeList: React.FC<any> = ({switchOn, setIsLoading}: HomeListProps) => {
 
           if (result.tokens?.length > 0) {
             return result.tokens.map((item) => {
-              console.log('🚀 ~ returnresult.tokens.map ~ item:', item);
-
               const chainInfo = getChainInfo(item?.token?.chainId);
               return {
                 chainName: chainInfo?.name,
@@ -169,7 +167,6 @@ const HomeList: React.FC<any> = ({switchOn, setIsLoading}: HomeListProps) => {
         tokenTypes={tokenTypes}
         setSheetOpen={setSheetOpen}
         sheetOpen={sheetOpen}
-        onOpenChange={onOpenChange}
         setSelectedType={setSelectedType}
         selectedType={selectedType}
       />

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 15:22:45
+ * @LastEditTime: 2025-03-05 10:50:56
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/Header/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -15,9 +15,14 @@ import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {AppName, PrimaryColor} from 'app/config';
 
-export type HeaderProps = {title: string; onBack?: () => void; fallbackUrl?: string};
+export type HeaderProps = {
+  title: string;
+  onBack?: () => void;
+  fallbackUrl?: string;
+  setShareVisible?: (value: boolean) => void;
+};
 //  头部
-const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/'}: HeaderProps) => {
+const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/', setShareVisible}: HeaderProps) => {
   const {back, push} = useRouter();
   const [{unread}] = useRematchModel('app');
   const [statusBarHeight, setStatusBarHeight] = useState(46);
@@ -35,6 +40,7 @@ const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/'}: HeaderProps) 
     } else {
       push(fallbackUrl);
     }
+
   };
   return (
     <XStack width={'100%'} pt={0} ai={'center'} backgroundColor={PrimaryColor} flexShrink={0}>
@@ -68,6 +74,7 @@ const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/'}: HeaderProps) 
           h={'100%'}
           pos={'relative'}
           onPress={() => {
+            setShareVisible && setShareVisible(true);
             // push('/my');
           }}
         >

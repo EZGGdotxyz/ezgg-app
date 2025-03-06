@@ -85,7 +85,14 @@ declare namespace API {
     /** 交易分类 */
     transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
     /** 交易类型 */
-    transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+    transactionType?:
+      | 'SEND'
+      | 'REQUEST'
+      | 'DEPOSIT'
+      | 'WITHDRAW'
+      | 'PAY_LINK'
+      | 'QR_CODE'
+      | 'REQUEST_LINK';
     /** 收款人会员ID */
     receiverMemberId?: number;
     /** 交易哈希 */
@@ -94,6 +101,15 @@ declare namespace API {
     transactionTimeFrom?: string;
     /** 交易时间 - 结束 */
     transactionTimeTo?: string;
+    /** 搜索关键词 */
+    search?: string;
+    /** 交易主题：收入：INCOME; 支出：EXPEND； */
+    subject?: 'INCOME' | 'EXPEND';
+  };
+
+  type getUserFindUserIdIdParams = {
+    /** 用户ID */
+    id: number;
   };
 
   type getUserPageMemberParams = {
@@ -103,6 +119,8 @@ declare namespace API {
     pageSize?: number;
     /** 检索条件 */
     search?: string;
+    /** 检索最近交易会员 */
+    recent?: boolean;
   };
 
   type postNotificationUpdateNotificationAllStatusParams = {

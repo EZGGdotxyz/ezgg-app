@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 22:37:45
+ * @LastEditTime: 2025-03-06 12:33:58
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/index.tsx
  */
 import {
@@ -60,6 +60,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
     const params: any = {
       page: _page,
       pageSize: 10,
+      recent: true,
     };
     if (search) {
       params.search = search;

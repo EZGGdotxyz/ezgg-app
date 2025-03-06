@@ -1,11 +1,12 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 13:54:52
+ * @LastEditTime: 2025-03-05 15:20:18
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
 export default {
+  'home.description': 'Onchain Currency with ezgg',
   'home.all': 'All',
   'home.income': 'Income',
   'home.expense': 'Expense',
@@ -93,11 +94,13 @@ export default {
   'home.order.noPortfolio': 'No Portfolio',
   'home.order.noPortfolio2': `You don't have any portfolio.`,
 
-  'home.order.qrCode.title': `~ QR Code (@{{name}})`,
+  'home.order.send.title': `Sent to (@{{name}})`,
   'home.order.payLink.title': `~PayLink (@{{name}})`,
+  'home.order.qrCode.title': `~ QR Code (@{{name}})`,
 
-  'home.order.send.title': `~Sent to (@{{name}})`,
   'home.order.request.title': `From Request (@{{name}})`,
+  'home.order.requestLink.title': `~Request Link (@{{name}})`,
+  'home.order.requestQrCode.title': `~Request QR Code (@{{name}})`,
 
   'home.paylink.recipient': 'Recipient',
   'home.paylink.anyoneLink': 'Anyone with the link ',
@@ -112,8 +115,8 @@ export default {
 
   'home.qr.title2': 'My QR Code',
   'home.qr.sub2': 'Recipient Address',
-  'home.qr.save': 'save',
-  'home.qr.share': 'share',
+  'home.qr.save': 'Save',
+  'home.qr.share': 'Share',
   'home.qr.invalid': 'Invalid QR code, please scan the QR code provided by ezgg',
 
   'home.deposit.selectWallet': 'Select Wallet',
@@ -127,4 +130,18 @@ export default {
   'home.take.message': 'Message',
   'home.take.claim': 'Claim',
   'home.take.balance': 'Balance',
+
+  'home.share.title': 'Share',
+  'home.share.facebook': 'Facebook',
+  'home.share.twitter': 'Twitter',
+  'home.share.whatsapp': 'WhatsApp',
+  'home.share.telegram': 'Telegram',
+  'home.share.tiktok': 'TikTok',
+  'home.share.instagram': 'Instagram',
+
+  'home.requesting.title': 'Onchain Currency with ezgg',
+  'home.requesting.description': 'Requesting Payment',
+
+  'home.claim.title': 'Onchain Currency with ezgg',
+  'home.claim.description': 'Claim your crypto',
 };

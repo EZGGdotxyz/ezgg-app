@@ -14,7 +14,14 @@ export async function postTransactionHistoryCreateTransactionHistory(
     /** 交易分类 */
     transactionCategory: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
     /** 交易类型 */
-    transactionType: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+    transactionType:
+      | 'SEND'
+      | 'REQUEST'
+      | 'DEPOSIT'
+      | 'WITHDRAW'
+      | 'PAY_LINK'
+      | 'QR_CODE'
+      | 'REQUEST_LINK';
     /** 付款人 - 会员id */
     senderMemberId?: number;
     /** 收款人 - 会员id */
@@ -31,7 +38,14 @@ export async function postTransactionHistoryCreateTransactionHistory(
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -73,18 +87,7 @@ export async function postTransactionHistoryCreateTransactionHistory(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -96,18 +99,7 @@ export async function postTransactionHistoryCreateTransactionHistory(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>('/member/transaction/history/create-transaction-history', {
@@ -132,7 +124,14 @@ export async function postTransactionHistoryCreateTransactionHistory2(
     /** 交易分类 */
     transactionCategory: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
     /** 交易类型 */
-    transactionType: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+    transactionType:
+      | 'SEND'
+      | 'REQUEST'
+      | 'DEPOSIT'
+      | 'WITHDRAW'
+      | 'PAY_LINK'
+      | 'QR_CODE'
+      | 'REQUEST_LINK';
     /** 付款人 - 会员id */
     senderMemberId?: number;
     /** 收款人 - 会员id */
@@ -149,7 +148,14 @@ export async function postTransactionHistoryCreateTransactionHistory2(
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -191,18 +197,7 @@ export async function postTransactionHistoryCreateTransactionHistory2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -214,18 +209,7 @@ export async function postTransactionHistoryCreateTransactionHistory2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>('/member/transaction/history/create-transaction-history', {
@@ -251,7 +235,14 @@ export async function postTransactionHistoryDeclineTransactionHistory(
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -293,18 +284,7 @@ export async function postTransactionHistoryDeclineTransactionHistory(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -316,18 +296,7 @@ export async function postTransactionHistoryDeclineTransactionHistory(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>('/member/transaction/history/decline-transaction-history', {
@@ -353,7 +322,14 @@ export async function postTransactionHistoryDeclineTransactionHistory2(
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -395,18 +371,7 @@ export async function postTransactionHistoryDeclineTransactionHistory2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -418,18 +383,7 @@ export async function postTransactionHistoryDeclineTransactionHistory2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>('/member/transaction/history/decline-transaction-history', {
@@ -454,7 +408,14 @@ export async function getTransactionHistoryFindTransactionHistoryId(
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -496,18 +457,7 @@ export async function getTransactionHistoryFindTransactionHistoryId(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -519,18 +469,7 @@ export async function getTransactionHistoryFindTransactionHistoryId(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>(`/member/transaction/history/find-transaction-history/${param0}`, {
@@ -556,7 +495,14 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -598,18 +544,7 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -621,18 +556,7 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>(`/member/transaction/history/find-transaction-history/${param0}`, {
@@ -658,7 +582,14 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -700,18 +631,7 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -723,18 +643,7 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>(`/member/transaction/history/find-transaction-history/code/${param0}`, {
@@ -760,7 +669,14 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -802,18 +718,7 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -825,18 +730,7 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>(`/member/transaction/history/find-transaction-history/code/${param0}`, {
@@ -866,7 +760,14 @@ export async function getTransactionHistoryPageTransactionHistory(
       totalCount?: number;
       record?: {
         transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-        transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+        transactionType?:
+          | 'SEND'
+          | 'REQUEST'
+          | 'DEPOSIT'
+          | 'WITHDRAW'
+          | 'PAY_LINK'
+          | 'QR_CODE'
+          | 'REQUEST_LINK';
         business?: 'LINK' | 'VAULT' | 'TRANSFER';
         transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
         platform?: 'ETH' | 'SOLANA';
@@ -908,18 +809,7 @@ export async function getTransactionHistoryPageTransactionHistory(
           createdAt?: string;
           nickname?: string;
           avatar?: string;
-          memberLinkedAccount?: {
-            id?: number;
-            createBy?: number;
-            updateBy?: number;
-            createAt?: string;
-            updateAt?: string;
-            memberId?: number;
-            did?: string;
-            type?: string;
-            detail?: string;
-            search?: string;
-          }[];
+          memberLinkedAccount?: { type?: string; search?: string }[];
         };
         receiverMember: {
           id?: number;
@@ -931,18 +821,7 @@ export async function getTransactionHistoryPageTransactionHistory(
           createdAt?: string;
           nickname?: string;
           avatar?: string;
-          memberLinkedAccount?: {
-            id?: number;
-            createBy?: number;
-            updateBy?: number;
-            createAt?: string;
-            updateAt?: string;
-            memberId?: number;
-            did?: string;
-            type?: string;
-            detail?: string;
-            search?: string;
-          }[];
+          memberLinkedAccount?: { type?: string; search?: string }[];
         };
       }[];
     };
@@ -978,7 +857,14 @@ export async function getTransactionHistoryPageTransactionHistory2(
       totalCount?: number;
       record?: {
         transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-        transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+        transactionType?:
+          | 'SEND'
+          | 'REQUEST'
+          | 'DEPOSIT'
+          | 'WITHDRAW'
+          | 'PAY_LINK'
+          | 'QR_CODE'
+          | 'REQUEST_LINK';
         business?: 'LINK' | 'VAULT' | 'TRANSFER';
         transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
         platform?: 'ETH' | 'SOLANA';
@@ -1020,18 +906,7 @@ export async function getTransactionHistoryPageTransactionHistory2(
           createdAt?: string;
           nickname?: string;
           avatar?: string;
-          memberLinkedAccount?: {
-            id?: number;
-            createBy?: number;
-            updateBy?: number;
-            createAt?: string;
-            updateAt?: string;
-            memberId?: number;
-            did?: string;
-            type?: string;
-            detail?: string;
-            search?: string;
-          }[];
+          memberLinkedAccount?: { type?: string; search?: string }[];
         };
         receiverMember: {
           id?: number;
@@ -1043,18 +918,7 @@ export async function getTransactionHistoryPageTransactionHistory2(
           createdAt?: string;
           nickname?: string;
           avatar?: string;
-          memberLinkedAccount?: {
-            id?: number;
-            createBy?: number;
-            updateBy?: number;
-            createAt?: string;
-            updateAt?: string;
-            memberId?: number;
-            did?: string;
-            type?: string;
-            detail?: string;
-            search?: string;
-          }[];
+          memberLinkedAccount?: { type?: string; search?: string }[];
         };
       }[];
     };
@@ -1089,7 +953,14 @@ export async function postTransactionHistoryUpdateTransactionHash(
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -1131,18 +1002,7 @@ export async function postTransactionHistoryUpdateTransactionHash(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -1154,18 +1014,7 @@ export async function postTransactionHistoryUpdateTransactionHash(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>('/member/transaction/history/update-transaction-hash', {
@@ -1193,7 +1042,14 @@ export async function postTransactionHistoryUpdateTransactionHash2(
     msg: string;
     data?: {
       transactionCategory?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW';
-      transactionType?: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
+      transactionType?:
+        | 'SEND'
+        | 'REQUEST'
+        | 'DEPOSIT'
+        | 'WITHDRAW'
+        | 'PAY_LINK'
+        | 'QR_CODE'
+        | 'REQUEST_LINK';
       business?: 'LINK' | 'VAULT' | 'TRANSFER';
       transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
       platform?: 'ETH' | 'SOLANA';
@@ -1235,18 +1091,7 @@ export async function postTransactionHistoryUpdateTransactionHash2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
       receiverMember: {
         id?: number;
@@ -1258,18 +1103,7 @@ export async function postTransactionHistoryUpdateTransactionHash2(
         createdAt?: string;
         nickname?: string;
         avatar?: string;
-        memberLinkedAccount?: {
-          id?: number;
-          createBy?: number;
-          updateBy?: number;
-          createAt?: string;
-          updateAt?: string;
-          memberId?: number;
-          did?: string;
-          type?: string;
-          detail?: string;
-          search?: string;
-        }[];
+        memberLinkedAccount?: { type?: string; search?: string }[];
       };
     };
   }>('/member/transaction/history/update-transaction-hash', {

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-26 14:21:05
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 15:03:52
+ * @LastEditTime: 2025-03-05 12:56:43
  * @FilePath: /ezgg-app/apps/next/pages/_app.tsx
  */
 import '@tamagui/core/reset.css';
@@ -10,7 +10,7 @@ import '../style/global.css';
 import '../style/react-photo-view.css';
 import '@tamagui/font-inter/css/700.css';
 import 'raf/polyfill';
-import {PrimaryColor} from 'app/config';
+import {AppName, PrimaryColor} from 'app/config';
 
 import {NextThemeProvider, useRootTheme} from '@tamagui/next-theme';
 import i18n from 'app/locales/index';
@@ -31,8 +31,8 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
   return (
     <>
       <Head>
-        <title>Bitenet</title>
-        <meta name="description" content="Bitenet" />
+        <title>{AppName}</title>
+        <meta name="description" content={AppName} />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"

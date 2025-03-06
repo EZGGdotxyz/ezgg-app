@@ -11089,6 +11089,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.3.2":
+  version: 2.5.1
+  resolution: "classnames@npm:2.5.1"
+  checksum: 58eb394e8817021b153bb6e7d782cfb667e4ab390cb2e9dac2fc7c6b979d1cc2b2a733093955fc5c94aa79ef5c8c89f11ab77780894509be6afbb91dddd79d15
+  languageName: node
+  linkType: hard
+
 "clean-css@npm:^5.2.2":
   version: 5.3.3
   resolution: "clean-css@npm:5.3.3"
@@ -11772,7 +11779,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:2.6.9, debug@npm:^2.2.0, debug@npm:^2.6.9":
+"debug@npm:2.6.9, debug@npm:^2.1.3, debug@npm:^2.2.0, debug@npm:^2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
   dependencies:
@@ -13734,6 +13741,17 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 4fb1697ac53d5bce45be6b30f22087d4bbf5d61f4fcf370a34a91e33340f2982ad9fe2695f8a735cb6148d502291b170cd06183331b41e01296341f5f3361708
+  languageName: node
+  linkType: hard
+
+"expo-clipboard@npm:^7.0.1":
+  version: 7.0.1
+  resolution: "expo-clipboard@npm:7.0.1"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 48c56d5bb51c78e0d874fb0fb672c9be95f1724995f1b722427899d61c573ea7a1f871b8a643a7b38f9c1abc1329c00ad45458706982c41575ca95599603c697
   languageName: node
   linkType: hard
 
@@ -16734,6 +16752,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsonp@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "jsonp@npm:0.2.1"
+  dependencies:
+    debug: "npm:^2.1.3"
+  checksum: 90aabd9deb3a9ba83aedf8d40e1aaff1fc29f3f3fe42985a661782498dde526a7cd9b7bec4b8721f7d0beafab9e5ccfdafd46640f7dd6c58d529a6bb5238e2b8
+  languageName: node
+  linkType: hard
+
 "jsonparse@npm:^1.2.0":
   version: 1.3.1
   resolution: "jsonparse@npm:1.3.1"
@@ -18051,6 +18078,7 @@ __metadata:
     eslint: "npm:^8.21.0"
     ethers: "npm:^6.9.0"
     expo-camera: "npm:~15.0.14"
+    expo-clipboard: "npm:^7.0.1"
     expo-linear-gradient: "npm:~13.0.2"
     expo-location: "npm:~17.0.1"
     expo-web-browser: "npm:~13.0.3"
@@ -18072,6 +18100,7 @@ __metadata:
     react-native-reanimated: "npm:~3.10.1"
     react-native-storage: "npm:^1.0.1"
     react-photo-view: "npm:^1.2.6"
+    react-share: "npm:^5.2.2"
     selection-extra: "npm:^0.0.6"
     swiper: "npm:^11.1.5"
     turbo: "npm:^1.10.3"
@@ -20574,6 +20603,18 @@ __metadata:
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0
   checksum: 06457fe5bcaa44aeca998905b6849304742ea1cc2d3841e4a0964c745ff392bc4dec07f8c779f317faacce3a0bf6f84e15020ac0fa81adb931067dbb0baf707b
+  languageName: node
+  linkType: hard
+
+"react-share@npm:^5.2.2":
+  version: 5.2.2
+  resolution: "react-share@npm:5.2.2"
+  dependencies:
+    classnames: "npm:^2.3.2"
+    jsonp: "npm:^0.2.1"
+  peerDependencies:
+    react: ^17 || ^18 || ^19
+  checksum: dbb5b38ade90ae18ec736a62ab751e557a45e16e4de48f3dad11a2260c42826ca141a8270d2228a739929f9c02ecff10aa675b33cf94935400e3e1beb3cebfa6
   languageName: node
   linkType: hard
 

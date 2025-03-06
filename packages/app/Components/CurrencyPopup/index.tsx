@@ -10,7 +10,7 @@ import {TokenIcon} from '@web3icons/react';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
 import {appScale, formatNumber, formatTokenAmount} from 'app/utils';
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, forwardRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
 
@@ -22,13 +22,13 @@ export type CurrencyPopupProps = {
   currencyData: any;
 };
 // 币种选择弹窗
-const CurrencyPopup: React.FC<any> = ({
+const CurrencyPopup = forwardRef<any, any>(({
   modalVisible,
   setModalVisible,
   currencyList,
   selectCurrency,
   currencyData,
-}: CurrencyPopupProps) => {
+}: CurrencyPopupProps, ref) => {
   const {t, i18n} = useTranslation();
   const scrollViewRef = useRef<any>(null);
 
@@ -175,6 +175,6 @@ const CurrencyPopup: React.FC<any> = ({
       </Sheet.Frame>
     </Sheet>
   );
-};
+});
 
 export default CurrencyPopup;

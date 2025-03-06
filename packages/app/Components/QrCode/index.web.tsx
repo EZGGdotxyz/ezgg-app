@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-08 16:25:15
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-07-19 16:39:22
- * @FilePath: /snapx-nfc-app/packages/app/Components/QrCode/index.web.tsx
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-03-05 14:43:52
+ * @FilePath: /ezgg-app/packages/app/Components/QrCode/index.web.tsx
  */
 
 import {XStack} from '@my/ui';
@@ -16,7 +16,13 @@ interface FeedbackProps {
 export default function QrCode({size, url}: FeedbackProps) {
   return (
     <XStack>
-      <QRCode value={url} size={size} />
+      <QRCode
+        value={url}
+        size={size}
+        level="H" // 容错率级别 Higher
+        includeMargin={false}
+        renderAs="svg" // 必须指定 SVG 模式
+      />
     </XStack>
   );
 }

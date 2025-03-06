@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 22:55:25
+ * @LastEditTime: 2025-03-05 15:32:31
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/index.tsx
  */
 import {
@@ -29,87 +29,18 @@ import {ChevronRight} from '@tamagui/lucide-icons';
 import {PrimaryColor} from 'app/config';
 import AppHeader2 from 'app/Components/AppHeader2';
 import SearchHeader from 'app/Components/SearchHeader';
-import {getNotificationPageNotification} from 'app/servers/api/notification';
-
+import {getNotificationGetUnreadCount, getNotificationPageNotification} from 'app/servers/api/notification';
+import {useDispatch} from 'react-redux';
+import {Dispatch} from 'app/store';
+import Item from './components/Item';
 const {useParam} = createParam<{id: string}>();
-
-type ItemProps = {
-  item: any;
-  isBorderBottom: boolean;
-  onWrite: (item: any) => void;
-  itemKey: any;
-};
-const Item: React.FC<any> = ({item, isBorderBottom, itemKey, onWrite}: ItemProps) => {
-  const {t, i18n} = useTranslation();
-  const {push} = useRouter();
-  const scheme = 'light';
-
-  return (
-    <YStack
-      p={appScale(24)}
-      bc={'$background'}
-      style={{
-        backgroundColor: '#fff',
-      }}
-      ai="center"
-      width={'100%'}
-      jc={'space-between'}
-    >
-      <XStack jc={'space-between'} w="100%">
-        <YStack flex={1}>
-          <XStack w={'100%'} jc={'space-between'} mb={'$2'}>
-            <SizableText color={'#212121'} w="100%" fow="600" size={'$6'} pr={'$1'}>
-              {item?.title}
-            </SizableText>
-            <XStack space="$3">
-              {item?.status === 'unread' && (
-                <Button unstyled>
-                  <AppImage
-                    width={appScale(32)}
-                    height={appScale(32)}
-                    src={require('app/assets/images/error.png')}
-                    type="local"
-                  />
-                </Button>
-              )}
-              {item?.status === 'unread' && (
-                <Button unstyled>
-                  <AppImage
-                    width={appScale(32)}
-                    height={appScale(32)}
-                    src={require('app/assets/images/success.png')}
-                    type="local"
-                  />
-                </Button>
-              )}
-            </XStack>
-          </XStack>
-
-          {item?.description && (
-            <SizableText color={'#424242'} size={'$3'} fow={'500'}>
-              {item?.description}
-            </SizableText>
-          )}
-          <XStack w="100%" jc={'space-between'} mb={'$2'}>
-            <SizableText color={'#616161'} size={'$1'} fow={'500'}>
-              {dayjs(item?.createAt).format('HH:mm A')}
-            </SizableText>
-          </XStack>
-        </YStack>
-        <XStack flexShrink={0} jc={'flex-end'} ai={'center'} w={36}>
-          <ChevronRight color={'#757575'} size={24} />
-        </XStack>
-      </XStack>
-    </YStack>
-  );
-};
 
 // 關於
 const NotificationScreen = (props: any) => {
   const {isRefresh} = props;
   const {t} = useTranslation();
   const scheme = 'light';
-
+  const dispatch = useDispatch<Dispatch>();
   const {makeRequest} = useRequest();
   const [data, setData] = useState<any>([]);
   const [page, setPage] = useState(1);
@@ -164,12 +95,27 @@ const NotificationScreen = (props: any) => {
   useEffect(() => {
     if (isRefresh) {
       fetchData();
+      _getUnread();
     }
   }, [isRefresh]);
 
   const onSearch = (text) => {
     // setSearchText(text);
     console.log('🚀 ~ onSearch ~ text:', text);
+  };
+
+  // 获取 未读消息数
+  const _getUnread = async () => {
+    const res = await makeRequest(getNotificationGetUnreadCount());
+    if (res?.data) {
+      dispatch.app.updateState({
+        unread: res?.data,
+      });
+    } else {
+      dispatch.app.updateState({
+        unread: 0,
+      });
+    }
   };
 
   /**
@@ -207,18 +153,7 @@ const NotificationScreen = (props: any) => {
     }
   };
 
-  const onWrite = (item: any) => {
-    setWriteData({
-      restaurantId: item?.restaurant?.id,
-      recordType: 'luckyDraw',
-      recordId: item?.memberGiftExchangeId,
-      name: item?.luckyDrawGiftName,
-      en_name: item?.luckyDrawGiftEN_name,
-      description: item?.luckyDrawGiftDescription,
-      en_description: item?.luckyDrawGiftEn_description,
-      photo: item?.luckyDrawGiftPhoto,
-      quantity: item?.luckyDrawRuleQuantity,
-    });
+  const onRead = (item: any) => {
     setModalVisible(true);
   };
 
@@ -256,7 +191,7 @@ const NotificationScreen = (props: any) => {
         ListEmptyComponent={<ListEmpty loading={loading} />}
         renderItem={({item, index}) => (
           <XStack w="100%" jc={'center'} key={item.id + 'id' + index}>
-            <Item isBorderBottom={index === data.length - 1} onWrite={onWrite} item={item} itemKey={item.id} />
+            <Item isBorderBottom={index === data.length - 1} onRead={onRead} item={item} itemKey={item.id} />
           </XStack>
         )}
       />

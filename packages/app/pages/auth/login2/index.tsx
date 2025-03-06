@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 15:26:50
+ * @LastEditTime: 2025-03-06 12:58:26
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {YStack, SizableText, AppImage, Button} from '@my/ui';
@@ -54,8 +54,7 @@ const LoginScreen = () => {
 
         initLogin(JSON.parse(token), JSON.parse(idToken));
         const _userInfo = await initUserInfo();
-
-        if (_userInfo?.nickname) {
+        if (_userInfo?.customMetadata?.nickname) {
           handleSuccess({
             nickname: _userInfo?.customMetadata?.nickname || '',
             avatar: _userInfo?.customMetadata?.avatar || '',

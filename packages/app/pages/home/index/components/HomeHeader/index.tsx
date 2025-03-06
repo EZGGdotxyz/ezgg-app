@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 15:26:40
+ * @LastEditTime: 2025-03-05 15:30:46
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeHeader/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -63,7 +63,7 @@ const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
           }}
         >
           {unread > 0 && (
-            <XStack pos="absolute" p="$4" t={0} r={0} h={'100%'}>
+            <XStack pos="absolute" t={0} r={0} h={'100%'}>
               <XStack mt={10} mr={4} w={8} h={8} borderRadius={4} bc={'red'}></XStack>
             </XStack>
           )}
