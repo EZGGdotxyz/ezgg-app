@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 11:06:11
+ * @LastEditTime: 2025-03-07 12:34:38
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/History/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -9,106 +9,74 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronRight} from '@tamagui/lucide-icons';
-import {appScale, getRelativeDate} from 'app/utils';
-import HistoryItem from 'app/Components/HistoryItem';
+import {appScale} from 'app/utils';
 import HistoryDayItem from 'app/Components/HistoryDayItem';
-import {useState} from 'react';
+import {useMemo} from 'react';
 import AppButton from 'app/Components/AppButton';
 
 export type HistoryProps = {
   history: any[];
 };
-// 首页 History
-const History: React.FC<any> = ({history}: HistoryProps) => {
+
+const History: React.FC<HistoryProps> = ({history}) => {
   const [{isLogin}] = useRematchModel('user');
   const {push} = useRouter();
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
 
-  // const list2 = [
-  //   {
-  //     day: getRelativeDate(new Date()),
-  //     list: [
-  //       {
-  //         id: 1,
-  //         name: 'From Request (@Elvan123)',
-  //         link: 'Thank you for your good work! 🍻',
-  //         amount: '100',
-  //       },
-  //       {
-  //         id: 1,
-  //         name: 'USDC',
-  //         link: 'Polygon',
-  //         amount: '100',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     day: getRelativeDate('2025-02-22'),
-  //     list: [
-  //       {
-  //         id: 1,
-  //         name: 'From Request (@Elvan123)',
-  //         link: 'Thank you for your good work! 🍻',
-  //         amount: '100',
-  //       },
-  //       {
-  //         id: 3,
-  //         name: 'USDC',
-  //         link: 'Polygon',
-  //         amount: '100',
-  //       },
-  //     ],
-  //   },
-  // ];
+  const renderEmptyState = () => (
+    <YStack flex={1} ai="center" jc="center" pt={appScale(48)}>
+      <AppImage
+        width={appScale(160)}
+        height={appScale(156)}
+        src={require('app/assets/images/empty2.png')}
+        type="local"
+      />
+      <SizableText mt={appScale(32)} col={'#212121'} fontSize={'$6'} fow={'700'}>
+        {t('home.order.noTransactions')}
+      </SizableText>
+      <SizableText mt={appScale(16)} col={'#212121'} fontSize={'$3'} fow="400">
+        {t('home.order.noTransactions2')}
+      </SizableText>
+    </YStack>
+  );
+
+  const renderLoginButton = () => (
+    <YStack pt={appScale(48)} pl={appScale(24)} pr={appScale(24)}>
+      <AppButton onPress={() => push('/login')}>
+        {t('login.loginButton')}
+      </AppButton>
+    </YStack>
+  );
+
+  const renderHistoryList = () => (
+    <>
+      <XStack
+        ai="center"
+        jc="flex-end"
+        h={appScale(36)}
+        pl={appScale(24)}
+        pr={appScale(24)}
+        onPress={() => push('/home/history')}
+      >
+        <SizableText fontSize={'$4'} color={'$color11'} mr={'$2'}>
+          {t('home.viewAll')}
+        </SizableText>
+        <ChevronRight size="$2" color={'$color11'} />
+      </XStack>
+      {history.map((item, index) => (
+        <HistoryDayItem key={index} item={item} />
+      ))}
+    </>
+  );
 
   return (
     <YStack pt={appScale(8)} flex={1}>
       {history.length > 0 ? (
-        <>
-          <XStack
-            ai="center"
-            jc="flex-end"
-            h={appScale(36)}
-            pl={appScale(24)}
-            pr={appScale(24)}
-            onPress={() => {
-              push('/home/history');
-            }}
-          >
-            <SizableText fontSize={'$5'} color={'$color11'} mr={'$2'}>
-              {t('home.viewAll')}
-            </SizableText>
-            <ChevronRight size="$3" color={'$color11'} />
-          </XStack>
-          {history.map((item, index) => (
-            <HistoryDayItem key={index} item={item} />
-          ))}
-        </>
+        renderHistoryList()
       ) : isLogin ? (
-        <YStack flex={1} ai="center" jc="center" pt={appScale(48)}>
-          <AppImage
-            width={appScale(160)}
-            height={appScale(156)}
-            src={require('app/assets/images/empty2.png')}
-            type="local"
-          />
-          <SizableText mt={appScale(32)} col={'#212121'} fontSize={'$7'} fow={'700'}>
-            {t('home.order.noTransactions')}
-          </SizableText>
-          <SizableText mt={appScale(16)} col={'#212121'} fontSize={'$3'} fow="400">
-            {t('home.order.noTransactions2')}
-          </SizableText>
-        </YStack>
+        renderEmptyState()
       ) : (
-        <YStack pt={appScale(48)} pl={appScale(24)} pr={appScale(24)}>
-          <AppButton
-            onPress={() => {
-              push('/login');
-            }}
-          >
-            {t('login.loginButton')}
-          </AppButton>
-        </YStack>
+        renderLoginButton()
       )}
     </YStack>
   );

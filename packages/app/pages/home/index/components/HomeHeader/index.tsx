@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 15:30:46
+ * @LastEditTime: 2025-03-07 13:20:44
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeHeader/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -31,7 +31,7 @@ const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
         pr={appScale(24)}
         pt={appScale(12)}
         pb={appScale(12)}
-        h={72}
+        h={appScale(72)}
         ai={'center'}
         jc={'space-between'}
       >
@@ -44,7 +44,7 @@ const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
           />
         </XStack>
         <XStack ai={'center'} h={'100%'}>
-          <SizableText col={'$color'} fontSize={'$8'} fow={'700'}>
+          <SizableText col={'$color'} fontSize={'$7'} fow={'700'}>
             {AppName}
           </SizableText>
         </XStack>
@@ -64,7 +64,7 @@ const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
         >
           {unread > 0 && (
             <XStack pos="absolute" t={0} r={0} h={'100%'}>
-              <XStack mt={10} mr={4} w={8} h={8} borderRadius={4} bc={'red'}></XStack>
+              <XStack mt={appScale(8)} mr={appScale(4)} w={appScale(8)} h={appScale(8)} borderRadius={appScale(4)} bc={'red'}></XStack>
             </XStack>
           )}
           {/* <AlignJustify color={'$color'} /> */}

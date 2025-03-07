@@ -9619,6 +9619,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"amfe-flexible@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "amfe-flexible@npm:2.2.1"
+  checksum: fe7f94a4798ce40f19ad722f5c823a57fd920c8acea9e8856d40f7bf737bf9ae7cdb86aee932c11b6528dae0995af2ba3a965f58198abc867d8d5aa8dedfa0c6
+  languageName: node
+  linkType: hard
+
 "anser@npm:^1.4.9":
   version: 1.4.10
   resolution: "anser@npm:1.4.10"
@@ -18075,6 +18082,7 @@ __metadata:
     "@tanstack/react-virtual": "npm:^3.0.1"
     "@types/lodash": "npm:^4"
     "@web3icons/react": "npm:^4.0.10"
+    amfe-flexible: "npm:^2.2.1"
     aws-sdk: "npm:^2.1525.0"
     check-dependency-version-consistency: "npm:^3.0.3"
     eslint: "npm:^8.21.0"

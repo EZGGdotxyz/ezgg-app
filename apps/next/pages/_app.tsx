@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-26 14:21:05
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 12:56:43
+ * @LastEditTime: 2025-03-07 13:52:41
  * @FilePath: /ezgg-app/apps/next/pages/_app.tsx
  */
 import '@tamagui/core/reset.css';
@@ -21,13 +21,62 @@ import type {SolitoAppProps} from 'solito';
 import {useColorScheme} from 'react-native';
 import {SmartWalletsProvider} from '@privy-io/react-auth/smart-wallets';
 import {PrivyProvider} from '@privy-io/react-auth';
-
 i18n.language;
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css');
 }
+// require('../public/tamagui.css');
 
 function MyApp({Component, pageProps}: SolitoAppProps) {
+  // 设置 body 字体大小（防止继承影响）
+  const setBodyFontSize = () => {
+    const dpr = window.devicePixelRatio || 1;
+    if (document.body) {
+      document.body.style.fontSize = 12 * dpr + 'px';
+    } else {
+      document.addEventListener('DOMContentLoaded', setBodyFontSize);
+    }
+  };
+
+  // 设置根字体大小
+  const setRemUnit = () => {
+    const docEl = document.documentElement;
+    // 假设设计稿宽度为 750px（根据实际项目修改）
+    const designWidth = 860;
+    const rem = docEl.clientWidth / (designWidth / 10);
+    docEl.style.fontSize = rem + 'px';
+  };
+
+  // 初始化屏幕缩放
+  const setViewportScale = () => {
+    const dpr = window.devicePixelRatio || 1;
+    const metaEl = document.querySelector('meta[name="viewport"]');
+    const content = `
+      initial-scale=${1 / dpr},
+      maximum-scale=${1 / dpr},
+      minimum-scale=${1 / dpr},
+      user-scalable=no
+    `;
+    if (!metaEl) {
+      document.write(`<meta name="viewport" content="${content}">`);
+    } else {
+      metaEl.setAttribute('content', content);
+    }
+  };
+
+  useEffect(() => {
+    // 初始化
+    // setViewportScale();
+    // setRemUnit();
+    // setBodyFontSize();
+
+    // // 监听窗口变化
+    // window.addEventListener('resize', setRemUnit);
+    // window.addEventListener('pageshow', (e) => {
+    //   if (e.persisted) setRemUnit();
+    // });
+  }, []);
+
   return (
     <>
       <Head>
@@ -39,7 +88,7 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
         ></meta>
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet"

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 13:44:10
+ * @LastEditTime: 2025-03-07 13:37:24
  * @FilePath: /ezgg-app/packages/app/pages/explore/amount/index.tsx
  */
 import {
@@ -15,6 +15,7 @@ import {
   AppImage,
   useToastController,
   Button,
+  ScrollView,
 } from '@my/ui';
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -42,7 +43,8 @@ const {useParams} = createParam<any>();
 // 存款
 const AmountScreen = () => {
   const {t} = useTranslation();
-  const [{payLinkData}] = useRematchModel('user');
+  const [{payLinkData, userInfo}] = useRematchModel('user');
+
   const dispatch = useDispatch<Dispatch>();
   const [inputValue, setInputValue] = React.useState('');
   const [showKeyboard, setShowKeyboard] = React.useState(false);
@@ -54,9 +56,7 @@ const AmountScreen = () => {
   const {onSendSubmit, onRequestSubmit} = useTransaction();
   const {makeRequest} = useRequest();
 
-  const [userInfo, setUserInfo] = React.useState<any>();
-
-  console.log('🚀 ~ AmountScreen ~ userInfo:', userInfo);
+  const [receiverUserInfo, setReceiverUserInfo] = React.useState<any>();
 
   const toast = useToastController();
 
@@ -72,7 +72,7 @@ const AmountScreen = () => {
     const res = await makeRequest(getUserFindUserIdId({id: params?.id}));
     console.log('res', res);
     if (res?.code === '0') {
-      setUserInfo(res?.data);
+      setReceiverUserInfo(res?.data);
     }
   };
 
@@ -102,12 +102,14 @@ const AmountScreen = () => {
       amount: _amount,
       message: '',
       transactionCategory: type,
-      transactionType: 'QR_CODE',
+      transactionType: type === 'REQUEST' ? 'REQUEST_QR_CODE' : 'QR_CODE',
     };
     if (type === 'SEND') {
-      _params.receiverMemberId = Number(params?.id);
+      // _params.senderMemberId = Number(userInfo?.customMetadata?.id);
+      _params.receiverMemberId = Number(receiverUserInfo?.id);
     } else {
-      _params.senderMemberId = Number(params?.id);
+      _params.senderMemberId = Number(receiverUserInfo?.id);
+      // _params.receiverMemberId = Number(userInfo?.customMetadata?.id);
     }
 
     return _params;
@@ -117,15 +119,16 @@ const AmountScreen = () => {
     try {
       setIsLoading(true);
       const _params = createTransactionParams(type);
+
       if (type === 'SEND') {
         await onSendSubmit(_params, (data) => {
           setIsLoading(false);
-          push('/home/success?type=qrCode&id=' + data?.id);
+          replace('/home/success?type=qrCode&id=' + data?.id);
         });
       } else {
         await onRequestSubmit(_params, (data) => {
           setIsLoading(false);
-          push('/home/success?type=requestQrCode&id=' + data?.id);
+          replace('/home/success?type=requestQrCode&id=' + data?.id);
         });
       }
     } catch (error) {
@@ -146,7 +149,6 @@ const AmountScreen = () => {
     e.stopPropagation();
     setShowKeyboard(true);
   };
-
   return (
     <PermissionPage>
       <AppHeader2
@@ -156,115 +158,126 @@ const AmountScreen = () => {
           dispatch.user.updateState({payLinkData: {}});
           window.history.pushState(null, '', '/');
         }}
-        title={params?.type === 'request' ? t('screen.home.requestFrom') : t('screen.home.send')}
+        title={params?.type === 'request' ? t('screen.home.request') : t('screen.home.send')}
         fallbackUrl="/"
       />
-      <YStack pl={appScale(24)} pr={appScale(24)} flex={1} w="100%" onPress={handlePagePress}>
-        <YStack w="100%" mb={appScale(24)}>
-          <XStack mb={appScale(8)} w="100%">
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-              {t('home.paylink.recipient')}
-            </SizableText>
-          </XStack>
-
-          <XStack
-            w="100%"
-            p={appScale(16)}
-            bc={'#FAFAFA'}
-            br={appScale(8)}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <XStack>
-              <YStack pos={'relative'} w={appScale(84)} flexShrink={0}>
-                {!userInfo?.avatar ? (
-                  <AppImage
-                    width={appScale(60)}
-                    height={appScale(60)}
-                    src={require(`app/assets/images/avatar.png`)}
-                    type="local"
-                  />
-                ) : (
-                  <AppImage width={appScale(60)} height={appScale(60)} src={userInfo?.avatar} />
-                )}
-              </YStack>
-              <YStack gap={appScale(2)}>
-                <SizableText fontSize={'$6'} color={'#26273C'} fontWeight={'500'}>
-                  @{userInfo?.nickname}
-                </SizableText>
-                <SizableText fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
-                  {getUserSubName(userInfo)}
-                </SizableText>
-              </YStack>
+      <ScrollView
+        flex={1}
+        w={'100%'}
+        bc="#fff"
+        contentContainerStyle={{
+          minHeight: '100%',
+        }}
+      >
+        <YStack pl={appScale(24)} pr={appScale(24)} flex={1} w="100%" onPress={handlePagePress}>
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#212121'} fontWeight={'600'}>
+                {t('home.paylink.recipient')}
+              </SizableText>
             </XStack>
-          </XStack>
-        </YStack>
 
-        <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
-        <YStack w="100%" mb={appScale(24)}>
-          <XStack mb={appScale(8)} w="100%">
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-              {params?.type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
-            </SizableText>
-          </XStack>
-          <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
-            <SizableText
-              fontSize={'$10'}
-              h={appScale(50)}
-              lh={appScale(50)}
-              color={'#212121'}
-              fontWeight={'600'}
-              pos="relative"
+            <XStack
+              w="100%"
+              p={appScale(16)}
+              bc={'#FAFAFA'}
+              br={appScale(8)}
+              justifyContent="space-between"
+              alignItems="center"
             >
-              {inputValue || '0'}
-              {showKeyboard && (
-                <XStack
-                  pos="absolute"
-                  right={-4}
-                  top={0}
-                  bottom={0}
-                  w={2}
-                  animation="quick"
-                  bc="#212121"
-                  style={{
-                    animationName: 'cursorBlink',
-                    animationDuration: '1s',
-                    animationIterationCount: 'infinite',
-                    animationTimingFunction: 'steps(2, start)',
-                  }}
-                />
-              )}
-            </SizableText>
-          </XStack>
-        </YStack>
-        {params?.type !== 'request' && (
-          <XStack mb={appScale(24)} h={appScale(24)} w="100%" ai={'center'} jc={'center'}>
-            {currencyData?.tokenAmount && (
-              <SizableText
-                h={appScale(24)}
-                lh={appScale(24)}
-                fontSize={'$4'}
-                color={'#212121'}
-                fontWeight={'500'}
-              >{`${t('home.balance')}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
-                currencyData?.chainName
-              })`}</SizableText>
-            )}
-          </XStack>
-        )}
+              <XStack>
+                <YStack pos={'relative'} w={appScale(84)} flexShrink={0}>
+                  {!receiverUserInfo?.avatar ? (
+                    <AppImage
+                      width={appScale(60)}
+                      height={appScale(60)}
+                      src={require(`app/assets/images/avatar.png`)}
+                      type="local"
+                    />
+                  ) : (
+                    <AppImage width={appScale(60)} height={appScale(60)} src={receiverUserInfo?.avatar} />
+                  )}
+                </YStack>
+                <YStack gap={appScale(2)}>
+                  <SizableText fontSize={'$5'} color={'#26273C'} fontWeight={'600'}>
+                    @{receiverUserInfo?.nickname}
+                  </SizableText>
+                  <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'500'}>
+                    {getUserSubName(receiverUserInfo)}
+                  </SizableText>
+                </YStack>
+              </XStack>
+            </XStack>
+          </YStack>
 
-        {/* <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'} borderTopWidth={1} borderColor={'#F2F2F2'}>
+          <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                {params?.type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
+              </SizableText>
+            </XStack>
+            <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
+              <SizableText
+                fontSize={'$10'}
+                h={appScale(50)}
+                lh={appScale(50)}
+                color={'#212121'}
+                fontWeight={'600'}
+                pos="relative"
+              >
+                {inputValue || '0'}
+                {showKeyboard && (
+                  <XStack
+                    pos="absolute"
+                    right={-4}
+                    top={0}
+                    bottom={0}
+                    w={2}
+                    animation="quick"
+                    bc="#212121"
+                    style={{
+                      animationName: 'cursorBlink',
+                      animationDuration: '1s',
+                      animationIterationCount: 'infinite',
+                      animationTimingFunction: 'steps(2, start)',
+                    }}
+                  />
+                )}
+              </SizableText>
+            </XStack>
+          </YStack>
+          {params?.type !== 'request' && (
+            <XStack mb={appScale(24)} h={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+              {currencyData?.tokenAmount && (
+                <SizableText
+                  h={appScale(24)}
+                  lh={appScale(24)}
+                  fontSize={'$4'}
+                  color={'#212121'}
+                  fontWeight={'500'}
+                >{`${t('home.balance')}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
+                  currencyData?.chainName
+                })`}</SizableText>
+              )}
+            </XStack>
+          )}
+
+          {/* <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'} borderTopWidth={1} borderColor={'#F2F2F2'}>
           <AppButton isLoading={buttonLoading} onPress={submit}>
             {t('home.send.continue')}
           </AppButton>
         </XStack> */}
-      </YStack>
-
+        </YStack>
+        {showKeyboard && (
+          <Keyboard decimals={currencyData?.token?.tokenDecimals || 6} onChange={setInputValue} value={inputValue} />
+        )}
+      </ScrollView>
       <XStack
         flexShrink={0}
         pl={appScale(24)}
         pr={appScale(24)}
-        pt={12}
+        pt={appScale(12)}
         pb={appScale(isIphoneX() ? 46 : 12)}
         w="100%"
         ai={'center'}
@@ -309,9 +322,6 @@ const AmountScreen = () => {
           {params?.type === 'request' ? t('home.request.requestCrypto') : t('home.paylink.sendCrypto')}
         </AppButton>
       </XStack>
-      {showKeyboard && (
-        <Keyboard decimals={currencyData?.token?.tokenDecimals || 6} onChange={setInputValue} value={inputValue} />
-      )}
       {isLoading && <AppLoading />}
     </PermissionPage>
   );

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 13:34:58
+ * @LastEditTime: 2025-03-07 13:57:50
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -16,6 +16,7 @@ import {
   TextArea,
   Button,
   useToastController,
+  ScrollView,
 } from '@my/ui';
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -71,6 +72,8 @@ const TakeScreen = (any) => {
   const dispatch = useDispatch<Dispatch>();
   const [{userInfo, isLogin}] = useRematchModel('user');
 
+  console.log('🚀 ~ TakeScreen ~ userInfo:', userInfo?.customMetadata?.id);
+
   const [inputValue, setInputValue] = React.useState('');
   const {params} = useParams();
   const [isLoading, setIsLoading] = React.useState(false);
@@ -80,42 +83,13 @@ const TakeScreen = (any) => {
   const [orderData, setOrderData] = React.useState<any>();
   const {back, push, replace} = useRouter();
 
-  const {onSendPayLinkSubmit, onRequestSubmit} = useTransaction();
-
-  const createTransactionParams = (type: 'SEND' | 'REQUEST') => {
-    const _amount = Number(convertAmountToTokenDecimals(orderData?.amount, orderData?.orderData?.tokenDecimals));
-    const params: any = {
-      platform: orderData?.token?.platform,
-      chainId: Number(orderData?.token?.chainId),
-      tokenContractAddress: orderData?.token?.address,
-      amount: _amount,
-      message: inputValue,
-      transactionCategory: type,
-      transactionType: orderData?.transactionType,
-    };
-
-    if (orderData?.userId !== 'anyone') {
-      if (type === 'SEND') {
-        params.receiverMemberId = Number(orderData?.userId);
-      } else {
-        params.senderMemberId = Number(orderData?.userId);
-      }
-    }
-
-    return params;
-  };
+  const {onSendPayLinkSubmit, onSendContract} = useTransaction();
 
   const handleSubmit = async (type: 'SEND' | 'REQUEST') => {
     try {
       setIsLoading(true);
-      const params = createTransactionParams(type);
-
-      console.log('🚀 ~ handleSubmit ~ params:', params);
       if (type === 'SEND') {
         await onSendPayLinkSubmit(orderData, (data) => {
-          // setIsLoading(false);
-          // setOrderData(data);
-          // setIsSuccess(true);
           toast.show(t('tips.success.transactionSuccess'), {
             duration: 3000,
           });
@@ -125,9 +99,15 @@ const TakeScreen = (any) => {
           }, 500);
         });
       } else {
-        await onRequestSubmit(params, (data) => {
-          setOrderData(data);
-          setIsSuccess(true);
+        await onSendContract(orderData, (data) => {
+          toast.show(t('tips.success.transactionSuccess'), {
+            duration: 3000,
+          });
+          setTimeout(() => {
+            replace('/');
+            window.history.pushState(null, '', '/');
+          }, 500);
+          // dispatch.user.updateState({payLinkData: {}});
         });
       }
     } catch (error) {
@@ -182,6 +162,17 @@ const TakeScreen = (any) => {
     }
   }, [params]);
 
+  const isMyPayLink = () => {
+    if (!isLogin) {
+      return false;
+    }
+    if (orderData?.transactionCategory === 'SEND') {
+      return orderData?.senderMember?.id === userInfo?.customMetadata?.id;
+    } else {
+      return orderData?.receiverMember?.id === userInfo?.customMetadata?.id;
+    }
+  };
+
   return (
     <PermissionPage isHomePage={true}>
       <AppHeader2
@@ -192,37 +183,45 @@ const TakeScreen = (any) => {
         title={AppName}
         fallbackUrl="/"
       />
-      <YStack flex={1} pt={appScale(80)} pl={appScale(24)} pr={appScale(24)}>
-        <YStack w="100%" mb={appScale(24)}>
-          <XStack mb={appScale(8)} w="100%" alignItems="center" justifyContent="center">
-            <SizableText h={appScale(40)} lh={appScale(40)} fontSize={'$6'} color={'#212121'} fontWeight={'700'}>
-              {orderData?.transactionCategory === 'SEND'
-                ? t('home.take.tips', {amount: formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)})
-                : t('home.take.tips2', {
-                    amount: formatTokenAmount(orderData?.amount, orderData?.tokenDecimals),
-                    name: orderData?.senderMember?.name,
-                  })}
-            </SizableText>
-          </XStack>
+      <ScrollView
+        flex={1}
+        w={'100%'}
+        bc="#fff"
+        contentContainerStyle={{
+          minHeight: '100%',
+        }}
+      >
+        <YStack flex={1} pt={appScale(80)} pl={appScale(24)} pr={appScale(24)}>
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%" alignItems="center" justifyContent="center">
+              <SizableText h={appScale(40)} lh={appScale(40)} fontSize={'$6'} color={'#212121'} fontWeight={'700'}>
+                {orderData?.transactionCategory === 'SEND'
+                  ? t('home.take.tips', {amount: formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)})
+                  : t('home.take.tips2', {
+                      amount: formatTokenAmount(orderData?.amount, orderData?.tokenDecimals),
+                      name: orderData?.receiverMember?.nickname || '',
+                    })}
+              </SizableText>
+            </XStack>
 
-          <XStack
-            w="100%"
-            p={appScale(16)}
-            bc={'#FAFAFA'}
-            br={appScale(8)}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <XStack h={appScale(50)}>
-              <XStack flexShrink={0} pos={'relative'} w={appScale(72)}>
-                {orderData?.tokenSymbol && (
-                  <YStack height={appScale(48)} width={appScale(48)} borderRadius={appScale(24)} overflow={'hidden'}>
-                    <TokenIcon symbol={orderData?.tokenSymbol} variant="background" size={appScale(48)} />
-                  </YStack>
-                )}
-              </XStack>
+            <XStack
+              w="100%"
+              p={appScale(16)}
+              bc={'#FAFAFA'}
+              br={appScale(8)}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <XStack h={appScale(50)}>
+                <XStack flexShrink={0} pos={'relative'} w={appScale(72)}>
+                  {orderData?.tokenSymbol && (
+                    <YStack height={appScale(48)} width={appScale(48)} borderRadius={appScale(24)} overflow={'hidden'}>
+                      <TokenIcon symbol={orderData?.tokenSymbol} variant="background" size={appScale(48)} />
+                    </YStack>
+                  )}
+                </XStack>
 
-              {/* <YStack pos={'relative'} w={appScale(72)} flexShrink={0}>
+                {/* <YStack pos={'relative'} w={appScale(72)} flexShrink={0}>
               <AppImage
                 width={appScale(48)}
                 height={appScale(48)}
@@ -238,87 +237,102 @@ const TakeScreen = (any) => {
                 />
               </XStack>
             </YStack> */}
-              {orderData?.tokenSymbol && (
-                <SizableText
-                  fontSize={'$8'}
-                  h={appScale(50)}
-                  lh={appScale(50)}
-                  color={'#212121'}
-                  fontWeight={'600'}
-                  pos="relative"
-                >
-                  {`${orderData?.tokenSymbol} (${getChainInfo(orderData?.chainId)?.name})`}
-                </SizableText>
-              )}
+                {orderData?.tokenSymbol && (
+                  <SizableText
+                    fontSize={'$8'}
+                    h={appScale(50)}
+                    lh={appScale(50)}
+                    color={'#212121'}
+                    fontWeight={'600'}
+                    pos="relative"
+                  >
+                    {`${orderData?.tokenSymbol} (${getChainInfo(orderData?.chainId)?.name})`}
+                  </SizableText>
+                )}
+              </XStack>
+              {/* <ChevronRight size="$3" color={'#212121'} /> */}
             </XStack>
-            {/* <ChevronRight size="$3" color={'#212121'} /> */}
-          </XStack>
-        </YStack>
+          </YStack>
 
-        <YStack w="100%" mb={appScale(24)}>
-          <XStack mb={appScale(8)} w="100%">
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-              {t('home.take.balance')}
-            </SizableText>
-          </XStack>
-          <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)}>
-            <SizableText
-              fontSize={'$8'}
-              h={appScale(50)}
-              lh={appScale(50)}
-              color={'#212121'}
-              fontWeight={'600'}
-              pos="relative"
-            >
-              {orderData?.amount
-                ? `${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol} (${
-                    getChainInfo(orderData?.chainId)?.name
-                  })`
-                : ''}
-            </SizableText>
-          </XStack>
-        </YStack>
-
-        <XStack w="100%" mb={appScale(24)}>
-          <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'400'}>
-            {orderData?.currencyAmount ? `≈ $${orderData?.currencyAmount} ${orderData?.currency}` : ''}
-          </SizableText>
-        </XStack>
-
-        <XStack w="100%" mb={appScale(24)}>
-          <AppButton
-            onPress={() => {
-              if (!isLogin) {
-                push(
-                  `/login?redirect=/${orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'}&code=${
-                    params?.code
-                  }`,
-                );
-              } else {
-                orderData?.transactionCategory === 'SEND' ? handleSubmit('SEND') : handleSubmit('REQUEST');
-              }
-            }}
-          >
-            {orderData?.transactionCategory === 'SEND' ? t('home.take.claim') : t('home.send')}
-          </AppButton>
-        </XStack>
-
-        {orderData?.message && (
           <YStack w="100%" mb={appScale(24)}>
             <XStack mb={appScale(8)} w="100%">
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-                {t('home.take.message')}
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#212121'} fontWeight={'600'}>
+                {t('home.take.balance')}
               </SizableText>
             </XStack>
-            <XStack w="100%" p={appScale(16)} h={appScale(180)} bc={'#FAFAFA'} br={appScale(8)} borderColor={'#FAFAFA'}>
-              <SizableText lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'400'}>
-                {orderData?.message || ''}
+            <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)}>
+              <SizableText
+                fontSize={'$8'}
+                h={appScale(50)}
+                lh={appScale(50)}
+                color={'#212121'}
+                fontWeight={'600'}
+                pos="relative"
+              >
+                {orderData?.amount
+                  ? `${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol} (${
+                      getChainInfo(orderData?.chainId)?.name
+                    })`
+                  : ''}
               </SizableText>
             </XStack>
           </YStack>
-        )}
-      </YStack>
 
+          <XStack w="100%" mb={appScale(24)}>
+            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#212121'} fontWeight={'400'}>
+              {orderData?.currencyAmount ? `≈ $${orderData?.currencyAmount} ${orderData?.currency}` : ''}
+            </SizableText>
+          </XStack>
+
+          <XStack w="100%" mb={appScale(24)}>
+            <AppButton
+              // disabled={isLoading}
+              disabled={isMyPayLink()}
+              onPress={() => {
+                if (!isLogin) {
+                  push(
+                    `/login?redirect=/${orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'}&code=${
+                      params?.code
+                    }`,
+                  );
+                } else {
+                  orderData?.transactionCategory === 'SEND' ? handleSubmit('SEND') : handleSubmit('REQUEST');
+                }
+              }}
+            >
+              {isMyPayLink()
+                ? orderData?.transactionCategory === 'SEND'
+                  ? t('home.take.myPayLink')
+                  : t('home.take.myPayLink2')
+                : orderData?.transactionCategory === 'SEND'
+                ? t('home.take.claim')
+                : t('home.send')}
+            </AppButton>
+          </XStack>
+
+          {orderData?.message && (
+            <YStack w="100%" mb={appScale(24)}>
+              <XStack mb={appScale(8)} w="100%">
+                <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#212121'} fontWeight={'600'}>
+                  {t('home.take.message')}
+                </SizableText>
+              </XStack>
+              <XStack
+                w="100%"
+                p={appScale(16)}
+                h={appScale(180)}
+                bc={'#FAFAFA'}
+                br={appScale(8)}
+                borderColor={'#FAFAFA'}
+              >
+                <SizableText lh={appScale(30)} fontSize={'$4'} color={'#212121'} fontWeight={'400'}>
+                  {orderData?.message || ''}
+                </SizableText>
+              </XStack>
+            </YStack>
+          )}
+        </YStack>
+      </ScrollView>
       {isLoading && <AppLoading />}
     </PermissionPage>
   );

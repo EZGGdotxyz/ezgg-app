@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 22:35:23
+ * @LastEditTime: 2025-03-07 10:21:42
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -40,6 +40,7 @@ export interface TransactionSuccessParams {
   id?: number;
   transactionCode?: string;
   transactionHash: string;
+  isPayLink?: boolean;
 }
 
 export const useTransaction = () => {
@@ -54,10 +55,15 @@ export const useTransaction = () => {
       if (!params.transactionHash) return;
 
       const res = await makeRequest(
-        postTransactionHistoryUpdateTransactionHash({
-          id: params?.id || 0,
-          transactionHash: params.transactionHash,
-        }),
+        params.isPayLink
+          ? postTransactionPayLinkUpdateTransactionHash({
+              transactionCode: params.transactionCode,
+              transactionHash: params.transactionHash,
+            })
+          : postTransactionHistoryUpdateTransactionHash({
+              id: params?.id || 0,
+              transactionHash: params.transactionHash,
+            }),
       );
 
       if (res?.code === '0') {
@@ -214,6 +220,7 @@ export const useTransaction = () => {
           id: orderData.id,
           transactionCode: orderData.transactionCode,
           transactionHash,
+          isPayLink: true,
         },
         onSuccess,
       );
@@ -226,26 +233,17 @@ export const useTransaction = () => {
     }
   };
 
-  // 发送交易
-  const onSendSubmit = async (params: TransactionParams, onSuccess?: (data: any) => void) => {
+  // 发送合约交易
+  const onSendContract = async (transaction: any, onSuccess?: (data: any) => void) => {
     try {
-      const transaction = await createTransaction(params);
-
-      console.log('🚀 ~ onSendSubmit ~ params:', params);
-
-      if (params.transactionType === 'PAY_LINK') {
-        await handleSendPayLink(transaction, onSuccess);
-        return;
-      }
-
       const tokenContractAddress = transaction.tokenContractAddress!;
       const bizContractAddress = transaction.bizContractAddress;
-      const amount = BigInt(params.amount);
+      const amount = BigInt(transaction.amount);
 
       console.log('🚀 ~ onSendSubmit ~ amount:', amount);
 
       const transactionHash = await sendTransaction({
-        chainId: params.chainId,
+        chainId: transaction.chainId,
         calls: [
           {
             to: tokenContractAddress,
@@ -273,6 +271,27 @@ export const useTransaction = () => {
         },
         onSuccess,
       );
+    } catch (error) {
+      console.error('Send submit error:', error);
+      toast.show(t('tips.error.networkError'), {
+        duration: 3000,
+      });
+      throw error;
+    }
+  };
+
+  // 发送交易
+  const onSendSubmit = async (params: TransactionParams, onSuccess?: (data: any) => void) => {
+    try {
+      const transaction = await createTransaction(params);
+
+      console.log('🚀 ~ onSendSubmit ~ params:', params);
+
+      if (params.transactionType === 'PAY_LINK') {
+        await handleSendPayLink(transaction, onSuccess);
+        return;
+      }
+      await onSendContract(transaction, onSuccess);
     } catch (error) {
       console.error('Send submit error:', error);
       toast.show(t('tips.error.networkError'), {
@@ -398,5 +417,6 @@ export const useTransaction = () => {
     onWithdraw,
     onDeposit,
     onSendPayLinkSubmit,
+    onSendContract,
   };
 };

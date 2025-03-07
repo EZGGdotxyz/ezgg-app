@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 15:23:51
+ * @LastEditTime: 2025-03-07 14:12:07
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -11,6 +11,7 @@ import {
   Button,
   HeaderBackButton,
   Paragraph,
+  ScrollView,
   SizableText,
   XStack,
   YStack,
@@ -212,119 +213,134 @@ const HistoryDetailScreen = () => {
         title={infoData?.title}
         setShareVisible={setShareVisible}
       />
-      <YStack flex={1} jc="space-between">
-        <YStack pb={appScale(24)}>
-          <YStack ai={'center'} jc={'center'} p={appScale(20)} bc={PrimaryColor}>
-            {infoData?.icon !== '' && (
-              <XStack w={'100%'} mb={appScale(12)} ai={'center'} jc={'center'}>
-                <AppImage
-                  width={appScale(100)}
-                  height={appScale(100)}
-                  src={require(`app/assets/images/${infoData?.icon}.png`)}
-                  type="local"
-                />
-              </XStack>
-            )}
-            <XStack w={'100%'} ai={'center'} jc={'center'}>
-              <SizableText
-                h={appScale(54)}
-                lh={appScale(54)}
-                style={{fontSize: '40px'}}
-                color={'#212121'}
-                fontWeight={'700'}
-              >
-                {orderData?.amount
-                  ? `${judgeAmountType(orderData)} ${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${
-                      orderData?.tokenSymbol
-                    }`
-                  : ''}
-              </SizableText>
-            </XStack>
-            {infoData?.userName !== '' && (
-              <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
-                <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'500'}>
-                  {infoData?.userName}
+      <ScrollView
+        flex={1}
+        w={'100%'}
+        bc="#fff"
+        contentContainerStyle={{
+          minHeight: '100%',
+        }}
+      >
+        <YStack flex={1} jc="space-between">
+          <YStack pb={appScale(24)}>
+            <YStack ai={'center'} jc={'center'} p={appScale(20)} bc={PrimaryColor}>
+              {infoData?.icon !== '' && (
+                <XStack w={'100%'} mb={appScale(12)} ai={'center'} jc={'center'}>
+                  <AppImage
+                    width={appScale(100)}
+                    height={appScale(100)}
+                    src={require(`app/assets/images/${infoData?.icon}.png`)}
+                    type="local"
+                  />
+                </XStack>
+              )}
+              <XStack w={'100%'} ai={'center'} jc={'center'}>
+                <SizableText
+                  lh={appScale(54)}
+                  color={'#212121'}
+                  fontWeight={'700'}
+                  fontSize={'$8'}
+                >
+                  {orderData?.amount
+                    ? `${judgeAmountType(orderData)} ${formatTokenAmount(
+                        orderData?.amount,
+                        orderData?.tokenDecimals,
+                      )} ${orderData?.tokenSymbol}`
+                    : ''}
                 </SizableText>
               </XStack>
-            )}
-          </YStack>
-
-          <YStack mt={appScale(20)} p={appScale(24)}>
-            {infoData?.infoList &&
-              infoData?.infoList.length > 0 &&
-              infoData?.infoList.map((item, index) => (
-                <XStack
-                  key={item.label}
-                  pb={appScale(16)}
-                  w="100%"
-                  ai="center"
-                  jc="space-between"
-                  bbw={1}
-                  bbc={index === infoData?.infoList.length - 1 ? '#EEEEEE' : '$background'}
-                >
-                  <SizableText h={appScale(26)} lh={appScale(26)} fontSize={'$5'} color={'#616161'} fontWeight={'500'}>
-                    {item.label}
+              {infoData?.userName !== '' && (
+                <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
+                  <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>
+                    {infoData?.userName}
                   </SizableText>
-                  {item?.isStatus && item?.value && (
-                    <XStack
-                      ai={'center'}
-                      bc={statusList[item.value]?.backgroundColor}
-                      borderRadius={appScale(8)}
-                      p={appScale(12)}
-                    >
-                      <SizableText
-                        h={appScale(20)}
-                        lh={appScale(20)}
-                        fontSize={'$1'}
-                        color={'#212121'}
-                        fontWeight={'700'}
-                      >
-                        {statusList[item.value]?.title}
-                      </SizableText>
-                    </XStack>
-                  )}
-                  {!item?.isStatus && (
-                    <XStack ai={'center'} jc={'center'}>
-                      <SizableText
-                        h={appScale(26)}
-                        lh={appScale(26)}
-                        fontSize={'$5'}
-                        color={'#424242'}
-                        fontWeight={'600'}
-                      >
-                        {item?.isTruncated ? (item?.value ? truncateAddress(item?.value) : '-') : item?.value}
-                      </SizableText>
-                      {item?.isCopyable && (
-                        <XStack ai={'center'} jc={'center'} ml={appScale(6)}>
-                          <CopyButton
-                            unstyled
-                            text={item?.isHx ? getExplorerUrl(orderData?.chainId, item?.value) : item?.value}
-                          >
-                            <AppImage
-                              width={appScale(18)}
-                              height={appScale(18)}
-                              src={require('app/assets/images/copy.png')}
-                              type="local"
-                            />
-                          </CopyButton>
-                        </XStack>
-                      )}
-                    </XStack>
-                  )}
                 </XStack>
-              ))}
+              )}
+            </YStack>
+
+            <YStack mt={appScale(20)} p={appScale(24)}>
+              {infoData?.infoList &&
+                infoData?.infoList.length > 0 &&
+                infoData?.infoList.map((item, index) => (
+                  <XStack
+                    key={item.label}
+                    pb={appScale(16)}
+                    w="100%"
+                    ai="center"
+                    jc="space-between"
+                    bbw={1}
+                    bbc={index === infoData?.infoList.length - 1 ? '#EEEEEE' : '$background'}
+                  >
+                    <SizableText
+                      h={appScale(26)}
+                      lh={appScale(26)}
+                      fontSize={'$4'}
+                      color={'#616161'}
+                      fontWeight={'500'}
+                    >
+                      {item.label}
+                    </SizableText>
+                    {item?.isStatus && item?.value && (
+                      <XStack
+                        ai={'center'}
+                        bc={statusList[item.value]?.backgroundColor}
+                        borderRadius={appScale(8)}
+                        p={appScale(12)}
+                      >
+                        <SizableText
+                          h={appScale(20)}
+                          lh={appScale(20)}
+                          fontSize={'$1'}
+                          color={'#212121'}
+                          fontWeight={'700'}
+                        >
+                          {statusList[item.value]?.title}
+                        </SizableText>
+                      </XStack>
+                    )}
+                    {!item?.isStatus && (
+                      <XStack ai={'center'} jc={'center'}>
+                        <SizableText
+                          h={appScale(26)}
+                          lh={appScale(26)}
+                          fontSize={'$4'}
+                          color={'#424242'}
+                          fontWeight={'600'}
+                        >
+                          {item?.isTruncated ? (item?.value ? truncateAddress(item?.value) : '-') : item?.value}
+                        </SizableText>
+                        {item?.isCopyable && (
+                          <XStack ai={'center'} jc={'center'} ml={appScale(6)}>
+                            <CopyButton
+                              unstyled
+                              text={item?.isHx ? getExplorerUrl(orderData?.chainId, item?.value) : item?.value}
+                            >
+                              <AppImage
+                                width={appScale(18)}
+                                height={appScale(18)}
+                                src={require('app/assets/images/copy.png')}
+                                type="local"
+                              />
+                            </CopyButton>
+                          </XStack>
+                        )}
+                      </XStack>
+                    )}
+                  </XStack>
+                ))}
+            </YStack>
           </YStack>
         </YStack>
+      </ScrollView>
 
-        {orderData?.transactionType === 'REQUEST' &&
-          orderData?.transactionStatus === 'PENDING' &&
-          orderData?.senderMember?.id === userInfo?.customMetadata?.id && (
-            <Footer
-              setDeclineRequestVisible={setDeclineRequestVisible}
-              setAcceptRequestVisible={setAcceptRequestVisible}
-            />
-          )}
-      </YStack>
+      {(orderData?.transactionType === 'REQUEST' || orderData?.transactionType === 'REQUEST_QR_CODE') &&
+        orderData?.transactionStatus === 'PENDING' &&
+        orderData?.senderMember?.id === userInfo?.customMetadata?.id && (
+          <Footer
+            setDeclineRequestVisible={setDeclineRequestVisible}
+            setAcceptRequestVisible={setAcceptRequestVisible}
+          />
+        )}
       {/* <SharePopup
         modalVisible={shareVisible}
         setModalVisible={setShareVisible}
@@ -337,12 +353,20 @@ const HistoryDetailScreen = () => {
         modalVisible={declineRequestVisible}
         setModalVisible={setDeclineRequestVisible}
         orderData={orderData}
+        onSuccess={() => {
+          _getTransactionHistoryFindTransactionHistoryId();
+          setDeclineRequestVisible(false);
+        }}
       />
       <AcceptRequestPopup
         setIsLoading={setIsLoading}
         modalVisible={acceptRequestVisible}
         setModalVisible={setAcceptRequestVisible}
         orderData={orderData}
+        onSuccess={() => {
+          _getTransactionHistoryFindTransactionHistoryId();
+          setAcceptRequestVisible(false);
+        }}
       />
       {isLoading && <AppLoading />}
     </PermissionPage>

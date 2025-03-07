@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 13:12:24
+ * @LastEditTime: 2025-03-06 20:43:41
  * @FilePath: /ezgg-app/packages/app/pages/home/history/list/index.tsx
  */
 import {
@@ -62,9 +62,9 @@ const HistoryScreen = (props: any) => {
       pageSize: 10,
       currency: currency,
     };
-    if (id && id !== 'all') {
-      params.brandId = Number(id);
-    }
+    // if (id && id !== 'all') {
+    //   params.brandId = Number(id);
+    // }
     const res = await makeRequest(
       getTransactionHistoryPageTransactionHistory({
         page: _page,

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 14:13:53
+ * @LastEditTime: 2025-03-07 12:58:07
  * @FilePath: /ezgg-app/packages/app/Components/SharePopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, XStack, YStack} from '@my/ui';
@@ -35,7 +35,7 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, t
       title: t('home.share.facebook'),
       button: () => (
         <FacebookShareButton url={url} title={title}>
-          <FacebookIcon size={48} round />
+          <FacebookIcon size={appScale(48)} round />
         </FacebookShareButton>
       ),
     },
@@ -43,7 +43,7 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, t
       title: t('home.share.twitter'),
       button: () => (
         <TwitterShareButton url={url} title={title}>
-          <TwitterIcon size={48} round />
+          <TwitterIcon size={appScale(48)} round />
         </TwitterShareButton>
       ),
     },
@@ -51,7 +51,7 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, t
       title: t('home.share.whatsapp'),
       button: () => (
         <WhatsappShareButton url={url} title={title}>
-          <WhatsappIcon size={48} round />
+          <WhatsappIcon size={appScale(48)} round />
         </WhatsappShareButton>
       ),
     },
@@ -59,7 +59,7 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, t
       title: t('home.share.telegram'),
       button: () => (
         <TelegramShareButton url={url} title={title}>
-          <TelegramIcon size={48} round />
+          <TelegramIcon size={appScale(48)} round />
         </TelegramShareButton>
       ),
     },
@@ -86,7 +86,7 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, t
       <YStack w="100%" pos={'absolute'} ai={'center'} jc={'center'} b={0} l={0} bc="$background">
         <YStack space="$4" pl="$4" pr="$4" pt={'$6'} pb={'$10'} w="100%">
           <XStack jc="center" mb={'$4'}>
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$7'} color={'#212121'} fontWeight={'700'}>
+            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$6'} color={'#212121'} fontWeight={'700'}>
               {t('home.share.title')}
             </SizableText>
           </XStack>
@@ -101,7 +101,7 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, t
                       <SizableText
                         h={appScale(30)}
                         lh={appScale(30)}
-                        fontSize={'$5'}
+                        fontSize={'$4'}
                         color={'#212121'}
                         fontWeight={'500'}
                       >

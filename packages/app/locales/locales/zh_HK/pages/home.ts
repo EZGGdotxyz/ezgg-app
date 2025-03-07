@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 16:38:20
+ * @LastEditTime: 2025-03-07 13:57:12
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -132,6 +132,8 @@ export default {
   'home.take.tips2': '發送{{amount}}給@{{name}}',
   'home.take.message': '訊息',
   'home.take.claim': '領取',
+  'home.take.myPayLink': '我的支付連結',
+  'home.take.myPayLink2': '我的請求支付連結',
   'home.take.balance': '餘額',
 
   'home.share.title': '分享',
@@ -152,4 +154,52 @@ export default {
   'home.explore.noPermission': '無拍照許可，請在設置中開啟相機權限',
   'home.explore.noPermission2': '你也可以使用下面的按鈕選擇圖片進行掃碼',
   'home.explore.requestPermission': '請求拍照許可',
+
+  'home.notification.send.title': '收到 @{{name}} 发送的 {{amount}}',
+  'home.notification.request.title': '收到 @{{name}} 的請求 {{amount}}',
+  // 通知相关
+  'home.notification.transUpdate.requestAccepted': '請求已接受',
+  'home.notification.transUpdate.requestAcceptedDesc': '您的付款請求已被{{name}}接受',
+  'home.notification.transUpdate.requestDeclined': '請求已拒絕',
+  'home.notification.transUpdate.requestDeclinedDesc': '您的付款請求已被{{name}}拒絕',
+  'home.notification.transUpdate.payLinkAccepted': '支付連結已接受',
+  'home.notification.transUpdate.payLinkAcceptedDesc': '您的支付連結已被{{name}}接受',
+
+  // 警报相关
+  'home.notification.alarm.title': '可疑活動警報',
+  'home.notification.balanceAlarm.title': '餘額不足提醒',
+  'home.notification.balanceAlarm.desc': '您的餘額不足 {{amount}}',
+  'home.notification.secureAlarm.title': '安全風險提醒',
+
+  // 其他通知类型
+  'home.notification.payRequest.title': '付款請求',
+  'home.notification.customerSupport.title': '客戶支持',
+  'home.notification.summary.title': '週期賬單',
+  'home.notification.appUpdate.title': '應用更新',
+  'home.notification.appUpdate.desc': '新版本 {{version}} 已發布',
+  'home.notification.salesPromotion.title': '促銷優惠',
+  'home.notification.survey.title': '用戶調研',
+
+  // 屏幕标题
+  'home.screen.notification.title': '通知',
+  'home.screen.profile.notification.title': '通知設置',
+
+  // 通知设置相关
+  'home.profile.notification.general': '一般通知',
+  'home.profile.notification.app': '應用通知',
+  'home.profile.notification.general1': '交易狀態更新',
+  'home.profile.notification.general2': '異常活動警報',
+  'home.profile.notification.general3': '付款請求',
+  'home.profile.notification.general4': '卡片活動',
+  'home.profile.notification.general5': '客戶支持',
+  'home.profile.notification.general6': '餘額不足提醒',
+  'home.profile.notification.general7': '安全風險提醒',
+  'home.profile.notification.general8': '週期賬單',
+  'home.profile.notification.app1': '應用更新',
+  'home.profile.notification.app2': '促銷優惠',
+  'home.profile.notification.app3': '用戶調研',
+
+  // 列表加载相关
+  'home.tips.list.loading.title': '沒有更多數據了',
+  'home.tips.list.loading.title2': '加載中...',
 };

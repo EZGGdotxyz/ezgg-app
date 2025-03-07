@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 16:52:24
+ * @LastEditTime: 2025-03-07 13:42:22
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -16,6 +16,7 @@ import {
   useToastController,
   Input,
   Button,
+  ScrollView,
 } from '@my/ui';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -75,28 +76,26 @@ const WithdrawScreen = () => {
   }, [address, currencyData?.token?.decimals, inputValue, isSubmit]);
 
   const submit = async (_address) => {
-    if (!inputValue || inputValue === '0') {
-      toast.show(t('home.send.amountToSend.tips'));
+    // 验证金额
+    if (!inputValue || Number(inputValue) <= 0) {
+      toast.show(t('tips.error.withdraw.invalidAmount'));
       return;
     }
 
-    if (Number(inputValue) > Number(currencyData?.tokenAmount)) {
-      toast.show(t('home.withdraw.tips'));
+    // 验证余额
+    if (Number(inputValue) > Number(currencyData?.balance)) {
+      toast.show(t('tips.error.withdraw.insufficientFunds'));
       return;
     }
-
-    if (!_address) {
-      toast.show(t('home.withdraw.address.tips'));
-      return;
-    }
-
     // 验证地址格式
     if (!validateAddress(_address, Number(currencyData?.token?.chainId))) {
-      toast.show(t('tips.error.withdraw.address.invalid'));
+      toast.show(t('home.withdraw.address.invalid'));
       return;
     }
+
     setIsSubmit(false);
     setIsLoading(true);
+
     try {
       await onWithdraw(
         {
@@ -116,7 +115,9 @@ const WithdrawScreen = () => {
         },
       );
     } catch (error) {
+      console.error('Withdraw error:', error);
       setIsLoading(false);
+      toast.show(t('tips.error.withdraw.failed'));
     }
   };
 
@@ -132,91 +133,107 @@ const WithdrawScreen = () => {
   return (
     <PermissionPage>
       <AppHeader2 title={t('screen.home.withdraw')} fallbackUrl="/" />
-      <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress} flex={1}>
-        <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
-        <YStack w="100%" mb={appScale(24)}>
-          <XStack mb={appScale(8)} w="100%">
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-              {t('home.send.amountToSend')}
+      <ScrollView
+        flex={1}
+        w={'100%'}
+        bc="#fff"
+        contentContainerStyle={{
+          minHeight: '100%',
+        }}
+      >
+        <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress} flex={1}>
+          <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                {t('home.send.amountToSend')}
+              </SizableText>
+            </XStack>
+            <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
+              <SizableText
+                fontSize={'$10'}
+                h={appScale(50)}
+                lh={appScale(50)}
+                color={'#212121'}
+                fontWeight={'600'}
+                pos="relative"
+              >
+                {inputValue || '0'}
+                {showKeyboard && (
+                  <XStack
+                    pos="absolute"
+                    right={-4}
+                    top={0}
+                    bottom={0}
+                    w={2}
+                    animation="quick"
+                    bc="#212121"
+                    style={{
+                      animationName: 'cursorBlink',
+                      animationDuration: '1s',
+                      animationIterationCount: 'infinite',
+                      animationTimingFunction: 'steps(2, start)',
+                    }}
+                  />
+                )}
+              </SizableText>
+            </XStack>
+          </YStack>
+
+          <XStack ai="center" pl={appScale(24)} pr={appScale(24)} mb={appScale(34)}>
+            <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
+            <SizableText fontSize={'$3'} color={'#9E9E9E'} ml={'$4'} mr={'$4'}>
+              {t('home.deposit.or')}
             </SizableText>
+            <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
           </XStack>
-          <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
-            <SizableText
-              fontSize={'$10'}
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                {t('home.withdraw.address')}
+              </SizableText>
+            </XStack>
+            <Input
+              w="100%"
+              p={appScale(16)}
+              bc={'#FAFAFA'}
+              br={appScale(8)}
+              fontSize={'$3'}
               h={appScale(50)}
               lh={appScale(50)}
-              color={'#212121'}
-              fontWeight={'600'}
-              pos="relative"
-            >
-              {inputValue || '0'}
-              {showKeyboard && (
-                <XStack
-                  pos="absolute"
-                  right={-4}
-                  top={0}
-                  bottom={0}
-                  w={2}
-                  animation="quick"
-                  bc="#212121"
-                  style={{
-                    animationName: 'cursorBlink',
-                    animationDuration: '1s',
-                    animationIterationCount: 'infinite',
-                    animationTimingFunction: 'steps(2, start)',
-                  }}
-                />
-              )}
-            </SizableText>
+              value={withdrawAddress}
+              onChangeText={setWithdrawAddress}
+              borderColor={'#FAFAFA'}
+              placeholder={t('home.withdraw.address.tips')}
+            />
+          </YStack>
+          <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+            {currencyData?.tokenAmount && (
+              <SizableText
+                h={appScale(24)}
+                lh={appScale(24)}
+                fontSize={'$4'}
+                color={'#212121'}
+                fontWeight={'500'}
+              >{`${t('home.balance')}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
+                currencyData?.chainName
+              })`}</SizableText>
+            )}
           </XStack>
-        </YStack>
 
-        <XStack ai="center" pl={appScale(24)} pr={appScale(24)} mb={appScale(34)}>
-          <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
-          <SizableText fontSize={'$3'} color={'#9E9E9E'} ml={'$4'} mr={'$4'}>
-            {t('home.deposit.or')}
-          </SizableText>
-          <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
-        </XStack>
-        <YStack w="100%" mb={appScale(24)}>
-          <XStack mb={appScale(8)} w="100%">
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-              {t('home.withdraw.address')}
-            </SizableText>
-          </XStack>
-          <Input
-            w="100%"
-            p={appScale(16)}
-            bc={'#FAFAFA'}
-            br={appScale(8)}
-            fontSize={'$5'}
-            h={appScale(50)}
-            lh={appScale(50)}
-            value={withdrawAddress}
-            onChangeText={setWithdrawAddress}
-            borderColor={'#FAFAFA'}
-            placeholder={t('home.withdraw.address.tips')}
-          />
-        </YStack>
-        <XStack mb={appScale(24)} w="100%" ai={'center'} jc={'center'}>
-          <SizableText h={appScale(24)} lh={appScale(24)} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>{`${t(
-            'home.balance',
-          )}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
-            currencyData?.chainName
-          })`}</SizableText>
-        </XStack>
-
-        {/* <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
+          {/* <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
           <AppButton isLoading={buttonLoading} onPress={submit}>
             {t('home.withdraw')}
           </AppButton>
         </XStack> */}
-      </YStack>
+        </YStack>
+        {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
+      </ScrollView>
       <XStack
         flexShrink={0}
         pl={appScale(24)}
         pr={appScale(24)}
-        pt={12}
+        pt={appScale(12)}
         pb={appScale(isIphoneX() ? 46 : 12)}
         w="100%"
         ai={'center'}
@@ -273,7 +290,6 @@ const WithdrawScreen = () => {
         modalVisible={isShow}
         setModalVisible={setIsShow}
       />
-      {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
       {isLoading && <AppLoading />}
     </PermissionPage>
   );

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 15:24:25
+ * @LastEditTime: 2025-03-07 13:23:54
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -104,20 +104,20 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
     >
       <XStack flex={1} mb={appScale(16)} w="100%" ai={'center'} jc={'space-between'}>
         <YStack gap={appScale(2)} w={'70%'}>
-          <SizableText fontSize={'$6'} color={'#26273C'} fontWeight={'500'}>
+          <SizableText fontSize={'$5'} color={'#26273C'} fontWeight={'600'}>
             {dealType().title}
           </SizableText>
-          <SizableText fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
+          <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'400'}>
             {dealType().sub}
           </SizableText>
         </YStack>
         <YStack gap={appScale(2)} w={'30%'}>
-          <SizableText ta={'right'} fontSize={'$5'} color={'#26273C'} fontWeight={'500'}>
+          <SizableText ta={'right'} fontSize={'$3'} color={'#26273C'} fontWeight={'600'}>
             {`${judgeAmountType(item)} ${formatNumber(Number(item?.currencyAmount || 0))} ${
               getCurrency(currency)?.label
             }`}
           </SizableText>
-          <SizableText ta={'right'} fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
+          <SizableText ta={'right'} fontSize={'$1'} color={'#9395A4'} fontWeight={'500'}>
             {`${judgeAmountType(item)} ${formatTokenAmount(item?.amount, item?.tokenDecimals)} ${item?.tokenSymbol} (${
               getChainInfo(item?.chainId)?.name
             })`}

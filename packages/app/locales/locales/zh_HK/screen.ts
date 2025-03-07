@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-10 22:57:56
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 13:22:39
+ * @LastEditTime: 2025-03-06 17:33:04
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/screen.ts
  */
 export default {
@@ -16,6 +16,7 @@ export default {
   'screen.home.sendTo': '發送到',
   'screen.home.paylink': '支付連結',
   'screen.home.requestFrom': '發送至',
+  'screen.home.request': '請求',
   'screen.home.amountRequesting': '請輸入您想要請求的金額',
   'screen.home.deposit': '存款',
   'screen.home.withdraw': '提取',

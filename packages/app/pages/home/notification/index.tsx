@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 15:32:31
+ * @LastEditTime: 2025-03-07 14:20:18
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/index.tsx
  */
 import {
@@ -14,11 +14,12 @@ import {
   XStack,
   YStack,
   Button,
+  useToastController,
 } from '@my/ui';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
-import {appScale} from 'app/utils';
+import {appScale, dealtHistoryList, restoreHistoryList} from 'app/utils';
 import useRequest from 'app/hooks/useRequest';
 import {createParam} from 'solito';
 import {useRouter} from 'solito/router';
@@ -29,10 +30,18 @@ import {ChevronRight} from '@tamagui/lucide-icons';
 import {PrimaryColor} from 'app/config';
 import AppHeader2 from 'app/Components/AppHeader2';
 import SearchHeader from 'app/Components/SearchHeader';
-import {getNotificationGetUnreadCount, getNotificationPageNotification} from 'app/servers/api/notification';
+import {
+  getNotificationGetUnreadCount,
+  getNotificationPageNotification,
+  postNotificationUpdateNotificationStatusId,
+} from 'app/servers/api/notification';
 import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import Item from './components/Item';
+import DayItem from './components/DayItem';
+import DeclineRequestPopup from '../history/detail/components/DeclineRequestPopup';
+import AcceptRequestPopup from '../history/detail/components/AcceptRequestPopup';
+import AppLoading from 'app/Components/AppLoading';
 const {useParam} = createParam<{id: string}>();
 
 // 關於
@@ -48,11 +57,14 @@ const NotificationScreen = (props: any) => {
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [searchText, setSearchText] = useState('');
-
-  const [writeData, setWriteData] = useState<any>({});
-
+  const [dataTotal, setDataTotal] = useState<any>(0);
+  const [declineRequestVisible, setDeclineRequestVisible] = useState(false);
+  const [acceptRequestVisible, setAcceptRequestVisible] = useState(false);
+  const [orderData, setOrderData] = useState<any>({});
   const [modalVisible, setModalVisible] = useState(false);
   const [canLoadMore, setCanLoadMore] = useState(false);
+  const toast = useToastController();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [id] = useParam('id');
 
@@ -66,21 +78,24 @@ const NotificationScreen = (props: any) => {
     //   params.brandId = Number(id);
     // }
     const res = await makeRequest(getNotificationPageNotification(params));
-    if (res?.data?.record && res?.data?.record?.length > 0) {
-      if (_page === 1) {
-        setData(res?.data?.record);
-      } else {
-        setData([...data, ...res?.data?.record]);
+    if (res?.data?.record && res?.data?.record.length > 0) {
+      let _recordData = res.data.record;
+      if (_page !== 1) {
+        _recordData = [...restoreHistoryList(data), ...res.data.record];
       }
+      setDataTotal(_recordData.length);
+      const _data = await dealtHistoryList(_recordData);
+      setData(_data);
+
       setPage(_page);
       setLoading(false);
       setTotal(res?.data?.totalCount || 0);
-      setCanLoadMore(res?.data?.record?.length < (res?.data?.totalCount || 0));
+      setCanLoadMore(_recordData.length < (res?.data?.totalCount || 0));
     } else {
       setData([]);
       setTotal(0);
-      setCanLoadMore(false);
       setLoading(false);
+      setCanLoadMore(false);
     }
   };
 
@@ -123,7 +138,7 @@ const NotificationScreen = (props: any) => {
    */
   const _renderFooter = () => {
     if (!loading) {
-      if (data.length === total) {
+      if (dataTotal === total) {
         return (
           <XStack w="100%" jc={'center'} py={appScale(24)}>
             <SizableText col={'$color11'} fontSize={'$3'}>
@@ -153,8 +168,29 @@ const NotificationScreen = (props: any) => {
     }
   };
 
-  const onRead = (item: any) => {
-    setModalVisible(true);
+  const _postNotificationUpdateNotificationStatusId = async (id: string) => {
+    setIsLoading(true);
+    const res = await makeRequest(postNotificationUpdateNotificationStatusId({id: Number(id)}));
+    if (res?.code === '0') {
+      fetchData();
+      _getUnread();
+      toast.show(t('tips.list.read'));
+    }
+    setIsLoading(false);
+  };
+
+  const onRead = (item: any, action = '') => {
+    if (action) {
+      setOrderData(item);
+      if (action === 'cancel') {
+        setDeclineRequestVisible(true);
+      } else {
+        setAcceptRequestVisible(true);
+      }
+      // setModalVisible(true);
+    } else {
+      _postNotificationUpdateNotificationStatusId(item?.id);
+    }
   };
 
   return (
@@ -189,12 +225,29 @@ const NotificationScreen = (props: any) => {
         }}
         ListFooterComponent={_renderFooter}
         ListEmptyComponent={<ListEmpty loading={loading} />}
-        renderItem={({item, index}) => (
-          <XStack w="100%" jc={'center'} key={item.id + 'id' + index}>
-            <Item isBorderBottom={index === data.length - 1} onRead={onRead} item={item} itemKey={item.id} />
-          </XStack>
-        )}
+        renderItem={({item, index}) => <DayItem key={item.id} onRead={onRead} item={item} />}
       />
+      <DeclineRequestPopup
+        setIsLoading={setIsLoading}
+        modalVisible={declineRequestVisible}
+        setModalVisible={setDeclineRequestVisible}
+        orderData={orderData?.transaction}
+        onSuccess={async () => {
+          setDeclineRequestVisible(false);
+          await _postNotificationUpdateNotificationStatusId(orderData?.id);
+        }}
+      />
+      <AcceptRequestPopup
+        setIsLoading={setIsLoading}
+        modalVisible={acceptRequestVisible}
+        setModalVisible={setAcceptRequestVisible}
+        orderData={orderData?.transaction}
+        onSuccess={async () => {
+          setAcceptRequestVisible(false);
+          await _postNotificationUpdateNotificationStatusId(orderData?.id);
+        }}
+      />
+      {isLoading && <AppLoading />}
     </PermissionPage>
   );
 };

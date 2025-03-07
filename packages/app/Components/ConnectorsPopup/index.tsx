@@ -1,21 +1,34 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 16:36:51
+ * @LastEditTime: 2025-03-07 12:57:42
  * @FilePath: /ezgg-app/packages/app/Components/ConnectorsPopup/index.tsx
  */
-import {AppImage, Button, ScrollView, Sheet, SizableText, Text, useToastController, XStack, YStack} from '@my/ui';
-import {Airplay, AlignJustify, GalleryVerticalEnd, Check} from '@tamagui/lucide-icons';
+import {Button, Sheet, SizableText, useToastController, XStack, YStack} from '@my/ui';
+import {Check} from '@tamagui/lucide-icons';
 import {WalletIcon} from '@web3icons/react';
-import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
 import {appScale} from 'app/utils';
-import {useEffect, useRef, useState, forwardRef} from 'react';
+import {useEffect, useRef, useState, forwardRef, memo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Link} from 'solito/link';
-import {Connector, useConnect, useChainId, useAccount, useDisconnect} from 'wagmi';
+import {Connector, useConnect, useAccount, useDisconnect} from 'wagmi';
 
-const Item: React.FC<any> = ({connector, onSubmit, activeConnector}) => {
+// 为window.phantom添加类型声明
+declare global {
+  interface Window {
+    phantom?: {
+      ethereum?: {
+        disconnect: () => void;
+      };
+    };
+  }
+}
+
+const Item = memo(({connector, onSubmit, activeConnector}: {
+  connector: Connector;
+  onSubmit: (connector: Connector) => Promise<void>;
+  activeConnector: Connector | undefined;
+}) => {
   const [ready, setReady] = useState(false);
   const {t} = useTranslation();
 
@@ -32,6 +45,8 @@ const Item: React.FC<any> = ({connector, onSubmit, activeConnector}) => {
 
   if (!ready) return null;
 
+  const isCurrentConnector = activeConnector?.uid === connector?.uid;
+
   return (
     <Button
       unstyled
@@ -45,9 +60,7 @@ const Item: React.FC<any> = ({connector, onSubmit, activeConnector}) => {
       pr={appScale(24)}
       ai="center"
       jc="space-between"
-      onPress={async () => {
-        onSubmit(connector);
-      }}
+      onPress={() => onSubmit(connector)}
     >
       <XStack ai="center" space="$3">
         <WalletIcon name="MetaMask" variant="background" size="64" />
@@ -55,81 +68,81 @@ const Item: React.FC<any> = ({connector, onSubmit, activeConnector}) => {
           <SizableText color={'#212121'} size={'$4'} fow={'600'}>
             {connector?.name}
           </SizableText>
-          {activeConnector?.uid === connector?.uid && (
-            <SizableText color={PrimaryColor} size={'$3'}>
+          {isCurrentConnector && (
+            <SizableText color={PrimaryColor} size={'$2'}>
               {t('home.wallet.connected')}
             </SizableText>
           )}
         </YStack>
       </XStack>
-      {activeConnector?.uid === connector?.uid && (
+      {isCurrentConnector && (
         <XStack ai="center" space="$2">
-          <Check size={32} color={PrimaryColor} />
+          <Check size={appScale(32)} color={PrimaryColor} />
         </XStack>
       )}
     </Button>
   );
-};
+});
 
 export type CurrencyPopupProps = {
-  modalVisible: any;
-  setModalVisible: (values) => void;
+  modalVisible: boolean;
+  setModalVisible: (value: boolean) => void;
   chainId: number;
-  setIsSubmit: (values) => void;
+  setIsSubmit: (value: boolean) => void;
 };
 
-const ConnectorsPopup = forwardRef<any, any>(
-  ({modalVisible, setModalVisible, chainId, setIsSubmit}: CurrencyPopupProps, ref) => {
+const ConnectorsPopup = forwardRef<any, CurrencyPopupProps>(
+  ({modalVisible, setModalVisible, chainId, setIsSubmit}, ref) => {
     const {t} = useTranslation();
     const toast = useToastController();
     const scrollViewRef = useRef<any>(null);
-    const {connectors, connect} = useConnect();
+    const {connectors} = useConnect();
     const {address, isConnected, connector: activeConnector} = useAccount();
-
-    console.log('🚀 ~ address:', address);
-
     const {disconnect} = useDisconnect();
-    const [isConnected2, setIsConnected2] = useState(false);
+    const [isConnecting, setIsConnecting] = useState(false);
 
     // 监听连接状态变化
     useEffect(() => {
-      if (isConnected && isConnected2) {
-        // 延迟执行onSubmit，确保状态已更新
-        setTimeout(() => {
+      if (isConnected && isConnecting) {
+        // 延迟执行，确保状态已更新
+        const timer = setTimeout(() => {
           setIsSubmit(true);
           setModalVisible(false);
-        });
+          setIsConnecting(false);
+        }, 500);
+
+        return () => clearTimeout(timer);
       }
-    }, [isConnected, isConnected2]);
+    }, [isConnected, isConnecting, setIsSubmit, setModalVisible]);
 
     const onSubmit = async (connector: Connector) => {
-      if (activeConnector?.uid === connector?.uid) {
-        setIsSubmit(true);
-        setModalVisible(false);
-      } else {
+      try {
+        // 如果点击的是当前连接的钱包，不做任何操作
+        if (activeConnector?.uid === connector?.uid) {
+          setIsSubmit(true);
+          setModalVisible(false);
+          return;
+        }
+
+        // 如果已连接其他钱包，先断开
         if (isConnected) {
           await disconnect();
-          // 2. 直接调用 Phantom 的断开 API
-          if (window?.phantom?.ethereum?.disconnect) {
-            window?.phantom.ethereum.disconnect();
-          }
 
-          // 3. 清除 localStorage 残留
+          // 清除localStorage残留
           localStorage.removeItem('wagmi.wallet');
           localStorage.removeItem('wagmi.connected');
           localStorage.removeItem('wagmi.store');
-          setTimeout(async () => {
-            await connector?.connect({
-              chainId: chainId,
-            });
-            setIsConnected2(true);
-          });
-        } else {
-          await connector?.connect({
-            chainId: chainId,
-          });
-          setIsConnected2(true);
         }
+
+        // 连接新钱包
+        setIsConnecting(true);
+        await connector.connect({
+          chainId: chainId,
+        });
+      } catch (error) {
+        console.error('❌ ~ Connection error:', error);
+        toast.show(t('tips.error.deposit.connectError'));
+        setIsConnecting(false);
       }
     };
 
@@ -147,11 +160,14 @@ const ConnectorsPopup = forwardRef<any, any>(
         <Sheet.Frame justifyContent="center" w="100%" alignItems="center">
           <Sheet.ScrollView ref={scrollViewRef} w="100%" bc="$background">
             <YStack pt="$4" pb="$4" style={{width: '100vw'}}>
-              {connectors &&
-                connectors.length > 0 &&
-                connectors?.map((item: any, index: number) => {
-                  return <Item activeConnector={activeConnector} key={index} connector={item} onSubmit={onSubmit} />;
-                })}
+              {connectors && connectors.length > 0 && connectors.map((item, index) => (
+                <Item
+                  key={index}
+                  connector={item}
+                  onSubmit={onSubmit}
+                  activeConnector={activeConnector}
+                />
+              ))}
             </YStack>
           </Sheet.ScrollView>
         </Sheet.Frame>
@@ -160,4 +176,4 @@ const ConnectorsPopup = forwardRef<any, any>(
   },
 );
 
-export default ConnectorsPopup;
+export default memo(ConnectorsPopup);

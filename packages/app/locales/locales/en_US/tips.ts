@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 16:47:31
+ * @LastEditTime: 2025-03-06 20:56:54
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -33,4 +33,13 @@ export default {
   'tips.error.deposit.connectError': 'Connect wallet failed, please try again',
   'tips.error.deposit.userRejected': 'You have cancelled the transaction',
   'tips.error.deposit.failed': 'Transaction failed, please try again',
+  'tips.error.deposit.transactionSuccess': 'Transaction successful',
+  'tips.success.transactionSuccess': 'Transaction successful',
+
+  "tips.error.deposit.updateFailed": "更新交易记录失败",
+  "tips.error.withdraw.invalidAmount": "请输入有效金额",
+  "tips.error.withdraw.insufficientFunds": "余额不足",
+  "tips.error.withdraw.failed": "提现失败，请重试",
+
+  'tips.list.read': 'Message read',
 };

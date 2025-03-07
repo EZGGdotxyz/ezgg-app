@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 23:29:52
+ * @LastEditTime: 2025-03-07 13:24:22
  * @FilePath: /ezgg-app/packages/app/pages/profile/notification/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, Switch, XStack, YStack} from '@my/ui';
@@ -148,7 +148,7 @@ const NotificationScreen = () => {
   return (
     <PermissionPage>
       <AppHeader2 title={t('screen.profile.notification.title')} fallbackUrl="/profile" />
-      <YStack space="$4" paddingVertical={16}>
+      <YStack space="$4" paddingVertical={appScale(16)}>
         <XStack ai="center" pl={appScale(24)} pr={appScale(24)}>
           <SizableText fontSize={'$3'} color={'#9E9E9E'} mr={'$4'}>
             {t('profile.notification.general')}
@@ -167,7 +167,7 @@ const NotificationScreen = () => {
               w="100%"
             >
               <YStack flex={1}>
-                <SizableText fontSize={'$5'} color={'#212121'} fow={'600'}>
+                <SizableText fontSize={'$3'} color={'#212121'} fow={'500'}>
                   {item?.title}
                 </SizableText>
               </YStack>
@@ -204,7 +204,7 @@ const NotificationScreen = () => {
               w="100%"
             >
               <YStack flex={1}>
-                <SizableText fontSize={'$5'} color={'#212121'} fow={'600'}>
+                <SizableText fontSize={'$4'} color={'#212121'} fow={'600'}>
                   {item?.title}
                 </SizableText>
               </YStack>

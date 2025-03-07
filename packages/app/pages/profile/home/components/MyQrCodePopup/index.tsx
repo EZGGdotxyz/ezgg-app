@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 13:43:03
+ * @LastEditTime: 2025-03-07 13:13:42
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/MyQrCodePopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -74,7 +74,7 @@ const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible, se
         // h={140}
         w="100%"
         // borderRadiusTopLeft={20}
-        borderTopRightRadius={16}
+        borderTopRightRadius={appScale(16)}
         borderTopLeftRadius={16}
         pos={'absolute'}
         ai={'center'}
@@ -83,8 +83,8 @@ const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible, se
         l={0}
         bc="#fff"
       >
-        <YStack pt={appScale(24)} pr={appScale(24)} pl={appScale(24)} pb={appScale(36)}>
-          <SizableText ta={'center'} fontSize={'$7'} color={'#212121'} fow={'700'}>
+        <YStack pt={appScale(24)} pr={appScale(24)} pl={appScale(24)} pb={appScale(24)}>
+          <SizableText ta={'center'} fontSize={'$6'} color={'#212121'} fow={'700'}>
             {t('home.qr.title2')}
           </SizableText>
           <SizableText ta={'center'} mb={appScale(24)} fontSize={'$3'} color={'#212121'} fow={'500'}>
@@ -114,7 +114,7 @@ const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible, se
           flexShrink={0}
           pl={appScale(24)}
           pr={appScale(24)}
-          pt={12}
+          pt={appScale(12)}
           pb={appScale(isIphoneX() ? 46 : 12)}
           w="100%"
           ai={'center'}

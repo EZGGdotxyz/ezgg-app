@@ -93,7 +93,7 @@ const ChainListPopup = forwardRef<any, any>(({
               //   justifyContent="space-between"
               //   paddingVertical={appScale(8)}
               // >
-              //   <SizableText fontSize={'$5'} color={'#26273C'} fontWeight={'500'}>
+              //   <SizableText fontSize={'$4'} color={'#26273C'} fontWeight={'500'}>
               //     {type.label}
               //   </SizableText>
               //   {selectedType === type.value && <Check size={16} color="#26273C" />}

@@ -50,7 +50,7 @@ const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/', setShareVisibl
         pr={appScale(24)}
         pt={appScale(12)}
         pb={appScale(12)}
-        h={72}
+        h={appScale(72)}
         ai={'center'}
         jc={'space-between'}
       >
@@ -63,7 +63,7 @@ const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/', setShareVisibl
           />
         </Button>
         <XStack ai={'center'} h={'100%'}>
-          <SizableText col={'$color'} fontSize={'$8'} fow={'700'}>
+          <SizableText col={'$color'} fontSize={'$7'} fow={'700'}>
             {title}
           </SizableText>
         </XStack>

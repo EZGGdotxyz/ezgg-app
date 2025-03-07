@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 23:37:56
+ * @LastEditTime: 2025-03-07 12:59:41
  * @FilePath: /ezgg-app/packages/app/Components/CurrencyPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -100,8 +100,8 @@ const CurrencyPopup = forwardRef<any, any>(({
               currencyList?.map((item: any, index: number) => {
                 return (
                   <YStack key={item?.chain + 'id' + index}>
-                    <XStack ai="center" pl={appScale(24)} pr={appScale(24)} h={48}>
-                      <SizableText fontSize={'$5'} color={'#212121'} mr={'$4'}>
+                    <XStack ai="center" pl={appScale(24)} pr={appScale(24)} h={appScale(48)}>
+                      <SizableText fontSize={'$4'} color={'#212121'} mr={'$4'}>
                         {item?.chainName}
                       </SizableText>
                       <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
@@ -118,7 +118,7 @@ const CurrencyPopup = forwardRef<any, any>(({
                         key={dayItem?.token?.address + 'id' + index}
                         flexDirection="column"
                         w="100%"
-                        h={56}
+                        h={appScale(56)}
                         // pb={appScale(16)}
                         // pt={appScale(16)}
                         ai="flex-end"

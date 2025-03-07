@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 13:45:01
+ * @LastEditTime: 2025-03-07 12:55:00
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -81,7 +81,7 @@ const SuccessPopup: React.FC<any> = ({
         {isSetInfo && (
           <YStack ai={'center'} pt={appScale(40)} pr={appScale(32)} pl={appScale(32)} pb={appScale(32)}>
             <YStack w="100%" mb={appScale(24)}>
-              <SizableText ta={'center'} mb={appScale(24)} col={'#212121'} fontSize={'$7'} fow={'700'}>
+              <SizableText ta={'center'} mb={appScale(24)} col={'#212121'} fontSize={'$6'} fow={'700'}>
                 {t('login.profile.title')}
               </SizableText>
               <SizableText ta={'center'} col={'#212121'} fontSize={'$4'}>
@@ -90,9 +90,9 @@ const SuccessPopup: React.FC<any> = ({
             </YStack>
             <YStack mb={appScale(24)} pos={'relative'}>
               <Button
-                w={104}
-                h={104}
-                borderRadius={52}
+                w={appScale(104)}
+                h={appScale(104)}
+                borderRadius={appScale(52)}
                 overflow={'hidden'}
                 borderWidth={2}
                 borderColor={'#eee'}
@@ -139,9 +139,9 @@ const SuccessPopup: React.FC<any> = ({
                 }}
               >
                 {!accountForm?.avatar ? (
-                  <AppImage width={100} height={100} src={require(`app/assets/images/avatar.png`)} type="local" />
+                  <AppImage width={appScale(100)} height={appScale(100)} src={require(`app/assets/images/avatar.png`)} type="local" />
                 ) : (
-                  <AppImage width={100} height={100} src={accountForm.avatar} />
+                  <AppImage width={appScale(100)} height={appScale(100)} src={accountForm.avatar} />
                 )}
               </Button>
               <XStack
@@ -161,7 +161,7 @@ const SuccessPopup: React.FC<any> = ({
             </YStack>
 
             <YStack w={'100%'}>
-              <SizableText ta="left" mb={appScale(12)} col={'#212121'} fontSize={'$5'} fow={'700'}>
+              <SizableText ta="left" mb={appScale(12)} col={'#212121'} fontSize={'$4'} fow={'700'}>
                 {t('login.profile.nikeName')}
               </SizableText>
               <XStack
@@ -234,7 +234,7 @@ const SuccessPopup: React.FC<any> = ({
               width={appScale(186)}
               height={appScale(180)}
             />
-            <SizableText ta={'center'} mb={appScale(32)} fontSize={'$7'} color={'#212121'} fow={'700'}>
+            <SizableText ta={'center'} mb={appScale(32)} fontSize={'$6'} color={'#212121'} fow={'700'}>
               {t('login.loginTips1')}
             </SizableText>
             <SizableText ta={'center'} h={appScale(26)} lh={appScale(26)} fontSize={'$4'} color={'#212121'} fow={'400'}>

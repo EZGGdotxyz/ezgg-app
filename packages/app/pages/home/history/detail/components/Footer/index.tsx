@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 11:02:18
+ * @LastEditTime: 2025-03-07 12:54:04
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/Footer/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController} from '@my/ui';
@@ -29,7 +29,7 @@ const Footer: React.FC<any> = ({setDeclineRequestVisible, setAcceptRequestVisibl
       flexShrink={0}
       pl={appScale(24)}
       pr={appScale(24)}
-      pt={12}
+      pt={appScale(12)}
       pb={appScale(isIphoneX() ? 46 : 12)}
       w="100%"
       ai={'center'}

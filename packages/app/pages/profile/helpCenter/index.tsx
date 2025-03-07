@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 11:18:18
+ * @LastEditTime: 2025-03-07 12:56:06
  * @FilePath: /ezgg-app/packages/app/pages/profile/helpCenter/index.tsx
  */
 import {
@@ -187,11 +187,11 @@ const HelpCenterScreen = () => {
             {item.icon === 'twitter' && <Text fontSize={20}>📘</Text>}
             {item.icon === 'instagram' && <Text fontSize={20}>📷</Text>}
           </YStack>
-          <SizableText col={'#212121'} fontSize={'$5'} fow="700">
+          <SizableText col={'#212121'} fontSize={'$4'} fow="700">
             {item.title}
           </SizableText>
         </XStack>
-        <ChevronRight size={20} />
+        <ChevronRight size={appScale(20)} />
       </XStack>
     </Button>
   );
@@ -243,7 +243,7 @@ const HelpCenterScreen = () => {
           }}
         >
           <SizableText
-            fontSize={'$5'}
+            fontSize={'$4'}
             textAlign="center"
             fontWeight={'600'}
             color={activeTab === 'faq' ? '#212121' : '#9E9E9E'}
@@ -271,7 +271,7 @@ const HelpCenterScreen = () => {
           }}
         >
           <SizableText
-            fontSize={'$5'}
+            fontSize={'$4'}
             textAlign="center"
             fontWeight={'600'}
             color={activeTab === 'contact' ? '#212121' : '#9E9E9E'}
@@ -362,11 +362,11 @@ const HelpCenterScreen = () => {
                       >
                         <XStack justifyContent="space-between" alignItems="center" width="100%">
                           <XStack alignItems="center" space="$3">
-                            <SizableText col={'#212121'} fontSize={'$5'} fow="700">
+                            <SizableText col={'#212121'} fontSize={'$4'} fow="700">
                               {item.question}
                             </SizableText>
                           </XStack>
-                          {expandedFaq === item.question ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                          {expandedFaq === item.question ? <ChevronUp size={appScale(20)} /> : <ChevronDown size={appScale(20)} />}
                         </XStack>
                       </Button>
                       <YStack

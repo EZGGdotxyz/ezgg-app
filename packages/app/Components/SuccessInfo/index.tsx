@@ -124,14 +124,14 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
       </XStack>
       {infoData?.userName!=='' && (
         <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
-          <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#616161'} fontWeight={'500'}>
+          <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
             {infoData?.userName}
           </SizableText>
         </XStack>
       )}
       {infoData?.title!=='' && (
         <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
-          <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#616161'} fontWeight={'500'}>
+          <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
             {infoData?.title}
           </SizableText>
         </XStack>
@@ -156,11 +156,11 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
               bbw={1}
               bbc={index === infoData?.infoList.length - 1 ? '#EEEEEE' : '$background'}
             >
-              <SizableText h={appScale(26)} lh={appScale(26)} fontSize={'$5'} color={'#616161'} fontWeight={'500'}>
+              <SizableText h={appScale(26)} lh={appScale(26)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
                 {item.label}
               </SizableText>
               <XStack ai={'center'} jc={'center'}>
-                <SizableText h={appScale(26)} lh={appScale(26)} fontSize={'$5'} color={'#424242'} fontWeight={'600'}>
+                <SizableText h={appScale(26)} lh={appScale(26)} fontSize={'$4'} color={'#424242'} fontWeight={'600'}>
                   {item?.isTruncated ? (item?.value ? truncateAddress(item?.value) : '-') : item?.value}
                 </SizableText>
                 {item?.isCopyable && (

@@ -1,13 +1,14 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 14:27:39
+ * @LastEditTime: 2025-03-07 13:11:36
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/ChainPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
+import { appScale } from 'app/utils';
 import {useEffect, useRef, forwardRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
@@ -71,7 +72,7 @@ const ChainPopup = forwardRef<any, any>(({
                     jc={'space-between'}
                     flexDirection="row"
                     w="100%"
-                    h={56}
+                    h={appScale(56)}
                     pl="$4"
                     pr="$4"
                     ai="center"
@@ -79,12 +80,12 @@ const ChainPopup = forwardRef<any, any>(({
                       selectChain(item);
                     }}
                   >
-                    <SizableText color={'#212121'} size={'$5'} fow={'600'}>
+                    <SizableText color={'#212121'} size={'$4'} fow={'600'}>
                       {item?.emoji} &nbsp;&nbsp;&nbsp;{' '}
                       {`${i18n.language === 'zh_HK' ? item?.chineseName : item?.englishName}`}
                     </SizableText>
-                    <SizableText color={'#212121'} size={'$4'} fow={'600'}>
-                      {item?.code}
+                    <SizableText color={'#212121'} size={'$3'} fow={'500'}>
+                      {item?.label}
                     </SizableText>
                   </Button>
                   // </YStack>

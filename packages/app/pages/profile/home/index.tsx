@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 14:50:01
+ * @LastEditTime: 2025-03-06 17:24:56
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -42,7 +42,7 @@ import AppButton from 'app/Components/AppButton';
 import AppLoading from 'app/Components/AppLoading';
 import {CurrencyList, ExternalLinkData} from 'app/config';
 import SharePopup from 'app/Components/SharePopup';
-import { encryptId } from 'app/utils/crypto';
+import {encryptId} from 'app/utils/crypto';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
 
 // 我的
@@ -65,10 +65,7 @@ const MyScreen = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [shareVisible, setShareVisible] = useState(false);
 
-  const userId = encryptId(userInfo?.customMetadata?.id||'');
-
-  console.log('🚀 ~ MyScreen ~ userId:', userId);
-
+  const userId = encryptId(userInfo?.customMetadata?.id || '');
 
   const InfoItems = [
     // {
@@ -230,7 +227,7 @@ const MyScreen = () => {
         <YStack pl={appScale(24)} pr={appScale(24)} pb={appScale(24)} pt={appScale(12)}>
           {isLogin && (
             <XStack w={'100%'} ai="center" jc={'space-between'} pb={appScale(24)}>
-              <SizableText fontSize={'$5'} color={'#212121'} h={appScale(28)} lh={appScale(28)}>
+              <SizableText fontSize={'$4'} color={'#212121'} h={appScale(28)} lh={appScale(28)}>
                 @{userInfo?.customMetadata?.nickname}
               </SizableText>
               <Button
@@ -299,7 +296,7 @@ const MyScreen = () => {
         setModalVisible={setModalVisible2}
         setShareVisible={setShareVisible}
       />
-       <SharePopup
+      <SharePopup
         modalVisible={shareVisible}
         setModalVisible={setShareVisible}
         title={t('home.description')}

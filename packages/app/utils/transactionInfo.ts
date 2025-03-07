@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-03 23:26:42
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 15:22:25
+ * @LastEditTime: 2025-03-07 13:44:21
  * @FilePath: /ezgg-app/packages/app/utils/transactionInfo.ts
  */
 import {formatDateTime, formatTokenAmount} from './index';
@@ -54,14 +54,16 @@ export const createBaseTransactionInfoList = (orderData: any, t: any, isTo = tru
 // 创建金额显示信息
 export const createAmountDisplay = (orderData: any) => {
   const chainName = getChainInfo(orderData?.chainId)?.name || '';
-  return `${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol} (${chainName})`;
+  return `${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${
+    orderData?.tokenSymbol || ''
+  } (${chainName})`;
 };
 
 // 创建网络费用显示信息
 export const createNetworkFeeDisplay = (orderData: any) => {
   const chainName = getChainInfo(orderData?.chainId)?.name || '';
   return `${formatTokenAmount(orderData?.networkFee, orderData?.tokenDecimals)} ${
-    orderData?.tokenSymbol
+    orderData?.tokenSymbol || ''
   } (${chainName})`;
 };
 

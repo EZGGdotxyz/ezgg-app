@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 11:30:25
+ * @LastEditTime: 2025-03-07 14:12:30
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/AcceptRequestPopup/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController, YStack} from '@my/ui';
@@ -28,6 +28,7 @@ interface AcceptRequestPopupProps {
   setModalVisible: (value: boolean) => void;
   orderData: any;
   setIsLoading: (isLoading: boolean) => void;
+  onSuccess: () => void;
 }
 
 const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
@@ -35,6 +36,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
   setModalVisible,
   orderData,
   setIsLoading,
+  onSuccess,
 }) => {
   const {t} = useTranslation();
 
@@ -83,6 +85,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
         ],
       });
       await handleTransactionSuccess(transactionHash);
+      onSuccess();
     } catch (error) {
       console.error('Send transaction error:', error);
       toast.show(t('tips.error.networkError'), {
@@ -126,7 +129,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
         borderTopLeftRadius={appScale(16)}
       >
         <YStack pt={appScale(24)} pl={appScale(24)} pr={appScale(24)} w="100%">
-          <SizableText ta={'center'} fontSize={'$7'} color={'#212121'} fontWeight={'700'}>
+          <SizableText ta={'center'} fontSize={'$6'} color={'#212121'} fontWeight={'700'}>
             {t('home.order.acceptRequest')}
           </SizableText>
           <XStack h={1} w="100%" mt={appScale(24)} mb={appScale(24)} bc={'#eee'} jc={'center'} ai={'center'}></XStack>
@@ -142,7 +145,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
             <SizableText ta={'center'} fontSize={'$4'} color={'#757575'} fontWeight={'500'}>
             {t('home.order.amountRequested2')}
             </SizableText>
-            <SizableText ta={'center'} fontSize={'$9'} color={'#212121'} fontWeight={'600'}>
+            <SizableText ta={'center'} fontSize={'$8'} color={'#212121'} fontWeight={'600'}>
               {`${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol}`}
             </SizableText>
 
@@ -157,12 +160,12 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
             </SizableText>
             <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
           </XStack>
-          <SizableText pb={appScale(16)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-            {`@${orderData?.senderMember?.name || ''}`}
+          <SizableText pb={appScale(16)} fontSize={'$4'} color={'#212121'} fontWeight={'600'}>
+            {`@${orderData?.senderMember?.nickname || ''}`}
           </SizableText>
           <XStack
             flexShrink={0}
-            pt={12}
+            pt={appScale(12)}
             pb={appScale(isIphoneX() ? 46 : 12)}
             w="100%"
             ai={'center'}
@@ -188,7 +191,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
               }}
               unstyled
             >
-              {t('home.order.noDecline')}
+              {t('operate.button.cancel')}
             </Button>
             <AppButton
               style={{
@@ -198,7 +201,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
                 onAcceptRequest();
               }}
             >
-              {t('home.order.yesDecline')}
+              {t('home.paylink.sendCrypto')}
             </AppButton>
           </XStack>
         </YStack>

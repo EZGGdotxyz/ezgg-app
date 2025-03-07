@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 12:33:58
+ * @LastEditTime: 2025-03-07 14:26:20
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/index.tsx
  */
 import {
@@ -105,7 +105,14 @@ const SendToScreen = ({isRefresh, type}: any) => {
           ...payLinkData,
           userId: item?.id,
           user: item,
-          transactionType: item?.id === 'anyone' ? 'PAY_LINK' : type === 'send' ? 'SEND' : 'REQUEST',
+          transactionType:
+            item?.id === 'anyone'
+              ? type === 'send'
+                ? 'PAY_LINK'
+                : 'REQUEST_LINK'
+              : type === 'send'
+              ? 'SEND'
+              : 'REQUEST',
         },
       });
       replace(`/home/${type}/amount?id=${payLinkData?.id}`);
@@ -117,7 +124,14 @@ const SendToScreen = ({isRefresh, type}: any) => {
           id: id,
           userId: item?.id,
           user: item,
-          transactionType: item?.id === 'anyone' ? 'PAY_LINK' : type === 'send' ? 'SEND' : 'REQUEST',
+          transactionType:
+            item?.id === 'anyone'
+              ? type === 'send'
+                ? 'PAY_LINK'
+                : 'REQUEST_LINK'
+              : type === 'send'
+              ? 'SEND'
+              : 'REQUEST',
         },
       });
       replace(`/home/${type}/amount?id=${id}`);
@@ -144,7 +158,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
           </XStack>
         );
       } else {
-        if (data.length > 0) {
+        if (data.length === 0) {
           return (
             <XStack w="100%" jc={'center'} py={appScale(24)}>
               <SizableText col={'$color11'} fontSize={'$3'}>
@@ -191,7 +205,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
               w={'100%'}
               lh={appScale(30)}
               ta={'center'}
-              fontSize={'$5'}
+              fontSize={'$4'}
               color={'#212121'}
               fow="600"
             >
@@ -224,11 +238,13 @@ const SendToScreen = ({isRefresh, type}: any) => {
           backgroundColor: '#f8f8f8',
         }}
         onEndReached={() => {
+          console.log('🚀 ~ SendToScreen ~ canLoadMore:');
           if (canLoadMore && !loadingMore) {
             fetchMoreData();
           }
         }}
         onMomentumScrollBegin={() => {
+          console.log('🚀 ~ SendToScreen ~ canLoadMore2:');
           setCanLoadMore(true);
         }}
         onEndReachedThreshold={50}
@@ -247,7 +263,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
         flexShrink={0}
         pl={appScale(24)}
         pr={appScale(24)}
-        pt={12}
+        pt={appScale(12)}
         pb={appScale(isIphoneX() ? 46 : 12)}
         w="100%"
         ai={'center'}

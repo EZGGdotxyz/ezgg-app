@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 16:47:09
+ * @LastEditTime: 2025-03-06 22:39:52
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -133,6 +133,8 @@ export default {
   'home.take.tips2': 'Send ${{amount}} to @{{name}}',
   'home.take.message': 'Message',
   'home.take.claim': 'Claim',
+  'home.take.myPayLink': 'My PayLink',
+  'home.take.myPayLink2': 'My Request PayLink',
   'home.take.balance': 'Balance',
 
   'home.share.title': 'Share',
@@ -149,8 +151,57 @@ export default {
   'home.claim.title': 'Onchain Currency with ezgg',
   'home.claim.description': 'Claim your crypto',
 
-  'home.explore.requestingPermission': 'Requesting camera permission',
-  'home.explore.noPermission': 'No camera permission',
+  'home.explore.requestingPermission': 'Request Camera Permission',
+  'home.explore.noPermission': 'No camera permission, please enable camera access in settings',
   'home.explore.noPermission2': 'You can also use the button below to select an image for scanning',
-  'home.explore.requestPermission': 'Request camera permission',
+  'home.explore.requestPermission': 'Request Camera Permission',
+
+
+  'home.notification.send.title': 'Received @{{name}} sent {{amount}}',
+  'home.notification.request.title': 'Received @{{name}} request {{amount}}',
+  // Notification related
+  'home.notification.transUpdate.requestAccepted': 'Request Accepted',
+  'home.notification.transUpdate.requestAcceptedDesc': 'Your payment request has been accepted',
+  'home.notification.transUpdate.requestDeclined': 'Request Declined',
+  'home.notification.transUpdate.requestDeclinedDesc': 'Your payment request has been declined',
+  'home.notification.transUpdate.payLinkAccepted': 'Pay Link Accepted',
+  'home.notification.transUpdate.payLinkAcceptedDesc': 'Your payment link has been clicked and confirmed',
+  
+  // Alarm related
+  'home.notification.alarm.title': 'Suspicious Activity Alert',
+  'home.notification.balanceAlarm.title': 'Low Balance Alert',
+  'home.notification.balanceAlarm.desc': 'Your balance is below {{amount}}',
+  'home.notification.secureAlarm.title': 'Security Risk Alert',
+  
+  // Other notification types
+  'home.notification.payRequest.title': 'Payment Request',
+  'home.notification.customerSupport.title': 'Customer Support',
+  'home.notification.summary.title': 'Periodic Statement',
+  'home.notification.appUpdate.title': 'App Update',
+  'home.notification.appUpdate.desc': 'New version {{version}} has been released',
+  'home.notification.salesPromotion.title': 'Sales Promotion',
+  'home.notification.survey.title': 'User Survey',
+  
+  // Screen titles
+  'home.screen.notification.title': 'Notifications',
+  'home.screen.profile.notification.title': 'Notification Settings',
+  
+  // Notification settings related
+  'home.profile.notification.general': 'General Notifications',
+  'home.profile.notification.app': 'App Notifications',
+  'home.profile.notification.general1': 'Transaction Status Updates',
+  'home.profile.notification.general2': 'Abnormal Activity Alerts',
+  'home.profile.notification.general3': 'Payment Requests',
+  'home.profile.notification.general4': 'Card Activity',
+  'home.profile.notification.general5': 'Customer Support',
+  'home.profile.notification.general6': 'Low Balance Alerts',
+  'home.profile.notification.general7': 'Security Risk Alerts',
+  'home.profile.notification.general8': 'Periodic Statements',
+  'home.profile.notification.app1': 'App Updates',
+  'home.profile.notification.app2': 'Sales Promotions',
+  'home.profile.notification.app3': 'User Surveys',
+  
+  // List loading related
+  'home.tips.list.loading.title': 'No more data',
+  'home.tips.list.loading.title2': 'Loading...'
 };

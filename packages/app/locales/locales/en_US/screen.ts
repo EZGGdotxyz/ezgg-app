@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-10 22:57:56
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 14:35:57
+ * @LastEditTime: 2025-03-06 21:37:49
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/screen.ts
  */
 export default {
@@ -16,6 +16,7 @@ export default {
   'screen.home.sendTo': 'Send To',
   'screen.home.paylink': 'Paylink',
   'screen.home.requestFrom': 'Request from',
+  'screen.home.request': 'Request',
   'screen.home.amountRequesting': 'Amount Requesting',
   'screen.home.deposit': 'Deposit',
   'screen.home.withdraw': 'Withdraw',

@@ -1,10 +1,10 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 13:21:06
+ * @LastEditTime: 2025-03-07 13:49:20
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
-import {YStack, SizableText, AppImage, Button} from '@my/ui';
+import {YStack, SizableText, AppImage, Button, ScrollView} from '@my/ui';
 import React, {useState, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
@@ -111,64 +111,73 @@ const LoginScreen = () => {
   return (
     <PermissionPage isLoginPage>
       <AppHeader2 title={''} fallbackUrl="/" />
-      <YStack f={1} pt={'20%'} ai="center" bc="$background">
-        <YStack pb={appScale(32 + 24)}>
-          <SizableText color="$color" ta="center" fontSize={appScale(24)} fontWeight="700" mb={appScale(32 + 24)}>
-            {AppName}
-          </SizableText>
-          <AppImage
-            width={appScale(285 / 2)}
-            height={appScale(322 / 2)}
-            src={require('app/assets/images/logo.png')}
-            type="local"
-          />
-        </YStack>
-        <YStack w="100%" pl={appScale(24)} pr={appScale(24)}>
-          <Button
-            backgroundColor={PrimaryColor}
-            h={appScale(58)}
-            w={'100%'}
-            br={appScale(28)}
-            ai={'center'}
-            jc={'center'}
-            pressStyle={{
-              opacity: 0.85,
-            }}
-            unstyled
-            onPress={() => login()}
-            disabled={!ready}
-          >
-            <SizableText color="#212121" fontSize={appScale(16)} fontWeight="700">
-              {t('login.loginButton')}
+      <ScrollView
+        flex={1}
+        w={'100%'}
+        bc="#fff"
+        contentContainerStyle={{
+          minHeight: '100%',
+        }}
+      >
+        <YStack f={1} pt={appScale(100)} ai="center" bc="$background">
+          <YStack pb={appScale(32 + 24)}>
+            <SizableText color="$color" ta="center" fontSize={appScale(24)} fontWeight="700" mb={appScale(32 + 24)}>
+              {AppName}
             </SizableText>
-          </Button>
-        </YStack>
-        <View
-          style={{
-            display: 'block',
-            padding: appScale(24),
-          }}
-        >
-          <SizableText style={{display: 'inline'}} color="#212121" fontSize={appScale(14)} fontWeight="500">
-            {t('login.loginAgreement1')}
-          </SizableText>
-          <Button
-            unstyled
-            style={{display: 'inline'}}
-            pressStyle={{opacity: 0.7}}
-            onPress={() => {
-              push('/profile/privacyPolicy');
+            <AppImage
+              width={appScale(285 / 2)}
+              height={appScale(322 / 2)}
+              src={require('app/assets/images/logo.png')}
+              type="local"
+            />
+          </YStack>
+          <YStack w="100%" pl={appScale(24)} pr={appScale(24)}>
+            <Button
+              backgroundColor={PrimaryColor}
+              h={appScale(58)}
+              w={'100%'}
+              br={appScale(28)}
+              ai={'center'}
+              jc={'center'}
+              pressStyle={{
+                opacity: 0.85,
+              }}
+              unstyled
+              onPress={() => login()}
+              disabled={!ready}
+            >
+              <SizableText color="#212121" fontSize={appScale(16)} fontWeight="700">
+                {t('login.loginButton')}
+              </SizableText>
+            </Button>
+          </YStack>
+          <View
+            style={{
+              display: 'block',
+              padding: appScale(24),
             }}
           >
-            <SizableText ml={appScale(4)} mr={appScale(4)} color="#212121" fontSize={appScale(14)} fontWeight="700">
-              {t('login.loginAgreement2')}
+            <SizableText style={{display: 'inline'}} color="#212121" fontSize={appScale(14)} fontWeight="500">
+              {t('login.loginAgreement1')}
             </SizableText>
-          </Button>
-          <SizableText style={{display: 'inline'}} color="#212121" fontSize={appScale(14)} fontWeight="500">
-            {t('login.loginAgreement3')}
-          </SizableText>
-        </View>
-      </YStack>
+            <Button
+              unstyled
+              style={{display: 'inline'}}
+              pressStyle={{opacity: 0.7}}
+              onPress={() => {
+                push('/profile/privacyPolicy');
+              }}
+            >
+              <SizableText ml={appScale(4)} mr={appScale(4)} color="#212121" fontSize={appScale(14)} fontWeight="700">
+                {t('login.loginAgreement2')}
+              </SizableText>
+            </Button>
+            <SizableText style={{display: 'inline'}} color="#212121" fontSize={appScale(14)} fontWeight="500">
+              {t('login.loginAgreement3')}
+            </SizableText>
+          </View>
+        </YStack>
+      </ScrollView>
       <SuccessPopup
         redirect={params?.redirect}
         handleSuccess={handleSuccess}

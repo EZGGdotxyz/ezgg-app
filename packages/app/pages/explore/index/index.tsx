@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 14:01:17
+ * @LastEditTime: 2025-03-07 13:26:25
  * @FilePath: /ezgg-app/packages/app/pages/explore/index/index.tsx
  */
 import {
@@ -15,6 +15,7 @@ import {
   AppImage,
   Button,
   useToastController,
+  ScrollView,
 } from '@my/ui';
 import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -27,6 +28,8 @@ import {useRouter} from 'solito/router';
 import AppLoading from 'app/Components/AppLoading';
 import {ExternalLinkData} from 'app/config';
 import {decryptId} from 'app/utils/crypto';
+import {createParam} from 'solito';
+const {useParams} = createParam<any>();
 
 // 掃描
 const ExploreScreen = () => {
@@ -39,6 +42,7 @@ const ExploreScreen = () => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToastController();
+  const {params} = useParams();
 
   useEffect(() => {
     checkCameraPermission();
@@ -187,7 +191,8 @@ const ExploreScreen = () => {
           setIsLoading(true);
           setTimeout(() => {
             stopScanning();
-            replace('/explore/' + _decryptId);
+            const _type = params?.type || 'send';
+            replace('/explore/' + _decryptId + '?type=' + _type);
             setIsLoading(false);
           }, 1000);
         } else {
@@ -211,106 +216,119 @@ const ExploreScreen = () => {
         isDark
         fallbackUrl="/"
       />
-      <YStack w="100%" flex={1} bc={'#1F222A'} ai="center">
-        <YStack w="100%" pb={appScale(58)} pt={appScale(12)}>
-          <SizableText
-            mb={appScale(16)}
-            h={appScale(50)}
-            lh={appScale(50)}
-            ta={'center'}
-            fontSize={'$9'}
-            color={'#fff'}
-            fow="600"
-          >
-            {t('home.qr.title')}
-          </SizableText>
-          <SizableText ta={'center'} fontSize={'$3'} color={'#fff'} fow="400">
-            {t('home.qr.sub')}
-          </SizableText>
-        </YStack>
+      <ScrollView
+        flex={1}
+        w={'100%'}
+        bc="#fff"
+        contentContainerStyle={{
+          minHeight: '100%',
+        }}
+      >
+        <YStack w="100%" flex={1} bc={'#1F222A'} ai="center">
+          <YStack w="100%" pb={appScale(58)} pt={appScale(12)}>
+            <SizableText
+              mb={appScale(16)}
+              h={appScale(50)}
+              lh={appScale(50)}
+              ta={'center'}
+              fontSize={'$8'}
+              color={'#fff'}
+              fow="600"
+            >
+              {t('home.qr.title')}
+            </SizableText>
+            <SizableText ta={'center'} fontSize={'$3'} color={'#fff'} fow="400">
+              {t('home.qr.sub')}
+            </SizableText>
+          </YStack>
 
-        <YStack
-          width={appScale(382)}
-          height={appScale(382)}
-          borderRadius={appScale(20)}
-          // borderWidth={2}
-          // borderColor="#fff"
-          overflow="hidden"
-          position="relative"
-        >
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            style={{
-              marginTop: appScale(3),
-              marginRight: appScale(3),
-              width: appScale(376),
-              height: appScale(376),
-              objectFit: 'cover',
-              transform: 'scaleX(-1)',
-            }}
-          />
-          <XStack
-            position="absolute"
+          <YStack
             width={appScale(382)}
             height={appScale(382)}
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            ai="center"
-            jc="center"
+            borderRadius={appScale(20)}
+            // borderWidth={2}
+            // borderColor="#534f4f"
+            overflow="hidden"
+            position="relative"
           >
-            <AppImage
-              src={require('app/assets/images/qr_code_bg.png')}
-              type="local"
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              style={{
+                marginTop: appScale(3),
+                marginRight: appScale(3),
+                width: appScale(376),
+                height: appScale(376),
+                objectFit: 'cover',
+                transform: 'scaleX(-1)',
+              }}
+            />
+            <XStack
+              position="absolute"
               width={appScale(382)}
               height={appScale(382)}
+              top={0}
+              left={0}
+              right={0}
+              bottom={0}
+              ai="center"
+              jc="center"
+            >
+              <AppImage
+                src={require('app/assets/images/qr_code_bg.png')}
+                type="local"
+                width={appScale(382)}
+                height={appScale(382)}
+              />
+            </XStack>
+            <canvas
+              ref={canvasRef}
+              style={{
+                display: 'none',
+                width: appScale(376),
+                height: appScale(376),
+              }}
             />
-          </XStack>
-          <canvas
-            ref={canvasRef}
-            style={{
-              display: 'none',
-              width: appScale(376),
-              height: appScale(376),
-            }}
-          />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileUpload}
-            ref={fileInputRef}
-            style={{display: 'none'}}
-          />
-        </YStack>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileUpload}
+              ref={fileInputRef}
+              style={{display: 'none'}}
+            />
+          </YStack>
 
-        {hasPermission === false ? (
-          <YStack w="100%" pt={appScale(40)} pl={appScale(24)} pr={appScale(24)} ai="center" jc="center" space="$4">
-            <SizableText ta={'center'} fontSize={'$7'} fontWeight={'600'} color="#fff">{t('home.explore.noPermission')}</SizableText>
-            <SizableText ta={'center'} fontSize={'$5'} fontWeight={'400'} color="#fff">{t('home.explore.noPermission2')}</SizableText>
+          {hasPermission === false ? (
+            <YStack w="100%" pt={appScale(40)} pb={appScale(24)} pl={appScale(24)} pr={appScale(24)} ai="center" jc="center" space="$4">
+              <SizableText ta={'center'} fontSize={'$6'} fontWeight={'600'} color="#fff">
+                {t('home.explore.noPermission')}
+              </SizableText>
+              <SizableText ta={'center'} fontSize={'$4'} fontWeight={'400'} color="#fff">
+                {t('home.explore.noPermission2')}
+              </SizableText>
             </YStack>
-        ) : (
-          <></>
-        )}
-      </YStack>
-      <XStack flexShrink={0} bc={'#1F222A'} jc={'center'} pb={appScale(32)}>
-        <Button
-          unstyled
-          onPress={() => {
-            fileInputRef.current?.click();
-          }}
-        >
-          <AppImage
-            width={appScale(56)}
-            height={appScale(56)}
-            src={require(`app/assets/images/img.png`)}
-            type="local"
-          />
-        </Button>
-      </XStack>
+          ) : (
+            <></>
+          )}
+        </YStack>
+        <XStack flexShrink={0} bc={'#1F222A'} jc={'center'} pb={appScale(32)}>
+          <Button
+            unstyled
+            onPress={() => {
+              fileInputRef.current?.click();
+            }}
+          >
+            <AppImage
+              width={appScale(56)}
+              height={appScale(56)}
+              src={require(`app/assets/images/img.png`)}
+              type="local"
+            />
+          </Button>
+        </XStack>
+      </ScrollView>
       {isLoading && <AppLoading />}
     </PermissionPage>
   );

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 13:12:49
+ * @LastEditTime: 2025-03-07 13:08:56
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -102,7 +102,7 @@ const HomeScreen = (props: HomeScreenProps) => {
         // h={appScale(100)}
         bc={PrimaryColor}
       >
-        <YStack mb={appScale(36)}>
+        <YStack pb={appScale(24)}>
           <XStack ai={'flex-start'} jc={'center'} w={'100%'}>
             <SizableText
               pos="relative"
@@ -110,12 +110,12 @@ const HomeScreen = (props: HomeScreenProps) => {
               h={appScale(60)}
               lh={appScale(60)}
               ta={'center'}
-              fontSize={'$10'}
+              fontSize={'$9'}
               fow={'700'}
             >
               {formatNumber(availableBalance)}
             </SizableText>
-            <SizableText col={'#212121'} ta={'center'} fontSize={'$6'} fow={'600'}>
+            <SizableText col={'#212121'} ta={'center'} fontSize={'$5'} fow={'600'}>
               $
             </SizableText>
           </XStack>
@@ -135,7 +135,7 @@ const HomeScreen = (props: HomeScreenProps) => {
             >
               <YStack ai={'center'}>
                 <AppImage width={appScale(60)} height={appScale(60)} src={item.icon} type="local" />
-                <SizableText mt={appScale(12)} lh={appScale(26)} col={'$color'} fontSize={'$5'} fow={'700'}>
+                <SizableText mt={appScale(12)} lh={appScale(26)} col={'$color'} fontSize={'$4'} fow={'700'}>
                   {item.title}
                 </SizableText>
               </YStack>

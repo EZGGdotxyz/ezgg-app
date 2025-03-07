@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 13:41:30
+ * @LastEditTime: 2025-03-07 13:20:27
  * @FilePath: /ezgg-app/packages/app/Components/AppHeader2/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -69,7 +69,7 @@ const AppHeader2: React.FC<any> = ({
         pr={appScale(24)}
         pt={appScale(12)}
         pb={appScale(12)}
-        h={72}
+        h={appScale(72)}
         ai={'center'}
         jc={'space-between'}
       >
@@ -98,7 +98,7 @@ const AppHeader2: React.FC<any> = ({
               />
             </XStack>
           )}
-          <SizableText col={'$color'} fontSize={'$8'} fow={'700'}>
+          <SizableText col={'$color'} fontSize={'$7'} fow={'700'}>
             {title}
           </SizableText>
         </XStack>

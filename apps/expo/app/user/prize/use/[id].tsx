@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-07 15:49:22
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-08-04 16:49:50
- * @FilePath: /snapx-nfc-app-merchants/apps/expo/app/user/prize/use/[id].tsx
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-03-07 13:03:49
+ * @FilePath: /ezgg-app/apps/expo/app/user/prize/use/[id].tsx
  */
 import UseScreen from 'app/pages/user/prize/use';
 import {Stack, router, useFocusEffect, useRouter} from 'expo-router';
@@ -10,6 +10,7 @@ import {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button} from '@my/ui';
 import {ChevronLeft} from '@tamagui/lucide-icons';
+import { appScale } from 'app/utils';
 export default function Page() {
   const {t} = useTranslation();
   const {back, push, replace} = useRouter();
@@ -38,7 +39,7 @@ export default function Page() {
                   }
                 }}
               >
-                <ChevronLeft size={36} color={'#428cfc'} />
+                <ChevronLeft size={appScale(36)} color={'#428cfc'} />
               </Button>
             );
           },

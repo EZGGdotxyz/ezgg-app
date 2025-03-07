@@ -35,7 +35,7 @@ const Header: React.FC<any> = ({}: HeaderProps) => {
         pr={appScale(24)}
         pt={appScale(12)}
         pb={appScale(12)}
-        h={72}
+        h={appScale(72)}
         ai={'center'}
         jc={'space-between'}
       >

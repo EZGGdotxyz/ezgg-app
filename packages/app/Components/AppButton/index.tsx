@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 19:44:49
+ * @LastEditTime: 2025-03-07 13:56:06
  * @FilePath: /ezgg-app/packages/app/Components/AppButton/index.tsx
  */
 import {Button, Paragraph} from '@my/ui';
@@ -14,10 +14,11 @@ interface AppButtonProps {
   onPress: () => void;
   style?: any;
   isLoading?: boolean;
+  disabled?: boolean;
 }
 
 export default function AppButton(props: AppButtonProps) {
-  const {onPress, style, isLoading = false} = props;
+  const {onPress, style, isLoading = false, disabled = false} = props;
   return (
     <Button
       h={appScale(58)}
@@ -29,9 +30,10 @@ export default function AppButton(props: AppButtonProps) {
         ...style,
         opacity: isLoading ? 0.5 : 1,
       }}
-      bc={PrimaryColor}
+      bc={disabled ? '#E0E0E0' : PrimaryColor}
+      // bc={PrimaryColor}
       onPress={onPress}
-      // disabled={isLoading}
+      disabled={disabled}
       pressStyle={{
         opacity: 0.85,
       }}
@@ -40,7 +42,7 @@ export default function AppButton(props: AppButtonProps) {
       {isLoading ? (
         <ActivityIndicator color={'#212121'} />
       ) : (
-        <Paragraph fontSize={'$4'} color={'#212121'} fontWeight={'700'}>
+        <Paragraph fontSize={'$4'} color={disabled ? '#9E9E9E' : '#212121'} fontWeight={'600'}>
           {props?.children}
         </Paragraph>
       )}

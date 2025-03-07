@@ -37,7 +37,7 @@ const ListEmpty: React.FC<any> = ({loading}: ListEmptypProps) => {
             />
           </XStack>
           <XStack>
-          <SizableText mt={appScale(32)} col={'#212121'} fontSize={'$7'} fow={'700'}>
+          <SizableText mt={appScale(32)} col={'#212121'} fontSize={'$6'} fow={'700'}>
               {t('tips.list.noData.title')}
             </SizableText>
           </XStack>

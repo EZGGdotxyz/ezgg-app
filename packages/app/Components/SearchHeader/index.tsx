@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 18:09:52
+ * @LastEditTime: 2025-03-07 12:58:37
  * @FilePath: /ezgg-app/packages/app/Components/SearchHeader/index.tsx
  */
 import {AppImage, Button, Input, SizableText, Text, XStack, useToastController} from '@my/ui';
@@ -48,7 +48,7 @@ const SearchHeader: React.FC<any> = ({searchText, setSearchText, onSearch, place
   return (
     <YStack flexShrink={0} pos={'relative'} w="100%" pb={appScale(20)} pt={appScale(12)}>
       <XStack
-        h={60}
+        h={appScale(60)}
         w={'100%'}
         jc={'space-between'}
         ai={'center'}

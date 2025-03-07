@@ -1,14 +1,15 @@
 /*
  * @Date: 2023-12-07 15:49:22
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-08-09 21:29:26
- * @FilePath: /snapx-nfc-app-merchants/apps/expo/app/my/gift/index.tsx
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-03-07 13:03:40
+ * @FilePath: /ezgg-app/apps/expo/app/my/gift/index.tsx
  */
 import GiftScreen from 'app/pages/my/gift/index';
 import {Stack, useRouter, router} from 'expo-router';
 import {useTranslation} from 'react-i18next';
 import {ChevronLeft} from '@tamagui/lucide-icons';
 import {Button} from '@my/ui';
+import { appScale } from 'app/utils';
 export default function Page() {
   const {t} = useTranslation();
   const {back, push, replace} = useRouter();
@@ -36,7 +37,7 @@ export default function Page() {
                   }
                 }}
               >
-                <ChevronLeft size={36} color={'#428cfc'} />
+                <ChevronLeft size={appScale(36)} color={'#428cfc'} />
               </Button>
             );
           },

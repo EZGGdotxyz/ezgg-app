@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 13:27:49
+ * @LastEditTime: 2025-03-07 13:33:36
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -16,6 +16,7 @@ import {
   TextArea,
   Button,
   useToastController,
+  ScrollView,
 } from '@my/ui';
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -66,7 +67,6 @@ const PayLinkScreen = ({type}: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const toast = useToastController();
-  const {getClientForChain} = useSmartWallets();
 
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [orderData, setOrderData] = React.useState<any>();
@@ -88,16 +88,21 @@ const PayLinkScreen = ({type}: any) => {
       transactionCategory: type,
       transactionType: payLinkData?.transactionType,
     };
-    if (payLinkData?.userId !== 'anyone') {
+    if (payLinkData?.transactionType !== 'PAY_LINK' && payLinkData?.transactionType !== 'REQUEST_LINK') {
       if (type === 'SEND') {
         params.receiverMemberId = Number(payLinkData?.userId);
+        // params.senderMemberId = Number(userInfo?.customMetadata?.id);
       } else {
         params.senderMemberId = Number(payLinkData?.userId);
+        // params.receiverMemberId = Number(userInfo?.customMetadata?.id);
+      }
+    } else {
+      if (type === 'SEND') {
+        params.senderMemberId = Number(userInfo?.customMetadata?.id);
+      } else {
+        params.receiverMemberId = Number(userInfo?.customMetadata?.id);
       }
     }
-    console.log('🚀 ~ createTransactionParams ~ payLinkData:', payLinkData);
-
-    console.log('🚀 ~ createTransactionParams ~ params:', params);
 
     return params;
   };
@@ -185,126 +190,135 @@ const PayLinkScreen = ({type}: any) => {
         title={t('screen.home.paylink')}
         fallbackUrl="/"
       />
-      {isSuccess ? (
-        <YStack flex={1} jc="space-between">
-          <SuccessInfo type={type === 'send' ? 'sent' : 'request'} orderData={orderData} />
+      <ScrollView
+        flex={1}
+        w={'100%'}
+        bc="#fff"
+        contentContainerStyle={{
+          minHeight: '100%',
+        }}
+      >
+        {isSuccess ? (
+          <YStack flex={1} jc="space-between">
+            <SuccessInfo type={type === 'send' ? 'sent' : 'request'} orderData={orderData} />
 
-          <YStack pb={appScale(16)} pl={appScale(24)} pr={appScale(24)}>
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'##616161'} fontWeight={'600'}>
-              {t('home.send.tips1')}
-            </SizableText>
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'##616161'} fontWeight={'600'}>
-              {t('home.send.tips2')}
-            </SizableText>
-          </YStack>
-        </YStack>
-      ) : (
-        <YStack flex={1} pl={appScale(24)} pr={appScale(24)}>
-          <YStack w="100%" mb={appScale(24)}>
-            <XStack mb={appScale(8)} w="100%">
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-                {t('home.paylink.recipient')}
+            <YStack pb={appScale(16)} pt={appScale(16)} pl={appScale(24)} pr={appScale(24)}>
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
+                {t('home.send.tips1')}
               </SizableText>
-            </XStack>
-
-            <Button
-              w="100%"
-              p={appScale(16)}
-              bc={'#FAFAFA'}
-              br={appScale(8)}
-              unstyled
-              flexDirection="row"
-              justifyContent="space-between"
-              alignItems="center"
-              pressStyle={{
-                opacity: 0.7,
-                bc: '#FAFAFA',
-              }}
-              onPress={() => {
-                console.log('🚀 ~ PayLinkScreen ~ type:', type);
-                push(`/home/${type}?userId=${payLinkData?.userId}`);
-              }}
-            >
-              {payLinkData?.userId === 'anyone' ? (
-                <SizableText fontSize={'$6'} color={PrimaryColor} fontWeight={'700'}>
-                  {t('home.paylink.anyoneLink')}
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
+                {t('home.send.tips2')}
+              </SizableText>
+            </YStack>
+          </YStack>
+        ) : (
+          <YStack flex={1} pl={appScale(24)} pr={appScale(24)}>
+            <YStack w="100%" mb={appScale(24)}>
+              <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                  {t('home.paylink.recipient')}
                 </SizableText>
-              ) : (
-                <XStack>
-                  <YStack pos={'relative'} w={appScale(84)} flexShrink={0}>
-                    {!payLinkData?.user?.avatar ? (
-                      <AppImage
-                        width={appScale(60)}
-                        height={appScale(60)}
-                        src={require(`app/assets/images/avatar.png`)}
-                        type="local"
-                      />
-                    ) : (
-                      <AppImage width={appScale(60)} height={appScale(60)} src={payLinkData?.user?.avatar} />
-                    )}
-                  </YStack>
-                  <YStack gap={appScale(2)}>
-                    <SizableText fontSize={'$6'} color={'#26273C'} fontWeight={'500'}>
-                      @{payLinkData?.user?.nickname}
-                    </SizableText>
-                    <SizableText fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
-                      {getUserSubName(payLinkData?.user)}
-                    </SizableText>
-                  </YStack>
-                </XStack>
-              )}
+              </XStack>
 
-              <ChevronRight size="$3" color={'#212121'} />
-            </Button>
-          </YStack>
-          <YStack w="100%" mb={appScale(24)}>
-            <XStack mb={appScale(8)} w="100%">
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-                {type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
-              </SizableText>
-            </XStack>
-            <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)}>
-              <SizableText
-                fontSize={'$8'}
-                h={appScale(50)}
-                lh={appScale(50)}
-                color={'#212121'}
-                fontWeight={'600'}
-                pos="relative"
+              <Button
+                w="100%"
+                p={appScale(16)}
+                bc={'#FAFAFA'}
+                br={appScale(8)}
+                unstyled
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+                pressStyle={{
+                  opacity: 0.7,
+                  bc: '#FAFAFA',
+                }}
+                onPress={() => {
+                  console.log('🚀 ~ PayLinkScreen ~ type:', type);
+                  replace(`/home/${type}?userId=${payLinkData?.userId}`);
+                }}
               >
-                {`${payLinkData?.amount} ${payLinkData?.currencyData?.token?.tokenSymbol} (${payLinkData?.currencyData?.chainName})`}
-              </SizableText>
-            </XStack>
-          </YStack>
+                {payLinkData?.userId === 'anyone' ? (
+                  <SizableText fontSize={'$5'} color={PrimaryColor} fontWeight={'600'}>
+                    {t('home.paylink.anyoneLink')}
+                  </SizableText>
+                ) : (
+                  <XStack>
+                    <YStack pos={'relative'} w={appScale(84)} flexShrink={0}>
+                      {!payLinkData?.user?.avatar ? (
+                        <AppImage
+                          width={appScale(60)}
+                          height={appScale(60)}
+                          src={require(`app/assets/images/avatar.png`)}
+                          type="local"
+                        />
+                      ) : (
+                        <AppImage width={appScale(60)} height={appScale(60)} src={payLinkData?.user?.avatar} />
+                      )}
+                    </YStack>
+                    <YStack gap={appScale(2)}>
+                      <SizableText fontSize={'$5'} color={'#26273C'} fontWeight={'600'}>
+                        @{payLinkData?.user?.nickname}
+                      </SizableText>
+                      <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'500'}>
+                        {getUserSubName(payLinkData?.user)}
+                      </SizableText>
+                    </YStack>
+                  </XStack>
+                )}
 
-          <YStack w="100%" mb={appScale(24)}>
-            <XStack mb={appScale(8)} w="100%">
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-                {t('home.paylink.addMessage')}
-              </SizableText>
-            </XStack>
-            <TextArea
-              w="100%"
-              p={appScale(16)}
-              bc={'#FAFAFA'}
-              br={appScale(8)}
-              rows={6}
-              fontSize={'$5'}
-              lh={appScale(30)}
-              value={inputValue}
-              onChangeText={setInputValue}
-              borderColor={'#FAFAFA'}
-              placeholder={t('home.paylink.addMessage.tips')}
-            />
+                <ChevronRight size="$2" color={'#212121'} />
+              </Button>
+            </YStack>
+            <YStack w="100%" mb={appScale(24)}>
+              <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                  {type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
+                </SizableText>
+              </XStack>
+              <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)}>
+                <SizableText
+                  fontSize={'$7'}
+                  h={appScale(50)}
+                  lh={appScale(50)}
+                  color={'#212121'}
+                  fontWeight={'600'}
+                  pos="relative"
+                >
+                  {`${payLinkData?.amount} ${payLinkData?.currencyData?.token?.tokenSymbol} (${payLinkData?.currencyData?.chainName})`}
+                </SizableText>
+              </XStack>
+            </YStack>
+
+            <YStack w="100%" mb={appScale(24)}>
+              <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                  {t('home.paylink.addMessage')}
+                </SizableText>
+              </XStack>
+              <TextArea
+                w="100%"
+                p={appScale(16)}
+                bc={'#FAFAFA'}
+                br={appScale(8)}
+                rows={6}
+                fontSize={'$3'}
+                lh={appScale(30)}
+                value={inputValue}
+                onChangeText={setInputValue}
+                borderColor={'#FAFAFA'}
+                placeholder={t('home.paylink.addMessage.tips')}
+              />
+            </YStack>
           </YStack>
-        </YStack>
-      )}
+        )}
+      </ScrollView>
 
       <XStack
         flexShrink={0}
         pl={appScale(24)}
         pr={appScale(24)}
-        pt={12}
+        pt={appScale(12)}
         pb={appScale(isIphoneX() ? 46 : 12)}
         w="100%"
         ai={'center'}

@@ -1,11 +1,11 @@
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 12:57:50
+ * @LastEditTime: 2025-03-07 10:43:16
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
 export const ExternalLinkData = {
-  webPageHome: 'https://www.bitenet.io',
+  webPageHome: 'https://app.catfoodworks.com',
 };
 
 // 主题色
@@ -56,7 +56,7 @@ export const CurrencyList = [
 const isRelease = false;
 
 // api 请求接口
-export const APP_URL = isRelease ? 'https://api.catfoodworks.com' : 'https://api.catfoodworks.com';
+export const APP_URL = isRelease ? 'https://api.catfoodworks.com' : '/api';
 
 // 区块链网路类型：MAIN 主网；TEST 测试网；DEV 开发网
 export const NETWORK = isRelease ? 'MAIN' : 'TEST';

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 23:05:55
+ * @LastEditTime: 2025-03-07 13:39:28
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/amount/index.tsx
  */
 import {
@@ -14,6 +14,7 @@ import {
   SizableText,
   AppImage,
   useToastController,
+  ScrollView,
 } from '@my/ui';
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -44,7 +45,7 @@ const AmountScreen = ({type}: any) => {
   const [currencyData, setCurrencyData] = React.useState<any>();
   const [isLoading, setIsLoading] = React.useState(false);
   const [buttonLoading, setButtonLoading] = React.useState(false);
-  const {back, push} = useRouter();
+  const {back, push, replace} = useRouter();
   const {params} = useParams();
   const toast = useToastController();
 
@@ -74,7 +75,7 @@ const AmountScreen = ({type}: any) => {
     setTimeout(() => {
       setButtonLoading(false);
       const id = new Date().getTime() + Math.random();
-      push(`/home/${type}/paylink?id=${id}`);
+      replace(`/home/${type}/paylink?id=${id}`);
       dispatch.user.updateState({
         payLinkData: {
           ...payLinkData,
@@ -101,70 +102,79 @@ const AmountScreen = ({type}: any) => {
         title={type === 'send' ? t('screen.home.amount') : t('screen.home.amountRequesting')}
         fallbackUrl="/"
       />
-      <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
-        <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
-        <YStack w="100%" mb={appScale(24)}>
-          <XStack mb={appScale(8)} w="100%">
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
-              {type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
-            </SizableText>
-          </XStack>
-          <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
-            <SizableText
-              fontSize={'$10'}
-              h={appScale(50)}
-              lh={appScale(50)}
-              color={'#212121'}
-              fontWeight={'600'}
-              pos="relative"
-            >
-              {inputValue || '0'}
-              {showKeyboard && (
-                <XStack
-                  pos="absolute"
-                  right={-4}
-                  top={0}
-                  bottom={0}
-                  w={2}
-                  animation="quick"
-                  bc="#212121"
-                  style={{
-                    animationName: 'cursorBlink',
-                    animationDuration: '1s',
-                    animationIterationCount: 'infinite',
-                    animationTimingFunction: 'steps(2, start)',
-                  }}
-                />
+      <ScrollView
+        flex={1}
+        w={'100%'}
+        bc="#fff"
+        contentContainerStyle={{
+          minHeight: '100%',
+        }}
+      >
+        <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
+          <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                {type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
+              </SizableText>
+            </XStack>
+            <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
+              <SizableText
+                fontSize={'$10'}
+                h={appScale(50)}
+                lh={appScale(50)}
+                color={'#212121'}
+                fontWeight={'600'}
+                pos="relative"
+              >
+                {inputValue || '0'}
+                {showKeyboard && (
+                  <XStack
+                    pos="absolute"
+                    right={-4}
+                    top={0}
+                    bottom={0}
+                    w={2}
+                    animation="quick"
+                    bc="#212121"
+                    style={{
+                      animationName: 'cursorBlink',
+                      animationDuration: '1s',
+                      animationIterationCount: 'infinite',
+                      animationTimingFunction: 'steps(2, start)',
+                    }}
+                  />
+                )}
+              </SizableText>
+            </XStack>
+          </YStack>
+          {type === 'send' && (
+            <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+              {currencyData?.tokenAmount && (
+                <SizableText
+                  h={appScale(24)}
+                  lh={appScale(24)}
+                  fontSize={'$3'}
+                  color={'#212121'}
+                  fontWeight={'500'}
+                >{`${t('home.balance')}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
+                  currencyData?.chainName
+                })`}</SizableText>
               )}
-            </SizableText>
+            </XStack>
+          )}
+
+          <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'} borderTopWidth={1} borderColor={'#F2F2F2'}>
+            <AppButton isLoading={buttonLoading} onPress={submit}>
+              {t('home.send.continue')}
+            </AppButton>
           </XStack>
         </YStack>
-        {type === 'send' && (
-          <XStack mb={appScale(24)} h={appScale(24)} w="100%" ai={'center'} jc={'center'}>
-            {currencyData?.tokenAmount && (
-              <SizableText
-                h={appScale(24)}
-                lh={appScale(24)}
-                fontSize={'$4'}
-                color={'#212121'}
-                fontWeight={'500'}
-              >{`${t('home.balance')}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
-                currencyData?.chainName
-              })`}</SizableText>
-            )}
-          </XStack>
+
+        {showKeyboard && (
+          <Keyboard decimals={currencyData?.token?.tokenDecimals || 6} onChange={setInputValue} value={inputValue} />
         )}
-
-        <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'} borderTopWidth={1} borderColor={'#F2F2F2'}>
-          <AppButton isLoading={buttonLoading} onPress={submit}>
-            {t('home.send.continue')}
-          </AppButton>
-        </XStack>
-      </YStack>
-
-      {showKeyboard && (
-        <Keyboard decimals={currencyData?.token?.tokenDecimals || 6} onChange={setInputValue} value={inputValue} />
-      )}
+      </ScrollView>
       {isLoading && <AppLoading />}
     </PermissionPage>
   );

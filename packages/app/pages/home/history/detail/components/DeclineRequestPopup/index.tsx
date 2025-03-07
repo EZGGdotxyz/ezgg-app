@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 11:17:48
+ * @LastEditTime: 2025-03-07 14:21:23
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/DeclineRequestPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -19,6 +19,7 @@ interface DeclineRequestPopupProps {
   setModalVisible: (value: boolean) => void;
   orderData: any;
   setIsLoading: (value: boolean) => void;
+  onSuccess: () => void;
 }
 
 const DeclineRequestPopup: React.FC<DeclineRequestPopupProps> = ({
@@ -26,6 +27,7 @@ const DeclineRequestPopup: React.FC<DeclineRequestPopupProps> = ({
   setModalVisible,
   orderData,
   setIsLoading,
+  onSuccess,
 }) => {
   const {t} = useTranslation();
   const {makeRequest} = useRequest();
@@ -41,10 +43,11 @@ const DeclineRequestPopup: React.FC<DeclineRequestPopupProps> = ({
         }),
       );
 
-      if (res?.code !== '0') {
+      if (res?.code === '0') {
         toast.show(t('tips.success.declineRequest'), {
           duration: 3000,
         });
+        onSuccess();
       }
     } catch (error) {
       toast.show(t('tips.error.networkError'), {
@@ -70,19 +73,19 @@ const DeclineRequestPopup: React.FC<DeclineRequestPopupProps> = ({
         borderTopLeftRadius={appScale(16)}
       >
         <YStack pt={appScale(24)} pl={appScale(24)} pr={appScale(24)} w="100%">
-          <SizableText ta={'center'} fontSize={'$7'} color={'#212121'} fontWeight={'700'}>
+          <SizableText ta={'center'} fontSize={'$6'} color={'#212121'} fontWeight={'700'}>
             {t('home.order.declineRequest')}
           </SizableText>
           <XStack h={1} w="100%" mt={appScale(24)} mb={appScale(24)} bc={'#eee'} jc={'center'} ai={'center'}></XStack>
           <SizableText pb={appScale(24)} ta={'center'} fontSize={'$6'} color={'#212121'} fontWeight={'600'}>
             {t('home.order.declineTips', {
               amount: `${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol}`,
-              name: `@${orderData?.senderMember?.name || ''}`,
+              name: `@${orderData?.senderMember?.nickname || ''}`,
             })}
           </SizableText>
           <XStack
             flexShrink={0}
-            pt={12}
+            pt={appScale(12)}
             pb={appScale(isIphoneX() ? 46 : 12)}
             w="100%"
             ai={'center'}

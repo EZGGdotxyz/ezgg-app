@@ -36,7 +36,7 @@ export default function Page() {
                   }
                 }}
               >
-                <ChevronLeft size={36} color={'#428cfc'} />
+                <ChevronLeft size={appScale(36)} color={'#428cfc'} />
               </Button>
             );
           },

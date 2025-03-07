@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 14:05:44
+ * @LastEditTime: 2025-03-07 13:27:47
  * @FilePath: /ezgg-app/packages/app/Components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -151,7 +151,7 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
       <>
         <YStack w="100%" mb={appScale(24)} onPress={() => setModalVisible(true)}>
           <XStack mb={appScale(8)} w="100%">
-            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$5'} color={'#212121'} fontWeight={'600'}>
+            <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
               {t('home.send.currency')}
             </SizableText>
           </XStack>
@@ -177,37 +177,11 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
                     <TokenIcon symbol={currencyData?.token?.tokenSymbol} variant="background" size={appScale(48)} />
                   </YStack>
                 )}
-                {/* {currencyData?.chainIcon && (
-                <XStack pos={'absolute'} bottom={appScale(-4)} right={appScale(12)}>
-                  <AppImage
-                    width={appScale(24)}
-                    height={appScale(24)}
-                    src={require(`app/assets/images/chain/${currencyData.chainIcon}.png`)}
-                    type="local"
-                  />
-                </XStack>
-              )} */}
               </XStack>
 
-              {/* <YStack pos={'relative'} w={appScale(72)} flexShrink={0}>
-              <AppImage
-                width={appScale(48)}
-                height={appScale(48)}
-                src={require(`app/assets/images/token/${currencyData.token}.png`)}
-                type="local"
-              />
-              <XStack pos={'absolute'} bottom={appScale(4)} right={appScale(18)}>
-                <AppImage
-                  width={appScale(24)}
-                  height={appScale(24)}
-                  src={require(`app/assets/images/chain/${currencyData.chain}.png`)}
-                  type="local"
-                />
-              </XStack>
-            </YStack> */}
               {currencyData?.token?.tokenSymbol && (
                 <SizableText
-                  fontSize={'$8'}
+                  fontSize={'$7'}
                   h={appScale(50)}
                   lh={appScale(50)}
                   color={'#212121'}
@@ -218,7 +192,7 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
                 </SizableText>
               )}
             </XStack>
-            <ChevronRight size="$3" color={'#212121'} />
+            <ChevronRight size="$2" color={'#212121'} />
           </Button>
         </YStack>
 

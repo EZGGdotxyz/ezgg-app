@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 10:21:11
+ * @LastEditTime: 2025-03-07 12:56:27
  * @FilePath: /ezgg-app/packages/app/pages/profile/about/index.tsx
  */
 import {
@@ -112,7 +112,7 @@ const AboutScreen = () => {
               <SizableText fontSize="$6" fontWeight="600" color="#212121">
                 {item.title}
               </SizableText>
-              <ChevronRight color={'#212121'} size={24} />
+              <ChevronRight color={'#212121'} size={appScale(24)} />
             </Button>
           ))}
         </YStack>

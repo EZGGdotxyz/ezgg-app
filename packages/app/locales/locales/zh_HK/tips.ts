@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 16:37:55
+ * @LastEditTime: 2025-03-07 14:09:47
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/tips.ts
  */
 export default {
@@ -31,4 +31,13 @@ export default {
   'tips.error.deposit.connectError': '連接錢包失敗，請重試',
   'tips.error.deposit.userRejected': '您已取消交易',
   'tips.error.deposit.failed': '交易失败，请重试',
+  'tips.error.deposit.transactionSuccess': '交易成功',
+  'tips.success.transactionSuccess': '交易成功',
+
+  "tips.error.deposit.updateFailed": "更新交易记录失败",
+  "tips.error.withdraw.invalidAmount": "请输入有效金额",
+  "tips.error.withdraw.insufficientFunds": "余额不足",
+  "tips.error.withdraw.failed": "提现失败，请重试",
+
+  'tips.list.read': '消息已讀取',
 };
