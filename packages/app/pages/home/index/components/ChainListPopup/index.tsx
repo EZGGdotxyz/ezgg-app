@@ -1,15 +1,15 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 13:53:49
+ * @LastEditTime: 2025-03-08 15:23:25
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/ChainListPopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify, Check, ChevronRight, GalleryVerticalEnd} from '@tamagui/lucide-icons';
 import {PrimaryColor} from 'app/config';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {forwardRef, useRef} from 'react';
+import useResponse from 'app/hooks/useResponse';
 
 export type ChainListPopupProps = {
   selectedType: any;
@@ -30,6 +30,7 @@ const ChainListPopup = forwardRef<any, ChainListPopupProps>((props, ref) => {
   } = props;
   const {t, i18n} = useTranslation();
   const scrollViewRef = useRef<any>(null);
+  const {appScale} = useResponse();
 
   return (
     <Sheet

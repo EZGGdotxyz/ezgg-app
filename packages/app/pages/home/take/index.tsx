@@ -25,7 +25,6 @@ import Keyboard from 'app/Components/Keyboard';
 import AppButton from 'app/Components/AppButton';
 import {StyleSheet} from 'react-native';
 import {
-  appScale,
   convertAmountToTokenDecimals,
   formatNumber,
   formatTokenAmount,
@@ -62,7 +61,7 @@ import {getChainInfo} from 'app/utils/chain';
 import {TokenIcon} from '@web3icons/react';
 import TokenLinkContract from 'app/abi/TokenLink.json';
 import {useTransaction} from 'app/hooks/useTransaction';
-
+import useResponse from 'app/hooks/useResponse';
 const {useParams} = createParam<any>();
 
 // 存款
@@ -71,8 +70,8 @@ const TakeScreen = (any) => {
   const {makeRequest} = useRequest();
   const dispatch = useDispatch<Dispatch>();
   const [{userInfo, isLogin}] = useRematchModel('user');
+  const {appScale} = useResponse();
 
-  console.log('🚀 ~ TakeScreen ~ userInfo:', userInfo?.customMetadata?.id);
 
   const [inputValue, setInputValue] = React.useState('');
   const {params} = useParams();

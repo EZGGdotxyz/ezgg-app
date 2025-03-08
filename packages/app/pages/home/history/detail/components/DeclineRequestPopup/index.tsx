@@ -6,13 +6,14 @@
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
 import AppModal from 'app/Components/AppModal';
-import {appScale, formatTokenAmount, isIphoneX} from 'app/utils';
+import { formatTokenAmount, isIphoneX} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import React, {useEffect, useState} from 'react';
 import {PrimaryColor} from 'app/config';
 import AppButton from 'app/Components/AppButton';
 import {postTransactionHistoryDeclineTransactionHistory} from 'app/servers/api/transactionHistory';
 import useRequest from 'app/hooks/useRequest';
+import useResponse from 'app/hooks/useResponse';
 
 interface DeclineRequestPopupProps {
   modalVisible: boolean;
@@ -32,6 +33,7 @@ const DeclineRequestPopup: React.FC<DeclineRequestPopupProps> = ({
   const {t} = useTranslation();
   const {makeRequest} = useRequest();
   const toast = useToastController();
+  const {appScale} = useResponse();
 
   const onSubmit = async () => {
     try {

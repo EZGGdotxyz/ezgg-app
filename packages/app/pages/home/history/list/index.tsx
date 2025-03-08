@@ -20,7 +20,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import History from '../../index/components/History';
-import {appScale, dealtHistoryList, restoreHistoryList} from 'app/utils';
+import { dealtHistoryList, restoreHistoryList} from 'app/utils';
 import useRequest from 'app/hooks/useRequest';
 import {createParam} from 'solito';
 import {useRouter} from 'solito/router';
@@ -35,6 +35,7 @@ import {getTransactionHistoryPageTransactionHistory} from 'app/servers/api/trans
 import HistoryDayItem from 'app/Components/HistoryDayItem';
 import {useRematchModel} from 'app/store/model';
 import {ScrollView as RNScrollView} from 'react-native';
+import useResponse from 'app/hooks/useResponse';
 
 const {useParam} = createParam<{id: string}>();
 
@@ -44,6 +45,7 @@ const HistoryScreen = (props: any) => {
   const {t} = useTranslation();
   const scheme = 'light';
   const [{currency}] = useRematchModel('app');
+  const {appScale} = useResponse();
 
   const {makeRequest} = useRequest();
   const [data, setData] = useState<any>([]);

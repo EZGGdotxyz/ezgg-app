@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 21:54:46
+ * @LastEditTime: 2025-03-08 15:17:47
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/components/DayItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -9,14 +9,16 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@tamagui/lucide-icons';
-import {appScale, getRelativeDate} from 'app/utils';
+import { getRelativeDate} from 'app/utils';
 import Item from '../Item';
+import useResponse from 'app/hooks/useResponse';
 
 export type DayItemProps = {item: any; onRead: (item: any) => void};
 // 交易历史item
 const DayItem: React.FC<any> = ({item, onRead}: DayItemProps) => {
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
+  const {appScale} = useResponse();
 
   return (
     <YStack>

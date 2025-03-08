@@ -9,7 +9,7 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown, ChevronRight} from '@tamagui/lucide-icons';
-import {appScale, formatDateTime, formatNumber, formatTokenAmount, truncateAddress} from 'app/utils';
+import { formatDateTime, formatNumber, formatTokenAmount, truncateAddress} from 'app/utils';
 import {useEffect, useState} from 'react';
 import CopyButton from '../CopyButton';
 import {getChainInfo, getExplorerUrl} from 'app/utils/chain';
@@ -21,6 +21,7 @@ import {
   createUserNicknameDisplay,
   createStatusDisplay,
 } from 'app/utils/transactionInfo';
+import useResponse from 'app/hooks/useResponse';
 
 export type SuccessInfoProps = {type: string; orderData: any};
 // 交易历史item
@@ -28,6 +29,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
   const [{currency}] = useRematchModel('app');
+  const {appScale} = useResponse();
 
   const [infoData, setInfoData] = useState<any>({});
 

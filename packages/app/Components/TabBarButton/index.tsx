@@ -1,17 +1,18 @@
 /*
  * @Date: 2024-06-08 18:35:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-24 16:59:31
+ * @LastEditTime: 2025-03-08 15:21:24
  * @FilePath: /ezgg-app/packages/app/Components/TabBarButton/index.tsx
  */
 import {View, Text, Pressable, StyleSheet, useColorScheme} from 'react-native';
 import React, {useEffect} from 'react';
 import {AppImage, YStack, SizableText} from '@my/ui';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
+import useResponse from 'app/hooks/useResponse';
 
 const TabBarButton = (props) => {
   const {isFocused, label, routeName} = props;
+  const {appScale} = useResponse();
 
   const {t, i18n} = useTranslation();
 

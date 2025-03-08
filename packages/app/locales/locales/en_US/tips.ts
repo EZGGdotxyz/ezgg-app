@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 23:46:22
+ * @LastEditTime: 2025-03-08 16:40:27
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -43,7 +43,7 @@ export default {
 
   'tips.list.read': 'Message read',
 
-  'tips.error.userRejected': 'User rejected the transaction',
+  'tips.error.userRejected': 'User cancelled the transaction',
   'tips.error.insufficientAllowance': 'Insufficient allowance',
   'tips.error.insufficientBalance': 'Insufficient balance',
 

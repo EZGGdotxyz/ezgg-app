@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-05 10:50:56
+ * @LastEditTime: 2025-03-08 15:23:09
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/Header/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -11,10 +11,9 @@ import {Platform} from 'react-native';
 import {Link} from 'solito/link';
 import {useRouter} from 'solito/router';
 import {useState} from 'react';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {AppName, PrimaryColor} from 'app/config';
-
+import useResponse from 'app/hooks/useResponse';
 export type HeaderProps = {
   title: string;
   onBack?: () => void;
@@ -27,6 +26,7 @@ const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/', setShareVisibl
   const [{unread}] = useRematchModel('app');
   const [statusBarHeight, setStatusBarHeight] = useState(46);
   const {t, i18n} = useTranslation();
+  const {appScale} = useResponse();
 
   const onBackPress = () => {
     if (onBack) {

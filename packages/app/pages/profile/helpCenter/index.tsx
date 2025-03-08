@@ -22,10 +22,9 @@ import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {ChevronDown, ChevronUp, Search, ChevronRight} from '@tamagui/lucide-icons';
-import {appScale} from 'app/utils';
 import SearchHeader from 'app/Components/SearchHeader';
 import {PrimaryColor} from 'app/config';
-
+import useResponse from 'app/hooks/useResponse';
 // 幫助中心
 const HelpCenterScreen = () => {
   const {t} = useTranslation();
@@ -36,6 +35,7 @@ const HelpCenterScreen = () => {
   const scrollViewRef = useRef<any>(null);
   const faqScrollViewRef = useRef<any>(null);
   const contactScrollViewRef = useRef<any>(null);
+  const {appScale} = useResponse();
 
   // 各类别的FAQ数据
   const generalFaqData = [

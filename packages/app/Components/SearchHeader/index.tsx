@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 21:50:36
+ * @LastEditTime: 2025-03-08 15:21:02
  * @FilePath: /ezgg-app/packages/app/Components/SearchHeader/index.tsx
  */
 import {AppImage, Button, Input, SizableText, Text, XStack, useToastController} from '@my/ui';
@@ -12,12 +12,12 @@ import {Link} from 'solito/link';
 import {useRouter} from 'solito/router';
 import {NativeModules} from 'react-native';
 import {createRef, useEffect, useRef, useState} from 'react';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {YStack} from '@my/ui';
 import {PrimaryColor} from 'app/config';
 import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
+import useResponse from 'app/hooks/useResponse';
 
 export type SearchHeaderProps = {
   onSearch: (data: any) => void;
@@ -33,6 +33,7 @@ const SearchHeader: React.FC<any> = ({onSearch, placeholder}: SearchHeaderProps)
   const dispatch = useDispatch<Dispatch>();
   const inputRef = useRef(null);
   const [searchText, setSearchText] = useState('');
+  const {appScale} = useResponse();
 
   const getPt = () => {
     if (Platform.OS === 'web') {

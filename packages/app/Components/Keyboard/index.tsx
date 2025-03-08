@@ -1,8 +1,7 @@
 import {AppImage, Button, SizableText, useToastController, XStack, YStack} from '@my/ui';
-import {appScale} from 'app/utils';
 import React, {useCallback, useEffect, useState} from 'react';
 import { useTranslation } from 'react-i18next';
-
+import useResponse from 'app/hooks/useResponse';
 interface KeyboardProps {
   /** 键盘输入值改变时的回调 */
   onChange?: (value: string) => void;
@@ -18,6 +17,7 @@ const Keyboard: React.FC<KeyboardProps> = ({onChange, maxLength = 12, value = ''
   const [inputValue, setInputValue] = useState(value);
   const toast = useToastController();
   const {t} = useTranslation();
+  const {appScale} = useResponse();
 
   // 数字按键布局
   const keys = [

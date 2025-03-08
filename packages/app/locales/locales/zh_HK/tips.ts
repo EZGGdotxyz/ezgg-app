@@ -41,7 +41,7 @@ export default {
 
   'tips.list.read': '訊息已讀取',
 
-  'tips.error.userRejected': '用戶拒絕交易',
+  'tips.error.userRejected': '用戶取消了交易',
   'tips.error.insufficientAllowance': '授權不足',
   'tips.error.insufficientBalance': '餘額不足',
 

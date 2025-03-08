@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-25 14:30:39
+ * @LastEditTime: 2025-03-08 15:24:28
  * @FilePath: /ezgg-app/packages/app/pages/home/success/components/Header/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -11,10 +11,9 @@ import {Platform} from 'react-native';
 import {Link} from 'solito/link';
 import {useRouter} from 'solito/router';
 import {useState} from 'react';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {AppName, PrimaryColor} from 'app/config';
-
+import useResponse from 'app/hooks/useResponse';
 export type HeaderProps = {};
 // 首页 头部
 const Header: React.FC<any> = ({}: HeaderProps) => {
@@ -22,6 +21,7 @@ const Header: React.FC<any> = ({}: HeaderProps) => {
   const {push} = useRouter();
   const [statusBarHeight, setStatusBarHeight] = useState(46);
   const {t, i18n} = useTranslation();
+  const {appScale} = useResponse();
 
   const onBackPress = () => {
     push('/');

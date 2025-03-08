@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 14:25:14
+ * @LastEditTime: 2025-03-08 15:17:27
  * @FilePath: /ezgg-app/packages/app/pages/home/success/index.tsx
  */
 import {
@@ -35,7 +35,7 @@ import {Dispatch} from 'app/store';
 import useRequest from 'app/hooks/useRequest';
 import Header from './components/Header';
 import SuccessInfo from 'app/components/SuccessInfo';
-import {appScale, isIphoneX} from 'app/utils';
+import { isIphoneX} from 'app/utils';
 import {createParam} from 'solito';
 import {getTransactionHistoryFindTransactionHistoryId} from 'app/servers/api/transactionHistory';
 import AppLoading from 'app/Components/AppLoading';
@@ -44,6 +44,7 @@ import {ExternalLinkData, PrimaryColor} from 'app/config';
 import AppButton from 'app/Components/AppButton';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
 const {useParams} = createParam<any>();
+import useResponse from 'app/hooks/useResponse';
 
 // 成功页面
 const SuccessScreen = () => {
@@ -56,6 +57,7 @@ const SuccessScreen = () => {
   const [shareVisible, setShareVisible] = useState(false);
   const {t, i18n} = useTranslation();
   const toast = useToastController();
+  const {appScale} = useResponse();
 
   const _getTransactionHistoryFindTransactionHistoryId = async () => {
     setIsLoading(true);

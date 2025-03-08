@@ -1,12 +1,11 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 23:51:09
+ * @LastEditTime: 2025-03-08 15:21:12
  * @FilePath: /ezgg-app/packages/app/Components/SharePopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, XStack, YStack} from '@my/ui';
 import AppModal from 'app/Components/AppModal';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {
   TwitterShareButton,
@@ -19,6 +18,7 @@ import {
   WhatsappIcon,
 } from 'react-share';
 import React, {useEffect, useState} from 'react';
+import useResponse from 'app/hooks/useResponse';
 
 interface SharePopupProps {
   modalVisible: boolean;
@@ -29,6 +29,7 @@ interface SharePopupProps {
 
 const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, shareTitle, shareUrl}) => {
   const {t} = useTranslation();
+  const {appScale} = useResponse();
 
   const shareItems = [
     {

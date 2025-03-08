@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:08:56
+ * @LastEditTime: 2025-03-08 15:26:56
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -12,20 +12,21 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useRouter} from 'solito/router';
 import PermissionPage from 'app/Components/PermissionPage';
-import useResponse from 'app/hooks/useResponse';
 import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import {Platform, useColorScheme} from 'react-native';
 // import {pushingRegisterDevice} from 'app/servers/api/2000Yidongtuisongguanli';
-import {appScale, formatNumber} from 'app/utils';
+import { formatNumber} from 'app/utils';
 import {PrimaryColor} from 'app/config';
 import HomeList from './components/HomeList';
 import AppLoading from 'app/Components/AppLoading';
 import {getNotificationGetUnreadCount} from 'app/servers/api/notification';
+import useResponse from 'app/hooks/useResponse';
 
 interface HomeScreenProps {}
 // 首页
-const HomeScreen = (props: HomeScreenProps) => {
+const HomeScreen = () => {
+  const { appScale } = useResponse();
   const {t, i18n} = useTranslation();
   const {makeRequest} = useRequest();
   const dispatch = useDispatch<Dispatch>();

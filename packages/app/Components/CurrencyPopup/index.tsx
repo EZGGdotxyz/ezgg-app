@@ -9,7 +9,8 @@ import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import {TokenIcon} from '@web3icons/react';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
-import {appScale, formatNumber, formatTokenAmount} from 'app/utils';
+import useResponse from 'app/hooks/useResponse';
+import { formatNumber, formatTokenAmount} from 'app/utils';
 import {useEffect, useRef, forwardRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
@@ -31,6 +32,7 @@ const CurrencyPopup = forwardRef<any, any>(({
 }: CurrencyPopupProps, ref) => {
   const {t, i18n} = useTranslation();
   const scrollViewRef = useRef<any>(null);
+  const {appScale} = useResponse();
 
   useEffect(() => {
     if (

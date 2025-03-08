@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 21:50:13
+ * @LastEditTime: 2025-03-08 15:17:37
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/index.tsx
  */
 import {
@@ -19,7 +19,7 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppButton from 'app/Components/AppButton';
-import {appScale, isIphoneX} from 'app/utils';
+import { isIphoneX} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import SearchHeader from 'app/Components/SearchHeader';
 import {PrimaryColor} from 'app/config';
@@ -34,6 +34,7 @@ import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import {useRematchModel} from 'app/store/model';
 const {useParams} = createParam<any>();
+import useResponse from 'app/hooks/useResponse';
 
 // 发送
 const SendToScreen = ({isRefresh, type}: any) => {
@@ -43,6 +44,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
   const {makeRequest} = useRequest();
   const dispatch = useDispatch<Dispatch>();
   const [{payLinkData}] = useRematchModel('user');
+  const {appScale} = useResponse();
 
   const [searchText, setSearchText] = useState('');
   const [search, setSearch] = useState('');

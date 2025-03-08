@@ -34,7 +34,7 @@ import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import useRequest from 'app/hooks/useRequest';
 import Header from './components/Header';
-import {appScale, getCurrency} from 'app/utils';
+import { getCurrency} from 'app/utils';
 import ChainPopup from './components/ChainPopup';
 import MyQrCodePopup from './components/MyQrCodePopup';
 import {usePrivy} from '@privy-io/react-auth';
@@ -44,6 +44,7 @@ import {CurrencyList, ExternalLinkData} from 'app/config';
 import SharePopup from 'app/Components/SharePopup';
 import {encryptId} from 'app/utils/crypto';
 // import {notificationGetUnreadCount} from 'app/servers/api/2001Xiaoxitongzhi';
+import useResponse from 'app/hooks/useResponse';
 
 // 我的
 const MyScreen = () => {
@@ -52,6 +53,7 @@ const MyScreen = () => {
   const {userLogout} = useUser();
   const {ready, authenticated, logout} = usePrivy();
   const {initUserInfo} = useUser();
+  const {appScale} = useResponse();
 
   const dispatch = useDispatch<Dispatch>();
   const {makeRequest} = useRequest();

@@ -9,14 +9,16 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@tamagui/lucide-icons';
-import {appScale, getRelativeDate} from 'app/utils';
+import { getRelativeDate} from 'app/utils';
 import HistoryItem from '../HistoryItem';
+import useResponse from 'app/hooks/useResponse';
 
 export type HistoryDayItemProps = {item: any};
 // 交易历史item
 const HistoryDayItem: React.FC<any> = ({item}: HistoryDayItemProps) => {
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
+  const {appScale} = useResponse();
 
   return (
     <YStack>

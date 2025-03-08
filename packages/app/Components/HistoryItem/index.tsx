@@ -9,9 +9,10 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@tamagui/lucide-icons';
-import {appScale, formatNumber, formatTokenAmount, getCurrency} from 'app/utils';
+import { formatNumber, formatTokenAmount, getCurrency} from 'app/utils';
 import {getChainInfo} from 'app/utils/chain';
 import dayjs from 'dayjs';
+import useResponse from 'app/hooks/useResponse';
 
 export type HistoryItemProps = {item: any; isBottom?: boolean};
 // 交易历史item
@@ -20,6 +21,7 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
   const {t, i18n} = useTranslation();
   const [{currency}] = useRematchModel('app');
   const [{userInfo}] = useRematchModel('user');
+  const {appScale} = useResponse();
 
   const incomeType = () => {
     // 判断当前用户是否为接收方（用于判断收入/支出）

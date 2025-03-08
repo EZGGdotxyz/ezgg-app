@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 14:06:51
+ * @LastEditTime: 2025-03-08 16:28:58
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet, ScrollView} from '@my/ui';
@@ -9,19 +9,18 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown, Check} from '@tamagui/lucide-icons';
-import {appScale, dealtHistoryList, formatNumber} from 'app/utils';
+import {dealtHistoryList} from 'app/utils';
 import {useEffect, useState, useCallback, useMemo, useRef} from 'react';
 import AppButton from 'app/Components/AppButton';
 import ChainListPopup from 'app/pages/home/index/components/ChainListPopup';
 import useRequest from 'app/hooks/useRequest';
-import {getBalanceListBalance} from 'app/servers/api/balance';
 import {TokenIcon} from '@web3icons/react';
 import {getChainInfo} from 'app/utils/chain';
 import TokenList from '../TokenList';
 import History from '../History';
 import {getTransactionHistoryPageTransactionHistory} from 'app/servers/api/transactionHistory';
-import {useDispatch} from 'react-redux';
-import {Dispatch} from 'app/store';
+import useResponse from 'app/hooks/useResponse';
+import useBlockchain from 'app/hooks/useBlockchain';
 
 export type HomeListProps = {
   switchOn: boolean;
@@ -32,9 +31,10 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
   const [{currency, blockchainList}] = useRematchModel('app');
   const [{isLogin}] = useRematchModel('user');
   const {makeRequest} = useRequest();
-  const dispatch = useDispatch<Dispatch>();
   const {push} = useRouter();
   const {t} = useTranslation();
+  const {appScale} = useResponse();
+  const {getAllBalances} = useBlockchain();
 
   const [sheetOpen, setSheetOpen] = useState(false);
   const [list, setList] = useState<any[]>([]);
@@ -58,88 +58,65 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
     }),
   ], [blockchainList, t]);
 
-  // 使用 useCallback 优化函数
-  const _getBalanceListBalance = useCallback(async (platform: string, chainId: string, currency: string) => {
-    const res = await makeRequest(getBalanceListBalance({platform, chainId, currency}));
-    return res?.data || null;
-  }, [makeRequest]);
+  // 获取交易历史
+  const fetchTransactionHistory = useCallback(async () => {
+    if (!isLogin) return;
 
-  const _getTransactionHistoryPageTransactionHistory = useCallback(async () => {
-    const res = await makeRequest(
-      getTransactionHistoryPageTransactionHistory({
-        page: 1,
-        pageSize: 10,
-        currency,
-      }),
-    );
-    if (res?.data?.record?.length > 0) {
-      setHistory(dealtHistoryList(res.data.record));
-    } else {
+    try {
+      const res = await makeRequest(
+        getTransactionHistoryPageTransactionHistory({
+          page: 1,
+          pageSize: 10,
+          currency,
+        }),
+      );
+
+      const records = res?.data?.record ?? [];
+      setHistory(records.length > 0 ? dealtHistoryList(records) : []);
+    } catch (error) {
+      console.error('获取交易历史失败:', error);
       setHistory([]);
     }
-  }, [makeRequest, currency]);
+  }, [makeRequest, currency, isLogin]);
 
-  const fetchAllBalances = useCallback(async () => {
-    if (!blockchainList?.length) return;
+  // 获取余额
+  const fetchBalances = useCallback(async () => {
+    if (!isLogin || !blockchainList?.length) return;
 
     try {
       setIsLoading(true);
-      const promises = selectedType?.chainId === 'all'
-        ? blockchainList.map(chain => _getBalanceListBalance(chain?.platform, chain.chainId, currency))
-        : [_getBalanceListBalance(selectedType?.platform, selectedType?.chainId, currency)];
-
-      const results = await Promise.all(promises);
-      let summaryBalance = 0;
-
-      const _tokenList = results
-        .filter(Boolean)
-        .flatMap((result) => {
-          if (result.summary?.balance) {
-            summaryBalance += Number(result.summary?.balance);
-          }
-
-          return result.tokens?.map((item) => {
-            const chainInfo = getChainInfo(item?.token?.chainId);
-            return {
-              chainName: chainInfo?.name,
-              chainIcon: chainInfo?.icon,
-              ...item,
-            };
-          }) || [];
-        });
-
-      dispatch.user.updateState({
-        availableBalance: summaryBalance,
-        tokenList: _tokenList,
-      });
-
-      setList(_tokenList.length > 0 ? _tokenList : []);
+      const selectedChainId = selectedType.chainId === 'all' ? undefined : Number(selectedType.chainId);
+      const tokenList = await getAllBalances(selectedChainId);
+      setList(tokenList);
     } catch (error) {
       console.error('获取余额列表失败:', error);
       setList([]);
     } finally {
       setIsLoading(false);
     }
-  }, [blockchainList, selectedType, currency, dispatch.user, setIsLoading, _getBalanceListBalance]);
+  }, [isLogin, blockchainList, selectedType.chainId, getAllBalances, setIsLoading]);
 
-  // const onOpenChange = useCallback((type) => {
-  //   setSelectedType(type);
-  //   setSheetOpen(false);
-  // }, []);
-
-  useEffect(() => {
-    if (isLogin) {
-      _getTransactionHistoryPageTransactionHistory();
-    }
-  }, [isLogin, _getTransactionHistoryPageTransactionHistory]);
-
+  // 监听登录状态和区块链列表变化
   useEffect(() => {
     if (isLogin && blockchainList?.length > 0) {
-      fetchAllBalances();
+      fetchBalances();
     }
-  }, [blockchainList, selectedType, isLogin, fetchAllBalances]);
+  }, [isLogin, blockchainList?.length]);
 
-  // 创建对ChainListPopup的ref
+  // 监听选择的链类型变化
+  useEffect(() => {
+    if (isLogin && blockchainList?.length > 0 && selectedType) {
+      fetchBalances();
+    }
+  }, [selectedType.chainId]);
+
+  // 监听登录状态和货币变化，获取交易历史
+  useEffect(() => {
+    if (isLogin) {
+      fetchTransactionHistory();
+    }
+  }, [isLogin, currency]);
+
   const chainListPopupRef = useRef(null);
 
   return (

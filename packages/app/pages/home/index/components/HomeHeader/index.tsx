@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:20:44
+ * @LastEditTime: 2025-03-08 15:25:53
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeHeader/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -11,13 +11,13 @@ import {Platform} from 'react-native';
 import {Link} from 'solito/link';
 import {useRouter} from 'solito/router';
 import {useState} from 'react';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {AppName, PrimaryColor} from 'app/config';
-
+import useResponse from 'app/hooks/useResponse';
 export type HomeHeaderProps = {isLogin: boolean};
 // 首页 头部
-const HomeHeader: React.FC<any> = ({isLogin}: HomeHeaderProps) => {
+const HomeHeader = () => {
+  const { appScale } = useResponse();
   const [{unread}] = useRematchModel('app');
   const {push} = useRouter();
   const [statusBarHeight, setStatusBarHeight] = useState(46);

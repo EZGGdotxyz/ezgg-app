@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 14:02:48
+ * @LastEditTime: 2025-03-08 15:24:13
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/amount/index.tsx
  */
 import {
@@ -22,7 +22,6 @@ import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
 import AppButton from 'app/Components/AppButton';
 import {StyleSheet} from 'react-native';
-import {appScale} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
@@ -32,7 +31,7 @@ import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import {useRematchModel} from 'app/store/model';
 import AppLoading from 'app/Components/AppLoading';
-
+import useResponse from 'app/hooks/useResponse';
 const {useParams} = createParam<any>();
 
 // 存款
@@ -48,7 +47,7 @@ const AmountScreen = ({type}: any) => {
   const {back, push, replace} = useRouter();
   const {params} = useParams();
   const toast = useToastController();
-
+  const {appScale} = useResponse();
   useEffect(() => {
     if (payLinkData?.id && payLinkData?.currencyData?.token?.tokenSymbol) {
       const {amount, currencyData: _currencyData} = payLinkData;

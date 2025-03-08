@@ -1,15 +1,15 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-27 18:13:26
+ * @LastEditTime: 2025-03-08 15:20:29
  * @FilePath: /ezgg-app/packages/app/Components/ListEmpty/index.tsx
  */
 import {AppImage, Button, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
+import useResponse from 'app/hooks/useResponse';
 import {useRematchModel} from 'app/store/model';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {ActivityIndicator} from 'react-native';
 import {Link} from 'solito/link';
@@ -21,6 +21,7 @@ export type ListEmptypProps = {
 const ListEmpty: React.FC<any> = ({loading}: ListEmptypProps) => {
   const {t, i18n} = useTranslation();
   const [app] = useRematchModel('app');
+  const {appScale} = useResponse();
 
   return (
     <YStack flex={1} w="100%" ai={'center'} jc={'center'}>

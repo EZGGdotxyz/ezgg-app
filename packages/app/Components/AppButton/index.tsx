@@ -6,7 +6,7 @@
  */
 import {Button, Paragraph} from '@my/ui';
 import {PrimaryColor, SubColor} from 'app/config';
-import {appScale} from 'app/utils';
+import useResponse from 'app/hooks/useResponse';
 import {ActivityIndicator} from 'react-native';
 
 interface AppButtonProps {
@@ -19,6 +19,7 @@ interface AppButtonProps {
 
 export default function AppButton(props: AppButtonProps) {
   const {onPress, style, isLoading = false, disabled = false} = props;
+  const {appScale} = useResponse();
   return (
     <Button
       h={appScale(58)}

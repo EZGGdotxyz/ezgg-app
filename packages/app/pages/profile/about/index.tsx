@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 12:56:27
+ * @LastEditTime: 2025-03-08 15:24:47
  * @FilePath: /ezgg-app/packages/app/pages/profile/about/index.tsx
  */
 import {
@@ -19,15 +19,15 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppHeader2 from 'app/Components/AppHeader2';
-import {appScale} from 'app/utils';
 import {useRouter} from 'solito/router';
 import {PrimaryColor} from 'app/config';
 import {ChevronRight} from '@tamagui/lucide-icons';
-
+import useResponse from 'app/hooks/useResponse';
 // 關於
 const AboutScreen = () => {
   const {t} = useTranslation();
   const {push} = useRouter();
+  const {appScale} = useResponse();
 
   const menuItems = [
     {

@@ -8,13 +8,15 @@ import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
 import React from 'react';
 import TabBarButton from '../TabBarButton';
 import {useRouter} from 'solito/router';
-import {appScale, isIphoneX} from 'app/utils';
+import { isIphoneX} from 'app/utils';
 import {XStack} from '@my/ui';
 import {useRematchModel} from 'app/store/model';
+import useResponse from 'app/hooks/useResponse';
 
 const TabBar = ({state, descriptors, navigation}) => {
   const {push, replace, back, parseNextPath} = useRouter();
   const [{isLogin}] = useRematchModel('user');
+  const {appScale} = useResponse();
 
   return (
     <XStack

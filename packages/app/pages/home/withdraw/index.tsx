@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 22:54:58
+ * @LastEditTime: 2025-03-08 16:39:31
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -24,7 +24,7 @@ import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
 import AppButton from 'app/Components/AppButton';
 import {StyleSheet} from 'react-native';
-import {appScale, convertAmountToTokenDecimals, isIphoneX} from 'app/utils';
+import {convertAmountToTokenDecimals, isIphoneX} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
@@ -46,6 +46,7 @@ import {PrimaryColor} from 'app/config';
 import {validateAddress} from 'app/utils/chain';
 import ConnectorsPopup from 'app/Components/ConnectorsPopup';
 import {useAccount} from 'wagmi';
+import {useResponse} from 'app/hooks/useResponse';
 
 // 提取
 const WithdrawScreen = () => {
@@ -66,6 +67,7 @@ const WithdrawScreen = () => {
 
   const {onWithdraw} = useTransaction();
   const {address} = useAccount();
+  const {appScale} = useResponse();
 
   const [isSubmit, setIsSubmit] = useState(false);
 
@@ -282,6 +284,7 @@ const WithdrawScreen = () => {
                 return;
               }
               setIsShow(true);
+              setIsLoading(true);
             }}
           >
             {t('home.withdraw.button2')}
@@ -289,6 +292,7 @@ const WithdrawScreen = () => {
         </XStack>
       )}
       <ConnectorsPopup
+        setIsLoading={setIsLoading}
         setIsSubmit={setIsSubmit}
         chainId={currencyData?.token?.chainId}
         modalVisible={isShow}

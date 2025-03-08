@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 14:04:28
+ * @LastEditTime: 2025-03-08 15:23:54
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/index.tsx
  */
 import {
@@ -19,7 +19,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
-import {appScale, dealtHistoryList, restoreHistoryList} from 'app/utils';
+import { dealtHistoryList, restoreHistoryList} from 'app/utils';
 import useRequest from 'app/hooks/useRequest';
 import {createParam} from 'solito';
 import {useRouter} from 'solito/router';
@@ -43,6 +43,7 @@ import DeclineRequestPopup from '../history/detail/components/DeclineRequestPopu
 import AcceptRequestPopup from '../history/detail/components/AcceptRequestPopup';
 import AppLoading from 'app/Components/AppLoading';
 const {useParam} = createParam<{id: string}>();
+import useResponse from 'app/hooks/useResponse';
 
 // 關於
 const NotificationScreen = (props: any) => {
@@ -65,6 +66,7 @@ const NotificationScreen = (props: any) => {
   const [canLoadMore, setCanLoadMore] = useState(false);
   const toast = useToastController();
   const [isLoading, setIsLoading] = useState(false);
+  const {appScale} = useResponse();
 
   const [id] = useParam('id');
 

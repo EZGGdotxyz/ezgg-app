@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 22:55:49
+ * @LastEditTime: 2025-03-08 16:34:33
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -21,7 +21,7 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
-import {appScale, convertAmountToTokenDecimals, formatTokenAmount, truncateAddress} from 'app/utils';
+import {convertAmountToTokenDecimals, formatTokenAmount, truncateAddress} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
@@ -46,6 +46,7 @@ import {postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/trans
 import {useTransaction} from 'app/hooks/useTransaction';
 import AppButton from 'app/Components/AppButton';
 import {useContractRead} from 'wagmi';
+import useResponse from 'app/hooks/useResponse';
 
 // 存款
 const DepositScreen = () => {
@@ -56,6 +57,7 @@ const DepositScreen = () => {
   const [{userInfo}] = useRematchModel('user');
   const {makeRequest} = useRequest();
   const {onDeposit} = useTransaction();
+  const {appScale} = useResponse();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const {back, push} = useRouter();
@@ -272,6 +274,7 @@ const DepositScreen = () => {
                   toast.show(t('home.send.amountToSend.tips'));
                   return;
                 }
+                setIsLoading(true);
                 return setIsShow(true);
               }}
             >
@@ -316,6 +319,7 @@ const DepositScreen = () => {
         {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
       </ScrollView>
       <ConnectorsPopup
+        setIsLoading={setIsLoading}
         setIsSubmit={setIsSubmit}
         chainId={currencyData?.token?.chainId}
         modalVisible={isShow}

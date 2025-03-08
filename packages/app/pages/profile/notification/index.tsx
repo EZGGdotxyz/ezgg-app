@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:24:22
+ * @LastEditTime: 2025-03-08 15:25:30
  * @FilePath: /ezgg-app/packages/app/pages/profile/notification/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, Switch, XStack, YStack} from '@my/ui';
@@ -10,17 +10,17 @@ import {useRematchModel} from 'app/store/model';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
-import {appScale} from 'app/utils';
 import {PrimaryColor} from 'app/config';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {getSettingFindSetting, postSettingUpdateSetting} from 'app/servers/api/setting';
 import AppLoading from 'app/Components/AppLoading';
-
+import useResponse from 'app/hooks/useResponse';
 const NotificationScreen = () => {
   const {t} = useTranslation();
   const {makeRequest} = useRequest();
   const [{isLogin, userInfo}] = useRematchModel('user');
   const [loading, setLoading] = useState(false);
+  const {appScale} = useResponse();
 
   const [notifications, setNotifications] = useState<any>({
     notifyTransUpdate: false,

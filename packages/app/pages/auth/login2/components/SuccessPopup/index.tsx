@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 00:16:17
+ * @LastEditTime: 2025-03-08 15:22:01
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -21,7 +21,6 @@ import AppLoading from 'app/Components/AppLoading';
 import AppModal from 'app/Components/AppModal';
 import QrCode from 'app/Components/QrCode';
 import {PrimaryColor} from 'app/config';
-import {appScale} from 'app/utils';
 import {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ActivityIndicator} from 'react-native';
@@ -30,6 +29,7 @@ import {Check, ChevronDown, ChevronRight, ChevronUp, LockKeyhole, User} from '@t
 import AppButton from 'app/Components/AppButton';
 import {postFileUpload} from 'app/servers/api/fileUpload';
 import useRequest from 'app/hooks/useRequest';
+import useResponse from 'app/hooks/useResponse';
 
 export type SuccessPopupProps = {
   handleSuccess: (values: any) => void;
@@ -55,6 +55,7 @@ const SuccessPopup: React.FC<any> = ({
   const [loading, setLoading] = useState(false);
   const toast = useToastController();
   const {makeRequest} = useRequest();
+  const {appScale} = useResponse();
 
   const accountContinue = () => {
     if (accountForm?.nickname && accountForm?.nickname.length < 4) {

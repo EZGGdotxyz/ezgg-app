@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 00:16:28
+ * @LastEditTime: 2025-03-08 16:19:39
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {YStack, SizableText, AppImage, Button, ScrollView} from '@my/ui';
@@ -9,7 +9,6 @@ import React, {useState, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppHeader2 from 'app/Components/AppHeader2';
-import {appScale} from 'app/utils';
 import {useRouter} from 'solito/router';
 import {useLogin, usePrivy, useUser as usePrivyUser} from '@privy-io/react-auth';
 import SuccessPopup from './components/SuccessPopup';
@@ -19,6 +18,7 @@ import {postUserUpdateMember} from 'app/servers/api/member';
 import {View} from 'react-native';
 import useInit from 'app/hooks/useInit';
 import {createParam} from 'solito';
+import useResponse from 'app/hooks/useResponse';
 const {useParams} = createParam<any>();
 
 const LoginScreen = () => {
@@ -26,8 +26,9 @@ const LoginScreen = () => {
   const {ready} = usePrivy();
   const {push} = useRouter();
   const {params} = useParams();
+  const {appScale} = useResponse();
 
-  const {_getInfrastructureListBlockchain} = useInit();
+  const {getInfrastructureList} = useInit();
   const {initLogin, initUserInfo, onLink} = useUser();
   const [modalVisible, setModalVisible] = useState(false);
   const [isSetInfo, setIsSetInfo] = useState(false);
@@ -64,8 +65,8 @@ const LoginScreen = () => {
           });
         } else {
           setAccountForm({
-            nickname: _userInfo?.nickname || '',
-            avatar: _userInfo?.avatar || '',
+            nickname: _userInfo?.customMetadata?.nickname || '',
+            avatar: _userInfo?.customMetadata?.avatar || '',
           });
           setIsSetInfo(true);
         }
@@ -89,7 +90,7 @@ const LoginScreen = () => {
           await refreshUser();
           setTimeout(async () => {
             setModalVisible(false);
-            _getInfrastructureListBlockchain();
+            getInfrastructureList();
             onLink();
           });
         } catch (error) {

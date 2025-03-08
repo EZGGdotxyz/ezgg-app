@@ -11,7 +11,8 @@ import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {AppName, PrimaryColor} from 'app/config';
 import AppButton from 'app/Components/AppButton';
-import {appScale, isIphoneX} from 'app/utils';
+import { isIphoneX} from 'app/utils';
+import useResponse from 'app/hooks/useResponse';
 
 export type FooterProps = {
   orderData: any;
@@ -23,6 +24,7 @@ export type FooterProps = {
 const Footer: React.FC<any> = ({setDeclineRequestVisible, setAcceptRequestVisible}: FooterProps) => {
   const {back, push} = useRouter();
   const {t, i18n} = useTranslation();
+  const {appScale} = useResponse();
 
   return (
     <XStack

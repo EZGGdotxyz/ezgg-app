@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 17:56:11
+ * @LastEditTime: 2025-03-08 15:17:43
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/components/Item/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -9,12 +9,13 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown, ChevronRight} from '@tamagui/lucide-icons';
-import {appScale, formatNumber, formatTokenAmount, getCurrency} from 'app/utils';
+import { formatNumber, formatTokenAmount, getCurrency} from 'app/utils';
 import {getChainInfo} from 'app/utils/chain';
 import dayjs from 'dayjs';
 import {PrimaryColor} from 'app/config';
 import {debounce} from 'lodash';
 import {useCallback} from 'react';
+import useResponse from 'app/hooks/useResponse';
 
 type ItemProps = {
   item: any;
@@ -82,6 +83,7 @@ const Item: React.FC<ItemProps> = ({item, onRead}: ItemProps) => {
   const {push} = useRouter();
   const [{userInfo}] = useRematchModel('user');
   const scheme = 'light';
+  const {appScale} = useResponse();
 
   // 使用 useCallback 和 debounce 创建防抖函数
   const handleCancel = useCallback(

@@ -11,9 +11,9 @@ import {Platform} from 'react-native';
 import {Link} from 'solito/link';
 import {useRouter} from 'solito/router';
 import {useState} from 'react';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {AppName, PrimaryColor} from 'app/config';
+import useResponse from 'app/hooks/useResponse';
 
 export type AppHeader2Props = {
   title: string;
@@ -43,6 +43,7 @@ const AppHeader2: React.FC<any> = ({
   const {back, push, replace} = useRouter();
   const [statusBarHeight, setStatusBarHeight] = useState(46);
   const {t, i18n} = useTranslation();
+  const {appScale} = useResponse();
 
   const onBackPress = () => {
     if (onBack) {

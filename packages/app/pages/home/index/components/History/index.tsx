@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 12:34:38
+ * @LastEditTime: 2025-03-08 15:23:38
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/History/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -9,10 +9,10 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronRight} from '@tamagui/lucide-icons';
-import {appScale} from 'app/utils';
 import HistoryDayItem from 'app/Components/HistoryDayItem';
 import {useMemo} from 'react';
 import AppButton from 'app/Components/AppButton';
+import useResponse from 'app/hooks/useResponse';
 
 export type HistoryProps = {
   history: any[];
@@ -22,6 +22,7 @@ const History: React.FC<HistoryProps> = ({history}) => {
   const [{isLogin}] = useRematchModel('user');
   const {push} = useRouter();
   const {t} = useTranslation();
+  const {appScale} = useResponse();
 
   const renderEmptyState = () => (
     <YStack flex={1} ai="center" jc="center" pt={appScale(48)}>

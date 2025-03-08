@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:13:42
+ * @LastEditTime: 2025-03-08 15:16:14
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/MyQrCodePopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -10,11 +10,12 @@ import AppButton from 'app/Components/AppButton';
 import AppModal from 'app/Components/AppModal';
 import QrCode from 'app/Components/QrCode';
 import {ExternalLinkData, PrimaryColor} from 'app/config';
-import {appScale, isIphoneX} from 'app/utils';
+import { isIphoneX} from 'app/utils';
 import QRCode from 'qrcode.react';
 import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
+import useResponse from 'app/hooks/useResponse';
 
 export type MyQrCodePopupProps = {
   userId: string;
@@ -26,6 +27,7 @@ export type MyQrCodePopupProps = {
 const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible, setShareVisible}: MyQrCodePopupProps) => {
   const {t, i18n} = useTranslation();
   const qrRef = useRef<HTMLDivElement>(null); // 指定元素类型
+  const {appScale} = useResponse();
 
   // 转换为 PNG 并下载
   const downloadQR = async () => {

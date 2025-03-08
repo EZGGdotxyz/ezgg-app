@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 14:57:32
+ * @LastEditTime: 2025-03-08 16:41:03
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -24,7 +24,7 @@ import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
 import AppButton from 'app/Components/AppButton';
 import {StyleSheet} from 'react-native';
-import {appScale, convertAmountToTokenDecimals, formatNumber, getUserSubName, isIphoneX} from 'app/utils';
+import {convertAmountToTokenDecimals, formatNumber, getUserSubName, isIphoneX} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
@@ -52,6 +52,7 @@ import {
 import AppLoading from 'app/Components/AppLoading';
 import TokenLinkContract from 'app/abi/TokenLink.json';
 import {useTransaction} from 'app/hooks/useTransaction';
+import useResponse from 'app/hooks/useResponse';
 
 const {useParams} = createParam<any>();
 
@@ -61,6 +62,7 @@ const PayLinkScreen = ({type}: any) => {
   const {makeRequest} = useRequest();
   const dispatch = useDispatch<Dispatch>();
   const [{payLinkData, userInfo}] = useRematchModel('user');
+  const {appScale} = useResponse();
 
   const [inputValue, setInputValue] = React.useState('');
   const {params} = useParams();
@@ -129,14 +131,27 @@ const PayLinkScreen = ({type}: any) => {
       }
     } catch (error) {
       console.error(`${type} transaction error:`, error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
+      if (error?.message.includes('The user rejected the request')) {
+        toast.show(t('tips.error.userRejected'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient allowance')) {
+        toast.show(t('tips.error.insufficientAllowance'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient balance')) {
+        toast.show(t('tips.error.insufficientBalance'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+      }
     } finally {
       setIsLoading(false);
     }
   };
-
 
   return (
     <PermissionPage>

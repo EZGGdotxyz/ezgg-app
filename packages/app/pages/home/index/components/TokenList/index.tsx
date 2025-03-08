@@ -9,14 +9,14 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@tamagui/lucide-icons';
-import {appScale, formatNumber, getCurrency} from 'app/utils';
+import { formatNumber, getCurrency} from 'app/utils';
 import {useMemo} from 'react';
 import AppButton from 'app/Components/AppButton';
 import ChainListPopup from 'app/pages/home/index/components/ChainListPopup';
 import useRequest from 'app/hooks/useRequest';
-import {getBalanceListBalance} from 'app/servers/api/balance';
 import {TokenIcon} from '@web3icons/react';
 import {getChainInfo} from 'app/utils/chain';
+import useResponse from 'app/hooks/useResponse';
 
 export type TokenListProps = {
   list: any[];
@@ -30,6 +30,7 @@ const TokenList: React.FC<TokenListProps> = ({list, tokenTypes, setSheetOpen, se
   const [{isLogin}] = useRematchModel('user');
   const {push} = useRouter();
   const {t} = useTranslation();
+  const {appScale} = useResponse();
 
   const getSelectedLabel = useMemo(() => {
     const selected = tokenTypes.find((type) => type.chainId === selectedType?.chainId);

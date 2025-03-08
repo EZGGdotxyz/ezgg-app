@@ -20,7 +20,7 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import Header from './components/Header';
-import {appScale, truncateAddress, formatTokenAmount, isIphoneX} from 'app/utils';
+import { truncateAddress, formatTokenAmount, isIphoneX} from 'app/utils';
 import CopyButton from 'app/Components/CopyButton';
 import {ExternalLinkData, PrimaryColor} from 'app/config';
 import {createParam} from 'solito';
@@ -44,6 +44,7 @@ import DeclineRequestPopup from './components/DeclineRequestPopup';
 import AcceptRequestPopup from './components/AcceptRequestPopup';
 import {useRouter} from 'solito/router';
 const {useParams} = createParam<any>();
+import useResponse from 'app/hooks/useResponse';
 
 // 订单详情
 const HistoryDetailScreen = () => {
@@ -54,6 +55,7 @@ const HistoryDetailScreen = () => {
     infoList: [],
     userName: '',
   });
+  const {appScale} = useResponse();
 
   const {params} = useParams();
   const {back, replace, push} = useRouter();

@@ -1,14 +1,14 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 13:52:31
+ * @LastEditTime: 2025-03-08 16:35:21
  * @FilePath: /ezgg-app/packages/app/Components/ConnectorsPopup/index.tsx
  */
 import {Button, Sheet, SizableText, useToastController, XStack, YStack, AppImage} from '@my/ui';
 import {Check} from '@tamagui/lucide-icons';
 import {WalletIcon} from '@web3icons/react';
 import {PrimaryColor} from 'app/config';
-import {appScale} from 'app/utils';
+import useResponse from 'app/hooks/useResponse';
 import {useEffect, useRef, useState, forwardRef, memo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Connector, useConnect, useAccount, useDisconnect} from 'wagmi';
@@ -36,6 +36,7 @@ const Item = memo(
   }) => {
     const [ready, setReady] = useState(false);
     const {t} = useTranslation();
+    const {appScale} = useResponse();
 
     useEffect(() => {
       (async () => {
@@ -116,10 +117,11 @@ export type CurrencyPopupProps = {
   setModalVisible: (value: boolean) => void;
   chainId: number;
   setIsSubmit: (value: boolean) => void;
+  setIsLoading: (value: boolean) => void;
 };
 
 const ConnectorsPopup = forwardRef<any, CurrencyPopupProps>(
-  ({modalVisible, setModalVisible, chainId, setIsSubmit}, ref) => {
+  ({modalVisible, setModalVisible, chainId, setIsSubmit, setIsLoading}, ref) => {
     const {t} = useTranslation();
     const toast = useToastController();
     const scrollViewRef = useRef<any>(null);
@@ -134,20 +136,20 @@ const ConnectorsPopup = forwardRef<any, CurrencyPopupProps>(
         // 延迟执行，确保状态已更新
         const timer = setTimeout(() => {
           setIsSubmit(true);
-          setModalVisible(false);
+          // setModalVisible(false);
           setIsConnecting(false);
         }, 500);
 
         return () => clearTimeout(timer);
       }
-    }, [isConnected, isConnecting, setIsSubmit, setModalVisible]);
+    }, [isConnected, isConnecting, setIsSubmit]);
 
     const onSubmit = async (connector: Connector) => {
       try {
+        setModalVisible(false);
         // 如果点击的是当前连接的钱包，不做任何操作
         if (activeConnector?.uid === connector?.uid) {
           setIsSubmit(true);
-          setModalVisible(false);
           return;
         }
 
@@ -170,6 +172,7 @@ const ConnectorsPopup = forwardRef<any, CurrencyPopupProps>(
         console.error('❌ ~ Connection error:', error);
         toast.show(t('tips.error.deposit.connectError'));
         setIsConnecting(false);
+        setIsLoading(false);
       }
     };
 

@@ -10,7 +10,6 @@ import {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button} from '@my/ui';
 import {ChevronLeft} from '@tamagui/lucide-icons';
-import { appScale } from 'app/utils';
 export default function Page() {
   const {t} = useTranslation();
   const {back, push, replace} = useRouter();

@@ -2,7 +2,7 @@
  * @Author: Yosan
  * @Date: 2022-11-12 12:19:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-04 22:58:48
+ * @LastEditTime: 2025-03-08 16:26:41
  * @Description:
  */
 import {createModel} from '@rematch/core';
@@ -29,8 +29,6 @@ export const user = createModel<RootModel>()({
     // isNewUser: false,
     // 总余额
     availableBalance: 0,
-    // 代币列表
-    tokenList: [],
     // 支付链接数据
     payLinkData: getStoredPayLinkData(),
   } as UserStoreModel,
@@ -60,7 +58,6 @@ export const user = createModel<RootModel>()({
         isLogin: false,
         userInfo: {},
         availableBalance: 0,
-        tokenList: [],
         payLinkData: {},
       });
       dispatch.app.updateState({

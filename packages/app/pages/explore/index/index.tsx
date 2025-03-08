@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 16:05:03
+ * @LastEditTime: 2025-03-08 15:22:15
  * @FilePath: /ezgg-app/packages/app/pages/explore/index/index.tsx
  */
 import {
@@ -22,13 +22,13 @@ import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {Html5Qrcode} from 'html5-qrcode';
-import {appScale} from 'app/utils';
 import AppButton from 'app/Components/AppButton';
 import {useRouter} from 'solito/router';
 import AppLoading from 'app/Components/AppLoading';
 import {ExternalLinkData} from 'app/config';
 import {decryptId} from 'app/utils/crypto';
 import {createParam} from 'solito';
+import useResponse from 'app/hooks/useResponse';
 const {useParams} = createParam<any>();
 
 // 掃描
@@ -43,6 +43,7 @@ const ExploreScreen = () => {
   const {params} = useParams();
   const html5QrcodeRef = useRef<Html5Qrcode | null>(null);
   const [isProcessingQR, setIsProcessingQR] = useState(false);
+  const {appScale} = useResponse();
 
   useEffect(() => {
     initScanner();

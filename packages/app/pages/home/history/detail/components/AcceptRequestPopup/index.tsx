@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 16:40:28
+ * @LastEditTime: 2025-03-08 15:22:40
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/AcceptRequestPopup/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController, YStack} from '@my/ui';
@@ -11,7 +11,6 @@ import {Platform} from 'react-native';
 import {Link} from 'solito/link';
 import {useRouter} from 'solito/router';
 import {useState} from 'react';
-import {appScale, formatTokenAmount, isIphoneX} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {AppName, PrimaryColor} from 'app/config';
 import AppButton from 'app/Components/AppButton';
@@ -22,6 +21,7 @@ import {encodeFunctionData, erc721Abi, erc20Abi, createPublicClient, http, getAd
 import TokenTransferContract from 'app/abi/TokenTransfer.json';
 import {postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
 import AppModal from 'app/Components/AppModal';
+import useResponse from 'app/hooks/useResponse';
 
 interface AcceptRequestPopupProps {
   modalVisible: boolean;
@@ -39,6 +39,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
   onSuccess,
 }) => {
   const {t} = useTranslation();
+  const {appScale} = useResponse();
 
   const {getClientForChain} = useSmartWallets();
   const {makeRequest} = useRequest();

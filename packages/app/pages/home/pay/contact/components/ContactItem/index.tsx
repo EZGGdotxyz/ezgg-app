@@ -1,15 +1,16 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 16:53:39
- * @FilePath: /ezgg-app/packages/app/pages/home/send/index/components/ContactItem/index.tsx
+ * @LastEditTime: 2025-03-08 15:17:34
+ * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/components/ContactItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
 import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
-import {appScale, getUserSubName, truncateAddress} from 'app/utils';
+import { getUserSubName, truncateAddress} from 'app/utils';
 import {useEffect, useState} from 'react';
+import useResponse from 'app/hooks/useResponse';
 
 export type ContactListProps = {
   onSubmit: (userId: any) => void;
@@ -22,6 +23,7 @@ const ContactItem: React.FC<any> = ({item, itemKey, onSubmit}: ContactListProps)
 
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
+  const {appScale} = useResponse();
 
 
 

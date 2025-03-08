@@ -9,9 +9,11 @@ import {Stack, useRouter, router} from 'expo-router';
 import {useTranslation} from 'react-i18next';
 import {ChevronLeft} from '@tamagui/lucide-icons';
 import {Button} from '@my/ui';
+import useResponse from 'app/hooks/useResponse';
 export default function Page() {
   const {t} = useTranslation();
   const {back, push, replace} = useRouter();
+  const {appScale} = useResponse();
 
   return (
     <>

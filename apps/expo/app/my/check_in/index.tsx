@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:03:33
+ * @LastEditTime: 2025-03-08 15:19:19
  * @FilePath: /ezgg-app/apps/expo/app/my/check_in/index.tsx
  */
 import CheckInScreen from 'app/pages/my/check_in';
@@ -10,11 +10,12 @@ import {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Button} from '@my/ui';
 import {ChevronLeft} from '@tamagui/lucide-icons';
-import { appScale } from 'app/utils';
+import useResponse from 'app/hooks/useResponse';
+
 export default function Page() {
   const {t} = useTranslation();
   const {back, push, replace} = useRouter();
-
+  const {appScale} = useResponse();
   const [isRefresh, setIsRefresh] = useState(false);
 
   useFocusEffect(

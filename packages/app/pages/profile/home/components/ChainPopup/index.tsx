@@ -1,18 +1,17 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:11:36
+ * @LastEditTime: 2025-03-08 15:25:10
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/ChainPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import AppModal from 'app/Components/AppModal';
 import {PrimaryColor} from 'app/config';
-import { appScale } from 'app/utils';
 import {useEffect, useRef, forwardRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
-
+import useResponse from 'app/hooks/useResponse';
 export type ChainPopupProps = {
   modalVisible: any;
   setModalVisible: (values) => void;
@@ -30,6 +29,7 @@ const ChainPopup = forwardRef<any, any>(({
 }: ChainPopupProps, ref) => {
   const {t, i18n} = useTranslation();
   const scrollViewRef = useRef(null);
+  const {appScale} = useResponse();
 
   useEffect(() => {
     if (modalVisible && scrollViewRef?.current && chainData?.id && chainList && chainList.length > 0) {

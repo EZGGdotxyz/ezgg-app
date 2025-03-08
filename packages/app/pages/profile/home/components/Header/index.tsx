@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:09:56
+ * @LastEditTime: 2025-03-08 15:25:20
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/Header/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -11,10 +11,9 @@ import {Platform} from 'react-native';
 import {Link} from 'solito/link';
 import {useRouter} from 'solito/router';
 import {useState} from 'react';
-import {appScale} from 'app/utils';
 import {useTranslation} from 'react-i18next';
 import {AppName, PrimaryColor} from 'app/config';
-
+import useResponse from 'app/hooks/useResponse';
 export type HeaderProps = {isLogin: boolean};
 // 首页 头部
 const Header: React.FC<any> = ({isLogin}: HeaderProps) => {
@@ -22,6 +21,7 @@ const Header: React.FC<any> = ({isLogin}: HeaderProps) => {
   const {push} = useRouter();
   const [statusBarHeight, setStatusBarHeight] = useState(46);
   const {t, i18n} = useTranslation();
+  const {appScale} = useResponse();
 
   return (
     <XStack width={'100%'} pt={0} ai={'center'} backgroundColor={'$background'} flexShrink={0}>
