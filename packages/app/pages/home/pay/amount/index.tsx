@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:39:28
+ * @LastEditTime: 2025-03-08 14:02:48
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/amount/index.tsx
  */
 import {
@@ -99,6 +99,9 @@ const AmountScreen = ({type}: any) => {
   return (
     <PermissionPage>
       <AppHeader2
+        onBack={() => {
+          replace('/');
+        }}
         title={type === 'send' ? t('screen.home.amount') : t('screen.home.amountRequesting')}
         fallbackUrl="/"
       />

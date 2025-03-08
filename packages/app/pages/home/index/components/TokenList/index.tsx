@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 12:34:08
+ * @LastEditTime: 2025-03-08 14:58:07
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/TokenList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet} from '@my/ui';
@@ -38,12 +38,12 @@ const TokenList: React.FC<TokenListProps> = ({list, tokenTypes, setSheetOpen, se
 
   const renderTokenItem = (item: any, index: number) => (
     <XStack key={index} pt={appScale(16)} pb={appScale(16)} w={'100%'} mb={appScale(8)}>
-      <XStack flexShrink={0} pos={'relative'} pr={appScale(24)}>
+      <XStack flexShrink={0} h={appScale(56)} pos={'relative'} pr={appScale(24)}>
         <YStack height={appScale(48)} width={appScale(48)} borderRadius={appScale(24)} overflow={'hidden'}>
           <TokenIcon symbol={item?.token?.tokenSymbol} variant="background" size={appScale(48)} />
         </YStack>
         {item?.chainIcon && (
-          <XStack pos={'absolute'} bottom={appScale(4)} right={appScale(12)}>
+          <XStack pos={'absolute'} bottom={appScale(4)} right={appScale(16)}>
             <AppImage
               width={appScale(24)}
               height={appScale(24)}

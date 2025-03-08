@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:26:25
+ * @LastEditTime: 2025-03-07 16:05:03
  * @FilePath: /ezgg-app/packages/app/pages/explore/index/index.tsx
  */
 import {
@@ -21,7 +21,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppHeader2 from 'app/Components/AppHeader2';
-import jsQR from 'jsqr';
+import {Html5Qrcode} from 'html5-qrcode';
 import {appScale} from 'app/utils';
 import AppButton from 'app/Components/AppButton';
 import {useRouter} from 'solito/router';
@@ -34,8 +34,6 @@ const {useParams} = createParam<any>();
 // 掃描
 const ExploreScreen = () => {
   const {t} = useTranslation();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scanning, setScanning] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const {replace, back} = useRouter();
@@ -43,20 +41,18 @@ const ExploreScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToastController();
   const {params} = useParams();
+  const html5QrcodeRef = useRef<Html5Qrcode | null>(null);
+  const [isProcessingQR, setIsProcessingQR] = useState(false);
 
   useEffect(() => {
-    checkCameraPermission();
+    initScanner();
     return () => {
+      // 只在组件卸载时关闭摄像头
       stopScanning();
-      if (videoRef.current?.srcObject) {
-        const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-        tracks.forEach((track) => track.stop());
-        videoRef.current.srcObject = null;
-      }
     };
   }, []);
 
-  const checkCameraPermission = async () => {
+  const initScanner = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({video: true});
       if (stream) {
@@ -68,7 +64,6 @@ const ExploreScreen = () => {
       setHasPermission(true);
       startScanning();
     } catch (error) {
-      console.error('Camera permission denied:', error);
       setHasPermission(false);
       toast.show(t('tips.error.cameraPermissionDenied'));
     }
@@ -76,111 +71,172 @@ const ExploreScreen = () => {
 
   const startScanning = async () => {
     try {
-      const constraints = {
-        video: {
-          facingMode: 'environment',
-          width: {ideal: 1280},
-          height: {ideal: 720},
-          focusMode: 'continuous',
-        },
-      };
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-        videoRef.current.onloadedmetadata = () => {
-          setScanning(true);
-          scanQRCode();
-        };
-      }
-    } catch (error) {
-      console.error('Error accessing camera:', error);
-    }
-  };
+      // 确保之前的扫描已经完全停止
+      await stopScanning();
 
-  const stopScanning = () => {
-    if (videoRef.current?.srcObject) {
-      const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-      tracks.forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-      setScanning(false);
-    }
-  };
+      html5QrcodeRef.current = new Html5Qrcode('qr-reader');
 
-  const scanQRCode = () => {
-    if (!scanning) return;
+      const qrCodeSuccessCallback = async (decodedText: string) => {
+        // 防止重复处理
+        if (isProcessingQR) return;
+        setIsProcessingQR(true);
 
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-
-    if (!video || !canvas) return;
-
-    const context = canvas.getContext('2d');
-    if (!context) return;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    // 计算中心区域
-    const scanRegionSize = Math.min(canvas.width, canvas.height) * 0.7;
-    const scanRegionX = (canvas.width - scanRegionSize) / 2;
-    const scanRegionY = (canvas.height - scanRegionSize) / 2;
-
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    // 获取扫描区域的图像数据
-    const imageData = context.getImageData(scanRegionX, scanRegionY, scanRegionSize, scanRegionSize);
-
-    const code = jsQR(imageData.data, imageData.width, imageData.height);
-    if (code) {
-      onPush(code?.data);
-      // TODO: 处理扫描到的二维码数据
-      // 这里可以添加成功扫描的回调
-    }
-
-    requestAnimationFrame(scanQRCode);
-  };
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const context = canvas.getContext('2d');
-        if (!context) return;
-
-        canvas.width = img.width;
-        canvas.height = img.height;
-        context.drawImage(img, 0, 0);
-
-        const imageData = context?.getImageData(0, 0, canvas.width, canvas.height);
-        if (imageData?.data) {
-          const code = jsQR(imageData?.data, imageData.width, imageData.height);
-
-          if (code) {
-            onPush(code?.data);
-          } else {
-            console.log('No QR code found in image');
+        // 识别成功后暂停扫描但不关闭摄像头
+        if (html5QrcodeRef.current) {
+          try {
+            await html5QrcodeRef.current.pause();
+          } catch (error) {
+            console.warn('暂停扫描失败:', error);
           }
         }
 
-        // 重新启动摄像头扫描
-        startScanning();
+        setIsLoading(true);
+        await onPush(decodedText);
+        setIsLoading(false);
+
+        // 处理完成后恢复扫描
+        if (html5QrcodeRef.current) {
+          try {
+            await html5QrcodeRef.current.resume();
+          } catch (error) {
+            console.warn('恢复扫描失败:', error);
+          }
+        }
+
+        setIsProcessingQR(false);
       };
-      img.src = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
+
+      const config = {
+        fps: 10,
+        qrbox: {width: 250, height: 250},
+        aspectRatio: 1,
+      };
+
+      await html5QrcodeRef.current.start({facingMode: 'environment'}, config, qrCodeSuccessCallback, undefined);
+      setScanning(true);
+    } catch (error) {
+      setIsLoading(false);
+      console.error('启动扫描失败:', error);
+    }
   };
 
-  const onPush = (code) => {
+  const stopScanning = async () => {
+    if (html5QrcodeRef.current) {
+      try {
+        // 先设置状态为非扫描
+        setScanning(false);
+
+        // 尝试停止扫描
+        if (html5QrcodeRef.current) {
+          try {
+            await html5QrcodeRef.current.stop();
+          } catch (stopError) {
+            console.warn('停止扫描时出错，可能已经停止:', stopError);
+            // 继续执行，尝试清理
+          }
+        }
+
+        // 添加短暂延迟确保停止完成
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // 尝试清理
+        if (html5QrcodeRef.current) {
+          try {
+            await html5QrcodeRef.current.clear();
+          } catch (clearError) {
+            console.warn('清理扫描器时出错:', clearError);
+            // 如果清理失败，尝试重新创建实例
+            html5QrcodeRef.current = null;
+            return;
+          }
+        }
+
+        html5QrcodeRef.current = null;
+      } catch (error) {
+        console.error('停止扫描失败:', error);
+        // 确保引用被清理
+        html5QrcodeRef.current = null;
+      }
+    }
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // 防止重复处理
+    if (isProcessingQR) return;
+    setIsProcessingQR(true);
+
+    try {
+      setIsLoading(true);
+
+      // 暂停相机扫描但不停止
+      if (html5QrcodeRef.current && scanning) {
+        try {
+          await html5QrcodeRef.current.pause();
+        } catch (error) {
+          console.warn('暂停扫描失败:', error);
+        }
+      }
+
+      // 创建新的扫描器实例用于文件扫描
+      const fileScanner = new Html5Qrcode('qr-reader-file');
+
+      // 扫描文件
+      const result = await fileScanner.scanFile(file, true);
+      console.log('图片扫描结果:', result);
+
+      // 清理文件扫描器
+      try {
+        await fileScanner.clear();
+      } catch (error) {
+        console.warn('清理文件扫描器失败:', error);
+      }
+
+      // 处理扫描结果
+      await onPush(result);
+
+      // 恢复相机扫描
+      if (html5QrcodeRef.current && scanning) {
+        try {
+          await html5QrcodeRef.current.resume();
+        } catch (error) {
+          console.warn('恢复扫描失败:', error);
+          // 如果恢复失败，尝试重新启动
+          await startScanning();
+        }
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error('图片扫描失败:', error);
+      toast.show(t('home.qr.invalid'));
+
+      // 恢复相机扫描
+      if (html5QrcodeRef.current && scanning) {
+        try {
+          await html5QrcodeRef.current.resume();
+        } catch (error) {
+          console.warn('恢复扫描失败:', error);
+          // 如果恢复失败，尝试重新启动
+          await startScanning();
+        }
+      }
+
+      setIsLoading(false);
+    }
+
+    // 清理文件输入
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+
+    setIsProcessingQR(false);
+  };
+
+  const onPush = async (code: string) => {
     if (code) {
-      console.log('Found QR code in image:', code);
       let userId = '';
       if (code.indexOf(ExternalLinkData.webPageHome + '/explore/') !== -1) {
         userId = code.replace(ExternalLinkData.webPageHome + '/explore/', '');
@@ -188,17 +244,15 @@ const ExploreScreen = () => {
       if (userId) {
         const _decryptId = decryptId(userId);
         if (_decryptId) {
-          setIsLoading(true);
-          setTimeout(() => {
-            stopScanning();
-            const _type = params?.type || 'send';
-            replace('/explore/' + _decryptId + '?type=' + _type);
-            setIsLoading(false);
-          }, 1000);
+          console.log('解密后的用户ID:', _decryptId);
+          const _type = params?.type || 'send';
+          replace('/explore/' + _decryptId + '?type=' + _type);
         } else {
+          console.warn('用户ID解密失败');
           toast.show(t('home.qr.invalid'));
         }
       } else {
+        console.warn('二维码格式不正确');
         toast.show(t('home.qr.invalid'));
       }
     }
@@ -246,23 +300,29 @@ const ExploreScreen = () => {
             width={appScale(382)}
             height={appScale(382)}
             borderRadius={appScale(20)}
-            // borderWidth={2}
-            // borderColor="#534f4f"
             overflow="hidden"
             position="relative"
           >
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
+            {/* 相机扫描容器 */}
+            <div
+              id="qr-reader"
               style={{
-                marginTop: appScale(3),
-                marginRight: appScale(3),
                 width: appScale(376),
                 height: appScale(376),
-                objectFit: 'cover',
-                transform: 'scaleX(-1)',
+                marginTop: appScale(3),
+                marginRight: appScale(3),
+                transform: 'scaleX(-1)', // 添加水平镜像效果
+              }}
+            />
+            {/* 文件扫描容器 - 完全隐藏 */}
+            <div
+              id="qr-reader-file"
+              style={{
+                position: 'absolute',
+                width: '1px',
+                height: '1px',
+                opacity: 0,
+                pointerEvents: 'none',
               }}
             />
             <XStack
@@ -283,14 +343,6 @@ const ExploreScreen = () => {
                 height={appScale(382)}
               />
             </XStack>
-            <canvas
-              ref={canvasRef}
-              style={{
-                display: 'none',
-                width: appScale(376),
-                height: appScale(376),
-              }}
-            />
             <input
               type="file"
               accept="image/*"
@@ -301,7 +353,16 @@ const ExploreScreen = () => {
           </YStack>
 
           {hasPermission === false ? (
-            <YStack w="100%" pt={appScale(40)} pb={appScale(24)} pl={appScale(24)} pr={appScale(24)} ai="center" jc="center" space="$4">
+            <YStack
+              w="100%"
+              pt={appScale(40)}
+              pb={appScale(24)}
+              pl={appScale(24)}
+              pr={appScale(24)}
+              ai="center"
+              jc="center"
+              space="$4"
+            >
               <SizableText ta={'center'} fontSize={'$6'} fontWeight={'600'} color="#fff">
                 {t('home.explore.noPermission')}
               </SizableText>

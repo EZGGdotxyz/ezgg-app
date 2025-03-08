@@ -49,8 +49,8 @@ const ChainPopup = forwardRef<any, any>(({
       dismissOnSnapToBottom
       open={modalVisible}
       onOpenChange={setModalVisible}
-      snapPoints={[40]}
-    >
+      snapPoints={[36]}
+      >
       <Sheet.Overlay animation="medium" enterStyle={{opacity: 0}} exitStyle={{opacity: 0}} />
       <Sheet.Handle />
       <Sheet.Frame justifyContent="center" w="100%" alignItems="center">

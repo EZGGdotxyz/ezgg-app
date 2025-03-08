@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 13:27:51
+ * @LastEditTime: 2025-03-08 00:15:51
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/login.ts
  */
 export default {
@@ -10,6 +10,7 @@ export default {
   'login.loginTips2': '請稍候......',
   'login.loginTips3': '您將進入首頁',
   'login.loginTips4': '您將進入{{type}}頁',
+  'login.loginTips5': '您將回到上個頁面',
   'login.type./claim': '領取',
   'login.type./requesting': '發送',
   'login.loginAgreement1':

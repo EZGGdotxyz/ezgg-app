@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-03 23:26:42
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:44:21
+ * @LastEditTime: 2025-03-07 23:42:17
  * @FilePath: /ezgg-app/packages/app/utils/transactionInfo.ts
  */
 import {formatDateTime, formatTokenAmount} from './index';
@@ -28,7 +28,7 @@ export const createTransactionInfoItem = (
 });
 
 // 创建基础交易信息列表
-export const createBaseTransactionInfoList = (orderData: any, t: any, isTo = true, isSender = false) => {
+export const createBaseTransactionInfoList = (orderData: any, t: any, isTo = true, isSender = true) => {
   const infoList = [createTransactionInfoItem(t('home.order.date'), formatDateTime(orderData?.transactionTime))];
   if (isTo) {
     infoList.push(

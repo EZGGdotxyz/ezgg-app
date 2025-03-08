@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 12:58:07
+ * @LastEditTime: 2025-03-07 23:51:09
  * @FilePath: /ezgg-app/packages/app/Components/SharePopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, XStack, YStack} from '@my/ui';
@@ -23,18 +23,18 @@ import React, {useEffect, useState} from 'react';
 interface SharePopupProps {
   modalVisible: boolean;
   setModalVisible: (value: boolean) => void;
-  title: string;
-  url: string;
+  shareTitle?: string;
+  shareUrl: string;
 }
 
-const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, title, url}) => {
+const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, shareTitle, shareUrl}) => {
   const {t} = useTranslation();
 
   const shareItems = [
     {
       title: t('home.share.facebook'),
       button: () => (
-        <FacebookShareButton url={url} title={title}>
+        <FacebookShareButton url={shareUrl} title={shareTitle}>
           <FacebookIcon size={appScale(48)} round />
         </FacebookShareButton>
       ),
@@ -42,7 +42,7 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, t
     {
       title: t('home.share.twitter'),
       button: () => (
-        <TwitterShareButton url={url} title={title}>
+        <TwitterShareButton url={shareUrl} title={shareTitle}>
           <TwitterIcon size={appScale(48)} round />
         </TwitterShareButton>
       ),
@@ -50,7 +50,7 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, t
     {
       title: t('home.share.whatsapp'),
       button: () => (
-        <WhatsappShareButton url={url} title={title}>
+        <WhatsappShareButton url={shareUrl} title={shareTitle}>
           <WhatsappIcon size={appScale(48)} round />
         </WhatsappShareButton>
       ),
@@ -58,7 +58,7 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, t
     {
       title: t('home.share.telegram'),
       button: () => (
-        <TelegramShareButton url={url} title={title}>
+        <TelegramShareButton url={shareUrl} title={shareTitle}>
           <TelegramIcon size={appScale(48)} round />
         </TelegramShareButton>
       ),

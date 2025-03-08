@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 10:21:42
+ * @LastEditTime: 2025-03-07 16:43:08
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -169,9 +169,23 @@ export const useTransaction = () => {
       );
     } catch (error) {
       console.error('Send pay link error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
+      if (error?.message.includes('The user rejected the request')) {
+        toast.show(t('tips.error.userRejected'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient allowance')) {
+        toast.show(t('tips.error.insufficientAllowance'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient balance')) {
+        toast.show(t('tips.error.insufficientBalance'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+      }
       throw error;
     }
   };
@@ -226,9 +240,24 @@ export const useTransaction = () => {
       );
     } catch (error) {
       console.error('Send pay link submit error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
+
+      if (error?.message.includes('The user rejected the request')) {
+        toast.show(t('tips.error.userRejected'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient allowance')) {
+        toast.show(t('tips.error.insufficientAllowance'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient balance')) {
+        toast.show(t('tips.error.insufficientBalance'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+      }
       throw error;
     }
   };
@@ -294,9 +323,23 @@ export const useTransaction = () => {
       await onSendContract(transaction, onSuccess);
     } catch (error) {
       console.error('Send submit error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
+      if (error?.message.includes('The user rejected the request')) {
+        toast.show(t('tips.error.userRejected'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient allowance')) {
+        toast.show(t('tips.error.insufficientAllowance'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient balance')) {
+        toast.show(t('tips.error.insufficientBalance'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+      }
       throw error;
     }
   };
@@ -354,9 +397,23 @@ export const useTransaction = () => {
       );
     } catch (error) {
       console.error('Withdraw error:', error);
-      toast.show(t('tips.error.transactionFailed'), {
-        duration: 3000,
-      });
+      if (error?.message.includes('The user rejected the request')) {
+        toast.show(t('tips.error.userRejected'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient allowance')) {
+        toast.show(t('tips.error.insufficientAllowance'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient balance')) {
+        toast.show(t('tips.error.insufficientBalance'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.transactionFailed'), {
+          duration: 3000,
+        });
+      }
       throw error;
     }
   };

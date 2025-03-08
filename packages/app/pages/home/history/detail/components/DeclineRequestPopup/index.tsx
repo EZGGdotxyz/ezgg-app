@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 14:21:23
+ * @LastEditTime: 2025-03-07 16:32:26
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/DeclineRequestPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -35,8 +35,8 @@ const DeclineRequestPopup: React.FC<DeclineRequestPopupProps> = ({
 
   const onSubmit = async () => {
     try {
-      setIsLoading(true);
       setModalVisible(false);
+      setIsLoading(true);
       const res = await makeRequest(
         postTransactionHistoryDeclineTransactionHistory({
           id: orderData?.id,

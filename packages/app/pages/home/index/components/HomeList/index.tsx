@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 21:17:46
+ * @LastEditTime: 2025-03-08 14:06:51
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet, ScrollView} from '@my/ui';
@@ -10,7 +10,7 @@ import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown, Check} from '@tamagui/lucide-icons';
 import {appScale, dealtHistoryList, formatNumber} from 'app/utils';
-import {useEffect, useState, useCallback, useMemo} from 'react';
+import {useEffect, useState, useCallback, useMemo, useRef} from 'react';
 import AppButton from 'app/Components/AppButton';
 import ChainListPopup from 'app/pages/home/index/components/ChainListPopup';
 import useRequest from 'app/hooks/useRequest';
@@ -35,7 +35,7 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
   const dispatch = useDispatch<Dispatch>();
   const {push} = useRouter();
   const {t} = useTranslation();
-  
+
   const [sheetOpen, setSheetOpen] = useState(false);
   const [list, setList] = useState<any[]>([]);
   const [history, setHistory] = useState<any[]>([]);
@@ -139,22 +139,26 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
     }
   }, [blockchainList, selectedType, isLogin, fetchAllBalances]);
 
+  // 创建对ChainListPopup的ref
+  const chainListPopupRef = useRef(null);
+
   return (
     <YStack f={1}>
       <ScrollView f={1} bc="$background">
         <YStack pb={appScale(104)}>
           {!switchOn && (
-            <TokenList 
-              selectedType={selectedType} 
-              setSheetOpen={setSheetOpen} 
-              list={list} 
-              tokenTypes={tokenTypes} 
+            <TokenList
+              selectedType={selectedType}
+              setSheetOpen={setSheetOpen}
+              list={list}
+              tokenTypes={tokenTypes}
             />
           )}
           {switchOn && <History history={history} />}
         </YStack>
       </ScrollView>
       <ChainListPopup
+        ref={chainListPopupRef}
         tokenTypes={tokenTypes}
         setSheetOpen={setSheetOpen}
         sheetOpen={sheetOpen}

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:12:57
+ * @LastEditTime: 2025-03-08 15:05:51
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -9,21 +9,6 @@ import {Dimensions, Platform, PixelRatio} from 'react-native';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 import {CurrencyList} from 'app/config';
-
-export const appScale = (width: number) => {
-  const screenWidth = Dimensions.get('window').width;
-  // // 基准宽度（设计稿宽度）
-  // const baseWidth = 430;
-  // // 计算缩放比例
-  // const scale = screenWidth / baseWidth *  0.81395349;
-  // return baseScale(width * scale);
-  // 单位转换
-  // 计算比例尺寸
-  const ratioSize = width * (screenWidth / 430);
-
-  // return `${Math.round(ratioSize)}`;
-  return ratioSize;
-};
 
 // 比较当前设备和对照设备的屏幕宽高
 function matchIOSScreenSize(screenWidth: number, screenHeight: number, screenW: number, screenH: number) {

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:23:54
+ * @LastEditTime: 2025-03-07 22:24:25
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -11,6 +11,7 @@ import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@tamagui/lucide-icons';
 import {appScale, formatNumber, formatTokenAmount, getCurrency} from 'app/utils';
 import {getChainInfo} from 'app/utils/chain';
+import dayjs from 'dayjs';
 
 export type HistoryItemProps = {item: any; isBottom?: boolean};
 // 交易历史item
@@ -19,6 +20,50 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
   const {t, i18n} = useTranslation();
   const [{currency}] = useRematchModel('app');
   const [{userInfo}] = useRematchModel('user');
+
+  const incomeType = () => {
+    // 判断当前用户是否为接收方（用于判断收入/支出）
+    const isReceiver = item?.receiverMember?.id === userInfo?.customMetadata?.id;
+    const isRequest = item?.transactionCategory === 'REQUEST';
+
+    if (isRequest) {
+      if (isReceiver) {
+        // 当前用户收到付款请求（将要支出）
+        return {
+          title: t(`home.history.request.${item?.transactionType}.title`, {
+            name: item?.senderMember?.nickname,
+          }),
+          sub: item?.message,
+        };
+      } else {
+        // 当前用户发起付款请求（将要收入）
+        return {
+          title: t(`home.history.send.${item?.transactionType}.title`, {
+            name: item?.receiverMember?.nickname,
+          }),
+          sub: item?.message,
+        };
+      }
+    } else {
+      if (isReceiver) {
+        // 当前用户是接收方（收入）
+        return {
+          title: t(`home.history.request.${item?.transactionType}.title`, {
+            name: item?.senderMember?.nickname,
+          }),
+          sub: item?.message,
+        };
+      } else {
+        // 当前用户是发送方（支出）
+        return {
+          title: t(`home.history.send.${item?.transactionType}.title`, {
+            name: item?.receiverMember?.nickname,
+          }),
+          sub: item?.message,
+        };
+      }
+    }
+  };
 
   const dealType = () => {
     switch (item?.transactionType) {
@@ -37,41 +82,13 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
           title: t('home.income'),
           sub: t('home.income'),
         };
-      case 'SEND':
+      case 'EXPEND':
         return {
-          title: t('home.order.send.title', {name: item?.receiverMember?.nickname}),
-          sub: item?.message,
-        };
-      case 'PAY_LINK':
-        return {
-          title: t('home.order.payLink.title', {name: item?.receiverMember?.nickname}),
-          sub: item?.message,
-        };
-      case 'QR_CODE':
-        return {
-          title: t('home.order.qrCode.title', {name: item?.receiverMember?.nickname}),
-          sub: item?.transactionCategory === 'REQUEST' ? t('home.receive') : t('home.send'),
-        };
-      case 'REQUEST':
-        return {
-          title: t('home.order.request.title', {name: item?.senderMember?.nickname}),
-          sub: item?.message,
-        };
-      case 'REQUEST_LINK':
-        return {
-          title: t('home.order.requestLink.title', {name: item?.senderMember?.nickname}),
-          sub: item?.message,
-        };
-      case 'REQUEST_QR_CODE':
-        return {
-          title: t('home.order.requestQrCode.title', {name: item?.senderMember?.nickname}),
-          sub: item?.message,
+          title: t('home.expend'),
+          sub: t('home.expend'),
         };
       default:
-        return {
-          title: '',
-          sub: '',
-        };
+        return incomeType();
     }
   };
 
@@ -104,7 +121,7 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
     >
       <XStack flex={1} mb={appScale(16)} w="100%" ai={'center'} jc={'space-between'}>
         <YStack gap={appScale(2)} w={'70%'}>
-          <SizableText fontSize={'$5'} color={'#26273C'} fontWeight={'600'}>
+          <SizableText fontSize={'$4'} color={'#212121'} fontWeight={'600'}>
             {dealType().title}
           </SizableText>
           <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'400'}>
@@ -123,6 +140,11 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
             })`}
           </SizableText>
         </YStack>
+      </XStack>
+      <XStack w="100%" jc={'space-between'} mb={'$2'}>
+        <SizableText color={'#9395A4'} size={'$1'} fow={'500'}>
+          {dayjs(item?.createAt).format('HH:mm A')}
+        </SizableText>
       </XStack>
       {!isBottom && <XStack h={2} width={'80%'} bc={'rgba(238, 238, 238, 1)'}></XStack>}
     </Button>

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:37:24
+ * @LastEditTime: 2025-03-07 22:56:04
  * @FilePath: /ezgg-app/packages/app/pages/explore/amount/index.tsx
  */
 import {
@@ -123,12 +123,12 @@ const AmountScreen = () => {
       if (type === 'SEND') {
         await onSendSubmit(_params, (data) => {
           setIsLoading(false);
-          replace('/home/success?type=qrCode&id=' + data?.id);
+          replace('/home/success?type=QR_CODE&id=' + data?.id);
         });
       } else {
         await onRequestSubmit(_params, (data) => {
           setIsLoading(false);
-          replace('/home/success?type=requestQrCode&id=' + data?.id);
+          replace('/home/success?type=REQUEST_QR_CODE&id=' + data?.id);
         });
       }
     } catch (error) {
@@ -156,7 +156,6 @@ const AmountScreen = () => {
         onBack={() => {
           replace('/');
           dispatch.user.updateState({payLinkData: {}});
-          window.history.pushState(null, '', '/');
         }}
         title={params?.type === 'request' ? t('screen.home.request') : t('screen.home.send')}
         fallbackUrl="/"
@@ -273,55 +272,56 @@ const AmountScreen = () => {
           <Keyboard decimals={currencyData?.token?.tokenDecimals || 6} onChange={setInputValue} value={inputValue} />
         )}
       </ScrollView>
-      <XStack
-        flexShrink={0}
-        pl={appScale(24)}
-        pr={appScale(24)}
-        pt={appScale(12)}
-        pb={appScale(isIphoneX() ? 46 : 12)}
-        w="100%"
-        ai={'center'}
-        jc={'center'}
-        space="$3"
-        borderTopWidth={1}
-        borderColor={'#F2F2F2'}
-      >
-        <Button
-          h={appScale(58)}
-          w={'50%'}
-          br={appScale(28)}
+      {!showKeyboard && (
+        <XStack
+          flexShrink={0}
+          pl={appScale(24)}
+          pr={appScale(24)}
+          pt={appScale(12)}
+          pb={appScale(isIphoneX() ? 46 : 12)}
+          w="100%"
           ai={'center'}
           jc={'center'}
-          bc={'#fff'}
-          borderWidth={2}
-          borderColor={PrimaryColor}
-          onPress={() => {
-            handlePagePress();
-            // setDeclineRequestVisible(true);
-            replace('/');
-            dispatch.user.updateState({payLinkData: {}});
-            window.history.pushState(null, '', '/');
-          }}
-          // disabled={isLoading}
-          pressStyle={{
-            opacity: 0.85,
-          }}
-          unstyled
+          space="$3"
+          borderTopWidth={1}
+          borderColor={'#F2F2F2'}
         >
-          {t('operate.button.cancel')}
-        </Button>
-        <AppButton
-          style={{
-            width: '50%',
-          }}
-          onPress={() => {
-            handlePagePress();
-            submit();
-          }}
-        >
-          {params?.type === 'request' ? t('home.request.requestCrypto') : t('home.paylink.sendCrypto')}
-        </AppButton>
-      </XStack>
+          <Button
+            h={appScale(58)}
+            w={'50%'}
+            br={appScale(28)}
+            ai={'center'}
+            jc={'center'}
+            bc={'#fff'}
+            borderWidth={2}
+            borderColor={PrimaryColor}
+            onPress={() => {
+              handlePagePress();
+              // setDeclineRequestVisible(true);
+              replace('/');
+              dispatch.user.updateState({payLinkData: {}});
+            }}
+            // disabled={isLoading}
+            pressStyle={{
+              opacity: 0.85,
+            }}
+            unstyled
+          >
+            {t('operate.button.cancel')}
+          </Button>
+          <AppButton
+            style={{
+              width: '50%',
+            }}
+            onPress={() => {
+              handlePagePress();
+              submit();
+            }}
+          >
+            {params?.type === 'request' ? t('home.request.requestCrypto') : t('home.paylink.sendCrypto')}
+          </AppButton>
+        </XStack>
+      )}
       {isLoading && <AppLoading />}
     </PermissionPage>
   );

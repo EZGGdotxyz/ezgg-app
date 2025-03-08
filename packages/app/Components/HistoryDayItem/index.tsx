@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-03 11:23:47
+ * @LastEditTime: 2025-03-08 14:01:32
  * @FilePath: /ezgg-app/packages/app/Components/HistoryDayItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -27,7 +27,7 @@ const HistoryDayItem: React.FC<any> = ({item}: HistoryDayItemProps) => {
         <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
       </XStack>
       {item.list.map((dayItem, index) => (
-        <HistoryItem key={index} item={dayItem} isBottom={index === item.list.length - 1} />
+        <HistoryItem key={dayItem?.id} item={dayItem} isBottom={index === item.list.length - 1} />
       ))}
     </YStack>
   );

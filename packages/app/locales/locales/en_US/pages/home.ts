@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 22:39:52
+ * @LastEditTime: 2025-03-07 18:09:16
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -156,23 +156,14 @@ export default {
   'home.explore.noPermission2': 'You can also use the button below to select an image for scanning',
   'home.explore.requestPermission': 'Request Camera Permission',
 
-
   'home.notification.send.title': 'Received @{{name}} sent {{amount}}',
   'home.notification.request.title': 'Received @{{name}} request {{amount}}',
-  // Notification related
-  'home.notification.transUpdate.requestAccepted': 'Request Accepted',
-  'home.notification.transUpdate.requestAcceptedDesc': 'Your payment request has been accepted',
-  'home.notification.transUpdate.requestDeclined': 'Request Declined',
-  'home.notification.transUpdate.requestDeclinedDesc': 'Your payment request has been declined',
-  'home.notification.transUpdate.payLinkAccepted': 'Pay Link Accepted',
-  'home.notification.transUpdate.payLinkAcceptedDesc': 'Your payment link has been clicked and confirmed',
-  
   // Alarm related
   'home.notification.alarm.title': 'Suspicious Activity Alert',
   'home.notification.balanceAlarm.title': 'Low Balance Alert',
   'home.notification.balanceAlarm.desc': 'Your balance is below {{amount}}',
   'home.notification.secureAlarm.title': 'Security Risk Alert',
-  
+
   // Other notification types
   'home.notification.payRequest.title': 'Payment Request',
   'home.notification.customerSupport.title': 'Customer Support',
@@ -181,11 +172,11 @@ export default {
   'home.notification.appUpdate.desc': 'New version {{version}} has been released',
   'home.notification.salesPromotion.title': 'Sales Promotion',
   'home.notification.survey.title': 'User Survey',
-  
+
   // Screen titles
   'home.screen.notification.title': 'Notifications',
   'home.screen.profile.notification.title': 'Notification Settings',
-  
+
   // Notification settings related
   'home.profile.notification.general': 'General Notifications',
   'home.profile.notification.app': 'App Notifications',
@@ -200,8 +191,44 @@ export default {
   'home.profile.notification.app1': 'App Updates',
   'home.profile.notification.app2': 'Sales Promotions',
   'home.profile.notification.app3': 'User Surveys',
-  
+
   // List loading related
   'home.tips.list.loading.title': 'No more data',
-  'home.tips.list.loading.title2': 'Loading...'
+  'home.tips.list.loading.title2': 'Loading...',
+
+  // 历史记录相关文本
+  'home.history.send.SEND.title': 'Sent to @{{name}}',
+  'home.history.send.PAY_LINK.title': 'Sent via PayLink to @{{name}}',
+  'home.history.send.QR_CODE.title': 'Sent via QR Code to @{{name}}',
+  'home.history.request.SEND.title': 'Received from @{{name}}',
+  'home.history.request.PAY_LINK.title': 'Received via PayLink from @{{name}}',
+  'home.history.request.QR_CODE.title': 'Received via QR Code from @{{name}}',
+  'home.history.send.REQUEST.title': 'Received request from @{{name}}',
+  'home.history.send.REQUEST_LINK.title': 'Received via PayLink request from @{{name}}',
+  'home.history.send.REQUEST_QR_CODE.title': 'Received via QR Code request from @{{name}}',
+  'home.history.request.REQUEST.title': 'Requested from @{{name}}',
+  'home.history.request.REQUEST_LINK.title': 'Requested via PayLink from @{{name}}',
+  'home.history.request.REQUEST_QR_CODE.title': 'Requested via QR Code from @{{name}}',
+
+  // 通知列表相关文本
+  'home.notification.list.send.SEND.title': 'Sent to @{{name}} {{amount}}',
+  'home.notification.list.send.PAY_LINK.title': 'Sent via PayLink to @{{name}} {{amount}}',
+  'home.notification.list.send.QR_CODE.title': 'Sent via QR Code to @{{name}} {{amount}}',
+
+  'home.notification.list.request.SEND.title': 'Sent to @{{name}} {{amount}}',
+  'home.notification.list.request.PAY_LINK.title': 'Sent via PayLink to @{{name}} {{amount}}',
+  'home.notification.list.request.QR_CODE.title': 'Sent via QR Code to @{{name}} {{amount}}',
+
+  'home.notification.list.send.REQUEST.title': 'Requested from @{{name}} {{amount}}',
+  'home.notification.list.send.REQUEST_LINK.title': 'Requested via PayLink from @{{name}} {{amount}}',
+  'home.notification.list.send.REQUEST_QR_CODE.title': 'Requested via QR Code from @{{name}} {{amount}}',
+
+  'home.notification.list.request.REQUEST.title': 'Requested from @{{name}} {{amount}}',
+  'home.notification.list.request.REQUEST_LINK.title': 'Requested via PayLink from @{{name}} {{amount}}',
+  'home.notification.list.request.REQUEST_QR_CODE.title': 'Requested via QR Code from @{{name}} {{amount}}',
+
+  // 通知状态更新相关文本
+  'home.notification.list.update.requestAcceptedDesc': '@{{name}} accepted your payment request: {{amount}}',
+  'home.notification.list.update.requestDeclinedDesc': '@{{name}} declined your payment request: {{amount}}',
+  'home.notification.list.update.payLinkAcceptedDesc': '@{{name}} accepted your PayLink: {{amount}}',
 };

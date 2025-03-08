@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:49:20
+ * @LastEditTime: 2025-03-08 00:16:28
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {YStack, SizableText, AppImage, Button, ScrollView} from '@my/ui';
@@ -179,7 +179,7 @@ const LoginScreen = () => {
         </YStack>
       </ScrollView>
       <SuccessPopup
-        redirect={params?.redirect}
+        redirect={params?.redirect||''}
         handleSuccess={handleSuccess}
         accountForm={accountForm}
         setAccountForm={setAccountForm}

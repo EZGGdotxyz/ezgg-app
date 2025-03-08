@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:38:26
+ * @LastEditTime: 2025-03-07 22:55:49
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -143,7 +143,7 @@ const DepositScreen = () => {
         transactionHash: hash || '',
       });
       setIsLoading(false);
-      push('/home/success?type=deposit&id=' + transaction?.id);
+      push('/home/success?type=DEPOSIT&id=' + transaction?.id);
     } catch (error) {
       console.error('Failed to update transaction hash:', error);
       setIsLoading(false);

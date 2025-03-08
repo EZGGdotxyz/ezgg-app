@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 14:20:18
+ * @LastEditTime: 2025-03-08 14:04:28
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/index.tsx
  */
 import {
@@ -158,25 +158,41 @@ const NotificationScreen = (props: any) => {
         }
       }
     } else {
-      return (
-        <XStack w="100%" jc={'center'} py={appScale(24)}>
-          <SizableText col={'$color11'} fontSize={'$3'}>
-            {t('tips.list.loading.title2')}
-          </SizableText>
-        </XStack>
-      );
+      return null;
     }
   };
 
-  const _postNotificationUpdateNotificationStatusId = async (id: string) => {
-    setIsLoading(true);
+  const _postNotificationUpdateNotificationStatusId = async (_orderData: any) => {
+    // setIsLoading(true);
     const res = await makeRequest(postNotificationUpdateNotificationStatusId({id: Number(id)}));
     if (res?.code === '0') {
-      fetchData();
-      _getUnread();
+      // fetchData();
+      // _getUnread();
+      // toast.show(t('tips.list.read'));
+      setData(
+        data.map((value: any) => {
+          if (dayjs(_orderData.createAt).format('YYYY-MM-DD') === value.day) {
+            let list = value.list.map((item: any) => {
+              if (item.id === _orderData.id) {
+                return {
+                  ...item,
+                  status: 1,
+                };
+              }
+              return item;
+            });
+            return {
+              ...value,
+              list: list,
+            };
+          } else {
+            return value;
+          }
+        }),
+      );
       toast.show(t('tips.list.read'));
     }
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   const onRead = (item: any, action = '') => {
@@ -189,7 +205,7 @@ const NotificationScreen = (props: any) => {
       }
       // setModalVisible(true);
     } else {
-      _postNotificationUpdateNotificationStatusId(item?.id);
+      _postNotificationUpdateNotificationStatusId(item);
     }
   };
 
@@ -199,7 +215,7 @@ const NotificationScreen = (props: any) => {
       <FlatList
         data={data}
         refreshing={loading}
-        keyExtractor={(item, index) => item?.id}
+        keyExtractor={(item, index) => item?.day}
         style={{
           width: '100%',
           height: '100%',
@@ -219,13 +235,13 @@ const NotificationScreen = (props: any) => {
         onMomentumScrollBegin={() => {
           setCanLoadMore(true);
         }}
-        onEndReachedThreshold={50}
+        onEndReachedThreshold={0.5}
         onRefresh={() => {
           fetchData();
         }}
         ListFooterComponent={_renderFooter}
         ListEmptyComponent={<ListEmpty loading={loading} />}
-        renderItem={({item, index}) => <DayItem key={item.id} onRead={onRead} item={item} />}
+        renderItem={({item, index}) => <DayItem key={item?.day} onRead={onRead} item={item} />}
       />
       <DeclineRequestPopup
         setIsLoading={setIsLoading}
@@ -234,7 +250,7 @@ const NotificationScreen = (props: any) => {
         orderData={orderData?.transaction}
         onSuccess={async () => {
           setDeclineRequestVisible(false);
-          await _postNotificationUpdateNotificationStatusId(orderData?.id);
+          await _postNotificationUpdateNotificationStatusId(orderData);
         }}
       />
       <AcceptRequestPopup
@@ -244,7 +260,7 @@ const NotificationScreen = (props: any) => {
         orderData={orderData?.transaction}
         onSuccess={async () => {
           setAcceptRequestVisible(false);
-          await _postNotificationUpdateNotificationStatusId(orderData?.id);
+          await _postNotificationUpdateNotificationStatusId(orderData);
         }}
       />
       {isLoading && <AppLoading />}

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:57:12
+ * @LastEditTime: 2025-03-07 18:09:09
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -155,15 +155,8 @@ export default {
   'home.explore.noPermission2': '你也可以使用下面的按鈕選擇圖片進行掃碼',
   'home.explore.requestPermission': '請求拍照許可',
 
-  'home.notification.send.title': '收到 @{{name}} 发送的 {{amount}}',
-  'home.notification.request.title': '收到 @{{name}} 的請求 {{amount}}',
-  // 通知相关
-  'home.notification.transUpdate.requestAccepted': '請求已接受',
-  'home.notification.transUpdate.requestAcceptedDesc': '您的付款請求已被{{name}}接受',
-  'home.notification.transUpdate.requestDeclined': '請求已拒絕',
-  'home.notification.transUpdate.requestDeclinedDesc': '您的付款請求已被{{name}}拒絕',
-  'home.notification.transUpdate.payLinkAccepted': '支付連結已接受',
-  'home.notification.transUpdate.payLinkAcceptedDesc': '您的支付連結已被{{name}}接受',
+  'home.notification.send.title': '收到 @{{name}} 發送 {{amount}}',
+  'home.notification.request.title': '收到 @{{name}} 請求 {{amount}}',
 
   // 警报相关
   'home.notification.alarm.title': '可疑活動警報',
@@ -202,4 +195,40 @@ export default {
   // 列表加载相关
   'home.tips.list.loading.title': '沒有更多數據了',
   'home.tips.list.loading.title2': '加載中...',
+
+  // 历史记录相关文本
+  'home.history.send.SEND.title': '發送給 @{{name}}',
+  'home.history.send.PAY_LINK.title': '通過支付連結發送給 @{{name}}',
+  'home.history.send.QR_CODE.title': '通過二維碼發送給 @{{name}}',
+  'home.history.request.SEND.title': '收到來自 @{{name}} 的轉賬',
+  'home.history.request.PAY_LINK.title': '收到來自 @{{name}} 的支付連結轉賬',
+  'home.history.request.QR_CODE.title': '收到來自 @{{name}} 的二維碼轉賬',
+  'home.history.send.REQUEST.title': '收到來自 @{{name}} 的請求',
+  'home.history.send.REQUEST_LINK.title': '收到來自 @{{name}} 的支付連結請求',
+  'home.history.send.REQUEST_QR_CODE.title': '收到來自 @{{name}} 的二維碼請求',
+  'home.history.request.REQUEST.title': '向 @{{name}} 發起請求',
+  'home.history.request.REQUEST_LINK.title': '通過支付連結向 @{{name}} 發起請求',
+  'home.history.request.REQUEST_QR_CODE.title': '通過二維碼向 @{{name}} 發起請求',
+
+  // 通知列表相关文本
+  'home.notification.list.send.SEND.title': '@{{name}} 向您發送了 {{amount}}',
+  'home.notification.list.send.PAY_LINK.title': '@{{name}} 通過支付連結向您發送了 {{amount}}',
+  'home.notification.list.send.QR_CODE.title': '@{{name}} 通過二維碼向您發送了 {{amount}}',
+
+  'home.notification.list.request.SEND.title': '您向 @{{name}} 發送了 {{amount}}',
+  'home.notification.list.request.PAY_LINK.title': '您通過支付連結向 @{{name}} 發送了 {{amount}}',
+  'home.notification.list.request.QR_CODE.title': '您通過二維碼向 @{{name}} 發送了 {{amount}}',
+
+  'home.notification.list.send.REQUEST.title': '@{{name}} 向您發起付款請求：{{amount}}',
+  'home.notification.list.send.REQUEST_LINK.title': '@{{name}} 通過支付連結向您發起請求：{{amount}}',
+  'home.notification.list.send.REQUEST_QR_CODE.title': '@{{name}} 通過二維碼向您發起請求：{{amount}}',
+
+  'home.notification.list.request.REQUEST.title': '您向 @{{name}} 發起付款請求：{{amount}}',
+  'home.notification.list.request.REQUEST_LINK.title': '您通過支付連結向 @{{name}} 發起請求：{{amount}}',
+  'home.notification.list.request.REQUEST_QR_CODE.title': '您通過二維碼向 @{{name}} 發起請求：{{amount}}',
+
+  // 通知状态更新相关文本
+  'home.notification.list.update.requestAcceptedDesc': '@{{name}} 已接受您的付款請求：{{amount}}',
+  'home.notification.list.update.requestDeclinedDesc': '@{{name}} 已拒絕您的付款請求：{{amount}}',
+  'home.notification.list.update.payLinkAcceptedDesc': '@{{name}} 已接受您的支付連結：{{amount}}',
 };

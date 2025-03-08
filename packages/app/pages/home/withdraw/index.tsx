@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:42:22
+ * @LastEditTime: 2025-03-07 22:54:58
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -111,7 +111,7 @@ const WithdrawScreen = () => {
         },
         (data) => {
           setIsLoading(false);
-          push('/home/success?type=withdraw&id=' + data?.id);
+          push('/home/success?type=WITHDRAW&id=' + data?.id);
         },
       );
     } catch (error) {
@@ -229,61 +229,65 @@ const WithdrawScreen = () => {
         </YStack>
         {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
       </ScrollView>
-      <XStack
-        flexShrink={0}
-        pl={appScale(24)}
-        pr={appScale(24)}
-        pt={appScale(12)}
-        pb={appScale(isIphoneX() ? 46 : 12)}
-        w="100%"
-        ai={'center'}
-        jc={'center'}
-        space="$3"
-        borderTopWidth={1}
-        borderColor={'#F2F2F2'}
-      >
-        <Button
-          h={appScale(58)}
-          w={'50%'}
-          br={appScale(28)}
+      {!showKeyboard && (
+        <XStack
+          flexShrink={0}
+          pl={appScale(24)}
+          pr={appScale(24)}
+          pt={appScale(12)}
+          pb={appScale(isIphoneX() ? 46 : 12)}
+          w="100%"
           ai={'center'}
           jc={'center'}
-          bc={'#fff'}
-          borderWidth={2}
-          borderColor={PrimaryColor}
-          onPress={() => {
-            submit(withdrawAddress);
-            // setDeclineRequestVisible(true);
-          }}
-          // disabled={isLoading}
-          pressStyle={{
-            opacity: 0.85,
-          }}
-          unstyled
+          space="$3"
+          borderTopWidth={1}
+          borderColor={'#F2F2F2'}
         >
-          {t('home.withdraw')}
-        </Button>
-        <AppButton
-          style={{
-            width: '50%',
-          }}
-          isLoading={buttonLoading}
-          onPress={() => {
-            if (!inputValue || inputValue === '0') {
-              toast.show(t('home.send.amountToSend.tips'));
-              return;
-            }
+          <Button
+            h={appScale(58)}
+            w={'50%'}
+            br={appScale(28)}
+            ai={'center'}
+            jc={'center'}
+            bc={'#fff'}
+            borderWidth={2}
+            borderColor={PrimaryColor}
+            onPress={() => {
+              submit(withdrawAddress);
+              handlePagePress();
+              // setDeclineRequestVisible(true);
+            }}
+            // disabled={isLoading}
+            pressStyle={{
+              opacity: 0.85,
+            }}
+            unstyled
+          >
+            {t('home.withdraw')}
+          </Button>
+          <AppButton
+            style={{
+              width: '50%',
+            }}
+            isLoading={buttonLoading}
+            onPress={() => {
+              handlePagePress();
+              if (!inputValue || inputValue === '0') {
+                toast.show(t('home.send.amountToSend.tips'));
+                return;
+              }
 
-            if (Number(inputValue) > Number(currencyData?.tokenAmount)) {
-              toast.show(t('home.withdraw.tips'));
-              return;
-            }
-            setIsShow(true);
-          }}
-        >
-          {t('home.withdraw.button2')}
-        </AppButton>
-      </XStack>
+              if (Number(inputValue) > Number(currencyData?.tokenAmount)) {
+                toast.show(t('home.withdraw.tips'));
+                return;
+              }
+              setIsShow(true);
+            }}
+          >
+            {t('home.withdraw.button2')}
+          </AppButton>
+        </XStack>
+      )}
       <ConnectorsPopup
         setIsSubmit={setIsSubmit}
         chainId={currencyData?.token?.chainId}

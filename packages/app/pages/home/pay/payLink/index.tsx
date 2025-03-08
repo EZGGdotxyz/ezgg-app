@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:33:36
+ * @LastEditTime: 2025-03-08 14:57:32
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -68,7 +68,6 @@ const PayLinkScreen = ({type}: any) => {
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const toast = useToastController();
 
-  const [isSuccess, setIsSuccess] = React.useState(false);
   const [orderData, setOrderData] = React.useState<any>();
 
   const {back, replace, push} = useRouter();
@@ -114,15 +113,18 @@ const PayLinkScreen = ({type}: any) => {
       if (type === 'SEND') {
         await onSendSubmit(params, (data) => {
           setIsLoading(false);
-          setOrderData(data);
-          setIsSuccess(true);
-          dispatch.user.updateState({payLinkData: {}});
+          replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
+          setTimeout(() => {
+            dispatch.user.updateState({payLinkData: {}});
+          });
         });
       } else {
         await onRequestSubmit(params, (data) => {
-          setOrderData(data);
-          setIsSuccess(true);
-          dispatch.user.updateState({payLinkData: {}});
+          setIsLoading(false);
+          replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
+          setTimeout(() => {
+            dispatch.user.updateState({payLinkData: {}});
+          });
         });
       }
     } catch (error) {
@@ -135,57 +137,13 @@ const PayLinkScreen = ({type}: any) => {
     }
   };
 
-  const onCopy = async (text: string) => {
-    try {
-      if (typeof navigator !== 'undefined' && navigator.clipboard) {
-        // 优先使用现代 Clipboard API
-        await navigator.clipboard.writeText(text);
-      } else if (typeof window !== 'undefined') {
-        // 降级方案：使用 textarea
-        const textarea = document.createElement('textarea');
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        textarea.value = text;
-
-        document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-
-        try {
-          document.execCommand('copy');
-        } catch (err) {
-          console.error('Failed to copy text:', err);
-          throw new Error('Copy failed');
-        } finally {
-          document.body.removeChild(textarea);
-        }
-      } else {
-        throw new Error('Copy not supported');
-      }
-
-      toast.show(t('tips.explore.copy'), {
-        duration: 3000,
-      });
-    } catch (error) {
-      console.error('Copy error:', error);
-      toast.show(t('tips.error.copyFailed'), {
-        duration: 3000,
-      });
-    }
-  };
 
   return (
     <PermissionPage>
       <AppHeader2
-        isClosure={isSuccess}
         onBack={() => {
-          if (isSuccess) {
-            dispatch.user.updateState({payLinkData: {}});
-            window.history.pushState(null, '', '/');
-            replace('/');
-          } else {
-            back();
-          }
+          replace('/');
+          dispatch.user.updateState({payLinkData: {}});
         }}
         title={t('screen.home.paylink')}
         fallbackUrl="/"
@@ -198,120 +156,104 @@ const PayLinkScreen = ({type}: any) => {
           minHeight: '100%',
         }}
       >
-        {isSuccess ? (
-          <YStack flex={1} jc="space-between">
-            <SuccessInfo type={type === 'send' ? 'sent' : 'request'} orderData={orderData} />
-
-            <YStack pb={appScale(16)} pt={appScale(16)} pl={appScale(24)} pr={appScale(24)}>
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
-                {t('home.send.tips1')}
-              </SizableText>
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
-                {t('home.send.tips2')}
-              </SizableText>
-            </YStack>
-          </YStack>
-        ) : (
-          <YStack flex={1} pl={appScale(24)} pr={appScale(24)}>
-            <YStack w="100%" mb={appScale(24)}>
-              <XStack mb={appScale(8)} w="100%">
+        <YStack flex={1} pl={appScale(24)} pr={appScale(24)}>
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
               <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                  {t('home.paylink.recipient')}
-                </SizableText>
-              </XStack>
+                {t('home.paylink.recipient')}
+              </SizableText>
+            </XStack>
 
-              <Button
-                w="100%"
-                p={appScale(16)}
-                bc={'#FAFAFA'}
-                br={appScale(8)}
-                unstyled
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                pressStyle={{
-                  opacity: 0.7,
-                  bc: '#FAFAFA',
-                }}
-                onPress={() => {
-                  console.log('🚀 ~ PayLinkScreen ~ type:', type);
-                  replace(`/home/${type}?userId=${payLinkData?.userId}`);
-                }}
+            <Button
+              w="100%"
+              p={appScale(16)}
+              bc={'#FAFAFA'}
+              br={appScale(8)}
+              unstyled
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+              pressStyle={{
+                opacity: 0.7,
+                bc: '#FAFAFA',
+              }}
+              onPress={() => {
+                replace(`/home/${type}?userId=${payLinkData?.userId}`);
+              }}
+            >
+              {payLinkData?.userId === 'anyone' ? (
+                <SizableText fontSize={'$5'} color={PrimaryColor} fontWeight={'600'}>
+                  {t('home.paylink.anyoneLink')}
+                </SizableText>
+              ) : (
+                <XStack>
+                  <YStack pos={'relative'} w={appScale(84)} flexShrink={0}>
+                    {!payLinkData?.user?.avatar ? (
+                      <AppImage
+                        width={appScale(60)}
+                        height={appScale(60)}
+                        src={require(`app/assets/images/avatar.png`)}
+                        type="local"
+                      />
+                    ) : (
+                      <AppImage width={appScale(60)} height={appScale(60)} src={payLinkData?.user?.avatar} />
+                    )}
+                  </YStack>
+                  <YStack gap={appScale(2)}>
+                    <SizableText fontSize={'$5'} color={'#26273C'} fontWeight={'600'}>
+                      @{payLinkData?.user?.nickname}
+                    </SizableText>
+                    <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'500'}>
+                      {getUserSubName(payLinkData?.user)}
+                    </SizableText>
+                  </YStack>
+                </XStack>
+              )}
+
+              <ChevronRight size="$2" color={'#212121'} />
+            </Button>
+          </YStack>
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                {type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
+              </SizableText>
+            </XStack>
+            <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)}>
+              <SizableText
+                fontSize={'$7'}
+                h={appScale(50)}
+                lh={appScale(50)}
+                color={'#212121'}
+                fontWeight={'600'}
+                pos="relative"
               >
-                {payLinkData?.userId === 'anyone' ? (
-                  <SizableText fontSize={'$5'} color={PrimaryColor} fontWeight={'600'}>
-                    {t('home.paylink.anyoneLink')}
-                  </SizableText>
-                ) : (
-                  <XStack>
-                    <YStack pos={'relative'} w={appScale(84)} flexShrink={0}>
-                      {!payLinkData?.user?.avatar ? (
-                        <AppImage
-                          width={appScale(60)}
-                          height={appScale(60)}
-                          src={require(`app/assets/images/avatar.png`)}
-                          type="local"
-                        />
-                      ) : (
-                        <AppImage width={appScale(60)} height={appScale(60)} src={payLinkData?.user?.avatar} />
-                      )}
-                    </YStack>
-                    <YStack gap={appScale(2)}>
-                      <SizableText fontSize={'$5'} color={'#26273C'} fontWeight={'600'}>
-                        @{payLinkData?.user?.nickname}
-                      </SizableText>
-                      <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'500'}>
-                        {getUserSubName(payLinkData?.user)}
-                      </SizableText>
-                    </YStack>
-                  </XStack>
-                )}
-
-                <ChevronRight size="$2" color={'#212121'} />
-              </Button>
-            </YStack>
-            <YStack w="100%" mb={appScale(24)}>
-              <XStack mb={appScale(8)} w="100%">
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                  {type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
-                </SizableText>
-              </XStack>
-              <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)}>
-                <SizableText
-                  fontSize={'$7'}
-                  h={appScale(50)}
-                  lh={appScale(50)}
-                  color={'#212121'}
-                  fontWeight={'600'}
-                  pos="relative"
-                >
-                  {`${payLinkData?.amount} ${payLinkData?.currencyData?.token?.tokenSymbol} (${payLinkData?.currencyData?.chainName})`}
-                </SizableText>
-              </XStack>
-            </YStack>
-
-            <YStack w="100%" mb={appScale(24)}>
-              <XStack mb={appScale(8)} w="100%">
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                  {t('home.paylink.addMessage')}
-                </SizableText>
-              </XStack>
-              <TextArea
-                w="100%"
-                p={appScale(16)}
-                bc={'#FAFAFA'}
-                br={appScale(8)}
-                rows={6}
-                fontSize={'$3'}
-                lh={appScale(30)}
-                value={inputValue}
-                onChangeText={setInputValue}
-                borderColor={'#FAFAFA'}
-                placeholder={t('home.paylink.addMessage.tips')}
-              />
-            </YStack>
+                {`${payLinkData?.amount} ${payLinkData?.currencyData?.token?.tokenSymbol} (${payLinkData?.currencyData?.chainName})`}
+              </SizableText>
+            </XStack>
           </YStack>
-        )}
+
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                {t('home.paylink.addMessage')}
+              </SizableText>
+            </XStack>
+            <TextArea
+              w="100%"
+              p={appScale(16)}
+              bc={'#FAFAFA'}
+              br={appScale(8)}
+              rows={6}
+              fontSize={'$3'}
+              lh={appScale(30)}
+              value={inputValue}
+              onChangeText={setInputValue}
+              borderColor={'#FAFAFA'}
+              placeholder={t('home.paylink.addMessage.tips')}
+            />
+          </YStack>
+        </YStack>
       </ScrollView>
 
       <XStack
@@ -337,42 +279,26 @@ const PayLinkScreen = ({type}: any) => {
           borderWidth={2}
           borderColor={PrimaryColor}
           onPress={() => {
-            if (isSuccess) {
-              replace(`/home/history/${orderData?.id}?isHistory=true`);
-              dispatch.user.updateState({payLinkData: {}});
-              window.history.pushState(null, '', '/');
-            } else {
-              back();
-            }
+            // back();
+            replace('/');
+            dispatch.user.updateState({payLinkData: {}});
           }}
           pressStyle={{
             opacity: 0.85,
           }}
           unstyled
         >
-          {isSuccess ? t('home.send.viewLink') : t('operate.button.cancel')}
+          {t('operate.button.cancel')}
         </Button>
         <AppButton
           style={{
             width: '50%',
           }}
           onPress={() => {
-            if (isSuccess) {
-              onCopy(
-                `${ExternalLinkData.webPageHome}/${
-                  orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
-                }/${orderData?.transactionCode}`,
-              );
-            } else {
-              handleSubmit(type === 'send' ? 'SEND' : 'REQUEST');
-            }
+            handleSubmit(type === 'send' ? 'SEND' : 'REQUEST');
           }}
         >
-          {isSuccess
-            ? t('home.send.copyLink')
-            : type === 'send'
-            ? t('home.paylink.sendCrypto')
-            : t('home.request.requestCrypto')}
+          {type === 'send' ? t('home.paylink.sendCrypto') : t('home.request.requestCrypto')}
         </AppButton>
       </XStack>
 

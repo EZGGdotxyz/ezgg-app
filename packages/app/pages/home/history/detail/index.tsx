@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 14:12:07
+ * @LastEditTime: 2025-03-08 00:17:01
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -56,8 +56,8 @@ const HistoryDetailScreen = () => {
   });
 
   const {params} = useParams();
-  const {back, replace} = useRouter();
-  const [{userInfo}] = useRematchModel('user');
+  const {back, replace, push} = useRouter();
+  const [{userInfo, isLogin}] = useRematchModel('user');
   const {makeRequest} = useRequest();
   const [orderData, setOrderData] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -98,114 +98,115 @@ const HistoryDetailScreen = () => {
     if (res?.code === '0') {
       const _orderData = res?.data;
       let _type: string = _orderData?.transactionType || '';
+      const isReceiver = _orderData?.receiverMember?.id === userInfo?.customMetadata?.id;
+      const isRequest = _orderData?.transactionCategory === 'REQUEST';
+
+      let _title = '';
+      if (isRequest) {
+        if (isReceiver) {
+          // 当前用户收到付款请求（将要支出）
+          _title = t(`home.history.request.${_orderData?.transactionType}.title`, {
+            name: _orderData?.senderMember?.nickname,
+          });
+        } else {
+          // 当前用户发起付款请求（将要收入）
+          _title = t(`home.history.send.${_orderData?.transactionType}.title`, {
+            name: _orderData?.receiverMember?.nickname,
+          });
+        }
+      } else {
+        if (isReceiver) {
+          // 当前用户是接收方（收入）
+          _title = t(`home.history.request.${_orderData?.transactionType}.title`, {
+            name: _orderData?.senderMember?.nickname,
+          });
+        } else {
+          // 当前用户是发送方（支出）
+          _title = t(`home.history.send.${_orderData?.transactionType}.title`, {
+            name: _orderData?.receiverMember?.nickname,
+          });
+        }
+      }
+
+      let infoDataDefault: any = {
+        title: _title,
+        icon: '',
+        infoList: [],
+        type: '',
+      };
       switch (_type) {
         case 'SEND':
-        case 'PAY_LINK':
         case 'QR_CODE':
-          _type = 'send';
+        case 'PAY_LINK':
+          infoDataDefault.type = 'send';
+          infoDataDefault.infoList = [
+            createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(_orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
+            ...createBaseTransactionInfoList(_orderData, t),
+          ];
+
           break;
         case 'WITHDRAW':
-          _type = 'withdraw';
+          infoDataDefault.type = 'withdraw';
+          infoDataDefault.infoList = [
+            createTransactionInfoItem(t('home.order.youWithdraw'), createAmountDisplay(_orderData)),
+            ...createBaseTransactionInfoList(_orderData, t, false),
+          ];
           break;
         case 'DEPOSIT':
-          _type = 'topUp';
+          infoDataDefault.type = 'topUp';
+          infoDataDefault.infoList = [
+            createTransactionInfoItem(t('home.order.youTopUp'), createAmountDisplay(_orderData)),
+            ...createBaseTransactionInfoList(_orderData, t, false),
+          ];
           break;
+
         case 'REQUEST':
-        case 'REQUEST_LINK':
         case 'REQUEST_QR_CODE':
-          _type = _orderData?.senderMember?.id === userInfo?.customMetadata?.id ? 'outgoingRequest' : 'incomingRequest';
+        case 'REQUEST_LINK':
+          infoDataDefault.type = isReceiver ? 'outgoingRequest' : 'incomingRequest';
+          infoDataDefault.infoList = [
+            createTransactionInfoItem(
+              isReceiver ? t('home.order.youRequested') : t('home.order.amountRequested'),
+              createAmountDisplay(_orderData),
+            ),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
+            createTransactionInfoItem(t('home.order.status'), createStatusDisplay(_orderData?.transactionStatus), {
+              isStatus: true,
+            }),
+            ...createBaseTransactionInfoList(_orderData, t, true),
+          ];
           break;
         default:
           break;
       }
 
-      const infoDataDefault = {
-        send: {
-          icon: '',
-          infoList: [
-            createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(_orderData)),
-            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
-            ...createBaseTransactionInfoList(_orderData, t),
-          ],
-        },
-        income: {
-          icon: '',
-          infoList: [
-            createTransactionInfoItem(t('home.order.youReceived'), createAmountDisplay(_orderData)),
-            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
-            ...createBaseTransactionInfoList(_orderData, t),
-            createTransactionInfoItem(t('home.order.from'), createUserNicknameDisplay(_orderData?.receiverMember), {
-              isCopyable: !!_orderData?.receiverMember?.nickname,
-            }),
-          ],
-        },
-        outgoingRequest: {
-          icon: '',
-          infoList: [
-            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(_orderData)),
-            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
-            createTransactionInfoItem(t('home.order.status'), createStatusDisplay(_orderData?.transactionStatus), {
-              isStatus: true,
-            }),
-            ...createBaseTransactionInfoList(_orderData, t),
-          ],
-        },
-        incomingRequest: {
-          icon: '',
-          infoList: [
-            createTransactionInfoItem(t('home.order.amountRequested'), createAmountDisplay(_orderData)),
-            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
-            createTransactionInfoItem(t('home.order.status'), createStatusDisplay(_orderData?.transactionStatus), {
-              isStatus: true,
-            }),
-            ...createBaseTransactionInfoList(_orderData, t, true, true),
-          ],
-        },
-        withdraw: {
-          icon: 'withdraw',
-          infoList: [
-            createTransactionInfoItem(t('home.order.youWithdraw'), createAmountDisplay(_orderData)),
-            ...createBaseTransactionInfoList(_orderData, t, false),
-          ],
-        },
-        topUp: {
-          icon: 'topUp',
-          infoList: [
-            createTransactionInfoItem(t('home.order.youTopUp'), createAmountDisplay(_orderData)),
-            ...createBaseTransactionInfoList(_orderData, t, false),
-          ],
-        },
-      };
       setOrderData({
         ..._orderData,
         // transactionType: _type,
       });
       setInfoData({
-        infoList: infoDataDefault[_type].infoList,
-        title: t(`screen.home.${_type}`),
-        icon: infoDataDefault[_type].icon,
-        userName:
-          _orderData?.transactionType === 'SEND' || _orderData?.transactionType === 'REQUEST'
-            ? `@${_type === 'send' ? _orderData?.receiverMember?.nickname : _orderData?.senderMember?.nickname || ''}`
-            : '',
+        infoList: infoDataDefault.infoList,
+        title: t(`screen.home.${infoDataDefault.type}`),
+        icon: infoDataDefault.icon,
+        title2: infoDataDefault.title,
       });
     }
     setIsLoading(false);
   };
 
   useEffect(() => {
-    if (params?.id) {
+    if (params?.id && userInfo?.customMetadata?.id) {
       _getTransactionHistoryFindTransactionHistoryId();
     }
-  }, [params]);
+  }, [params, userInfo]);
 
   return (
-    <PermissionPage>
+    <PermissionPage isHomePage={true}>
       <Header
         back={() => {
           if (params?.isHistory) {
             replace('/');
-            window.history.pushState(null, '', '/');
           } else {
             back();
           }
@@ -235,12 +236,7 @@ const HistoryDetailScreen = () => {
                 </XStack>
               )}
               <XStack w={'100%'} ai={'center'} jc={'center'}>
-                <SizableText
-                  lh={appScale(54)}
-                  color={'#212121'}
-                  fontWeight={'700'}
-                  fontSize={'$8'}
-                >
+                <SizableText lh={appScale(54)} color={'#212121'} fontWeight={'700'} fontSize={'$8'}>
                   {orderData?.amount
                     ? `${judgeAmountType(orderData)} ${formatTokenAmount(
                         orderData?.amount,
@@ -249,15 +245,14 @@ const HistoryDetailScreen = () => {
                     : ''}
                 </SizableText>
               </XStack>
-              {infoData?.userName !== '' && (
+              {infoData?.title2 !== '' && (
                 <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
                   <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>
-                    {infoData?.userName}
+                    {infoData?.title2}
                   </SizableText>
                 </XStack>
               )}
             </YStack>
-
             <YStack mt={appScale(20)} p={appScale(24)}>
               {infoData?.infoList &&
                 infoData?.infoList.length > 0 &&
@@ -329,6 +324,17 @@ const HistoryDetailScreen = () => {
                   </XStack>
                 ))}
             </YStack>
+            {!isLogin && (
+              <XStack w={'100%'} mt="$6" pb="$10" pl={appScale(24)} pr={appScale(24)}>
+                <AppButton
+                  onPress={() => {
+                    push(`/login?redirect=/home/history/${params?.id}`);
+                  }}
+                >
+                  {t('login.loginButton')}
+                </AppButton>
+              </XStack>
+            )}
           </YStack>
         </YStack>
       </ScrollView>
@@ -344,8 +350,8 @@ const HistoryDetailScreen = () => {
       {/* <SharePopup
         modalVisible={shareVisible}
         setModalVisible={setShareVisible}
-        title={infoData?.title}
-        url={`${ExternalLinkData.webPageHome}/transaction/${orderData?.id}`}
+        shareTitle={infoData?.title}
+        shareUrl={`${ExternalLinkData.webPageHome}/transaction/${orderData?.id}`}
       /> */}
 
       <DeclineRequestPopup

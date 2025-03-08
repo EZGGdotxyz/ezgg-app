@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 12:55:00
+ * @LastEditTime: 2025-03-08 00:16:17
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -250,9 +250,7 @@ const SuccessPopup: React.FC<any> = ({
               fow={'400'}
             >
               {redirect
-                ? t('login.loginTips4', {
-                    type: redirect === '/claim' ? t('login.type./claim') : t('login.type./requesting'),
-                  })
+                ? t('login.loginTips5')
                 : t('login.loginTips3')}
             </SizableText>
             <XStack>

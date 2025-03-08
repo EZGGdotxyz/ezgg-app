@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 20:56:54
+ * @LastEditTime: 2025-03-07 23:46:22
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -36,10 +36,18 @@ export default {
   'tips.error.deposit.transactionSuccess': 'Transaction successful',
   'tips.success.transactionSuccess': 'Transaction successful',
 
-  "tips.error.deposit.updateFailed": "更新交易记录失败",
-  "tips.error.withdraw.invalidAmount": "请输入有效金额",
-  "tips.error.withdraw.insufficientFunds": "余额不足",
-  "tips.error.withdraw.failed": "提现失败，请重试",
+  "tips.error.deposit.updateFailed": "Update transaction record failed",
+  "tips.error.withdraw.invalidAmount": "Please enter a valid amount",
+  "tips.error.withdraw.insufficientFunds": "Insufficient balance",
+  "tips.error.withdraw.failed": "Withdrawal failed, please try again",
 
   'tips.list.read': 'Message read',
+
+  'tips.error.userRejected': 'User rejected the transaction',
+  'tips.error.insufficientAllowance': 'Insufficient allowance',
+  'tips.error.insufficientBalance': 'Insufficient balance',
+
+
+  'tips.success.declineRequest': 'Declined',
+  'tips.success.acceptRequest': 'Payment successful',
 };

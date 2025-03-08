@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 13:44:32
+ * @LastEditTime: 2025-03-08 00:13:26
  * @FilePath: /ezgg-app/packages/app/hooks/useUser.ts
  */
 import {Dispatch} from 'app/store';
@@ -36,6 +36,10 @@ export default function useUser() {
     if ((params?.redirect === '/claim' || params?.redirect === '/requesting') && params?.code) {
       replace({
         pathname: params?.redirect + '/' + params?.code,
+      });
+    } else if (params?.redirect) {
+      replace({
+        pathname: params?.redirect,
       });
     } else {
       replace({

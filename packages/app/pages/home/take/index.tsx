@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:57:50
+ * @LastEditTime: 2025-03-07 22:57:46
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -94,8 +94,7 @@ const TakeScreen = (any) => {
             duration: 3000,
           });
           setTimeout(() => {
-            replace('/');
-            window.history.pushState(null, '', '/');
+            replace('/home/success?type=PAY_LINK&id=' + orderData?.id);
           }, 500);
         });
       } else {
@@ -104,17 +103,30 @@ const TakeScreen = (any) => {
             duration: 3000,
           });
           setTimeout(() => {
-            replace('/');
-            window.history.pushState(null, '', '/');
+            replace('/home/success?type=REQUEST_LINK&id=' + data?.id);
           }, 500);
           // dispatch.user.updateState({payLinkData: {}});
         });
       }
     } catch (error) {
       console.error(`${type} transaction error:`, error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
+      if (error?.message.includes('The user rejected the request')) {
+        toast.show(t('tips.error.userRejected'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient allowance')) {
+        toast.show(t('tips.error.insufficientAllowance'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient balance')) {
+        toast.show(t('tips.error.insufficientBalance'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -138,7 +150,6 @@ const TakeScreen = (any) => {
         );
         return setTimeout(() => {
           replace('/');
-          window.history.pushState(null, '', '/');
         }, 500);
       } else if (_orderData?.transactionStatus === 'DECLINED') {
         toast.show(t('tips.error.transactionDeclined'), {
@@ -146,7 +157,6 @@ const TakeScreen = (any) => {
         });
         return setTimeout(() => {
           replace('/');
-          window.history.pushState(null, '', '/');
         }, 500);
       }
       setOrderData({

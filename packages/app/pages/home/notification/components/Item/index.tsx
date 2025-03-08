@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 14:24:17
+ * @LastEditTime: 2025-03-07 17:56:11
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/components/Item/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -13,6 +13,8 @@ import {appScale, formatNumber, formatTokenAmount, getCurrency} from 'app/utils'
 import {getChainInfo} from 'app/utils/chain';
 import dayjs from 'dayjs';
 import {PrimaryColor} from 'app/config';
+import {debounce} from 'lodash';
+import {useCallback} from 'react';
 
 type ItemProps = {
   item: any;
@@ -75,50 +77,86 @@ export enum TransactionUpdateAction {
   PAY_LINK_ACCEPTED = 'PAY_LINK_ACCEPTED',
 }
 
-const Item: React.FC<any> = ({item, onRead}: ItemProps) => {
+const Item: React.FC<ItemProps> = ({item, onRead}: ItemProps) => {
   const {t, i18n} = useTranslation();
   const {push} = useRouter();
+  const [{userInfo}] = useRematchModel('user');
   const scheme = 'light';
 
-  const dealType = (transaction) => {
-    switch (transaction?.transactionType) {
-      case 'SEND':
-      case 'PAY_LINK':
+  // 使用 useCallback 和 debounce 创建防抖函数
+  const handleCancel = useCallback(
+    debounce((e: any) => {
+      e.stopPropagation();
+      e.preventDefault();
+      onRead(item, 'cancel');
+    }, 300),
+    [item, onRead],
+  );
+
+  const handleReceive = useCallback(
+    debounce((e: any) => {
+      e.stopPropagation();
+      e.preventDefault();
+      onRead(item, 'receive');
+    }, 300),
+    [item, onRead],
+  );
+
+  const dealType = (transaction: any) => {
+    if (!transaction || !userInfo) {
+      return {
+        title: '',
+        context: '',
+      };
+    }
+
+    // 判断当前用户是否为接收方（用于判断收入/支出）
+    const isReceiver = transaction.receiverMember?.id === userInfo.customMetadata?.id;
+    const isRequest = transaction.transactionCategory === 'REQUEST';
+    const amount = `${formatTokenAmount(transaction.amount, transaction.tokenDecimals)} ${transaction.tokenSymbol} (${
+      getChainInfo(transaction.chainId)?.name
+    })`;
+
+    if (isRequest) {
+      if (isReceiver) {
+        // 当前用户收到付款请求
         return {
-          title: t('home.notification.send.title', {
-            name: transaction?.senderMember?.nickname,
-            amount: `${formatTokenAmount(transaction?.amount, transaction?.tokenDecimals)} ${
-              transaction?.tokenSymbol
-            } (${getChainInfo(transaction?.chainId)?.name})`,
+          title: t(`home.notification.list.send.${transaction.transactionType}.title`, {
+            name: transaction.senderMember?.nickname,
+            amount,
           }),
-          context: transaction?.message,
+          context: transaction.message,
         };
-      // case 'QR_CODE':
-      //   return {
-      //     title: t('home.order.qrCode.title', {name: transaction?.receiverMember?.nickname}),
-      //     context: transaction?.transactionCategory === 'REQUEST' ? t('home.receive') : t('home.send'),
-      //   };
-      case 'REQUEST':
-      case 'REQUEST_QR_CODE':
+      } else {
+        // 当前用户发起付款请求
         return {
-          title: t('home.notification.request.title', {
-            name: transaction?.receiverMember?.nickname,
-            amount: `${formatTokenAmount(transaction?.amount, transaction?.tokenDecimals)} ${
-              transaction?.tokenSymbol
-            } (${getChainInfo(transaction?.chainId)?.name})`,
+          title: t(`home.notification.list.request.${transaction.transactionType}.title`, {
+            name: transaction.receiverMember?.nickname,
+            amount,
           }),
-          context: transaction?.message,
+          context: transaction.message,
         };
-      // case 'REQUEST_LINK':
-      //   return {
-      //     title: t('home.order.requestLink.title', {name: transaction?.receiverMember?.nickname}),
-      //     context: transaction?.message,
-      //   };
-      default:
+      }
+    } else {
+      if (isReceiver) {
+        // 当前用户收到转账
         return {
-          title: '',
-          context: '',
+          title: t(`home.notification.list.send.${transaction.transactionType}.title`, {
+            name: transaction.senderMember?.nickname,
+            amount,
+          }),
+          context: transaction.message,
         };
+      } else {
+        // 当前用户发送转账
+        return {
+          title: t(`home.notification.list.request.${transaction.transactionType}.title`, {
+            name: transaction.receiverMember?.nickname,
+            amount,
+          }),
+          context: transaction.message,
+        };
+      }
     }
   };
 
@@ -135,25 +173,34 @@ const Item: React.FC<any> = ({item, onRead}: ItemProps) => {
         return dealType(item?.transaction);
 
       case NotificationTopic.TRANS_UPDATE:
+        const amount = item?.transaction
+          ? `${formatTokenAmount(item.transaction.amount, item.transaction.tokenDecimals)} ${
+              item.transaction.tokenSymbol
+            } (${getChainInfo(item.transaction.chainId)?.name})`
+          : '';
+
         switch (item?.action) {
           case TransactionUpdateAction.REQUEST_ACCEPTED:
             return {
-              title: t('home.notification.transUpdate.requestAcceptedDesc', {
-                name: ` @${item?.transaction?.receiverMember?.nickname} `,
+              title: t('home.notification.list.update.requestAcceptedDesc', {
+                name: item?.transaction?.receiverMember?.nickname,
+                amount,
               }),
               context: item?.transaction?.message,
             };
           case TransactionUpdateAction.REQUEST_DECLINED:
             return {
-              title: t('home.notification.transUpdate.requestDeclinedDesc', {
-                name: ` @${item?.transaction?.receiverMember?.nickname} `,
+              title: t('home.notification.list.update.requestDeclinedDesc', {
+                name: item?.transaction?.receiverMember?.nickname,
+                amount,
               }),
               context: item?.transaction?.message,
             };
           case TransactionUpdateAction.PAY_LINK_ACCEPTED:
             return {
-              title: t('home.notification.transUpdate.payLinkAcceptedDesc', {
-                name: ` @${item?.transaction?.receiverMember?.nickname} `,
+              title: t('home.notification.list.update.payLinkAcceptedDesc', {
+                name: item?.transaction?.receiverMember?.nickname,
+                amount,
               }),
               context: item?.transaction?.message,
             };
@@ -242,7 +289,7 @@ const Item: React.FC<any> = ({item, onRead}: ItemProps) => {
       <XStack jc={'space-between'} w="100%">
         <YStack flex={1}>
           <XStack w={'100%'} ai={'center'} jc={'space-between'} mb={'$2'}>
-            <SizableText color={'#212121'} w="100%" fow="600" size={'$5'} pr={'$1'}>
+            <SizableText fontSize={'$4'} color={'#212121'} fontWeight={'600'} w="100%" pr={'$1'}>
               {subjectType()?.title}
             </SizableText>
           </XStack>
@@ -257,53 +304,39 @@ const Item: React.FC<any> = ({item, onRead}: ItemProps) => {
           </XStack>
         </YStack>
         <XStack flexShrink={0} jc={'flex-end'} ai={'center'}>
-          <XStack space="$3" ai={'center'}>
-            {item?.subject === 'TRANS_REQUEST' && item?.transaction?.transactionStatus === 'PENDING' ? (
-              <XStack space="$3" ai={'center'}>
-                <Button
-                  unstyled
-                  onPress={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    onRead(item, 'cancel');
-                  }}
-                >
-                  <AppImage
-                    width={appScale(32)}
-                    height={appScale(32)}
-                    src={require('app/assets/images/error.png')}
-                    type="local"
-                  />
-                </Button>
-                <Button
-                  unstyled
-                  onPress={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    onRead(item, 'receive');
-                  }}
-                >
-                  <AppImage
-                    width={appScale(32)}
-                    height={appScale(32)}
-                    src={require('app/assets/images/success.png')}
-                    type="local"
-                  />
-                </Button>
-              </XStack>
-            ) : (
-              <>
-                {item?.status === 0 && (
+          {item?.status === 0 && (
+            <XStack space="$3" ai={'center'}>
+              {item?.subject === 'TRANS_REQUEST' && item?.transaction?.transactionStatus === 'PENDING' ? (
+                <XStack space="$3" ai={'center'}>
+                  <Button unstyled onPress={handleCancel}>
+                    <AppImage
+                      width={appScale(32)}
+                      height={appScale(32)}
+                      src={require('app/assets/images/error.png')}
+                      type="local"
+                    />
+                  </Button>
+                  <Button unstyled onPress={handleReceive}>
+                    <AppImage
+                      width={appScale(32)}
+                      height={appScale(32)}
+                      src={require('app/assets/images/success.png')}
+                      type="local"
+                    />
+                  </Button>
+                </XStack>
+              ) : (
+                <>
                   <XStack
                     width={appScale(8)}
                     borderRadius={appScale(4)}
                     height={appScale(8)}
                     bc={PrimaryColor}
                   ></XStack>
-                )}
-              </>
-            )}
-          </XStack>
+                </>
+              )}
+            </XStack>
+          )}
           <ChevronRight color={'#757575'} size={appScale(32)} />
         </XStack>
       </XStack>

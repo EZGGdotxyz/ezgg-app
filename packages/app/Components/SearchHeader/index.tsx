@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 12:58:37
+ * @LastEditTime: 2025-03-07 21:50:36
  * @FilePath: /ezgg-app/packages/app/Components/SearchHeader/index.tsx
  */
 import {AppImage, Button, Input, SizableText, Text, XStack, useToastController} from '@my/ui';
@@ -20,13 +20,11 @@ import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 
 export type SearchHeaderProps = {
-  searchText: string;
-  setSearchText: (searchText: string) => void;
   onSearch: (data: any) => void;
   placeholder: string;
 };
 // 首页 餐厅详情
-const SearchHeader: React.FC<any> = ({searchText, setSearchText, onSearch, placeholder}: SearchHeaderProps) => {
+const SearchHeader: React.FC<any> = ({onSearch, placeholder}: SearchHeaderProps) => {
   const [{unread}] = useRematchModel('app');
   const {push, back, replace} = useRouter();
   const {t, i18n} = useTranslation();
@@ -34,6 +32,7 @@ const SearchHeader: React.FC<any> = ({searchText, setSearchText, onSearch, place
   const scheme = 'light';
   const dispatch = useDispatch<Dispatch>();
   const inputRef = useRef(null);
+  const [searchText, setSearchText] = useState('');
 
   const getPt = () => {
     if (Platform.OS === 'web') {
@@ -87,7 +86,6 @@ const SearchHeader: React.FC<any> = ({searchText, setSearchText, onSearch, place
               }}
               value={searchText}
               onChangeText={(text) => {
-                // setSearchText(text);
                 setSearchText(text);
               }}
               onKeyPress={(e) => {

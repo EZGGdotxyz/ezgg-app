@@ -1,11 +1,11 @@
 /*
  * @Date: 2024-01-10 22:57:56
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 17:33:04
+ * @LastEditTime: 2025-03-08 00:05:15
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/screen.ts
  */
 export default {
-  'screen.login.title': '登入',
+  'screen.login.title': '登錄',
   'screen.home.title': '首頁',
   'screen.home.history': '交易歷史',
   'screen.home.detail.title': '交易詳情',
@@ -17,7 +17,7 @@ export default {
   'screen.home.paylink': '支付連結',
   'screen.home.requestFrom': '發送至',
   'screen.home.request': '請求',
-  'screen.home.amountRequesting': '請輸入您想要請求的金額',
+  'screen.home.amountRequesting': '請求的金額',
   'screen.home.deposit': '存款',
   'screen.home.withdraw': '提取',
   'screen.home.income': '收入',
@@ -34,4 +34,4 @@ export default {
   'screen.profile.helpCenter.title': '幫助中心',
   'screen.profile.privacyPolicy.title': '隱私政策',
   'screen.profile.aboutEzgg.title': '關於 ezgg.',
-};
+ };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 16:16:12
+ * @LastEditTime: 2025-03-07 23:03:00
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -34,8 +34,8 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
   useEffect(() => {
     if (type) {
       const infoDataDefault = {
-        sent: {
-          title: orderData?.name ? `${t('home.order.sentTo')} @${orderData?.name}` : '',
+        SEND: {
+          title: `${t('home.order.sentTo')} @${orderData?.receiverMember?.nickname}`,
           icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
@@ -43,8 +43,8 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
             ...createBaseTransactionInfoList(orderData, t),
           ],
         },
-        qrCode: {
-          title: orderData?.name ? `${t('home.order.sentTo')} @${orderData?.name}` : '',
+        QR_CODE: {
+          title: `${t('home.order.sentTo')} @${orderData?.receiverMember?.nickname}`,
           icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
@@ -52,31 +52,52 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
             ...createBaseTransactionInfoList(orderData, t),
           ],
         },
-        request: {
+        PAY_LINK: {
+          title: '',
+          icon: '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
+            ...createBaseTransactionInfoList(orderData, t),
+          ],
+        },
+        REQUEST: {
+          title: `${t('home.request')} @${orderData?.senderMember?.nickname}`,
+          icon: '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
+            // createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
+            //   isStatus: true,
+            // }),
+            ...createBaseTransactionInfoList(orderData, t),
+          ],
+        },
+        REQUEST_QR_CODE: {
+          title: `${t('home.request')} @${orderData?.senderMember?.nickname}`,
+          icon: '',
+          infoList: [
+            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
+            // createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
+            //   isStatus: true,
+            // }),
+            ...createBaseTransactionInfoList(orderData, t),
+          ],
+        },
+        REQUEST_LINK: {
           title: '',
           icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
-            createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
-              isStatus: true,
-            }),
+            // createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
+            //   isStatus: true,
+            // }),
             ...createBaseTransactionInfoList(orderData, t),
           ],
         },
-        requestQrCode: {
-          title: '',
-          icon: '',
-          infoList: [
-            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
-            createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
-            createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
-              isStatus: true,
-            }),
-            ...createBaseTransactionInfoList(orderData, t),
-          ],
-        },
-        withdraw: {
+        WITHDRAW: {
           title: t('home.order.depositTips'),
           icon: 'withdraw',
           infoList: [
@@ -84,7 +105,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
             ...createBaseTransactionInfoList(orderData, t, false),
           ],
         },
-        deposit: {
+        DEPOSIT: {
           title: '',
           icon: 'topUp',
           infoList: [
@@ -97,10 +118,6 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
         infoList: infoDataDefault[type].infoList,
         title: infoDataDefault[type]?.title || '',
         icon: infoDataDefault[type].icon,
-        userName:
-          orderData?.transactionType === 'SEND' || orderData?.transactionType === 'REQUEST'
-            ? `@${type === 'send' ? orderData?.receiverMember?.nickname : orderData?.senderMember?.nickname || ''}`
-            : '',
       });
     }
   }, [type, orderData]);
@@ -122,14 +139,14 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
             : '0'}
         </SizableText>
       </XStack>
-      {infoData?.userName!=='' && (
+      {/* {infoData?.userName !== '' && (
         <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
           <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
             {infoData?.userName}
           </SizableText>
         </XStack>
-      )}
-      {infoData?.title!=='' && (
+      )} */}
+      {infoData?.title !== '' && (
         <XStack mt={appScale(6)} w={'100%'} ai={'center'} jc={'center'}>
           <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
             {infoData?.title}

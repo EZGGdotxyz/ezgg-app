@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 14:26:20
+ * @LastEditTime: 2025-03-07 21:50:13
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/index.tsx
  */
 import {
@@ -53,7 +53,6 @@ const SendToScreen = ({isRefresh, type}: any) => {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [canLoadMore, setCanLoadMore] = useState(false);
 
   const fetchData = async (_page = 1) => {
     setLoading(true);
@@ -75,17 +74,15 @@ const SendToScreen = ({isRefresh, type}: any) => {
       setPage(_page);
       setLoading(false);
       setTotal(res?.data?.totalCount || 0);
-      setCanLoadMore(res.data.record.length < (res?.data?.totalCount || 0));
     } else {
       setData([]);
       setTotal(0);
       setLoading(false);
-      setCanLoadMore(false);
     }
   };
 
   const fetchMoreData = async () => {
-    if (!loadingMore && canLoadMore) {
+    if (!loadingMore && data.length < total) {
       setLoadingMore(true);
       await fetchData(page + 1);
       setLoadingMore(false);
@@ -149,7 +146,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
    */
   const _renderFooter = () => {
     if (!loading) {
-      if (data.length === 0) {
+      if (data.length === total) {
         return (
           <XStack w="100%" jc={'center'} py={appScale(24)}>
             <SizableText col={'$color11'} fontSize={'$3'}>
@@ -158,7 +155,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
           </XStack>
         );
       } else {
-        if (data.length === 0) {
+        if (data.length > 0) {
           return (
             <XStack w="100%" jc={'center'} py={appScale(24)}>
               <SizableText col={'$color11'} fontSize={'$3'}>
@@ -178,7 +175,6 @@ const SendToScreen = ({isRefresh, type}: any) => {
       );
     }
   };
-
   return (
     <PermissionPage>
       <AppHeader2
@@ -192,8 +188,6 @@ const SendToScreen = ({isRefresh, type}: any) => {
         fallbackUrl="/"
       />
       <SearchHeader
-        searchText={searchText}
-        setSearchText={setSearchText}
         onSearch={onSearch}
         placeholder={t('home.send.search')}
       />
@@ -225,7 +219,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
       <FlatList
         data={data}
         refreshing={loading}
-        keyExtractor={(item, index) => item?.id}
+        keyExtractor={(item) => String(item?.id)}
         style={{
           width: '100%',
           height: '100%',
@@ -238,19 +232,12 @@ const SendToScreen = ({isRefresh, type}: any) => {
           backgroundColor: '#f8f8f8',
         }}
         onEndReached={() => {
-          console.log('🚀 ~ SendToScreen ~ canLoadMore:');
-          if (canLoadMore && !loadingMore) {
+          if (!loadingMore && data.length < total) {
             fetchMoreData();
           }
         }}
-        onMomentumScrollBegin={() => {
-          console.log('🚀 ~ SendToScreen ~ canLoadMore2:');
-          setCanLoadMore(true);
-        }}
-        onEndReachedThreshold={50}
-        onRefresh={() => {
-          fetchData();
-        }}
+        onEndReachedThreshold={0.5}
+        onRefresh={() => fetchData()}
         ListFooterComponent={_renderFooter}
         ListEmptyComponent={<ListEmpty loading={loading} />}
         renderItem={({item, index}) => (

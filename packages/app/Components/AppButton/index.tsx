@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:56:06
+ * @LastEditTime: 2025-03-07 22:11:41
  * @FilePath: /ezgg-app/packages/app/Components/AppButton/index.tsx
  */
 import {Button, Paragraph} from '@my/ui';

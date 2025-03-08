@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-10 16:44:53
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 10:48:49
+ * @LastEditTime: 2025-03-08 00:17:51
  * @FilePath: /ezgg-app/apps/next/next.config.js
  */
 /** @type {import('next').NextConfig} */
@@ -59,7 +59,7 @@ module.exports = function () {
     typescript: {
       ignoreBuildErrors: true,
     },
-    // output: 'export',
+    output: 'export',
     distDir: 'mobile',
     // assetPrefix: '/mobile', //加前缀
     // basePath: '/mobile', //node
@@ -88,17 +88,17 @@ module.exports = function () {
     //   ];
     // },
     // 添加代理配置（如果需要）
-    async rewrites() {
-      return [
-        {
-          source: '/api/:path*',
-          destination: `${'https://4ba43b97.r6.cpolar.top'}/:path*`,
-          // source: '/api',
-          // destination: 'https://4ba43b97.r6.cpolar.top', // 替换为您的实际API域名
-          // rewrite: (path) => path.replace(/^\/api/, ''),
-        },
-      ];
-    },
+    // async rewrites() {
+    //   return [
+    //     {
+    //       source: '/api/:path*',
+    //       destination: `${'https://4ba43b97.r6.cpolar.top'}/:path*`,
+    //       // source: '/api',
+    //       // destination: 'https://4ba43b97.r6.cpolar.top', // 替换为您的实际API域名
+    //       // rewrite: (path) => path.replace(/^\/api/, ''),
+    //     },
+    //   ];
+    // },
   };
 
   for (const plugin of plugins) {

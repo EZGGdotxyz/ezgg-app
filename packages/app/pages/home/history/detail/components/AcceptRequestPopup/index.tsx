@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 14:12:30
+ * @LastEditTime: 2025-03-07 16:40:28
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/AcceptRequestPopup/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController, YStack} from '@my/ui';
@@ -46,6 +46,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
 
   const onAcceptRequest = async () => {
     try {
+      setModalVisible(false);
       setIsLoading(true);
       // 代币合约地址
       const tokenContractAddress = orderData?.tokenContractAddress!;
@@ -88,9 +89,23 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
       onSuccess();
     } catch (error) {
       console.error('Send transaction error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
+      if (error?.message.includes('The user rejected the request')) {
+        toast.show(t('tips.error.userRejected'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient allowance')) {
+        toast.show(t('tips.error.insufficientAllowance'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient balance')) {
+        toast.show(t('tips.error.insufficientBalance'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -106,6 +121,9 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
       );
       if (res?.data) {
         setIsLoading(false);
+        toast.show(t('tips.success.acceptRequest'), {
+          duration: 3000,
+        });
       }
     }
   };
@@ -143,7 +161,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
             mb={appScale(16)}
           >
             <SizableText ta={'center'} fontSize={'$4'} color={'#757575'} fontWeight={'500'}>
-            {t('home.order.amountRequested2')}
+              {t('home.order.amountRequested2')}
             </SizableText>
             <SizableText ta={'center'} fontSize={'$8'} color={'#212121'} fontWeight={'600'}>
               {`${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol}`}
