@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:25:53
+ * @LastEditTime: 2025-03-08 17:07:30
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeHeader/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -18,7 +18,7 @@ export type HomeHeaderProps = {isLogin: boolean};
 // 首页 头部
 const HomeHeader = () => {
   const { appScale } = useResponse();
-  const [{unread}] = useRematchModel('app');
+  const [{unread,isLogin}] = useRematchModel('app');
   const {push} = useRouter();
   const [statusBarHeight, setStatusBarHeight] = useState(46);
   const {t, i18n} = useTranslation();

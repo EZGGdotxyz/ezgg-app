@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:17:27
+ * @LastEditTime: 2025-03-08 17:11:51
  * @FilePath: /ezgg-app/packages/app/pages/home/success/index.tsx
  */
 import {
@@ -35,7 +35,7 @@ import {Dispatch} from 'app/store';
 import useRequest from 'app/hooks/useRequest';
 import Header from './components/Header';
 import SuccessInfo from 'app/components/SuccessInfo';
-import { isIphoneX} from 'app/utils';
+import {isIphoneX} from 'app/utils';
 import {createParam} from 'solito';
 import {getTransactionHistoryFindTransactionHistoryId} from 'app/servers/api/transactionHistory';
 import AppLoading from 'app/Components/AppLoading';
@@ -152,84 +152,83 @@ const SuccessScreen = () => {
         })}
         shareUrl={shareUrl}
       />
-      {orderData?.transactionCategory === 'SEND' ||
-        (orderData?.transactionCategory === 'REQUEST' && (
-          <XStack
-            flexShrink={0}
-            pl={appScale(24)}
-            pr={appScale(24)}
-            pt={appScale(12)}
-            pb={appScale(isIphoneX() ? 46 : 12)}
-            w="100%"
+      {(orderData?.transactionCategory === 'SEND' || orderData?.transactionCategory === 'REQUEST') && (
+        <XStack
+          flexShrink={0}
+          pl={appScale(24)}
+          pr={appScale(24)}
+          pt={appScale(12)}
+          pb={appScale(isIphoneX() ? 46 : 12)}
+          w="100%"
+          ai={'center'}
+          jc={'center'}
+          space="$3"
+          borderTopWidth={1}
+          borderColor={'#F2F2F2'}
+        >
+          <Button
+            h={appScale(58)}
+            w={'50%'}
+            br={appScale(28)}
             ai={'center'}
             jc={'center'}
-            space="$3"
-            borderTopWidth={1}
-            borderColor={'#F2F2F2'}
+            bc={'#fff'}
+            borderWidth={2}
+            borderColor={PrimaryColor}
+            onPress={() => {
+              if (orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') {
+                window.open(
+                  `${ExternalLinkData.webPageHome}/${
+                    orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
+                  }/${orderData?.transactionCode}`,
+                  '_blank',
+                );
+              } else {
+                setShareVisible(true);
+              }
+            }}
+            // disabled={isLoading}
+            pressStyle={{
+              opacity: 0.85,
+            }}
+            unstyled
           >
-            <Button
-              h={appScale(58)}
-              w={'50%'}
-              br={appScale(28)}
-              ai={'center'}
-              jc={'center'}
-              bc={'#fff'}
-              borderWidth={2}
-              borderColor={PrimaryColor}
-              onPress={() => {
-                if (orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') {
-                  window.open(
-                    `${ExternalLinkData.webPageHome}/${
-                      orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
-                    }/${orderData?.transactionCode}`,
-                    '_blank',
-                  );
-                } else {
-                  setShareVisible(true);
-                }
-              }}
-              // disabled={isLoading}
-              pressStyle={{
-                opacity: 0.85,
-              }}
-              unstyled
-            >
-              {orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK'
-                ? t('home.send.viewLink')
-                : t('home.order.done')}
-            </Button>
-            <Button
-              h={appScale(58)}
-              w={'50%'}
-              br={appScale(28)}
-              ai={'center'}
-              jc={'center'}
-              bc={'#fff'}
-              borderWidth={2}
-              borderColor={PrimaryColor}
-              onPress={() => {
-                if (orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') {
-                  onCopy(
-                    `${ExternalLinkData.webPageHome}/${
-                      orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
-                    }/${orderData?.transactionCode}`,
-                  );
-                } else {
-                  replace('/');
-                }
-              }}
-              // disabled={isLoading}
-              pressStyle={{
-                opacity: 0.85,
-              }}
-              unstyled
-            >
-              {orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK'
-                ? t('home.send.copyLink')
-                : t('home.order.done')}
-            </Button>
-          </XStack>
-        ))}
+            {orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK'
+              ? t('home.send.viewLink')
+              : t('home.order.share')}
+          </Button>
+          <Button
+            h={appScale(58)}
+            w={'50%'}
+            br={appScale(28)}
+            ai={'center'}
+            jc={'center'}
+            bc={'#fff'}
+            borderWidth={2}
+            borderColor={PrimaryColor}
+            onPress={() => {
+              if (orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') {
+                onCopy(
+                  `${ExternalLinkData.webPageHome}/${
+                    orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
+                  }/${orderData?.transactionCode}`,
+                );
+              } else {
+                replace('/');
+              }
+            }}
+            // disabled={isLoading}
+            pressStyle={{
+              opacity: 0.85,
+            }}
+            unstyled
+          >
+            {orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK'
+              ? t('home.send.copyLink')
+              : t('home.order.done')}
+          </Button>
+        </XStack>
+      )}
     </PermissionPage>
   );
 };

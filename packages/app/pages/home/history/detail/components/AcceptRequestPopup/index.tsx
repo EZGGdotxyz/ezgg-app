@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:22:40
+ * @LastEditTime: 2025-03-08 17:08:23
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/AcceptRequestPopup/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController, YStack} from '@my/ui';
@@ -22,6 +22,7 @@ import TokenTransferContract from 'app/abi/TokenTransfer.json';
 import {postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
 import AppModal from 'app/Components/AppModal';
 import useResponse from 'app/hooks/useResponse';
+import { formatTokenAmount, isIphoneX } from 'app/utils';
 
 interface AcceptRequestPopupProps {
   modalVisible: boolean;
