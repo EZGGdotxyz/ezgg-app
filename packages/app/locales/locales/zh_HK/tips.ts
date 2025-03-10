@@ -47,4 +47,6 @@ export default {
 
   'tips.success.declineRequest': '已拒絕',
   'tips.success.acceptRequest': '支付成功',
+
+  'tips.error.explore.selfTransfer': '不能與自己發生交易',
  };

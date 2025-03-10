@@ -1,14 +1,14 @@
 /*
  * @Date: 2024-07-09 14:17:09
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-28 14:22:27
+ * @LastEditTime: 2025-03-10 16:36:50
  * @FilePath: /ezgg-app/packages/app/Components/TabBar/index.tsx
  */
 import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
 import React from 'react';
 import TabBarButton from '../TabBarButton';
 import {useRouter} from 'solito/router';
-import { isIphoneX} from 'app/utils';
+import {isIphoneX} from 'app/utils';
 import {XStack} from '@my/ui';
 import {useRematchModel} from 'app/store/model';
 import useResponse from 'app/hooks/useResponse';
@@ -26,72 +26,74 @@ const TabBar = ({state, descriptors, navigation}) => {
       bc="$background"
       style={styles.tabbar}
     >
-      {state.routes.map((route, index) => {
-        if (route.name === 'login') return null;
-        let label = route.name;
+      <XStack jc={'center'} ai={'center'} style={{width: '100%', maxWidth: 430}}>
+        {state.routes.map((route, index) => {
+          if (route.name === 'login') return null;
+          let label = route.name;
 
-        if (Platform.OS !== 'web') {
-          const {options} = descriptors[route.key];
-          label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-              ? options.title
-              : route.name;
-        }
-        if (['_sitemap', '+not-found'].includes(route.name)) return null;
+          if (Platform.OS !== 'web') {
+            const {options} = descriptors[route.key];
+            label =
+              options.tabBarLabel !== undefined
+                ? options.tabBarLabel
+                : options.title !== undefined
+                ? options.title
+                : route.name;
+          }
+          if (['_sitemap', '+not-found'].includes(route.name)) return null;
 
-        const isFocused = state.index === index;
+          const isFocused = state.index === index;
 
-        const onPress = () => {
-          if (Platform.OS === 'web') {
-            if (route.name === 'explore' && !isLogin) {
-              return push('/login');
-            }
-
-            push('/' + (route.name === 'home' ? '' : route.name));
-          } else {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (!isFocused && !event.defaultPrevented) {
+          const onPress = () => {
+            if (Platform.OS === 'web') {
               if (route.name === 'explore' && !isLogin) {
-                return navigation.navigate('/login', route.params);
+                return push('/login');
               }
-              navigation.navigate(route.name, route.params);
-            }
-          }
-        };
 
-        const onLongPress = () => {
-          if (Platform.OS === 'web') {
-            if (route.name === 'explore' && !isLogin) {
-              return push('/login');
-            }
-            push('/' + (route.name === 'home' ? '' : route.name));
-          } else {
-            navigation.emit({
-              type: 'tabLongPress',
-              target: route.key,
-            });
-          }
-        };
+              push('/' + (route.name === 'home' ? '' : route.name));
+            } else {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
 
-        return (
-          <TabBarButton
-            key={route.name}
-            // style={styles.tabbarItem}
-            onPress={onPress}
-            onLongPress={onLongPress}
-            isFocused={isFocused}
-            routeName={route.name}
-            label={label}
-          />
-        );
-      })}
+              if (!isFocused && !event.defaultPrevented) {
+                if (route.name === 'explore' && !isLogin) {
+                  return navigation.navigate('/login', route.params);
+                }
+                navigation.navigate(route.name, route.params);
+              }
+            }
+          };
+
+          const onLongPress = () => {
+            if (Platform.OS === 'web') {
+              if (route.name === 'explore' && !isLogin) {
+                return push('/login');
+              }
+              push('/' + (route.name === 'home' ? '' : route.name));
+            } else {
+              navigation.emit({
+                type: 'tabLongPress',
+                target: route.key,
+              });
+            }
+          };
+
+          return (
+            <TabBarButton
+              key={route.name}
+              // style={styles.tabbarItem}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              isFocused={isFocused}
+              routeName={route.name}
+              label={label}
+            />
+          );
+        })}
+      </XStack>
     </XStack>
   );
 };
@@ -105,9 +107,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

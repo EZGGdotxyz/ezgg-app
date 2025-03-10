@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:41:31
+ * @LastEditTime: 2025-03-10 19:09:15
  * @FilePath: /ezgg-app/packages/app/pages/explore/amount/index.tsx
  */
 import {
@@ -23,7 +23,7 @@ import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
 import AppButton from 'app/Components/AppButton';
 import {StyleSheet} from 'react-native';
-import { convertAmountToTokenDecimals, getUserSubName, isIphoneX} from 'app/utils';
+import {convertAmountToTokenDecimals, getUserSubName, isIphoneX} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
@@ -45,6 +45,9 @@ const {useParams} = createParam<any>();
 const AmountScreen = () => {
   const {t} = useTranslation();
   const [{payLinkData, userInfo}] = useRematchModel('user');
+
+  console.log('🚀 ~ AmountScreen ~ userInfo:', userInfo);
+
   const {appScale} = useResponse();
 
   const dispatch = useDispatch<Dispatch>();
@@ -63,18 +66,24 @@ const AmountScreen = () => {
   const toast = useToastController();
 
   useEffect(() => {
-    if (params?.id) {
+    if (params?.id && userInfo?.customMetadata?.id) {
       _getUserFindUserIdId();
-      // setCurrencyData(params?.currency);
-      // setInputValue(params?.id);
     }
-  }, [params?.id]);
+  }, [params?.id,userInfo]);
 
   const _getUserFindUserIdId = async () => {
     const res = await makeRequest(getUserFindUserIdId({id: params?.id}));
     console.log('res', res);
     if (res?.code === '0') {
-      setReceiverUserInfo(res?.data);
+      console.log('🚀 ~ const_getUserFindUserIdId= ~ userInfo?.customMetadata?.id:', userInfo?.customMetadata?.id);
+      if (userInfo?.customMetadata?.id !== Number(params?.id)) {
+        setReceiverUserInfo(res?.data);
+      } else {
+        toast.show(t('tips.error.explore.selfTransfer'));
+        setTimeout(() => {
+          replace('/');
+        }, 1000);
+      }
     }
   };
 

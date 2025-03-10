@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-26 14:21:05
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:52:41
+ * @LastEditTime: 2025-03-10 16:20:43
  * @FilePath: /ezgg-app/apps/next/pages/_app.tsx
  */
 import '@tamagui/core/reset.css';
@@ -128,7 +128,7 @@ function ThemeProvider({children}: {children: React.ReactNode}) {
     //   setTheme(next as any);
     // }}
     >
-      <Provider disableRootThemeClass defaultTheme={theme}>
+      <Provider disableRootThemeClass defaultTheme={'light'}>
         {children}
       </Provider>
     </NextThemeProvider>

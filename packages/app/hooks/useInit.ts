@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:19:37
+ * @LastEditTime: 2025-03-10 16:34:17
  * @FilePath: /ezgg-app/packages/app/hooks/useInit.ts
  */
 import {Dispatch} from 'app/store';

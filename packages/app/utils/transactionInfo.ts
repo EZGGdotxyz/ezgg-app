@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-03 23:26:42
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 23:42:17
+ * @LastEditTime: 2025-03-10 17:33:56
  * @FilePath: /ezgg-app/packages/app/utils/transactionInfo.ts
  */
 import {formatDateTime, formatTokenAmount} from './index';
@@ -28,17 +28,13 @@ export const createTransactionInfoItem = (
 });
 
 // 创建基础交易信息列表
-export const createBaseTransactionInfoList = (orderData: any, t: any, isTo = true, isSender = true) => {
+export const createBaseTransactionInfoList = (orderData: any, t: any, isTo = true, isSender = true, sideName = '') => {
   const infoList = [createTransactionInfoItem(t('home.order.date'), formatDateTime(orderData?.transactionTime))];
   if (isTo) {
     infoList.push(
-      createTransactionInfoItem(
-        t('home.order.to'),
-        createUserNicknameDisplay(isSender ? orderData?.senderMember : orderData?.receiverMember),
-        {
-          isCopyable: isSender ? !!orderData?.senderMember?.nickname : !!orderData?.receiverMember?.nickname,
-        },
-      ),
+      createTransactionInfoItem(!isSender ? t('home.order.to') : t('home.order.from'), sideName ? `@${sideName}` : '-', {
+        isCopyable: !!sideName,
+      }),
     );
   }
   infoList.push(

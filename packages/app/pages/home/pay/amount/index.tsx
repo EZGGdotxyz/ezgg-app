@@ -113,7 +113,7 @@ const AmountScreen = ({type}: any) => {
         }}
       >
         <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
-          <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
+          <Currency isRequest={type === 'request'} setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
           <YStack w="100%" mb={appScale(24)}>
             <XStack mb={appScale(8)} w="100%">
               <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>

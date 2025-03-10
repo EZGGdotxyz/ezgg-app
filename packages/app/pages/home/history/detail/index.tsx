@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 00:17:01
+ * @LastEditTime: 2025-03-10 17:33:33
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -20,7 +20,7 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import Header from './components/Header';
-import { truncateAddress, formatTokenAmount, isIphoneX} from 'app/utils';
+import {truncateAddress, formatTokenAmount, isIphoneX} from 'app/utils';
 import CopyButton from 'app/Components/CopyButton';
 import {ExternalLinkData, PrimaryColor} from 'app/config';
 import {createParam} from 'solito';
@@ -104,17 +104,20 @@ const HistoryDetailScreen = () => {
       const isRequest = _orderData?.transactionCategory === 'REQUEST';
 
       let _title = '';
+      let sideName: any = '';
       if (isRequest) {
         if (isReceiver) {
           // 当前用户收到付款请求（将要支出）
           _title = t(`home.history.request.${_orderData?.transactionType}.title`, {
             name: _orderData?.senderMember?.nickname,
           });
+          sideName = _orderData?.senderMember?.nickname;
         } else {
           // 当前用户发起付款请求（将要收入）
           _title = t(`home.history.send.${_orderData?.transactionType}.title`, {
             name: _orderData?.receiverMember?.nickname,
           });
+          sideName = _orderData?.receiverMember?.nickname;
         }
       } else {
         if (isReceiver) {
@@ -122,13 +125,17 @@ const HistoryDetailScreen = () => {
           _title = t(`home.history.request.${_orderData?.transactionType}.title`, {
             name: _orderData?.senderMember?.nickname,
           });
+          sideName = _orderData?.senderMember?.nickname;
         } else {
           // 当前用户是发送方（支出）
           _title = t(`home.history.send.${_orderData?.transactionType}.title`, {
             name: _orderData?.receiverMember?.nickname,
           });
+          sideName = _orderData?.receiverMember?.nickname;
         }
       }
+      console.log('🚀 ~ const_getTransactionHistoryFindTransactionHistoryId= ~ sideName:', sideName);
+
 
       let infoDataDefault: any = {
         title: _title,
@@ -144,7 +151,7 @@ const HistoryDetailScreen = () => {
           infoDataDefault.infoList = [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(_orderData)),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(_orderData)),
-            ...createBaseTransactionInfoList(_orderData, t),
+            ...createBaseTransactionInfoList(_orderData, t, true, isReceiver, sideName),
           ];
 
           break;
@@ -176,7 +183,7 @@ const HistoryDetailScreen = () => {
             createTransactionInfoItem(t('home.order.status'), createStatusDisplay(_orderData?.transactionStatus), {
               isStatus: true,
             }),
-            ...createBaseTransactionInfoList(_orderData, t, true),
+            ...createBaseTransactionInfoList(_orderData, t, true, isReceiver, sideName),
           ];
           break;
         default:

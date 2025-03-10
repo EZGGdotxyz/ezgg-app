@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 23:03:00
+ * @LastEditTime: 2025-03-10 17:36:59
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -9,7 +9,7 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown, ChevronRight} from '@tamagui/lucide-icons';
-import { formatDateTime, formatNumber, formatTokenAmount, truncateAddress} from 'app/utils';
+import {formatDateTime, formatNumber, formatTokenAmount, truncateAddress} from 'app/utils';
 import {useEffect, useState} from 'react';
 import CopyButton from '../CopyButton';
 import {getChainInfo, getExplorerUrl} from 'app/utils/chain';
@@ -29,12 +29,32 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
   const [{currency}] = useRematchModel('app');
+  const [{userInfo, isLogin}] = useRematchModel('user');
+
   const {appScale} = useResponse();
 
   const [infoData, setInfoData] = useState<any>({});
 
   useEffect(() => {
     if (type) {
+      const isReceiver = orderData?.receiverMember?.id === userInfo?.customMetadata?.id;
+      const isRequest = orderData?.transactionCategory === 'REQUEST';
+      let _title = '';
+      let sideName: any = '';
+      if (isRequest) {
+        if (isReceiver) {
+          sideName = orderData?.senderMember?.nickname;
+        } else {
+          sideName = orderData?.receiverMember?.nickname;
+        }
+      } else {
+        if (isReceiver) {
+          sideName = orderData?.senderMember?.nickname;
+        } else {
+          sideName = orderData?.receiverMember?.nickname;
+        }
+      }
+
       const infoDataDefault = {
         SEND: {
           title: `${t('home.order.sentTo')} @${orderData?.receiverMember?.nickname}`,
@@ -42,7 +62,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           infoList: [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
-            ...createBaseTransactionInfoList(orderData, t),
+            ...createBaseTransactionInfoList(orderData, t, true, isReceiver, sideName),
           ],
         },
         QR_CODE: {
@@ -51,7 +71,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           infoList: [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
-            ...createBaseTransactionInfoList(orderData, t),
+            ...createBaseTransactionInfoList(orderData, t, true, isReceiver, sideName),
           ],
         },
         PAY_LINK: {
@@ -60,7 +80,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           infoList: [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
-            ...createBaseTransactionInfoList(orderData, t),
+            ...createBaseTransactionInfoList(orderData, t, true, isReceiver, sideName),
           ],
         },
         REQUEST: {
@@ -72,7 +92,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
             // createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
             //   isStatus: true,
             // }),
-            ...createBaseTransactionInfoList(orderData, t),
+            ...createBaseTransactionInfoList(orderData, t, true, isReceiver, sideName),
           ],
         },
         REQUEST_QR_CODE: {
@@ -84,7 +104,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
             // createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
             //   isStatus: true,
             // }),
-            ...createBaseTransactionInfoList(orderData, t),
+            ...createBaseTransactionInfoList(orderData, t, true, isReceiver, sideName),
           ],
         },
         REQUEST_LINK: {
@@ -96,7 +116,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
             // createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
             //   isStatus: true,
             // }),
-            ...createBaseTransactionInfoList(orderData, t),
+            ...createBaseTransactionInfoList(orderData, t, true, isReceiver, sideName),
           ],
         },
         WITHDRAW: {

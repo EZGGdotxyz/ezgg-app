@@ -29,7 +29,6 @@ export default function PermissionPage(props: PermissionPageProps) {
   const dispatch = useDispatch<Dispatch>();
   // const {params} = useParams();
   const [app] = useRematchModel('app');
-  const scheme = 'light';
   const {replace} = useRouter();
   const insets = useSafeAreaInsets();
 

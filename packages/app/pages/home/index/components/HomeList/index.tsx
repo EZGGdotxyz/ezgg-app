@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:28:58
+ * @LastEditTime: 2025-03-10 17:44:32
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet, ScrollView} from '@my/ui';
@@ -86,7 +86,7 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
     try {
       setIsLoading(true);
       const selectedChainId = selectedType.chainId === 'all' ? undefined : Number(selectedType.chainId);
-      const tokenList = await getAllBalances(selectedChainId);
+      const tokenList = await getAllBalances(false, selectedChainId);
       setList(tokenList);
     } catch (error) {
       console.error('获取余额列表失败:', error);
@@ -96,19 +96,12 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
     }
   }, [isLogin, blockchainList, selectedType.chainId, getAllBalances, setIsLoading]);
 
-  // 监听登录状态和区块链列表变化
+  // 监听登录状态、区块链列表和选择的链类型变化
   useEffect(() => {
     if (isLogin && blockchainList?.length > 0) {
       fetchBalances();
     }
-  }, [isLogin, blockchainList?.length]);
-
-  // 监听选择的链类型变化
-  useEffect(() => {
-    if (isLogin && blockchainList?.length > 0 && selectedType) {
-      fetchBalances();
-    }
-  }, [selectedType.chainId]);
+  }, [isLogin, blockchainList?.length, selectedType.chainId]);
 
   // 监听登录状态和货币变化，获取交易历史
   useEffect(() => {

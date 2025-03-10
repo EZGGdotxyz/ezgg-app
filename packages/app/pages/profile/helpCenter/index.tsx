@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 21:50:18
+ * @LastEditTime: 2025-03-10 18:55:41
  * @FilePath: /ezgg-app/packages/app/pages/profile/helpCenter/index.tsx
  */
 import {
@@ -25,6 +25,15 @@ import {ChevronDown, ChevronUp, Search, ChevronRight} from '@tamagui/lucide-icon
 import SearchHeader from 'app/Components/SearchHeader';
 import {PrimaryColor} from 'app/config';
 import useResponse from 'app/hooks/useResponse';
+
+// FAQ 数据接口
+interface FaqItem {
+  question: string;
+  answer?: string;
+  list?: string[];
+  category: string;
+}
+
 // 幫助中心
 const HelpCenterScreen = () => {
   const {t} = useTranslation();
@@ -38,61 +47,65 @@ const HelpCenterScreen = () => {
   const {appScale} = useResponse();
 
   // 各类别的FAQ数据
-  const generalFaqData = [
+  const generalFaqData: FaqItem[] = [
     {
-      question: 'What is ezgg.app?',
-      answer:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      question: t('profile.help.faq.general.1.title'),
+      answer: t('profile.help.faq.general.1.content'),
+      list: [],
       category: 'General',
     },
     {
-      question: 'How do I get started with ezgg?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      question: t('profile.help.faq.general.2.title'),
+      answer: '',
+      list: [
+        t('profile.help.faq.general.2.content.1'),
+        t('profile.help.faq.general.2.content.2'),
+        t('profile.help.faq.general.2.content.3'),
+      ],
       category: 'General',
     },
   ];
 
-  const accountFaqData = [
-    {
-      question: 'How do I set up an account?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      category: 'Account',
-    },
-    {
-      question: 'How do I reset my password?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      category: 'Account',
-    },
-  ];
+  const accountFaqData: FaqItem[] = [];
 
-  const paymentFaqData = [
+  const paymentFaqData: FaqItem[] = [
     {
-      question: 'How long does a transfer take?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      question: t('profile.help.faq.payment.1.title'),
+      answer: t('profile.help.faq.payment.1.content'),
+      list: [],
       category: 'Payment',
     },
     {
-      question: 'Are there any fees?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      question: t('profile.help.faq.payment.2.title'),
+      answer: t('profile.help.faq.payment.2.content'),
+      list: [],
       category: 'Payment',
     },
   ];
 
-  const balanceFaqData = [
+  const balanceFaqData: FaqItem[] = [
     {
-      question: 'How do I request money?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      question: t('profile.help.faq.balance.1.title'),
+      answer: '',
+      list: [
+        t('profile.help.faq.balance.1.content.1'),
+        t('profile.help.faq.balance.1.content.2'),
+        t('profile.help.faq.balance.1.content.3'),
+        t('profile.help.faq.balance.1.content.4'),
+        t('profile.help.faq.balance.1.content.5'),
+      ],
       category: 'Balance',
     },
     {
-      question: 'Can I send money internationally?',
-      answer: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      question: t('profile.help.faq.balance.2.title'),
+      answer: t('profile.help.faq.balance.2.content'),
+      list: [],
       category: 'Balance',
     },
   ];
 
   // 所有FAQ数据的集合
-  const allFaqData = [...generalFaqData, ...accountFaqData, ...paymentFaqData, ...balanceFaqData];
+  const allFaqData: FaqItem[] = [...generalFaqData, ...paymentFaqData, ...balanceFaqData];
 
   // 根据当前选择的类别和搜索文本过滤FAQ数据
   const filteredFaqData = allFaqData.filter((item) => {
@@ -100,7 +113,8 @@ const HelpCenterScreen = () => {
     const matchesSearch =
       searchText.trim() === '' ||
       item.question.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.answer.toLowerCase().includes(searchText.toLowerCase());
+      (item.answer?.toLowerCase().includes(searchText.toLowerCase()) ?? false) ||
+      (item.list?.some((listItem) => listItem.toLowerCase().includes(searchText.toLowerCase())) ?? false);
     return matchesCategory && matchesSearch;
   });
 
@@ -120,10 +134,10 @@ const HelpCenterScreen = () => {
       value: 'General',
       label: t('profile.help.faq.general.title'),
     },
-    {
-      value: 'Account',
-      label: t('profile.help.faq.account.title'),
-    },
+    // {
+    //   value: 'Account',
+    //   label: t('profile.help.faq.account.title'),
+    // },
     {
       value: 'Payment',
       label: t('profile.help.faq.payment.title'),
@@ -217,7 +231,15 @@ const HelpCenterScreen = () => {
     setSearchText('');
   };
 
-  const onSearch = () => {};
+  const onSearch = (text: string) => {
+    setSearchText(text);
+    // 当搜索时重置展开的FAQ
+    setExpandedFaq(null);
+    // 如果搜索内容不为空，自动切换到"全部"分类
+    if (text.trim() !== '') {
+      setActiveCategory('General');
+    }
+  };
 
   return (
     <PermissionPage isHomePage={true}>
@@ -292,12 +314,7 @@ const HelpCenterScreen = () => {
       <ScrollView ref={scrollViewRef} flex={1}>
         <YStack flex={1} paddingTop={appScale(12)}>
           {/* 搜索框 */}
-          {activeTab === 'faq' && (
-            <SearchHeader
-              placeholder={t('home.search')}
-              onSearch={onSearch}
-            />
-          )}
+          {activeTab === 'faq' && <SearchHeader placeholder={t('home.search')} onSearch={onSearch} value={searchText} />}
 
           {activeTab === 'faq' && (
             <YStack flex={1}>
@@ -364,7 +381,11 @@ const HelpCenterScreen = () => {
                               {item.question}
                             </SizableText>
                           </XStack>
-                          {expandedFaq === item.question ? <ChevronUp size={appScale(20)} /> : <ChevronDown size={appScale(20)} />}
+                          {expandedFaq === item.question ? (
+                            <ChevronUp size={appScale(20)} />
+                          ) : (
+                            <ChevronDown size={appScale(20)} />
+                          )}
                         </XStack>
                       </Button>
                       <YStack
@@ -387,9 +408,30 @@ const HelpCenterScreen = () => {
                         overflow="hidden"
                       >
                         <YStack paddingVertical={appScale(16)} borderTopColor={'#eeeeee'} borderTopWidth={1}>
-                          <SizableText col={'#424242'} fontSize={'$4'} fow="500">
-                            {item.answer}
-                          </SizableText>
+                          {item?.answer && (
+                            <SizableText col={'#424242'} fontSize={'$4'} fow="500">
+                              {item?.answer}
+                            </SizableText>
+                          )}
+                          {item?.list && item?.list.length > 0 && (
+                            <YStack gap="$2">
+                              {item?.list.map((listItem) => (
+                                <XStack gap="$2">
+                                  <YStack h={appScale(28)} ai="center" jc="center">
+                                    <XStack
+                                      w={appScale(8)}
+                                      h={appScale(8)}
+                                      bg={'#424242'}
+                                      borderRadius={appScale(4)}
+                                    ></XStack>
+                                  </YStack>
+                                  <SizableText lh={appScale(28)} col={'#424242'} fontSize={'$4'} fow="500">
+                                    {listItem}
+                                  </SizableText>
+                                </XStack>
+                              ))}
+                            </YStack>
+                          )}
                         </YStack>
                       </YStack>
                     </YStack>

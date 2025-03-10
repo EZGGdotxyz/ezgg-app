@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:39:31
+ * @LastEditTime: 2025-03-10 17:39:07
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -46,7 +46,7 @@ import {PrimaryColor} from 'app/config';
 import {validateAddress} from 'app/utils/chain';
 import ConnectorsPopup from 'app/Components/ConnectorsPopup';
 import {useAccount} from 'wagmi';
-import {useResponse} from 'app/hooks/useResponse';
+import useResponse from 'app/hooks/useResponse';
 
 // 提取
 const WithdrawScreen = () => {

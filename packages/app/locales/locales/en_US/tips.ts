@@ -50,4 +50,7 @@ export default {
 
   'tips.success.declineRequest': 'Declined',
   'tips.success.acceptRequest': 'Payment successful',
+
+  'tips.error.explore.selfTransfer': 'Cannot transfer to yourself',
+
 };

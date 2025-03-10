@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:19:39
+ * @LastEditTime: 2025-03-10 16:48:34
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {YStack, SizableText, AppImage, Button, ScrollView} from '@my/ui';
@@ -122,7 +122,7 @@ const LoginScreen = () => {
       >
         <YStack f={1} pt={appScale(100)} ai="center" bc="$background">
           <YStack pb={appScale(32 + 24)}>
-            <SizableText color="$color" ta="center" fontSize={appScale(24)} fontWeight="700" mb={appScale(32 + 24)}>
+            <SizableText color="$color" ta="center" fontSize="$8" fontWeight="700" mb={appScale(32 + 24)}>
               {AppName}
             </SizableText>
             <AppImage
@@ -147,7 +147,7 @@ const LoginScreen = () => {
               onPress={() => login()}
               disabled={!ready}
             >
-              <SizableText color="#212121" fontSize={appScale(16)} fontWeight="700">
+              <SizableText color="#212121" fontSize={'$5'} fontWeight="700">
                 {t('login.loginButton')}
               </SizableText>
             </Button>
@@ -158,7 +158,7 @@ const LoginScreen = () => {
               padding: appScale(24),
             }}
           >
-            <SizableText style={{display: 'inline'}} color="#212121" fontSize={appScale(14)} fontWeight="500">
+            <SizableText style={{display: 'inline'}} color="#212121" fontSize="$2" fontWeight="500">
               {t('login.loginAgreement1')}
             </SizableText>
             <Button
@@ -169,18 +169,18 @@ const LoginScreen = () => {
                 push('/profile/privacyPolicy');
               }}
             >
-              <SizableText ml={appScale(4)} mr={appScale(4)} color="#212121" fontSize={appScale(14)} fontWeight="700">
-                {t('login.loginAgreement2')}
+              <SizableText ml={appScale(4)} mr={appScale(4)} fontSize="$3" color="#1677ff" fontWeight="700">
+                《{t('login.loginAgreement2')}》
               </SizableText>
             </Button>
-            <SizableText style={{display: 'inline'}} color="#212121" fontSize={appScale(14)} fontWeight="500">
+            <SizableText style={{display: 'inline'}} color="#212121" fontSize="$2" fontWeight="500">
               {t('login.loginAgreement3')}
             </SizableText>
           </View>
         </YStack>
       </ScrollView>
       <SuccessPopup
-        redirect={params?.redirect||''}
+        redirect={params?.redirect || ''}
         handleSuccess={handleSuccess}
         accountForm={accountForm}
         setAccountForm={setAccountForm}

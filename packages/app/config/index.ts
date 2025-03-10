@@ -15,7 +15,7 @@ export const SubColor = '#f39965';
 
 export const DefaultLanguage = 'en_US';
 
-export const AppName = 'ezgg.app';
+export const AppName = 'ezgg.xyz';
 
 export const CurrencyList = [
   {

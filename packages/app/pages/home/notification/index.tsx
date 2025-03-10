@@ -49,7 +49,6 @@ import useResponse from 'app/hooks/useResponse';
 const NotificationScreen = (props: any) => {
   const {isRefresh} = props;
   const {t} = useTranslation();
-  const scheme = 'light';
   const dispatch = useDispatch<Dispatch>();
   const {makeRequest} = useRequest();
   const [data, setData] = useState<any>([]);

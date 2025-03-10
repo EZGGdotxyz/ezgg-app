@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-08
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:21:40
+ * @LastEditTime: 2025-03-10 17:19:15
  * @FilePath: /ezgg-app/packages/app/hooks/useBlockchain.ts
  */
 import {Dispatch} from 'app/store';
@@ -9,7 +9,7 @@ import {useDispatch} from 'react-redux';
 import {useRematchModel} from 'app/store/model';
 import useRequest from './useRequest';
 import {NETWORK} from 'app/config';
-import {getInfrastructureListBlockchain} from 'app/servers/api/infrastructure';
+import {getInfrastructureListBlockchain, getInfrastructureListTokenContract} from 'app/servers/api/infrastructure';
 import {getBalanceListBalance} from 'app/servers/api/balance';
 import {useState, useCallback} from 'react';
 import {getChainInfo} from 'app/utils/chain';
@@ -26,6 +26,12 @@ export interface BalanceData extends BlockchainData {
   currency: string;
 }
 
+export interface TokenContractData {
+  chainId: number;
+  symbol: string;
+  [key: string]: any;
+}
+
 export interface TokenData {
   chainName: string;
   chainIcon: string;
@@ -40,6 +46,13 @@ export interface TokenData {
 export interface ChainGroup {
   chainName: string;
   tokenList: TokenData[];
+}
+
+export interface BlockchainResponse {
+  platform?: Platform;
+  network?: string;
+  chainId: number;
+  [key: string]: any;
 }
 
 export default function useBlockchain() {
@@ -61,8 +74,14 @@ export default function useBlockchain() {
           network: NETWORK,
         }),
       );
-      if (ethRes?.data?.length > 0) {
-        _blockchainList = ethRes.data;
+
+      if (ethRes?.data) {
+        const ethData = ethRes.data as BlockchainResponse[];
+        _blockchainList = ethData.map((item) => ({
+          platform: 'ETH' as Platform,
+          chainId: item.chainId,
+          network: item.network,
+        }));
       }
 
       // 获取 SOLANA 平台的区块链列表
@@ -72,8 +91,15 @@ export default function useBlockchain() {
           network: NETWORK,
         }),
       );
-      if (solanaRes?.data?.length > 0) {
-        _blockchainList = [..._blockchainList, ...solanaRes.data];
+
+      if (solanaRes?.data) {
+        const solanaData = solanaRes.data as BlockchainResponse[];
+        const solanaBlockchains = solanaData.map((item) => ({
+          platform: 'SOLANA' as Platform,
+          chainId: item.chainId,
+          network: item.network,
+        }));
+        _blockchainList = [..._blockchainList, ...solanaBlockchains];
       }
 
       // 更新状态
@@ -91,80 +117,130 @@ export default function useBlockchain() {
   };
 
   // 获取余额列表
-  const getBalanceList = useCallback(async ({
-    platform,
-    chainId,
-    currency: targetCurrency = currency
-  }: BalanceData) => {
-    try {
-      const res = await makeRequest(getBalanceListBalance({
-        platform,
-        chainId,
-        currency: targetCurrency
-      }));
-      return res?.data || null;
-    } catch (error) {
-      console.error('获取余额列表失败:', error);
-      return null;
-    }
-  }, [makeRequest, currency]);
+  const getBalanceList = useCallback(
+    async ({platform, chainId, currency: targetCurrency = currency}: BalanceData) => {
+      try {
+        const res = await makeRequest(
+          getBalanceListBalance({
+            platform,
+            chainId,
+            currency: targetCurrency,
+          }),
+        );
+        return res?.data || null;
+      } catch (error) {
+        console.error('获取余额列表失败:', error);
+        return null;
+      }
+    },
+    [makeRequest, currency],
+  );
 
   // 获取所有链的余额
-  const getAllBalances = useCallback(async (selectedChainId?: number) => {
-    if (!blockchainList?.length) return [];
+  const getAllBalances = useCallback(
+    async (isRequest = false, selectedChainId?: number) => {
+      if (!blockchainList?.length) return [];
 
-    try {
-      setLoading(true);
-      let summaryBalance = 0;
+      try {
+        setLoading(true);
+        let summaryBalance = 0;
+        let tokenList: TokenData[] = [];
 
-      // 根据是否选择了特定链来决定要查询的链列表
-      const chainsToQuery = selectedChainId
-        ? blockchainList.filter(chain => chain.chainId === selectedChainId)
-        : blockchainList;
+        if (isRequest) {
+          // 使用 getInfrastructureListTokenContract 获取数据
+          const tokenContractRes = await makeRequest(
+            getInfrastructureListTokenContract({
+              platform: 'ETH',
+              network: NETWORK,
+            }),
+          );
 
-      // 并行获取所有选中链的余额
-      const results = await Promise.all(
-        chainsToQuery.map(chain =>
-          getBalanceList({
-            platform: chain.platform,
-            chainId: chain.chainId,
-            currency
-          })
-        )
-      );
-
-      // 处理结果
-      const tokenList = results
-        .filter(Boolean)
-        .flatMap(result => {
-          if (result?.summary?.balance) {
-            summaryBalance += Number(result.summary.balance);
+          if (tokenContractRes?.data) {
+            tokenList = tokenContractRes.data.map((token: TokenContractData) => {
+              const chainInfo = getChainInfo(token.chainId);
+              return {
+                chainName: chainInfo?.name || '',
+                chainIcon: chainInfo?.icon || '',
+                currency: token?.priceCurrency,
+                currencyAmount: '0',
+                token: {
+                  platform: token?.platform,
+                  network: token?.network,
+                  erc: token?.erc,
+                  id: token?.id,
+                  address: token?.address,
+                  chainId: token?.chainId,
+                  tokenName: token?.tokenName,
+                  tokenSymbol: token?.tokenSymbol || token?.tokenName,
+                  tokenDecimals: token?.tokenDecimals,
+                  priceCurrency: token?.priceCurrency,
+                  priceValue: token?.priceValue,
+                  icon: token?.icon,
+                },
+                tokenAmount: '0',
+                // token: {
+                //   ...token,
+                //   tokenSymbol: token.symbol,
+                //   chainId: token.chainId,
+                // },
+              };
+            });
+            return tokenList;
           }
-          return result?.tokens || [];
-        })
-        .map(token => {
-          const chainInfo = getChainInfo(token?.token?.chainId);
-          return {
-            chainName: chainInfo?.name,
-            chainIcon: chainInfo?.icon,
-            ...token,
-          };
+        }
+
+        // 如果 isRequest 为 false 或者获取合约列表失败，则使用原有逻辑
+        // 根据是否选择了特定链来决定要查询的链列表
+        const chainsToQuery = selectedChainId
+          ? blockchainList.filter((chain) => chain.chainId === selectedChainId)
+          : blockchainList;
+
+        // 并行获取所有选中链的余额
+        const results = await Promise.all(
+          chainsToQuery.map((chain) =>
+            getBalanceList({
+              platform: chain.platform,
+              chainId: chain.chainId,
+              currency,
+            }),
+          ),
+        );
+
+        // 处理结果
+        tokenList = results
+          .filter(Boolean)
+          .flatMap((result) => {
+            if (result?.summary?.balance) {
+              summaryBalance += Number(result.summary.balance);
+            }
+            return result?.tokens || [];
+          })
+          .map((token) => {
+            const chainInfo = getChainInfo(token?.token?.chainId);
+            return {
+              token: token.token,
+              ...token,
+              chainName: chainInfo?.name || '',
+              chainIcon: chainInfo?.icon || '',
+            };
+          });
+
+        // 更新总余额
+        dispatch.user.updateState({
+          availableBalance: summaryBalance,
         });
+        console.log('🚀 ~ tokenList:', tokenList);
 
-      // 更新总余额
-      dispatch.user.updateState({
-        availableBalance: summaryBalance,
-        tokenList: tokenList,
-      });
-
-      return tokenList;
-    } catch (error) {
-      console.error('获取所有余额失败:', error);
-      return [];
-    } finally {
-      setLoading(false);
-    }
-  }, [blockchainList, currency, getBalanceList, dispatch]);
+        return tokenList;
+      } catch (error) {
+        console.error('获取所有余额失败:', error);
+        return [];
+      } finally {
+        setLoading(false);
+      }
+    },
+    [blockchainList, currency, getBalanceList, dispatch],
+  );
 
   // 将 token 列表转换为按链分组的数据
   const convertToChainGroups = useCallback((tokenList: TokenData[]): ChainGroup[] => {
@@ -178,7 +254,7 @@ export default function useBlockchain() {
         ...token,
       };
 
-      const existingChainGroup = acc.find(group => group.chainName === chainInfo.name);
+      const existingChainGroup = acc.find((group) => group.chainName === chainInfo.name);
       if (existingChainGroup) {
         existingChainGroup.tokenList.push(tokenData);
       } else {
@@ -195,9 +271,12 @@ export default function useBlockchain() {
   }, []);
 
   // 根据平台获取区块链列表
-  const getBlockchainsByPlatform = useCallback((platform: Platform) => {
-    return blockchainList.filter((blockchain: BlockchainData) => blockchain.platform === platform);
-  }, [blockchainList]);
+  const getBlockchainsByPlatform = useCallback(
+    (platform: Platform) => {
+      return blockchainList.filter((blockchain: BlockchainData) => blockchain.platform === platform);
+    },
+    [blockchainList],
+  );
 
   return {
     getInfrastructureList,

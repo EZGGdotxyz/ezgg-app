@@ -29,7 +29,6 @@ const SearchHeader: React.FC<any> = ({onSearch, placeholder}: SearchHeaderProps)
   const {push, back, replace} = useRouter();
   const {t, i18n} = useTranslation();
   const toast = useToastController();
-  const scheme = 'light';
   const dispatch = useDispatch<Dispatch>();
   const inputRef = useRef(null);
   const [searchText, setSearchText] = useState('');

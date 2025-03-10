@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-01-10 16:44:53
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-08-05 15:44:19
- * @FilePath: /snapx-nfc-app-merchants/packages/config/src/tamagui.config.ts
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-03-10 17:24:51
+ * @FilePath: /ezgg-app/packages/config/src/tamagui.config.ts
  */
 import {createTamagui} from 'tamagui';
 import {createInterFont} from '@tamagui/font-inter';
@@ -80,9 +80,9 @@ export const config = createTamagui({
       background2: '#f8f8f8',
     },
     dark: {
-      ...themes.dark,
-      background: '#000',
-      background2: '#151515',
+      ...themes.light,
+      background: '#fff',
+      background2: '#f8f8f8',
     },
   },
   tokens: {

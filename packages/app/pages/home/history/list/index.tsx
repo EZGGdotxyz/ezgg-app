@@ -43,7 +43,6 @@ const {useParam} = createParam<{id: string}>();
 const HistoryScreen = (props: any) => {
   const {isRefresh} = props;
   const {t} = useTranslation();
-  const scheme = 'light';
   const [{currency}] = useRematchModel('app');
   const {appScale} = useResponse();
 

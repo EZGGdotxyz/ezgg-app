@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-01-10 16:57:40
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-08-05 15:43:29
- * @FilePath: /snapx-nfc-app-merchants/apps/expo/app/_layout.tsx
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-03-10 16:22:33
+ * @FilePath: /ezgg-app/apps/expo/app/_layout.tsx
  */
 import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
 import {Provider} from 'app/provider';
@@ -97,7 +97,7 @@ export default function HomeLayout() {
   return (
     <Provider>
       <StatusBar barStyle="dark-content" />
-      <ThemeProvider value={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={DefaultTheme}>
         <Stack screenOptions={{headerShown: false}} />
       </ThemeProvider>
     </Provider>

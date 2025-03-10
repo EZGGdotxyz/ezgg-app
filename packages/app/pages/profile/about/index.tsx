@@ -1,122 +1,73 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:24:47
+ * @LastEditTime: 2025-03-10 18:41:06
  * @FilePath: /ezgg-app/packages/app/pages/profile/about/index.tsx
  */
-import {
-  AppHeader,
-  AppHeaderProps,
-  HeaderBackButton,
-  Paragraph,
-  YStack,
-  XStack,
-  SizableText,
-  AppImage,
-  Button,
-} from '@my/ui';
+import {AppHeader, AppHeaderProps, HeaderBackButton, Paragraph, YStack, SizableText, XStack, ScrollView} from '@my/ui';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppHeader2 from 'app/Components/AppHeader2';
-import {useRouter} from 'solito/router';
-import {PrimaryColor} from 'app/config';
-import {ChevronRight} from '@tamagui/lucide-icons';
 import useResponse from 'app/hooks/useResponse';
-// 關於
+// 隱私政策
 const AboutScreen = () => {
   const {t} = useTranslation();
-  const {push} = useRouter();
   const {appScale} = useResponse();
-
-  const menuItems = [
-    {
-      id: 'job_vacancy',
-      title: t('profile.about.1'),
-      url: '/profile/job_vacancy',
-    },
-    {
-      id: 'developer',
-      title: t('profile.about.2'),
-      url: '/profile/developer',
-    },
-    {
-      id: 'partner',
-      title: t('profile.about.3'),
-      url: '/profile/partner',
-    },
-    {
-      id: 'accessibility',
-      title: t('profile.about.4'),
-      url: '/profile/accessibility',
-    },
-    {
-      id: 'terms',
-      title: t('profile.about.5'),
-      url: '/profile/terms',
-    },
-    {
-      id: 'feedback',
-      title: t('profile.about.6'),
-      url: '/profile/feedback',
-    },
-    {
-      id: 'rate',
-      title: t('profile.about.7'),
-      url: '/profile/rate',
-    },
-    {
-      id: 'website',
-      title: t('profile.about.8'),
-      url: '/profile/website',
-    },
-    {
-      id: 'social',
-      title: t('profile.about.9'),
-      url: '/profile/social',
-    },
-  ];
 
   return (
     <PermissionPage isHomePage={true}>
       <AppHeader2 title={t('screen.profile.aboutEzgg.title')} fallbackUrl="/profile" />
-      <YStack f={1} backgroundColor="$background" px={appScale(24)} py={appScale(24)} space={appScale(24)}>
-        <YStack ai="center" space={appScale(8)}>
-        <AppImage
-            width={appScale(285 / 3)}
-            height={appScale(322 / 3)}
-            src={require('app/assets/images/logo.png')}
-            type="local"
-          />
-          <SizableText fontSize="$7" fontWeight="700" color="#212121">
-            ezgg v5.7.9
+      <ScrollView flex={1}>
+        <YStack f={1} p={appScale(24)}>
+          <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+            {t('profile.about.content.1')}
+          </SizableText>
+          <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+            {t('profile.about.content.2')}
+          </SizableText>
+          <YStack>
+            <SizableText fontSize="$6" fontWeight="700" color="$color" mb={appScale(16)}>
+              {t('profile.about.content.3')}
+            </SizableText>
+            <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+              {t('profile.about.content.4')}
+            </SizableText>
+            <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+              {t('profile.about.content.5')}
+            </SizableText>
+            <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+              {t('profile.about.content.6')}
+            </SizableText>
+          </YStack>
+
+          <YStack>
+            <SizableText fontSize="$6" fontWeight="700" color="$color" mb={appScale(16)}>
+              {t('profile.about.content.7')}
+            </SizableText>
+            <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+              {t('profile.about.content.8')}
+            </SizableText>
+            <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+              {t('profile.about.content.8')}
+            </SizableText>
+            <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+              {t('profile.about.content.10')}
+            </SizableText>
+          </YStack>
+          <YStack>
+            <SizableText fontSize="$6" fontWeight="700" color="$color" mb={appScale(16)}>
+              {t('profile.about.content.11')}
+            </SizableText>
+            <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+              {t('profile.about.content.12')}
+            </SizableText>
+          </YStack>
+          <SizableText fontSize="$4" color="$color" mb={appScale(12)}>
+            {t('profile.about.content.13')}
           </SizableText>
         </YStack>
-
-        <YStack space={appScale(4)}>
-          {menuItems.map((item) => (
-            <Button
-              unstyled
-              key={item.id}
-              height={appScale(56)}
-              ai="center"
-              flexDirection="row"
-              jc="space-between"
-              // px={appScale(16)}
-              py={appScale(14)}
-              backgroundColor="#fff"
-              borderRadius={appScale(8)}
-              pressStyle={{opacity: 0.8}}
-              // onPress={() => push(item.url)}
-            >
-              <SizableText fontSize="$6" fontWeight="600" color="#212121">
-                {item.title}
-              </SizableText>
-              <ChevronRight color={'#212121'} size={appScale(24)} />
-            </Button>
-          ))}
-        </YStack>
-      </YStack>
+      </ScrollView>
     </PermissionPage>
   );
 };

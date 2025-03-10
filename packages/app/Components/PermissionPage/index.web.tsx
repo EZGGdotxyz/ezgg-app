@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:47:59
+ * @LastEditTime: 2025-03-10 16:19:54
  * @FilePath: /ezgg-app/packages/app/Components/PermissionPage/index.web.tsx
  */
 import {Button, Paragraph, YStack} from '@my/ui';
@@ -63,7 +63,7 @@ export default function PermissionPage(props: PermissionPageProps) {
         backgroundColor: '#fff',
         position: 'relative',
         // maxHeight: app.appHeight,
-        // maxWidth: 768,
+        maxWidth: 430,
       }}
     >
       {props.children}

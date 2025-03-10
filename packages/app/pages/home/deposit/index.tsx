@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:34:33
+ * @LastEditTime: 2025-03-10 17:40:59
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -216,7 +216,12 @@ const DepositScreen = () => {
         }}
       >
         <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
-          <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
+          <Currency
+            setIsLoading={setIsLoading}
+            currencyData={currencyData}
+            setCurrencyData={setCurrencyData}
+            isRequest={true}
+          />
           <YStack w="100%" mb={appScale(24)}>
             <XStack mb={appScale(8)} w="100%">
               <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
@@ -253,7 +258,7 @@ const DepositScreen = () => {
               </SizableText>
             </XStack>
           </YStack>
-          <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+          {/* <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
             {currencyData?.tokenAmount && (
               <SizableText
                 h={appScale(24)}
@@ -265,7 +270,7 @@ const DepositScreen = () => {
                 currencyData?.chainName
               })`}</SizableText>
             )}
-          </XStack>
+          </XStack> */}
 
           <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
             <AppButton

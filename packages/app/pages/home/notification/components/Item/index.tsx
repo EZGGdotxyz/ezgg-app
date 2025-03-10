@@ -82,7 +82,6 @@ const Item: React.FC<ItemProps> = ({item, onRead}: ItemProps) => {
   const {t, i18n} = useTranslation();
   const {push} = useRouter();
   const [{userInfo}] = useRematchModel('user');
-  const scheme = 'light';
   const {appScale} = useResponse();
 
   // 使用 useCallback 和 debounce 创建防抖函数

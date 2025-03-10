@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 14:36:26
+ * @LastEditTime: 2025-03-10 16:31:31
  * @FilePath: /ezgg-app/packages/app/provider/index.tsx
  */
 import {CustomToast, TamaguiProvider, TamaguiProviderProps, ToastProvider, config} from '@my/ui';
@@ -16,13 +16,13 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 const queryClient = new QueryClient();
 
 export function Provider({children, ...rest}: Omit<TamaguiProviderProps, 'config'>) {
-  const scheme = 'light';
+
 
   return (
     <ReduxProvider store={store}>
       <QueryClientProvider client={queryClient}>
         <WagmiProvider config={wagmiConfig}>
-          <TamaguiProvider config={config} disableInjectCSS defaultTheme={'light'} {...rest}>
+          <TamaguiProvider config={config} theme='light'  disableInjectCSS defaultTheme={'light'} {...rest}>
             <ToastProvider swipeDirection="horizontal" duration={2000}>
               <AppPage>{children}</AppPage>
               <CustomToast />
