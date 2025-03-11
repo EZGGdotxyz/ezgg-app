@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 17:18:58
+ * @LastEditTime: 2025-03-10 19:37:39
  * @FilePath: /ezgg-app/packages/app/Components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -15,6 +15,7 @@ import {TokenIcon} from '@web3icons/react';
 import React from 'react';
 import useResponse from 'app/hooks/useResponse';
 import useBlockchain from 'app/hooks/useBlockchain';
+import {getTrustWalletAssetUrl} from 'app/utils/chain';
 
 export type CurrencyProps = {
   currencyData: any;
@@ -43,7 +44,7 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
       if (blockchainList?.length > 0) {
         fetchBalances();
       }
-    }, [blockchainList,isRequest]);
+    }, [blockchainList, isRequest]);
 
     const fetchBalances = async () => {
       try {
@@ -92,6 +93,14 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
                     <TokenIcon symbol={currencyData?.token?.tokenSymbol} variant="background" size={appScale(48)} />
                   </YStack>
                 )}
+                {/* <AppImage
+                  src={getTrustWalletAssetUrl(
+                    '0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42',
+                    currencyData?.token?.chainId,
+                  )}
+                  w={appScale(48)}
+                  h={appScale(48)}
+                /> */}
               </XStack>
 
               {currencyData?.token?.tokenSymbol && (

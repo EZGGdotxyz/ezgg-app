@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:21:12
+ * @LastEditTime: 2025-03-11 14:21:53
  * @FilePath: /ezgg-app/packages/app/Components/SharePopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, XStack, YStack} from '@my/ui';
@@ -16,6 +16,7 @@ import {
   TelegramIcon,
   FacebookIcon,
   WhatsappIcon,
+  XIcon,
 } from 'react-share';
 import React, {useEffect, useState} from 'react';
 import useResponse from 'app/hooks/useResponse';
@@ -41,10 +42,15 @@ const SharePopup: React.FC<SharePopupProps> = ({modalVisible, setModalVisible, s
       ),
     },
     {
-      title: t('home.share.twitter'),
+      title: 'X',
       button: () => (
-        <TwitterShareButton url={shareUrl} title={shareTitle}>
-          <TwitterIcon size={appScale(48)} round />
+        <TwitterShareButton
+          url={shareUrl}
+          title={shareTitle}
+          hashtags={['ezgg', 'ezggdotxyz']}
+          related={['ezggdotxyz']}
+        >
+          <XIcon size={appScale(48)} round />
         </TwitterShareButton>
       ),
     },

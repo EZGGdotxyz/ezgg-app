@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 18:09:09
+ * @LastEditTime: 2025-03-11 14:59:03
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -112,6 +112,11 @@ export default {
   'home.paylink.addMessage': '添加訊息',
   'home.paylink.addMessage.tips': '請輸入您的訊息',
   'home.paylink.sendCrypto': '發送加密貨幣',
+  'home.paylink.approveTransaction': '批准交易',
+  'home.paylink.approve': '批准',
+  'home.paylink.reject': '拒絕',
+  'home.paylink.amount': '金額',
+  'home.paylink.network': '網絡',
 
   'home.qr.title': '掃描QR碼',
   'home.qr.sub': '將相機對準QR碼進行掃描',

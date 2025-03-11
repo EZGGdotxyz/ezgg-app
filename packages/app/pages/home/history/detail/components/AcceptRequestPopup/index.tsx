@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 17:08:23
+ * @LastEditTime: 2025-03-11 16:13:14
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/AcceptRequestPopup/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController, YStack} from '@my/ui';
@@ -22,7 +22,8 @@ import TokenTransferContract from 'app/abi/TokenTransfer.json';
 import {postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
 import AppModal from 'app/Components/AppModal';
 import useResponse from 'app/hooks/useResponse';
-import { formatTokenAmount, isIphoneX } from 'app/utils';
+import {formatTokenAmount, isIphoneX} from 'app/utils';
+import {getBalanceFindBalance} from 'app/servers/api/balance';
 
 interface AcceptRequestPopupProps {
   modalVisible: boolean;
@@ -50,6 +51,36 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
     try {
       setModalVisible(false);
       setIsLoading(true);
+
+      const res: any = await makeRequest(
+        getBalanceFindBalance({
+          platform: orderData?.platform,
+          chainId: orderData?.chainId,
+          address: orderData?.tokenContractAddress,
+          currency: String(orderData?.currency || 'usd').toLowerCase(),
+        }),
+      );
+
+      if (res?.data?.tokenAmount) {
+        // 考虑代币精度，将小数转换为整数
+        const tokenAmountStr = String(res?.data?.tokenAmount);
+        const [integerPart = '0', decimalPart = ''] = tokenAmountStr.split('.');
+        const decimals = orderData?.tokenDecimals || 18;
+        
+        // 补齐精度位数
+        const paddedDecimal = decimalPart.padEnd(decimals, '0');
+        const fullIntegerAmount = integerPart + paddedDecimal;
+        
+        // 转换为 BigInt
+        const tokenAmount = BigInt(fullIntegerAmount);
+
+        console.log('🚀 ~ onAcceptRequest ~ tokenAmount:', tokenAmount);
+
+        if (tokenAmount < BigInt(orderData?.amount)) {
+          throw new Error('insufficient balance');
+        }
+      }
+
       // 代币合约地址
       const tokenContractAddress = orderData?.tokenContractAddress!;
       // 转账业务合约地址
@@ -65,28 +96,35 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
       }
 
       // 使用Privy的SmartWallet发起ERC4337标准的批量打包交易
-      const transactionHash = await baseClient.sendTransaction({
-        calls: [
-          {
-            // 调用USDC代币的approve方法，授信给转账业务合约
-            to: tokenContractAddress,
-            data: encodeFunctionData({
-              abi: erc20Abi,
-              functionName: 'approve',
-              args: [bizContractAddress, amount],
-            }),
+      const transactionHash = await baseClient.sendTransaction(
+        {
+          calls: [
+            {
+              // 调用USDC代币的approve方法，授信给转账业务合约
+              to: tokenContractAddress,
+              data: encodeFunctionData({
+                abi: erc20Abi,
+                functionName: 'approve',
+                args: [bizContractAddress, amount],
+              }),
+            },
+            {
+              // 调用转账业务合约的transfer方法，将代币转给接收方（并收取手续费）
+              to: bizContractAddress,
+              data: encodeFunctionData({
+                abi: TokenTransferContract.abi,
+                functionName: 'transfer',
+                args: [orderData?.receiverWalletAddress!, tokenContractAddress, amount],
+              }),
+            },
+          ],
+        },
+        {
+          uiOptions: {
+            showWalletUIs: false,
           },
-          {
-            // 调用转账业务合约的transfer方法，将代币转给接收方（并收取手续费）
-            to: bizContractAddress,
-            data: encodeFunctionData({
-              abi: TokenTransferContract.abi,
-              functionName: 'transfer',
-              args: [orderData?.receiverWalletAddress!, tokenContractAddress, amount],
-            }),
-          },
-        ],
-      });
+        },
+      );
       await handleTransactionSuccess(transactionHash);
       onSuccess();
     } catch (error) {

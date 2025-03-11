@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 18:48:59
+ * @LastEditTime: 2025-03-11 14:23:17
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/profile.ts
  */
 export default {
@@ -101,5 +101,11 @@ export default {
   'profile.about.content.11': '技術細節：',
   'profile.about.content.12': 'EZGG 採用 ERC-4337 智能帳戶，實現免 Gas、無縫交易。支付透過 EVM 兼容帳戶抽象技術 保障安全與順暢體驗。',
   'profile.about.content.13': '立即加入 Web3 新世代支付革命，體驗 EZGG！ 🚀',
+
+
+
+
+  'profile.privacyPolicy.1': '普通',
+
 
 };

@@ -1,11 +1,11 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 16:19:54
+ * @LastEditTime: 2025-03-11 16:25:52
  * @FilePath: /ezgg-app/packages/app/Components/PermissionPage/index.web.tsx
  */
 import {Button, Paragraph, YStack} from '@my/ui';
-import {PrimaryColor} from 'app/config';
+import {PrimaryColor, MAX_WIDTH} from 'app/config';
 import {useRematchModel} from 'app/store/model';
 import {useEffect} from 'react';
 import {createParam} from 'solito';
@@ -63,7 +63,7 @@ export default function PermissionPage(props: PermissionPageProps) {
         backgroundColor: '#fff',
         position: 'relative',
         // maxHeight: app.appHeight,
-        maxWidth: 430,
+        maxWidth: MAX_WIDTH,
       }}
     >
       {props.children}

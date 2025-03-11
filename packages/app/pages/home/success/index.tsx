@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 17:11:51
+ * @LastEditTime: 2025-03-11 15:34:31
  * @FilePath: /ezgg-app/packages/app/pages/home/success/index.tsx
  */
 import {

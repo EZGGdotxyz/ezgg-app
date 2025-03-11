@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 16:43:08
+ * @LastEditTime: 2025-03-11 16:21:45
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -111,9 +111,36 @@ export const useTransaction = () => {
         throw new Error('Failed to get client for chain');
       }
 
-      return await baseClient.sendTransaction({
-        calls: params.calls,
-      });
+      return await baseClient.sendTransaction(
+        {
+          calls: params.calls,
+        },
+        {
+          uiOptions: {
+            showWalletUIs: false,
+          },
+        },
+        // {
+        //   uiOptions: {
+        //     showWalletUIs: false,
+        //     header: 'header',
+        //     successHeader: 'successHeader!',
+        //     successDescription: 'successDescription',
+        //     title: 'title',
+        //     description: 'description',
+        //     buttonText: 'buttonText',
+        //     transactionInfo: {
+        //       title: 'title',
+        //       action: 'action',
+        //       contractInfo: {
+        //         name: 'name',
+        //         url: 'address',
+        //         imgUrl: '',
+        //       },
+        //     },
+        //   },
+        // },
+      );
     } catch (error) {
       console.error('Send transaction error:', error);
       throw error;
@@ -220,14 +247,21 @@ export const useTransaction = () => {
         throw new Error('Failed to get client for chain');
       }
 
-      const transactionHash = await baseClient.sendTransaction({
-        to: bizContractAddress,
-        data: encodeFunctionData({
-          abi: TokenLinkContract.abi,
-          functionName: 'withdraw',
-          args: [getAddress(payLink.data.senderWalletAddress!), payLink.data.otp],
-        }),
-      });
+      const transactionHash = await baseClient.sendTransaction(
+        {
+          to: bizContractAddress,
+          data: encodeFunctionData({
+            abi: TokenLinkContract.abi,
+            functionName: 'withdraw',
+            args: [getAddress(payLink.data.senderWalletAddress!), payLink.data.otp],
+          }),
+        },
+        {
+          uiOptions: {
+            showWalletUIs: false,
+          },
+        },
+      );
 
       await handleTransactionSuccess(
         {
@@ -268,9 +302,6 @@ export const useTransaction = () => {
       const tokenContractAddress = transaction.tokenContractAddress!;
       const bizContractAddress = transaction.bizContractAddress;
       const amount = BigInt(transaction.amount);
-
-      console.log('🚀 ~ onSendSubmit ~ amount:', amount);
-
       const transactionHash = await sendTransaction({
         chainId: transaction.chainId,
         calls: [
@@ -310,13 +341,9 @@ export const useTransaction = () => {
   };
 
   // 发送交易
-  const onSendSubmit = async (params: TransactionParams, onSuccess?: (data: any) => void) => {
+  const onSendSubmit = async (transaction: any, onSuccess?: (data: any) => void) => {
     try {
-      const transaction = await createTransaction(params);
-
-      console.log('🚀 ~ onSendSubmit ~ params:', params);
-
-      if (params.transactionType === 'PAY_LINK') {
+      if (transaction.transactionType === 'PAY_LINK') {
         await handleSendPayLink(transaction, onSuccess);
         return;
       }
@@ -359,33 +386,32 @@ export const useTransaction = () => {
   };
 
   // 提现
-  const onWithdraw = async (
-    params: TransactionParams & {
-      receiverAddress: string;
-    },
-    onSuccess?: (data: any) => void,
-  ) => {
+  const onWithdraw = async (transaction: any, onSuccess?: (data: any) => void) => {
     try {
-      const _amount = Number(convertAmountToTokenDecimals(params.amount.toString(), 6));
-      const transaction = await createTransaction({...params, amount: _amount});
-
       const tokenContractAddress = transaction.tokenContractAddress!;
       const baseClient = await getClientForChain({
-        id: params.chainId,
+        id: transaction.chainId,
       });
 
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
       }
 
-      const transactionHash = await baseClient.sendTransaction({
-        to: getAddress(tokenContractAddress!),
-        data: encodeFunctionData({
-          abi: erc20Abi,
-          functionName: 'transfer',
-          args: [params.receiverAddress as `0x${string}`, BigInt(_amount)],
-        }),
-      });
+      const transactionHash = await baseClient.sendTransaction(
+        {
+          to: getAddress(tokenContractAddress!),
+          data: encodeFunctionData({
+            abi: erc20Abi,
+            functionName: 'transfer',
+            args: [transaction.receiverAddress as `0x${string}`, BigInt(transaction.amount)],
+          }),
+        },
+        {
+          uiOptions: {
+            showWalletUIs: false,
+          },
+        },
+      );
 
       await handleTransactionSuccess(
         {

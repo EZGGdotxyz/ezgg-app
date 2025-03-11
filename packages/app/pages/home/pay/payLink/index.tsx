@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:41:03
+ * @LastEditTime: 2025-03-11 16:04:51
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -33,11 +33,6 @@ import {ChevronDown, ChevronRight} from '@tamagui/lucide-icons';
 import {createParam} from 'solito';
 import {ExternalLinkData, PrimaryColor} from 'app/config';
 import SuccessInfo from 'app/Components/SuccessInfo';
-import {
-  getTransactionHistoryFindTransactionHistoryCodeTransactionCode,
-  postTransactionHistoryCreateTransactionHistory,
-  postTransactionHistoryUpdateTransactionHash,
-} from 'app/servers/api/transactionHistory';
 import useRequest from 'app/hooks/useRequest';
 import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
@@ -53,6 +48,7 @@ import AppLoading from 'app/Components/AppLoading';
 import TokenLinkContract from 'app/abi/TokenLink.json';
 import {useTransaction} from 'app/hooks/useTransaction';
 import useResponse from 'app/hooks/useResponse';
+import PayPopup from 'app/Components/PayPopup';
 
 const {useParams} = createParam<any>();
 
@@ -71,9 +67,10 @@ const PayLinkScreen = ({type}: any) => {
   const toast = useToastController();
 
   const [orderData, setOrderData] = React.useState<any>();
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const {back, replace, push} = useRouter();
-  const {onSendSubmit, onRequestSubmit} = useTransaction();
+  const {onSendSubmit, onRequestSubmit, createTransaction} = useTransaction();
 
   const createTransactionParams = (type: 'SEND' | 'REQUEST') => {
     const _amount = Number(
@@ -113,13 +110,15 @@ const PayLinkScreen = ({type}: any) => {
       setIsLoading(true);
       const params = createTransactionParams(type);
       if (type === 'SEND') {
-        await onSendSubmit(params, (data) => {
-          setIsLoading(false);
-          replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
-          setTimeout(() => {
-            dispatch.user.updateState({payLinkData: {}});
+        const transaction = await createTransaction(params);
+        if (transaction?.transactionCode) {
+          setModalVisible(true);
+          setOrderData(transaction);
+        } else {
+          toast.show(t('tips.error.networkError'), {
+            duration: 3000,
           });
-        });
+        }
       } else {
         await onRequestSubmit(params, (data) => {
           setIsLoading(false);
@@ -131,6 +130,40 @@ const PayLinkScreen = ({type}: any) => {
       }
     } catch (error) {
       console.error(`${type} transaction error:`, error);
+      if (error?.message.includes('The user rejected the request')) {
+        toast.show(t('tips.error.userRejected'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient allowance')) {
+        toast.show(t('tips.error.insufficientAllowance'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient balance')) {
+        toast.show(t('tips.error.insufficientBalance'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const _onSendContract = async () => {
+    try {
+      setIsLoading(true);
+      await onSendSubmit(orderData, (data) => {
+        setIsLoading(false);
+        replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
+        setTimeout(() => {
+          dispatch.user.updateState({payLinkData: {}});
+        });
+      });
+    } catch (error) {
+      
       if (error?.message.includes('The user rejected the request')) {
         toast.show(t('tips.error.userRejected'), {
           duration: 3000,
@@ -310,7 +343,12 @@ const PayLinkScreen = ({type}: any) => {
             width: '50%',
           }}
           onPress={() => {
-            handleSubmit(type === 'send' ? 'SEND' : 'REQUEST');
+            if (orderData?.id) {
+              // _onSendContract();
+              setModalVisible(true);
+            } else {
+              handleSubmit(type === 'send' ? 'SEND' : 'REQUEST');
+            }
           }}
         >
           {type === 'send' ? t('home.paylink.sendCrypto') : t('home.request.requestCrypto')}
@@ -318,6 +356,13 @@ const PayLinkScreen = ({type}: any) => {
       </XStack>
 
       {isLoading && <AppLoading />}
+
+      <PayPopup
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        orderData={orderData}
+        onSubmit={_onSendContract}
+      />
     </PermissionPage>
   );
 };

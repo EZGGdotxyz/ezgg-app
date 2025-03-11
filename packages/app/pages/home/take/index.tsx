@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 22:57:46
+ * @LastEditTime: 2025-03-11 16:21:15
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -24,13 +24,7 @@ import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
 import AppButton from 'app/Components/AppButton';
 import {StyleSheet} from 'react-native';
-import {
-  convertAmountToTokenDecimals,
-  formatNumber,
-  formatTokenAmount,
-  getUserSubName,
-  isIphoneX,
-} from 'app/utils';
+import {convertAmountToTokenDecimals, formatNumber, formatTokenAmount, getUserSubName, isIphoneX} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import Currency from 'app/Components/Currency';
@@ -62,6 +56,9 @@ import {TokenIcon} from '@web3icons/react';
 import TokenLinkContract from 'app/abi/TokenLink.json';
 import {useTransaction} from 'app/hooks/useTransaction';
 import useResponse from 'app/hooks/useResponse';
+import PayPopup from 'app/Components/PayPopup';
+import {getBalanceFindBalance} from 'app/servers/api/balance';
+
 const {useParams} = createParam<any>();
 
 // 存款
@@ -72,14 +69,13 @@ const TakeScreen = (any) => {
   const [{userInfo, isLogin}] = useRematchModel('user');
   const {appScale} = useResponse();
 
-
   const [inputValue, setInputValue] = React.useState('');
   const {params} = useParams();
   const [isLoading, setIsLoading] = React.useState(false);
   const toast = useToastController();
 
-  const [isSuccess, setIsSuccess] = React.useState(false);
   const [orderData, setOrderData] = React.useState<any>();
+  const [modalVisible, setModalVisible] = React.useState(false);
   const {back, push, replace} = useRouter();
 
   const {onSendPayLinkSubmit, onSendContract} = useTransaction();
@@ -97,6 +93,37 @@ const TakeScreen = (any) => {
           }, 500);
         });
       } else {
+        const res: any = await makeRequest(
+          getBalanceFindBalance({
+            platform: orderData?.platform,
+            chainId: orderData?.chainId,
+            address: orderData?.tokenContractAddress,
+            currency: String(orderData?.currency || 'usd').toLowerCase(),
+          }),
+        );
+
+        console.log('🚀 ~ onSendPayLinkSubmit ~ res:', res);
+
+        if (res?.data?.tokenAmount) {
+          // 考虑代币精度，将小数转换为整数
+          const tokenAmountStr = String(res?.data?.tokenAmount);
+          const [integerPart = '0', decimalPart = ''] = tokenAmountStr.split('.');
+          const decimals = orderData?.tokenDecimals || 18;
+
+          // 补齐精度位数
+          const paddedDecimal = decimalPart.padEnd(decimals, '0');
+          const fullIntegerAmount = integerPart + paddedDecimal;
+
+          // 转换为 BigInt
+          const tokenAmount = BigInt(fullIntegerAmount);
+
+          console.log('🚀 ~ onAcceptRequest ~ tokenAmount:', tokenAmount);
+
+          if (tokenAmount < BigInt(orderData?.amount)) {
+            throw new Error('insufficient balance');
+          }
+        }
+
         await onSendContract(orderData, (data) => {
           toast.show(t('tips.success.transactionSuccess'), {
             duration: 3000,
@@ -129,6 +156,10 @@ const TakeScreen = (any) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const onSubmit = () => {
+    orderData?.transactionCategory === 'SEND' ? handleSubmit('SEND') : handleSubmit('REQUEST');
   };
 
   const _getTransactionHistoryFindTransactionHistoryCodeTransactionCode = async () => {
@@ -305,7 +336,11 @@ const TakeScreen = (any) => {
                     }`,
                   );
                 } else {
-                  orderData?.transactionCategory === 'SEND' ? handleSubmit('SEND') : handleSubmit('REQUEST');
+                  if (orderData?.transactionCategory === 'SEND') {
+                    handleSubmit('SEND');
+                  } else {
+                    setModalVisible(true);
+                  }
                 }
               }}
             >
@@ -317,6 +352,25 @@ const TakeScreen = (any) => {
                 ? t('home.take.claim')
                 : t('home.send')}
             </AppButton>
+          </XStack>
+          <XStack w="100%" mb={appScale(24)}>
+            <Button
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              unstyled
+              mt={appScale(24)}
+              chromeless
+              onPress={() => {
+                replace('/');
+              }}
+            >
+              <SizableText col={'#212121'} fontSize={'$3'}>
+                {t('login.profile.dont')}
+              </SizableText>
+            </Button>
           </XStack>
 
           {orderData?.message && (
@@ -343,6 +397,12 @@ const TakeScreen = (any) => {
         </YStack>
       </ScrollView>
       {isLoading && <AppLoading />}
+      <PayPopup
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        orderData={orderData}
+        onSubmit={onSubmit}
+      />
     </PermissionPage>
   );
 };

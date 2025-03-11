@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 17:36:59
+ * @LastEditTime: 2025-03-11 15:17:32
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -120,7 +120,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           ],
         },
         WITHDRAW: {
-          title: t('home.order.depositTips'),
+          title: t('home.order.withdrawTips'),
           icon: 'withdraw',
           infoList: [
             createTransactionInfoItem(t('home.order.youWithdraw'), createAmountDisplay(orderData)),
@@ -128,7 +128,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           ],
         },
         DEPOSIT: {
-          title: '',
+          title: t('home.order.depositTips'),
           icon: 'topUp',
           infoList: [
             createTransactionInfoItem(t('home.order.youTopUp'), createAmountDisplay(orderData)),

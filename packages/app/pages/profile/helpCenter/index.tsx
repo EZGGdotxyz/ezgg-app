@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 18:55:41
+ * @LastEditTime: 2025-03-11 14:19:28
  * @FilePath: /ezgg-app/packages/app/pages/profile/helpCenter/index.tsx
  */
 import {
@@ -25,7 +25,7 @@ import {ChevronDown, ChevronUp, Search, ChevronRight} from '@tamagui/lucide-icon
 import SearchHeader from 'app/Components/SearchHeader';
 import {PrimaryColor} from 'app/config';
 import useResponse from 'app/hooks/useResponse';
-
+import {TwitterIcon, TelegramIcon, FacebookIcon, WhatsappIcon, XIcon} from 'react-share';
 // FAQ 数据接口
 interface FaqItem {
   question: string;
@@ -120,12 +120,12 @@ const HelpCenterScreen = () => {
 
   // 联系方式数据
   const contactData = [
-    {type: 'Customer Service', icon: 'headphones', title: t('profile.help.contactSupport.1')},
-    {type: 'WhatsApp', icon: 'whatsapp', title: t('profile.help.contactSupport.2')},
-    {type: 'Website', icon: 'globe', title: t('profile.help.contactSupport.3')},
-    {type: 'Facebook', icon: 'facebook', title: t('profile.help.contactSupport.4')},
-    {type: 'Twitter', icon: 'twitter', title: t('profile.help.contactSupport.5')},
-    {type: 'Instagram', icon: 'instagram', title: t('profile.help.contactSupport.6')},
+    // {type: 'Customer Service', icon: 'headphones', title: t('profile.help.contactSupport.1'), url: 'tel:1234567890'},
+    // {type: 'WhatsApp', icon: 'whatsapp', title: t('profile.help.contactSupport.2'), url: 'https://wa.me/1234567890'},
+    // {type: 'Website', icon: 'globe', title: t('profile.help.contactSupport.3'), url: 'https://www.google.com'},
+    // {type: 'Facebook', icon: 'facebook', title: t('profile.help.contactSupport.4'), url: 'https://www.facebook.com'},
+    {type: 'X', icon: 'x', title: 'X', url: 'https://x.com/ezggdotxyz'},
+    {type: 'Instagram', icon: 'instagram', title: t('profile.help.contactSupport.6'), url: 'https://t.me/EZGGxyz'},
   ];
 
   // 分类数据
@@ -175,7 +175,7 @@ const HelpCenterScreen = () => {
     setExpandedFaq(expandedFaq === question ? null : question);
   };
 
-  const renderContactItem = (item: {type: string; icon: string; title: string}) => (
+  const renderContactItem = (item: {type: string; icon: string; title: string; url: string}) => (
     <Button
       key={item.type}
       unstyled
@@ -189,17 +189,24 @@ const HelpCenterScreen = () => {
       pressStyle={{
         opacity: 0.85,
       }}
+      onPress={() => {
+        if (item.type === 'Customer Service') {
+          // Linking.openURL('tel:1234567890');
+        } else {
+          window.open(item.url, '_blank');
+        }
+      }}
     >
       <XStack justifyContent="space-between" alignItems="center" width="100%">
         <XStack alignItems="center" space="$3">
           {/* 使用图标组件 */}
           <YStack width={24} height={24} justifyContent="center" alignItems="center">
-            {item.icon === 'headphones' && <Text fontSize={20}>🎧</Text>}
+            {item.icon === 'headphones' && <WhatsappIcon size={appScale(48)} round />}
             {item.icon === 'whatsapp' && <Text fontSize={20}>📱</Text>}
             {item.icon === 'globe' && <Text fontSize={20}>🌐</Text>}
-            {item.icon === 'facebook' && <Text fontSize={20}>📘</Text>}
-            {item.icon === 'twitter' && <Text fontSize={20}>📘</Text>}
-            {item.icon === 'instagram' && <Text fontSize={20}>📷</Text>}
+            {item.icon === 'facebook' && <FacebookIcon size={appScale(48)} round />}
+            {item.icon === 'x' && <XIcon size={appScale(48)} round />}
+            {item.icon === 'instagram' && <TelegramIcon size={appScale(48)} round />}
           </YStack>
           <SizableText col={'#212121'} fontSize={'$4'} fow="700">
             {item.title}
@@ -314,7 +321,9 @@ const HelpCenterScreen = () => {
       <ScrollView ref={scrollViewRef} flex={1}>
         <YStack flex={1} paddingTop={appScale(12)}>
           {/* 搜索框 */}
-          {activeTab === 'faq' && <SearchHeader placeholder={t('home.search')} onSearch={onSearch} value={searchText} />}
+          {activeTab === 'faq' && (
+            <SearchHeader placeholder={t('home.search')} onSearch={onSearch} value={searchText} />
+          )}
 
           {activeTab === 'faq' && (
             <YStack flex={1}>

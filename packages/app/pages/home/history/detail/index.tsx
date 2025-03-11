@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 17:33:33
+ * @LastEditTime: 2025-03-11 15:35:44
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -13,6 +13,7 @@ import {
   Paragraph,
   ScrollView,
   SizableText,
+  useToastController,
   XStack,
   YStack,
 } from '@my/ui';
@@ -66,6 +67,7 @@ const HistoryDetailScreen = () => {
   const [shareVisible, setShareVisible] = useState(false);
   const [declineRequestVisible, setDeclineRequestVisible] = useState(false);
   const [acceptRequestVisible, setAcceptRequestVisible] = useState(false);
+  const toast = useToastController();
   const statusList = {
     PENDING: {
       title: t('home.order.status.unpaid'),
@@ -136,7 +138,6 @@ const HistoryDetailScreen = () => {
       }
       console.log('🚀 ~ const_getTransactionHistoryFindTransactionHistoryId= ~ sideName:', sideName);
 
-
       let infoDataDefault: any = {
         title: _title,
         icon: '',
@@ -204,6 +205,44 @@ const HistoryDetailScreen = () => {
     setIsLoading(false);
   };
 
+  const onCopy = async (text: string) => {
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        // 优先使用现代 Clipboard API
+        await navigator.clipboard.writeText(text);
+      } else if (typeof window !== 'undefined') {
+        // 降级方案：使用 textarea
+        const textarea = document.createElement('textarea');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        textarea.value = text;
+
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        try {
+          document.execCommand('copy');
+        } catch (err) {
+          console.error('Failed to copy text:', err);
+          throw new Error('Copy failed');
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      } else {
+        throw new Error('Copy not supported');
+      }
+
+      toast.show(t('tips.explore.copy'), {
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Copy error:', error);
+      toast.show(t('tips.error.copyFailed'), {
+        duration: 3000,
+      });
+    }
+  };
   useEffect(() => {
     if (params?.id && userInfo?.customMetadata?.id) {
       _getTransactionHistoryFindTransactionHistoryId();
@@ -356,6 +395,63 @@ const HistoryDetailScreen = () => {
             setAcceptRequestVisible={setAcceptRequestVisible}
           />
         )}
+
+      {(orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') && (
+        <XStack
+          flexShrink={0}
+          pl={appScale(24)}
+          pr={appScale(24)}
+          pt={appScale(12)}
+          pb={appScale(isIphoneX() ? 46 : 12)}
+          w="100%"
+          ai={'center'}
+          jc={'center'}
+          space="$3"
+          borderTopWidth={1}
+          borderColor={'#F2F2F2'}
+        >
+          <Button
+            h={appScale(58)}
+            w={'50%'}
+            br={appScale(28)}
+            ai={'center'}
+            jc={'center'}
+            bc={'#fff'}
+            borderWidth={2}
+            borderColor={PrimaryColor}
+            onPress={() => {
+              window.open(
+                `${ExternalLinkData.webPageHome}/${
+                  orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
+                }/${orderData?.transactionCode}`,
+                '_blank',
+              );
+            }}
+            // disabled={isLoading}
+            pressStyle={{
+              opacity: 0.85,
+            }}
+            unstyled
+          >
+            {t('home.send.viewLink')}
+          </Button>
+          <AppButton
+            style={{
+              width: '50%',
+            }}
+            onPress={() => {
+              onCopy(
+                `${ExternalLinkData.webPageHome}/${
+                  orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
+                }/${orderData?.transactionCode}`,
+              );
+            }}
+          >
+            {t('home.send.copyLink')}
+          </AppButton>
+        </XStack>
+      )}
+
       {/* <SharePopup
         modalVisible={shareVisible}
         setModalVisible={setShareVisible}

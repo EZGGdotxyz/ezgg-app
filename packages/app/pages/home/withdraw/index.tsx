@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 17:39:07
+ * @LastEditTime: 2025-03-11 15:21:00
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -47,6 +47,7 @@ import {validateAddress} from 'app/utils/chain';
 import ConnectorsPopup from 'app/Components/ConnectorsPopup';
 import {useAccount} from 'wagmi';
 import useResponse from 'app/hooks/useResponse';
+import PayPopup from 'app/Components/PayPopup';
 
 // 提取
 const WithdrawScreen = () => {
@@ -62,10 +63,13 @@ const WithdrawScreen = () => {
   const toast = useToastController();
   const [currencyData, setCurrencyData] = React.useState<any>();
 
+  const [orderData, setOrderData] = React.useState<any>();
+  const [modalVisible, setModalVisible] = React.useState(false);
+
   const [withdrawAddress, setWithdrawAddress] = React.useState('');
   const [isShow, setIsShow] = React.useState(false);
 
-  const {onWithdraw} = useTransaction();
+  const {onWithdraw, createTransaction} = useTransaction();
   const {address} = useAccount();
   const {appScale} = useResponse();
 
@@ -98,29 +102,42 @@ const WithdrawScreen = () => {
     setIsSubmit(false);
     setIsLoading(true);
 
+    const params: any = {
+      platform: currencyData?.token?.platform,
+      chainId: Number(currencyData?.token?.chainId),
+      tokenContractAddress: currencyData?.token?.address,
+      message: inputValue,
+      transactionCategory: 'WITHDRAW',
+      transactionType: 'WITHDRAW',
+      senderMemberId: userInfo?.customMetadata?.id,
+      receiverAddress: _address,
+    };
+    const _amount = Number(convertAmountToTokenDecimals(inputValue.toString(), 6));
+    const transaction = await createTransaction({...params, amount: _amount});
+
+    if (transaction?.transactionCode) {
+      setModalVisible(true);
+      setOrderData({...transaction, receiverAddress: _address});
+    } else {
+      toast.show(t('tips.error.withdraw.failed'));
+      setIsLoading(false);
+    }
+
     try {
-      await onWithdraw(
-        {
-          platform: currencyData?.token?.platform,
-          chainId: Number(currencyData?.token?.chainId),
-          tokenContractAddress: currencyData?.token?.address,
-          amount: Number(inputValue),
-          message: inputValue,
-          transactionCategory: 'WITHDRAW',
-          transactionType: 'WITHDRAW',
-          senderMemberId: userInfo?.customMetadata?.id,
-          receiverAddress: _address,
-        },
-        (data) => {
-          setIsLoading(false);
-          push('/home/success?type=WITHDRAW&id=' + data?.id);
-        },
-      );
     } catch (error) {
       console.error('Withdraw error:', error);
       setIsLoading(false);
       toast.show(t('tips.error.withdraw.failed'));
     }
+  };
+
+  const _onWithdraw = async () => {
+    try {
+      await onWithdraw(orderData, (data) => {
+        setIsLoading(false);
+        push('/home/success?type=WITHDRAW&id=' + data?.id);
+      });
+    } catch (error) {}
   };
 
   const handlePagePress = () => {
@@ -255,8 +272,8 @@ const WithdrawScreen = () => {
             borderWidth={2}
             borderColor={PrimaryColor}
             onPress={() => {
-              submit(withdrawAddress);
               handlePagePress();
+              submit(withdrawAddress);
               // setDeclineRequestVisible(true);
             }}
             // disabled={isLoading}
@@ -299,6 +316,12 @@ const WithdrawScreen = () => {
         setModalVisible={setIsShow}
       />
       {isLoading && <AppLoading />}
+      <PayPopup
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        orderData={orderData}
+        onSubmit={_onWithdraw}
+      />
     </PermissionPage>
   );
 };

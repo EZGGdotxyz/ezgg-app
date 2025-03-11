@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:23:25
+ * @LastEditTime: 2025-03-11 10:57:04
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/ChainListPopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 14:58:07
+ * @LastEditTime: 2025-03-11 09:09:20
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/TokenList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet} from '@my/ui';

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-26 14:21:05
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 16:20:43
+ * @LastEditTime: 2025-03-11 16:27:21
  * @FilePath: /ezgg-app/apps/next/pages/_app.tsx
  */
 import '@tamagui/core/reset.css';
@@ -69,7 +69,6 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
     // setViewportScale();
     // setRemUnit();
     // setBodyFontSize();
-
     // // 监听窗口变化
     // window.addEventListener('resize', setRemUnit);
     // window.addEventListener('pageshow', (e) => {
@@ -97,7 +96,7 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
       <PrivyProvider
         appId="cm74gcbre00h972np2f6bdut8"
         config={{
-          loginMethods: ['email', 'google', 'sms', 'wallet'],
+          loginMethods: ['email', 'google', 'wallet'],
           appearance: {
             logo: '/images/logo.png',
             theme: 'light',

@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-01-10 16:56:27
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-07-18 23:45:55
- * @FilePath: /snapx-nfc-app/apps/next/pages/_document.tsx
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-03-11 14:04:58
+ * @FilePath: /ezgg-app/apps/next/pages/_document.tsx
  */
 import {config} from '@my/ui';
 import NextDocument, {DocumentContext, DocumentInitialProps, Head, Html, Main, NextScript} from 'next/document';
@@ -46,6 +46,8 @@ export default class Document extends NextDocument {
         <body>
           <Main />
           <NextScript />
+          <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+          <script>eruda.init();</script>
         </body>
       </Html>
     );

@@ -1,152 +1,224 @@
 /*
  * @Date: 2025-03-03 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 14:24:42
+ * @LastEditTime: 2025-03-11 10:58:50
  * @FilePath: /ezgg-app/packages/app/utils/chain.ts
  */
 import {getAddress} from 'viem';
 import {bsc, polygon, base, baseSepolia, polygonAmoy, bscTestnet} from 'wagmi/chains';
 
-interface ChainInfo {
+// 常量定义
+const TRUST_WALLET_ASSETS_BASE_URL = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains';
+const DEFAULT_WETH_ADDRESS = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
+const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
+// 链相关类型定义
+export type ChainId = 1 | 56 | 137 | 8453 | 728126428 | 97 | 80001 | 80002 | 84532 | 100001 | 9999;
+export type ChainName = 'ethereum' | 'smartchain' | 'polygon' | 'base' | 'tron' | 'solana';
+
+// 链配置
+interface ChainConfig {
+  name: string;
+  assetName: ChainName;
+  explorerUrl: string;
+  testnetExplorerUrl?: string;
+  isEVM: boolean;
+}
+
+// 链配置映射
+const CHAIN_CONFIGS: {[key in number]: ChainConfig} = {
+  56: {
+    name: 'BSC',
+    assetName: 'smartchain',
+    explorerUrl: 'https://bscscan.com',
+    testnetExplorerUrl: 'https://testnet.bscscan.com',
+    isEVM: true,
+  },
+  137: {
+    name: 'Polygon',
+    assetName: 'polygon',
+    explorerUrl: 'https://polygonscan.com',
+    testnetExplorerUrl: 'https://mumbai.polygonscan.com',
+    isEVM: true,
+  },
+  8453: {
+    name: 'Base',
+    assetName: 'base',
+    explorerUrl: 'https://basescan.org',
+    testnetExplorerUrl: 'https://sepolia.basescan.org',
+    isEVM: true,
+  },
+  728126428: {
+    name: 'Tron',
+    assetName: 'tron',
+    explorerUrl: 'https://tronscan.org',
+    isEVM: false,
+  },
+  9999: {
+    name: 'Solana',
+    assetName: 'solana',
+    explorerUrl: 'https://solscan.io',
+    isEVM: false,
+  },
+};
+
+// 接口定义
+export interface ChainInfo {
   name: string;
   icon: string;
 }
 
 /**
- * 根据链路ID获取链路信息
- * @param chainId 链路ID
- * @returns 链路信息对象，包含名称和图标
+ * 获取链配置信息
+ * @param chainId 链ID
+ * @returns 链配置信息
  */
-export function getChainInfo(chainId?: any): ChainInfo {
-  if (!chainId || chainId === 'undefined') {
-    return {
-      name: '',
-      icon: '',
-    };
+const getChainConfig = (chainId: number): ChainConfig | undefined => {
+  // 处理测试网到主网的映射
+  const mainnetChainId =
+    {
+      97: 56, // BSC Testnet -> BSC
+      80001: 137, // Mumbai -> Polygon
+      80002: 137, // Polygon Amoy -> Polygon
+      84532: 8453, // Base Sepolia -> Base
+    }[chainId] || chainId;
+
+  return CHAIN_CONFIGS[mainnetChainId];
+};
+
+/**
+ * 根据链路ID获取链路信息
+ */
+export function getChainInfo(chainId?: number): ChainInfo {
+  if (!chainId) {
+    return {name: '', icon: ''};
   }
 
-  switch (chainId) {
-    case bsc.id:
-    case bscTestnet.id:
-    case 56:
-    case 97:
-      return {
-        name: 'BSC',
-        icon: 'BSC',
-      };
-    case polygon.id:
-    case polygonAmoy.id:
-    case 137:
-    case 80002:
-    case 80001:
-      return {
-        name: 'Polygon',
-        icon: 'Polygon',
-      };
-
-    case base.id:
-    case baseSepolia.id:
-    case 8453:
-    case 84532:
-      return {
-        name: 'Base',
-        icon: 'Base',
-      };
-    // tron
-    case 100001:
-      return {
-        name: 'Tron',
-        icon: 'Tron',
-      };
-    // solana
-    case 9999:
-      return {
-        name: 'Solana',
-        icon: 'Solana',
-      };
-    default:
-      return {
-        name: '',
-        icon: '',
-      };
+  const config = getChainConfig(chainId);
+  if (!config) {
+    return {name: '', icon: ''};
   }
+
+  return {
+    name: config.name,
+    icon: config.name,
+  };
 }
 
 /**
- * 根据链路ID和交易哈希获取区块链浏览器链接
- * @param chainId 链路ID
- * @param hash 交易哈希
- * @returns 区块链浏览器链接
+ * 获取区块链浏览器链接
  */
-export function getExplorerUrl(chainId?: any, hash?: string): string {
-  if (!chainId || !hash) {
-    return '';
-  }
+export function getExplorerUrl(chainId?: number, hash?: string): string {
+  if (!chainId || !hash) return '';
 
-  switch (chainId) {
-    case bsc.id:
-    case 56:
-      return `https://bscscan.com/tx/${hash}`;
-    case bscTestnet.id:
-    case 97:
-      return `https://testnet.bscscan.com/tx/${hash}`;
-    case polygon.id:
-    case 137:
-      return `https://polygonscan.com/tx/${hash}`;
-    case polygonAmoy.id:
-    case 80002:
-    case 80001:
-      return `https://mumbai.polygonscan.com/tx/${hash}`;
-    case base.id:
-    case 8453:
-      return `https://basescan.org/tx/${hash}`;
-    case baseSepolia.id:
-    case 84532:
-      return `https://sepolia.basescan.org/tx/${hash}`;
-    // tron
-    case 201:
-      return `https://tronscan.org/#/transaction/${hash}`;
-    // solana
-    case 501:
-      return `https://solscan.io/tx/${hash}`;
-    default:
-      return '';
-  }
+  const config = getChainConfig(chainId);
+  if (!config) return '';
+
+  const baseUrl = isTestnet(chainId) && config.testnetExplorerUrl ? config.testnetExplorerUrl : config.explorerUrl;
+
+  return `${baseUrl}/tx/${hash}`;
 }
 
-export const validateAddress = (address: string, chainId: number) => {
+/**
+ * 验证地址格式
+ */
+export const validateAddress = (address: string, chainId: number): boolean => {
   try {
-    // 根据不同的链ID进行验证
-    switch (chainId) {
-      case 1: // Ethereum Mainnet
-      case 5: // Goerli
-      case 137: // Polygon
-      case 80001: // Mumbai
-      case 80002: // Polygon Amoy
-      case 84532: // Base Sepolia
-      case 8453: // Base
-        // 检查 EVM 兼容链地址格式
-        const validAddress = getAddress(address);
-        return validAddress.startsWith('0x') && validAddress.length === 42;
+    const config = getChainConfig(chainId);
+    if (!config) return false;
 
-      case 56: // BSC
-      case 97: // BSC Testnet
-        // 检查 EVM 兼容链地址格式
-        const validAddress2 = getAddress(address);
-        return validAddress2.startsWith('0x') && validAddress2.length === 42;
-
-      case 501: // Solana
-        // Solana 地址是 base58 编码的 32 字节
-        return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
-
-      case 201: // Tron
-        // Tron 地址以 T 开头，长度为 34
-        return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(address);
-
-      default:
-        return false;
+    if (config.isEVM) {
+      const validAddress = getAddress(address);
+      return validAddress.startsWith('0x') && validAddress.length === 42;
     }
+
+    // Solana 地址验证
+    if (config.assetName === 'solana') {
+      return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
+    }
+
+    // Tron 地址验证
+    if (config.assetName === 'tron') {
+      return /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(address);
+    }
+
+    return false;
   } catch (error) {
     return false;
   }
+};
+
+/**
+ * 获取代币图标URL
+ */
+export const getTrustWalletAssetUrl = (address: string, chainId: number): string => {
+  console.log('🚀 ~ getTrustWalletAssetUrl ~ chainId:', chainId);
+  const config = getChainConfig(chainId);
+
+  console.log('🚀 ~ getTrustWalletAssetUrl ~ config:', config);
+
+  if (!config) return getDefaultTokenIcon();
+
+  if (isNativeToken(address, chainId)) {
+    console.log('🚀 ~ getTrustWalletAssetUrl ~ address:', address);
+
+    return `${TRUST_WALLET_ASSETS_BASE_URL}/${config.assetName}/info/logo.png`;
+  }
+
+  if (address) {
+    console.log('🚀 ~ getTrustWalletAssetUrl ~ address:', address);
+
+    return `${TRUST_WALLET_ASSETS_BASE_URL}/${config.assetName}/assets/${address}/logo.png`;
+  }
+
+  return getDefaultTokenIcon();
+};
+
+/**
+ * 判断是否为原生代币
+ */
+const isNativeToken = (address: string, chainId: number): boolean => {
+  const config = getChainConfig(chainId);
+  if (!config) return false;
+
+  if (config.isEVM) {
+    return !address || address.toLowerCase() === NATIVE_TOKEN_ADDRESS;
+  }
+
+  if (config.assetName === 'tron') {
+    return address?.toLowerCase() === 'trx';
+  }
+
+  return false;
+};
+
+/**
+ * 判断是否为测试网
+ */
+const isTestnet = (chainId: number): boolean => {
+  return [97, 80001, 80002, 84532].includes(chainId);
+};
+
+/**
+ * 获取默认代币图标
+ */
+const getDefaultTokenIcon = (): string => {
+  return `${TRUST_WALLET_ASSETS_BASE_URL}/ethereum/assets/${DEFAULT_WETH_ADDRESS}/logo.png`;
+};
+
+/**
+ * 获取链图标URL
+ */
+export const getChainIconUrl = (chainId: number): string => {
+  const config = getChainConfig(chainId);
+  if (!config) return getDefaultChainIcon();
+
+  return `${TRUST_WALLET_ASSETS_BASE_URL}/${config.assetName}/info/logo.png`;
+};
+
+/**
+ * 获取默认链图标
+ */
+const getDefaultChainIcon = (): string => {
+  return `${TRUST_WALLET_ASSETS_BASE_URL}/ethereum/info/logo.png`;
 };

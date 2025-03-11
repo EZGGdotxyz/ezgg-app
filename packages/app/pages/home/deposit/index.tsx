@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 17:40:59
+ * @LastEditTime: 2025-03-11 15:29:41
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -34,10 +34,6 @@ import CopyButton from 'app/Components/CopyButton';
 import {erc20Abi, type Hex, parseEther, parseUnits} from 'viem';
 import {
   useAccount,
-  useChainId,
-  useDisconnect,
-  useReadContract,
-  useSendTransaction,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi';

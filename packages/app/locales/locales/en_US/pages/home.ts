@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 18:09:16
+ * @LastEditTime: 2025-03-11 15:09:56
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -113,6 +113,11 @@ export default {
   'home.paylink.addMessage': 'Add Message',
   'home.paylink.addMessage.tips': 'Please enter your message',
   'home.paylink.sendCrypto': 'Send Crypto',
+  'home.paylink.approveTransaction': 'Approve Transaction',
+  'home.paylink.approve': 'Approve',
+  'home.paylink.reject': 'Reject',
+  'home.paylink.amount': 'Amount',
+  'home.paylink.network': 'Network',
 
   'home.qr.title': 'Scan QR Code',
   'home.qr.sub': 'Point the camera at the QR Code to scan.',

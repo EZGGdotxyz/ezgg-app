@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 15:30:31
+ * @LastEditTime: 2025-03-11 16:25:41
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
 export const ExternalLinkData = {
@@ -16,6 +16,8 @@ export const SubColor = '#f39965';
 export const DefaultLanguage = 'en_US';
 
 export const AppName = 'ezgg.xyz';
+export const MAX_WIDTH = 768;
+
 
 export const CurrencyList = [
   {

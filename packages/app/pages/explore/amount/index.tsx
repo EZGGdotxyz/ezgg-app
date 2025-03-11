@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 19:09:15
+ * @LastEditTime: 2025-03-11 15:13:14
  * @FilePath: /ezgg-app/packages/app/pages/explore/amount/index.tsx
  */
 import {
@@ -38,6 +38,7 @@ import {useTransaction} from 'app/hooks/useTransaction';
 import {getUserFindUserIdId} from 'app/servers/api/member';
 import useRequest from 'app/hooks/useRequest';
 import useResponse from 'app/hooks/useResponse';
+import PayPopup from 'app/Components/PayPopup';
 
 const {useParams} = createParam<any>();
 
@@ -58,9 +59,10 @@ const AmountScreen = () => {
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const {back, push, replace} = useRouter();
   const {params} = useParams();
-  const {onSendSubmit, onRequestSubmit} = useTransaction();
+  const {onSendSubmit, onRequestSubmit, createTransaction} = useTransaction();
   const {makeRequest} = useRequest();
-
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [orderData, setOrderData] = React.useState<any>();
   const [receiverUserInfo, setReceiverUserInfo] = React.useState<any>();
 
   const toast = useToastController();
@@ -69,7 +71,7 @@ const AmountScreen = () => {
     if (params?.id && userInfo?.customMetadata?.id) {
       _getUserFindUserIdId();
     }
-  }, [params?.id,userInfo]);
+  }, [params?.id, userInfo]);
 
   const _getUserFindUserIdId = async () => {
     const res = await makeRequest(getUserFindUserIdId({id: params?.id}));
@@ -132,10 +134,15 @@ const AmountScreen = () => {
       const _params = createTransactionParams(type);
 
       if (type === 'SEND') {
-        await onSendSubmit(_params, (data) => {
-          setIsLoading(false);
-          replace('/home/success?type=QR_CODE&id=' + data?.id);
-        });
+        const transaction = await createTransaction(_params);
+        if (transaction?.transactionCode) {
+          setModalVisible(true);
+          setOrderData(transaction);
+        } else {
+          toast.show(t('tips.error.networkError'), {
+            duration: 3000,
+          });
+        }
       } else {
         await onRequestSubmit(_params, (data) => {
           setIsLoading(false);
@@ -144,6 +151,36 @@ const AmountScreen = () => {
       }
     } catch (error) {
       console.error(`${type} transaction error:`, error);
+      if (error?.message.includes('The user rejected the request')) {
+        toast.show(t('tips.error.userRejected'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient allowance')) {
+        toast.show(t('tips.error.insufficientAllowance'), {
+          duration: 3000,
+        });
+      } else if (error?.message.includes('insufficient balance')) {
+        toast.show(t('tips.error.insufficientBalance'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const _onSendContract = async () => {
+    try {
+      setIsLoading(true);
+      await onSendSubmit(orderData, (data) => {
+        setIsLoading(false);
+        replace('/home/success?type=QR_CODE&id=' + data?.id);
+      });
+    } catch (error) {
       if (error?.message.includes('The user rejected the request')) {
         toast.show(t('tips.error.userRejected'), {
           duration: 3000,
@@ -340,7 +377,12 @@ const AmountScreen = () => {
             }}
             onPress={() => {
               handlePagePress();
-              submit();
+              if (orderData?.id) {
+                // _onSendContract();
+                setModalVisible(true);
+              } else {
+                submit();
+              }
             }}
           >
             {params?.type === 'request' ? t('home.request.requestCrypto') : t('home.paylink.sendCrypto')}
@@ -348,6 +390,13 @@ const AmountScreen = () => {
         </XStack>
       )}
       {isLoading && <AppLoading />}
+
+      <PayPopup
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        orderData={orderData}
+        onSubmit={_onSendContract}
+      />
     </PermissionPage>
   );
 };

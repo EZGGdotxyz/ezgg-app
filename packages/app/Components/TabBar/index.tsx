@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 14:17:09
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 16:36:50
+ * @LastEditTime: 2025-03-11 16:30:00
  * @FilePath: /ezgg-app/packages/app/Components/TabBar/index.tsx
  */
 import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
@@ -12,6 +12,7 @@ import {isIphoneX} from 'app/utils';
 import {XStack} from '@my/ui';
 import {useRematchModel} from 'app/store/model';
 import useResponse from 'app/hooks/useResponse';
+import {MAX_WIDTH} from 'app/config';
 
 const TabBar = ({state, descriptors, navigation}) => {
   const {push, replace, back, parseNextPath} = useRouter();
@@ -23,10 +24,9 @@ const TabBar = ({state, descriptors, navigation}) => {
       height={appScale(isIphoneX() ? 64 + 34 : 64)}
       pt={8}
       pb={appScale(isIphoneX() ? 8 + 34 : 8)}
-      bc="$background"
       style={styles.tabbar}
     >
-      <XStack jc={'center'} ai={'center'} style={{width: '100%', maxWidth: 430}}>
+      <XStack jc={'center'} ai={'center'} style={{width: '100%', maxWidth: MAX_WIDTH}} bc="$background">
         {state.routes.map((route, index) => {
           if (route.name === 'login') return null;
           let label = route.name;
