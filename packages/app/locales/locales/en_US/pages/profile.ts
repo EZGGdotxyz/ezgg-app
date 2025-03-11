@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 18:40:51
+ * @LastEditTime: 2025-03-11 16:55:09
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/profile.ts
  */
 export default {
@@ -104,4 +104,47 @@ export default {
   'profile.about.content.12':
     'EZGG leverages ERC-4337-powered smart accounts for gasless, seamless transactions. Payments are secured via EVM-compatible account abstraction, ensuring smooth and secure transfers.',
   'profile.about.content.13': 'Join the next-gen Web3 payment revolution with EZGG!',
+
+  'profile.privacyPolicy.time': 'Effective Date: March XX, 2025',
+  'profile.privacyPolicy.content.1': 'ezgg.xyz ("we", "us", "our") is committed to safeguarding the privacy of our users ("you", "your"). This Privacy Policy describes how we gather, utilize, disclose, and protect your information when you visit our website or utilize our services. By accessing or using our services, you consent to the terms outlined in this Privacy Policy.',
+
+  'profile.privacyPolicy.1.title': '1. Information We Collect',
+  'profile.privacyPolicy.1.content.1': 'We may gather the following types of information:',
+  'profile.privacyPolicy.1.content.list.1': 'Personal Information: Information you provide during the registration process, such as your name, email address, phone number, and any other identifying information.',
+  'profile.privacyPolicy.1.content.list.2': 'Usage Information: Details regarding how you interact with our website and services, including your IP address, browser type, pages visited, and actions taken on the site.',
+  'profile.privacyPolicy.1.content.list.3': 'Device Information: Information about the device you use to access our services, including the operating system, unique device identifiers, and mobile network information.',
+  'profile.privacyPolicy.1.content.list.4': 'Cookies and Tracking Technologies: We may employ cookies and similar tracking technologies to collect and store information about your preferences and browsing activities.',
+
+  'profile.privacyPolicy.2.title': '2. How We Use Your Information',
+  'profile.privacyPolicy.2.content.1': 'Your information may be utilized for the following purposes:',
+  'profile.privacyPolicy.2.content.list.1': 'To provide, operate, and maintain our services.',
+  'profile.privacyPolicy.2.content.list.2': 'To send you notifications related to your account with ezgg.xyz.',
+  'profile.privacyPolicy.2.content.list.3': 'To respond to your inquiries, fulfill your requests, and offer customer support.',
+  'profile.privacyPolicy.2.content.list.4': 'To monitor and analyze trends and usage of our services.',
+  'profile.privacyPolicy.2.content.list.5': 'To enhance our services and personalize your user experience.',
+  'profile.privacyPolicy.2.content.list.6': 'To comply with legal obligations and enforce our policies.',
+
+  'profile.privacyPolicy.3.title': '3. Sharing Your Information',
+  'profile.privacyPolicy.3.content.1': 'We may share your information with third parties under the following circumstances:',
+  'profile.privacyPolicy.3.content.list.1': 'Service Providers: We may share your information with trusted third-party service providers to facilitate our services (e.g., payment processors, communication services).',
+  'profile.privacyPolicy.3.content.list.2': 'Legal Compliance: We may disclose your information to meet legal obligations or to protect the rights, property, or safety of ezgg.xyz or others.',
+  'profile.privacyPolicy.3.content.list.3': 'Business Transfers: If ezgg.xyz is involved in a merger, acquisition, or asset sale, your information may be transferred as part of that transaction.',
+  'profile.privacyPolicy.3.content.2': 'All of the above categories exclude opt-in data and consent regarding text messaging; this information will not be shared with any third parties.',
+
+  'profile.privacyPolicy.4.title': '4. Your Privacy Choices',
+  'profile.privacyPolicy.4.content.1': 'You have the following options regarding your information:',
+  'profile.privacyPolicy.4.content.list.1': 'Opt-Out of Marketing Communications: You may opt-out of receiving marketing communications from us by following the unsubscribe instructions in the messages you receive or by contacting us directly.',
+  'profile.privacyPolicy.4.content.list.2': 'Access and Update Your Information: You can access and update your personal information by reaching out to us directly.',
+  'profile.privacyPolicy.4.content.list.3': 'Cookies Management: You can manage cookies through your browser settings and other tools.',
+
+  'profile.privacyPolicy.5.title': '5. Security Measures',
+  'profile.privacyPolicy.5.content.1': 'We implement reasonable measures to protect your information from unauthorized access, use, or disclosure. However, no method of transmission over the Internet or electronic storage is entirely secure.',
+
+  'profile.privacyPolicy.6.title': '6. Changes to This Privacy Policy',
+  'profile.privacyPolicy.6.content.1': 'We may revise this Privacy Policy periodically. We will notify you of any changes by posting the updated Privacy Policy on our website and changing the effective date at the top.',
+
+  'profile.privacyPolicy.7.title': '7. Contact Us',
+  'profile.privacyPolicy.7.content.1': 'If you have any questions regarding this Privacy Policy, please reach out to us on X or telegram:',
+  'profile.privacyPolicy.7.content.2': 'TG: https://t.me/EZGGxyz',
+  'profile.privacyPolicy.7.content.3': 'X: https://x.com/ezggdotxyz  @ezggdotxyz  ',
 };

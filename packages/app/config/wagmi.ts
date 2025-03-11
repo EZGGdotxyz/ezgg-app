@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-02-28 15:17:12
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 15:21:38
+ * @LastEditTime: 2025-03-11 17:14:17
  * @FilePath: /ezgg-app/packages/app/config/wagmi.ts
  */
 import {createConfig, http} from 'wagmi';
@@ -20,7 +20,7 @@ const config = createConfig({
   client({chain}) {
     return createClient({chain, transport: http()});
   },
-  connectors: [injected({target: 'metaMask'}), metaMask(), safe(), walletConnect({projectId})],
+  connectors: [injected({target: 'metaMask', shimDisconnect: true}), safe(), walletConnect({projectId})],
   // transports: {
   //   [mainnet.id]: http(),
   //   [bsc.id]: http(),

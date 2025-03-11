@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:35:21
+ * @LastEditTime: 2025-03-11 17:26:58
  * @FilePath: /ezgg-app/packages/app/Components/ConnectorsPopup/index.tsx
  */
 import {Button, Sheet, SizableText, useToastController, XStack, YStack, AppImage} from '@my/ui';
@@ -52,7 +52,6 @@ const Item = memo(
     if (!ready) return null;
 
     const isCurrentConnector = activeConnector?.uid === connector?.uid;
-    console.log('🚀 ~ connector:', connector);
 
     return (
       <Button
@@ -136,6 +135,7 @@ const ConnectorsPopup = forwardRef<any, CurrencyPopupProps>(
         // 延迟执行，确保状态已更新
         const timer = setTimeout(() => {
           setIsSubmit(true);
+          console.log('🚀 ~ onSubmit ~ 连接成功:');
           // setModalVisible(false);
           setIsConnecting(false);
         }, 500);
@@ -149,6 +149,7 @@ const ConnectorsPopup = forwardRef<any, CurrencyPopupProps>(
         setModalVisible(false);
         // 如果点击的是当前连接的钱包，不做任何操作
         if (activeConnector?.uid === connector?.uid) {
+          console.log('🚀 ~ onSubmit ~ 如果点击的是当前连接的钱包，不做任何操作:');
           setIsSubmit(true);
           return;
         }

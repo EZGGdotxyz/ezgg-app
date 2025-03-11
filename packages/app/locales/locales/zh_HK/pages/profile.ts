@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 14:23:17
+ * @LastEditTime: 2025-03-11 16:55:05
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/profile.ts
  */
 export default {
@@ -105,7 +105,54 @@ export default {
 
 
 
-  'profile.privacyPolicy.1': '普通',
+  'profile.privacyPolicy.time': '生效日期： 2025年3月XX日',
+  'profile.privacyPolicy.content.1': 'ezgg.xyz（以下簡稱「我們」、「我們的」）致力於保護用戶（以下簡稱「您」、「您的」）的隱私。本隱私政策說明了我們在您訪問我們的網站或使用我們的服務時，如何收集、使用、披露和保護您的信息。通過訪問或使用我們的服務，您同意本隱私政策中所述的條款。',
+  
+  'profile.privacyPolicy.1.title': '1. 我們收集的信息',
+  'profile.privacyPolicy.1.content.1': '我們可能會收集以下類型的信息：',
+  'profile.privacyPolicy.1.content.list.1': '個人信息： 您在註冊過程中提供的信息，例如姓名、電子郵件地址、電話號碼及其他可識別的詳細信息。',
+  'profile.privacyPolicy.1.content.list.2': '使用信息： 關於您如何使用我們的網站和服務的信息，包括您的IP地址、瀏覽器類型、訪問的頁面和在網站上的操作記錄。',
+  'profile.privacyPolicy.1.content.list.3': '設備信息： 關於您使用的設備的信息，例如操作系統、唯一設備標識符和移動網路信息。',
+  'profile.privacyPolicy.1.content.list.4': 'Cookies及追踪技術： 我們可能會使用Cookies和類似的追踪技術，以收集和存儲有關您偏好和瀏覽活動的信息。',
+
+
+  'profile.privacyPolicy.2.title': '2. 我們如何使用您的信息',
+  'profile.privacyPolicy.2.content.1': '我們可能會將您的信息用於以下目的：',
+  'profile.privacyPolicy.2.content.list.1': '提供、運營和維護我們的服務。',
+  'profile.privacyPolicy.2.content.list.2': '向您發送與ezgg.xyz賬戶相關的通知。',
+  'profile.privacyPolicy.2.content.list.3': '回覆您的諮詢、滿足您的請求並提供客戶支援。',
+  'profile.privacyPolicy.2.content.list.4': '監測和分析我們服務的使用趨勢。',
+  'profile.privacyPolicy.2.content.list.5': '改進我們的服務並為您提供個性化的體驗。',
+  'profile.privacyPolicy.2.content.list.6': '遵守法律義務並執行我們的政策。',
+
+
+  'profile.privacyPolicy.3.title': '3. 資訊共享',
+  'profile.privacyPolicy.3.content.1': '在以下情況下，我們可能會與第三方共享您的信息：',
+  'profile.privacyPolicy.3.content.list.1': '服務提供商： 我們可能會與值得信賴的第三方服務提供商共享您的信息，以便提供我們的服務（例如，支付處理、通訊服務）。',
+  'profile.privacyPolicy.3.content.list.2': '法律要求： 我們可能會披露您的信息，以滿足法律義務或保護ezgg.xyz及他人的權利、財產或安全。',
+  'profile.privacyPolicy.3.content.list.3': '業務轉讓： 如果ezgg.xyz涉及合併、收購或資產出售，您的信息可能會作為該交易的一部分進行轉移。',
+  'profile.privacyPolicy.3.content.2': '以上所有類別均不包括短信發送者的選擇加入數據和同意；這些信息不會與任何第三方共享。',
+
+
+  'profile.privacyPolicy.4.title': '4. 您的隱私選擇',
+  'profile.privacyPolicy.4.content.1': '您對您的信息有以下選擇：',
+  'profile.privacyPolicy.4.content.list.1': '選擇退出營銷通訊： 您可以通過遵循您收到的消息中的退訂説明或直接聯繫我們，選擇不再接收我們的營銷通訊。',
+  'profile.privacyPolicy.4.content.list.2': '存取和更新信息： 您可以通過直接聯繫我們來存取和更新您的個人信息。',
+  'profile.privacyPolicy.4.content.list.3': 'Cookies管理： 您可以通過瀏覽器設置和其他工具管理Cookies的使用。',
+
+
+  'profile.privacyPolicy.5.title': '5. 安全性',
+  'profile.privacyPolicy.5.content.1': '我們採取合理的措施來保護您的信息，以防止未經授權的存取、使用或披露。然而，互聯網傳輸或電子存儲的方法並非100%安全。',
+
+
+  'profile.privacyPolicy.6.title': '6. 本隱私政策的變更',
+  'profile.privacyPolicy.6.content.1': '我們可能會不時更新本隱私政策。我們將在網站上發佈新的隱私政策，並更新頂部的生效日期，以通知您任何更改。',
+
+
+  'profile.privacyPolicy.7.title': '7. 聯絡我們',
+  'profile.privacyPolicy.7.content.1': '如果您對本隱私政策有任何疑問，請在推特或telegram上與我們聯繫：',
+  'profile.privacyPolicy.7.content.2': 'TG: https://t.me/EZGGxyz',
+  'profile.privacyPolicy.7.content.3': 'X: https://x.com/ezggdotxyz  @ezggdotxyz   ',
 
 
 };

@@ -2,7 +2,7 @@ import {app} from './../store/models/app';
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 16:29:19
+ * @LastEditTime: 2025-03-11 17:05:21
  * @FilePath: /ezgg-app/packages/app/hooks/useResponse.ts
  */
 import {Dimensions, Platform, ScaledSize} from 'react-native';
