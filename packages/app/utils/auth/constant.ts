@@ -2,7 +2,7 @@
  * @Author: Yosan
  * @Date: 2022-11-12 12:53:17
  * @LastEditors: yosan
- * @LastEditTime: 2025-02-26 21:48:25
+ * @LastEditTime: 2025-03-12 17:45:14
  * @Description:
  */
 // 当前语言
@@ -23,13 +23,14 @@ export const USER_INFO = 'USER-INFO';
 // 用户权限
 export const DEVICE_TOKEN = 'DEVICE_TOKEN';
 
-
 // 打卡code
 export const SIGN_CODE = 'SIGN_CODE';
 
 //搜索历史
 export const HISTORY_LIST = 'HISTORY_LIST';
 
-
 // receive 领取
 export const IS_RECEIVE = 'IS_RECEIVE';
+
+// 货币
+export const CURRENCY = 'CURRENCY';

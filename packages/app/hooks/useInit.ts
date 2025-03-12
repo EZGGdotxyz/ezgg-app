@@ -13,6 +13,7 @@ import {
   getUserToken,
   setInviteCode,
   setLanguage,
+  getCurrency,
 } from 'app/utils/auth';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
@@ -73,6 +74,13 @@ export default function useInit() {
 
     // 设置语言
     const locale = (await getLanguage()) || DefaultLanguage;
+
+    // 设置货币
+    const currency = (await getCurrency()) || 'USD';
+    dispatch.app.updateState({
+      currency,
+    });
+
     if (locale) {
       i18n?.changeLanguage(locale);
     }
@@ -87,5 +95,5 @@ export default function useInit() {
     _init: initApp,
     getInfrastructureList,
     initApp,
-    };
+  };
 }

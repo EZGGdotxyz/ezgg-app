@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 16:49:26
+ * @LastEditTime: 2025-03-12 17:49:36
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/login.ts
  */
 export default {
@@ -19,8 +19,8 @@ export default {
   'login.loginAgreement2': 'Privacy & Terms',
   'login.loginAgreement3': 'for more.',
 
-  'login.profile.title': 'complete your profile 👤',
-  'login.profile.sub': `Don't worry, your data remains safe and private. Only you can see it.`,
+  'login.profile.title': 'Your nickname will act as your payment ID: it can be used to receive funds and appears when you send payments. ',
+  'login.profile.sub': `You cannot change your Nick Name once you have created it.❗❗`,
   'login.profile.nikeName': 'Nick Name',
   'login.profile.nikeName.placeholder': 'Please enter your nickname',
   'login.profile.nikeName.error': 'Please enter a nickname with more than 4 characters',

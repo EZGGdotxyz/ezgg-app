@@ -16,6 +16,7 @@ import {
   HISTORY_LIST,
   IS_RECEIVE,
   USER_ID_TOKEN,
+  CURRENCY,
 } from './constant';
 
 export const getIsReceive = async () => {
@@ -90,6 +91,21 @@ export const setLanguage = async (language: string) => {
   return setStore({
     name: LANGUAGE,
     content: language,
+  });
+};
+
+export const getCurrency = async () => {
+  return (
+    getStore({
+      name: CURRENCY,
+    }) || 'USD'
+  );
+};
+
+export const setCurrency = async (currency: string) => {
+  return setStore({
+    name: CURRENCY,
+    content: currency,
   });
 };
 

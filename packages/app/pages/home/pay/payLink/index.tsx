@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 16:04:51
+ * @LastEditTime: 2025-03-12 17:50:59
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -37,13 +37,6 @@ import useRequest from 'app/hooks/useRequest';
 import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import {useRematchModel} from 'app/store/model';
-import {useSmartWallets} from '@privy-io/react-auth/smart-wallets';
-import {encodeFunctionData, erc721Abi, erc20Abi, createPublicClient, http, getAddress} from 'viem';
-import TokenTransferContract from 'app/abi/TokenTransfer.json';
-import {
-  postTransactionPayLinkCreatePayLink,
-  postTransactionPayLinkUpdateTransactionHash,
-} from 'app/servers/api/transactionPayLink';
 import AppLoading from 'app/Components/AppLoading';
 import TokenLinkContract from 'app/abi/TokenLink.json';
 import {useTransaction} from 'app/hooks/useTransaction';
@@ -163,7 +156,7 @@ const PayLinkScreen = ({type}: any) => {
         });
       });
     } catch (error) {
-      
+
       if (error?.message.includes('The user rejected the request')) {
         toast.show(t('tips.error.userRejected'), {
           duration: 3000,
@@ -289,6 +282,7 @@ const PayLinkScreen = ({type}: any) => {
             </XStack>
             <TextArea
               w="100%"
+              unstyled
               p={appScale(16)}
               bc={'#FAFAFA'}
               br={appScale(8)}

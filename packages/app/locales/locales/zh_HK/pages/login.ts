@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 16:49:36
+ * @LastEditTime: 2025-03-12 17:49:50
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/login.ts
  */
 export default {
@@ -18,8 +18,8 @@ export default {
   'login.loginAgreement2': '隱私政策和條款',
   'login.loginAgreement3': '。',
 
-  'login.profile.title': '完成你的個人資料👤',
-  'login.profile.sub': `不用擔心，您的資料仍然是安全且私密的。只有你能看到它。`,
+  'login.profile.title': '您的暱稱將作為您的支付ID：它可以用於接收資金並在您發送付款時出現。',
+  'login.profile.sub': `您一旦創建了暱稱，就無法更改。❗❗`,
   'login.profile.nikeName': '暱稱',
   'login.profile.nikeName.placeholder': '請輸入您的暱稱',
   'login.profile.nikeName.error': '請輸入超過 4 個字元的暱稱',

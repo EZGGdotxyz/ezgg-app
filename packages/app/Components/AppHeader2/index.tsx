@@ -88,6 +88,18 @@ const AppHeader2: React.FC<any> = ({
                 type="local"
               />
             )}
+            {isLogo && isClosure && (
+              <AppImage
+                width={appScale(28)}
+                height={appScale(28)}
+                src={
+                  isClosure
+                    ? require(isDark ? 'app/assets/images/dark/closure.png' : 'app/assets/images/closure.png')
+                    : require('app/assets/images/left.png')
+                }
+                type="local"
+              />
+            )}
           </Button>
         </XStack>
         <XStack ai={'center'} h={'100%'}>

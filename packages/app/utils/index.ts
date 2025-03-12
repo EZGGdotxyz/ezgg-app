@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:05:51
+ * @LastEditTime: 2025-03-12 17:43:21
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -100,7 +100,7 @@ export const truncateAddress = (address: string) => {
 
 // 获取货币信息
 export const getCurrency = (currency: string) => {
-  return CurrencyList.find((item) => item.code === currency);
+  return CurrencyList.find((item) => item.label === currency);
 };
 
 // 处理历史列表结构

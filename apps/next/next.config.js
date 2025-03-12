@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-10 16:44:53
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 00:17:51
+ * @LastEditTime: 2025-03-12 15:00:16
  * @FilePath: /ezgg-app/apps/next/next.config.js
  */
 /** @type {import('next').NextConfig} */
@@ -60,7 +60,7 @@ module.exports = function () {
       ignoreBuildErrors: true,
     },
     output: 'export',
-    distDir: 'mobile',
+    distDir: 'crypto-transfer-frontend',
     // assetPrefix: '/mobile', //加前缀
     // basePath: '/mobile', //node
     modularizeImports: {

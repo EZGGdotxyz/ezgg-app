@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 16:25:41
+ * @LastEditTime: 2025-03-12 18:01:18
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
 export const ExternalLinkData = {
@@ -27,6 +27,7 @@ export const CurrencyList = [
     englishName: 'US dollar',
     code: 'usd',
     label: 'USD',
+    symbol: '$',
   },
   {
     id: '2',
@@ -35,6 +36,7 @@ export const CurrencyList = [
     englishName: 'Chinese yuan',
     code: 'cny',
     label: 'CNY',
+    symbol: '¥',
   },
   {
     id: '3',
@@ -43,6 +45,7 @@ export const CurrencyList = [
     englishName: 'Hong Kong dollar',
     code: 'hkd',
     label: 'HKD',
+    symbol: 'HK$',
   },
   {
     id: '4',
@@ -51,6 +54,7 @@ export const CurrencyList = [
     englishName: 'Singapore dollar',
     code: 'sgd',
     label: 'SGD',
+    symbol: 'S$',
   },
 ];
 
@@ -58,7 +62,10 @@ export const CurrencyList = [
 const isRelease = false;
 
 // api 请求接口
-export const APP_URL = isRelease ? 'https://api.catfoodworks.com' : 'https://api.catfoodworks.com';
+// export const APP_URL = isRelease ? 'https://api.ezgg.xyz' : 'https://api.catfoodworks.com';
+
+export const APP_URL = isRelease ? 'https://api.ezgg.xyz' : 'https://api.ezgg.xyz';
+
 
 // 区块链网路类型：MAIN 主网；TEST 测试网；DEV 开发网
 export const NETWORK = isRelease ? 'MAIN' : 'TEST';

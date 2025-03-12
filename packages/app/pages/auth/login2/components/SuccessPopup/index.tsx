@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 13:07:50
+ * @LastEditTime: 2025-03-12 17:50:33
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -104,8 +104,8 @@ const SuccessPopup: React.FC<any> = ({
         {isSetInfo && (
           <YStack ai={'center'} pt={appScale(40)} pr={appScale(32)} pl={appScale(32)} pb={appScale(32)}>
             <YStack w="100%" mb={appScale(24)}>
-              <SizableText ta={'center'} mb={appScale(24)} col={'#212121'} fontSize={'$6'} fow={'700'}>
-                {t('login.profile.title')}
+            <SizableText ta={'center'} mb={appScale(12)} col={'#212121'} fontSize={'$4'}>
+            {t('login.profile.title')}
               </SizableText>
               <SizableText ta={'center'} col={'#212121'} fontSize={'$4'}>
                 {t('login.profile.sub')}
@@ -228,7 +228,7 @@ const SuccessPopup: React.FC<any> = ({
               <AppButton isLoading={loading} onPress={accountContinue}>
                 {t('operate.button.login')}
               </AppButton>
-              <Button
+              {/* <Button
                 style={{
                   width: '100%',
                   justifyContent: 'center',
@@ -249,7 +249,7 @@ const SuccessPopup: React.FC<any> = ({
                 <SizableText col={'#212121'} fontSize={'$3'}>
                   {t('login.profile.dont')}
                 </SizableText>
-              </Button>
+              </Button> */}
             </YStack>
           </YStack>
         )}

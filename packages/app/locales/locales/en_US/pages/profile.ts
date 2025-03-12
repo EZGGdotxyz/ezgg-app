@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 16:55:09
+ * @LastEditTime: 2025-03-12 17:48:33
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/profile.ts
  */
 export default {
@@ -10,7 +10,7 @@ export default {
   'profile.home.language': 'Language',
   'profile.home.language.zh_hk': 'English (US)',
   'profile.home.language.en_us': '繁體中文',
-  'profile.home.currency': 'Demoniator',
+  'profile.home.currency': 'Denomination',
   'profile.home.about': 'About',
   'profile.home.helpCenter': 'Help Center',
   'profile.home.privacyPolicy': 'Privacy Policy',

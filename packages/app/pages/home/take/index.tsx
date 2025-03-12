@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 16:21:15
+ * @LastEditTime: 2025-03-12 18:00:56
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -217,8 +217,9 @@ const TakeScreen = (any) => {
     <PermissionPage isHomePage={true}>
       <AppHeader2
         isLogo
+        isClosure={isMyPayLink()}
         onBack={() => {
-          push('/');
+          replace('/');
         }}
         title={AppName}
         fallbackUrl="/"
@@ -353,25 +354,27 @@ const TakeScreen = (any) => {
                 : t('home.send')}
             </AppButton>
           </XStack>
-          <XStack w="100%" mb={appScale(24)}>
-            <Button
-              style={{
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              unstyled
-              mt={appScale(24)}
-              chromeless
-              onPress={() => {
-                replace('/');
-              }}
-            >
-              <SizableText col={'#212121'} fontSize={'$3'}>
-                {t('login.profile.dont')}
-              </SizableText>
-            </Button>
-          </XStack>
+          {!isMyPayLink() && (
+            <XStack w="100%" mb={appScale(24)}>
+              <Button
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                unstyled
+                mt={appScale(24)}
+                chromeless
+                onPress={() => {
+                  replace('/');
+                }}
+              >
+                <SizableText col={'#212121'} fontSize={'$3'}>
+                  {t('login.profile.dont')}
+                </SizableText>
+              </Button>
+            </XStack>
+          )}
 
           {orderData?.message && (
             <YStack w="100%" mb={appScale(24)}>

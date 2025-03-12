@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-06 17:24:56
+ * @LastEditTime: 2025-03-12 17:46:43
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -20,7 +20,7 @@ import {
 } from '@my/ui';
 import {ChevronRight} from '@tamagui/lucide-icons';
 import {useRematchModel} from 'app/store/model';
-import {setLanguage} from 'app/utils/auth';
+import {setCurrency, setLanguage} from 'app/utils/auth';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useRouter} from 'solito/router';
@@ -205,7 +205,7 @@ const MyScreen = () => {
           )}
           {item.id === 'currency' && (
             <SizableText fow={'600'} color={'#212121'} fontSize="$2">
-              {getCurrency(currency)?.label}
+              {currency}
             </SizableText>
           )}
           {item.id !== 'logout' && <ChevronRight color={'#212121'} />}
@@ -218,8 +218,9 @@ const MyScreen = () => {
     setChainData(item);
     setModalVisible(false);
     dispatch.app.updateState({
-      currency: item.code,
+      currency: item.label,
     });
+    setCurrency(item.label);
   };
 
   return (
