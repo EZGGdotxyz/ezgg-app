@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 23:45:49
+ * @LastEditTime: 2025-03-11 17:55:12
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/tips.ts
  */
 export default {
@@ -49,4 +49,7 @@ export default {
   'tips.success.acceptRequest': '支付成功',
 
   'tips.error.explore.selfTransfer': '不能與自己發生交易',
- };
+
+  'tips.error.deposit.balanceError': '餘額獲取失敗，請重試',
+  'tips.error.deposit.connectionFailed': '連接錢包失敗，請重試',
+};

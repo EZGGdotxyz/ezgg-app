@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 17:26:58
+ * @LastEditTime: 2025-03-11 20:52:34
  * @FilePath: /ezgg-app/packages/app/Components/ConnectorsPopup/index.tsx
  */
 import {Button, Sheet, SizableText, useToastController, XStack, YStack, AppImage} from '@my/ui';
@@ -117,40 +117,82 @@ export type CurrencyPopupProps = {
   chainId: number;
   setIsSubmit: (value: boolean) => void;
   setIsLoading: (value: boolean) => void;
+  onClosed?: (wasConnected: boolean) => void;
 };
 
 const ConnectorsPopup = forwardRef<any, CurrencyPopupProps>(
-  ({modalVisible, setModalVisible, chainId, setIsSubmit, setIsLoading}, ref) => {
+  ({modalVisible, setModalVisible, chainId, setIsSubmit, setIsLoading, onClosed}, ref) => {
     const {t} = useTranslation();
     const toast = useToastController();
     const scrollViewRef = useRef<any>(null);
-    const {connectors} = useConnect();
+    const {connectors, error: connectError} = useConnect({
+      onError(error) {
+        console.error('Connect error:', error);
+        handleConnectError(error);
+      },
+      onSuccess() {
+        setIsSubmit(true);
+        setIsConnecting(false);
+      },
+    });
     const {address, isConnected, connector: activeConnector} = useAccount();
     const {disconnect} = useDisconnect();
     const [isConnecting, setIsConnecting] = useState(false);
+    const connectTimeoutRef = useRef<NodeJS.Timeout>();
+
+    // 处理连接错误
+    const handleConnectError = (error: Error) => {
+      let errorMessage = t('tips.error.deposit.connectError');
+      
+      if (error?.message?.includes('User rejected')) {
+        errorMessage = t('tips.error.userRejected');
+      } else if (error?.message?.includes('Already processing eth_requestAccounts')) {
+        errorMessage = t('tips.error.deposit.connectProcessing');
+      } else if (error?.message?.includes('Connector not found')) {
+        errorMessage = t('tips.error.deposit.walletNotFound');
+      }
+
+      toast.show(errorMessage, {
+        duration: 3000,
+      });
+      
+      setIsConnecting(false);
+      setIsLoading(false);
+      onClosed?.(false);
+    };
+
+    // 清理函数
+    const cleanup = () => {
+      if (connectTimeoutRef.current) {
+        clearTimeout(connectTimeoutRef.current);
+      }
+      setIsConnecting(false);
+      setIsLoading(false);
+    };
+
+    // 组件卸载时清理
+    useEffect(() => {
+      return cleanup;
+    }, []);
 
     // 监听连接状态变化
     useEffect(() => {
       if (isConnected && isConnecting) {
-        // 延迟执行，确保状态已更新
-        const timer = setTimeout(() => {
-          setIsSubmit(true);
-          console.log('🚀 ~ onSubmit ~ 连接成功:');
-          // setModalVisible(false);
-          setIsConnecting(false);
-        }, 500);
-
-        return () => clearTimeout(timer);
+        cleanup();
+        setIsSubmit(true);
+        // 调用关闭回调
+        onClosed?.(true);
       }
-    }, [isConnected, isConnecting, setIsSubmit]);
+    }, [isConnected, isConnecting, setIsSubmit, onClosed]);
 
     const onSubmit = async (connector: Connector) => {
       try {
         setModalVisible(false);
+        
         // 如果点击的是当前连接的钱包，不做任何操作
         if (activeConnector?.uid === connector?.uid) {
-          console.log('🚀 ~ onSubmit ~ 如果点击的是当前连接的钱包，不做任何操作:');
           setIsSubmit(true);
+          onClosed?.(true);
           return;
         }
 
@@ -174,6 +216,7 @@ const ConnectorsPopup = forwardRef<any, CurrencyPopupProps>(
         toast.show(t('tips.error.deposit.connectError'));
         setIsConnecting(false);
         setIsLoading(false);
+        onClosed?.(false);
       }
     };
 
