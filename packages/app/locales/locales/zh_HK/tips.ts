@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 17:55:12
+ * @LastEditTime: 2025-03-12 12:27:23
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/tips.ts
  */
 export default {
@@ -52,4 +52,7 @@ export default {
 
   'tips.error.deposit.balanceError': '餘額獲取失敗，請重試',
   'tips.error.deposit.connectionFailed': '連接錢包失敗，請重試',
+
+  'tips.error.deposit.amountRequired': '請輸入有效金額',
+  'tips.error.deposit.invalidAmount': '請輸入有效金額',
 };

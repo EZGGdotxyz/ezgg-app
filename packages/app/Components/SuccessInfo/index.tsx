@@ -125,6 +125,10 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           infoList: [
             createTransactionInfoItem(t('home.order.youWithdraw'), createAmountDisplay(orderData)),
             ...createBaseTransactionInfoList(orderData, t, false),
+            createTransactionInfoItem(t('home.order.withdrawAddress'), orderData?.receiverWalletAddress || '', {
+              isCopyable: !!orderData?.receiverWalletAddress,
+              isTruncated: true,
+            }),
           ],
         },
         DEPOSIT: {
@@ -133,6 +137,10 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           infoList: [
             createTransactionInfoItem(t('home.order.youTopUp'), createAmountDisplay(orderData)),
             ...createBaseTransactionInfoList(orderData, t, false),
+            createTransactionInfoItem(t('home.order.depositAddress'), orderData?.senderWalletAddress || '', {
+              isCopyable: !!orderData?.senderWalletAddress,
+              isTruncated: true,
+            }),
           ],
         },
       };

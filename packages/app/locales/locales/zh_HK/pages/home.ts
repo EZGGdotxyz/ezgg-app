@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 14:59:03
+ * @LastEditTime: 2025-03-12 12:58:08
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -16,7 +16,7 @@ export default {
   'home.topUp': '充值',
   'home.withdraw': '提現',
   'home.balance': '可用餘額',
-  'home.portfolio': '投資組合',
+  'home.portfolio': '資產',
   'home.history': '歷史',
   'home.viewAll': '查看全部',
   'home.today': '今天',
@@ -49,7 +49,8 @@ export default {
   'home.withdraw.button2': '連接錢包',
   'home.withdraw.tips': '您提取的金額不能超過您的餘額',
   'home.withdraw.address': '提取地址',
-  'home.withdraw.address.tips': '請輸入您想要提取的地址',
+  'home.withdraw.address.tips': '請輸入提取地址',
+  'home.withdraw.address.tips2': '請選擇錢包或輸入提取地址',
   'home.wallet.connected': '已連接',
 
   'home.request.amountRequesting': '請輸入您想要請求的金額',
@@ -68,6 +69,9 @@ export default {
   'home.order.amountRequested': '請求金額',
   'home.order.sentTo': '發送到',
   'home.order.from': '從',
+  'home.order.depositAddress': '存款地址',
+  'home.order.withdrawAddress': '提現地址',
+
 
   'home.order.networkFee': '網絡費用',
   'home.order.date': '日期',
@@ -94,8 +98,8 @@ export default {
   'home.order.declinedTips2': '請求已被拒絕！',
   'home.order.noTransactions': '無交易記錄',
   'home.order.noTransactions2': `您尚未進行任何交易。`,
-  'home.order.noPortfolio': '無投資組合',
-  'home.order.noPortfolio2': `您尚未擁有任何投資組合。`,
+  'home.order.noPortfolio': '無資產',
+  'home.order.noPortfolio2': `您尚未擁有任何資產。`,
 
   'home.order.send.title': `發送到 (@{{name}})`,
   'home.order.payLink.title': `~支付連結 (@{{name}})`,
@@ -236,4 +240,8 @@ export default {
   'home.notification.list.update.requestAcceptedDesc': '@{{name}} 已接受您的付款請求：{{amount}}',
   'home.notification.list.update.requestDeclinedDesc': '@{{name}} 已拒絕您的付款請求：{{amount}}',
   'home.notification.list.update.payLinkAcceptedDesc': '@{{name}} 已接受您的支付連結：{{amount}}',
+
+  'home.connectors.title': '連接錢包',
+  'home.connectors.noWallets': '未連接錢包',
+  'home.connectors.noWallets2': '不使用外部錢包',
 };

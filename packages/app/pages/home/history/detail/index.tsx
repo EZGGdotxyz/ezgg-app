@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 15:35:44
+ * @LastEditTime: 2025-03-12 13:02:51
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -157,17 +157,27 @@ const HistoryDetailScreen = () => {
 
           break;
         case 'WITHDRAW':
+          infoDataDefault.title = '';
           infoDataDefault.type = 'withdraw';
           infoDataDefault.infoList = [
             createTransactionInfoItem(t('home.order.youWithdraw'), createAmountDisplay(_orderData)),
             ...createBaseTransactionInfoList(_orderData, t, false),
+            createTransactionInfoItem(t('home.order.withdrawAddress'), _orderData?.receiverWalletAddress || '', {
+              isCopyable: !!_orderData?.receiverWalletAddress,
+              isTruncated: true,
+            }),
           ];
           break;
         case 'DEPOSIT':
+          infoDataDefault.title = '';
           infoDataDefault.type = 'topUp';
           infoDataDefault.infoList = [
             createTransactionInfoItem(t('home.order.youTopUp'), createAmountDisplay(_orderData)),
             ...createBaseTransactionInfoList(_orderData, t, false),
+            createTransactionInfoItem(t('home.order.depositAddress'), _orderData?.senderWalletAddress || '', {
+              isCopyable: !!_orderData?.senderWalletAddress,
+              isTruncated: true,
+            }),
           ];
           break;
 

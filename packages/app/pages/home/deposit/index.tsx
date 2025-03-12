@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 15:29:41
+ * @LastEditTime: 2025-03-12 12:29:47
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -17,7 +17,7 @@ import {
   Button,
   ScrollView,
 } from '@my/ui';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
@@ -32,17 +32,14 @@ import {useFundWallet} from '@privy-io/react-auth';
 import {useRematchModel} from 'app/store/model';
 import CopyButton from 'app/Components/CopyButton';
 import {erc20Abi, type Hex, parseEther, parseUnits} from 'viem';
-import {
-  useAccount,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from 'wagmi';
+import {useAccount, useWaitForTransactionReceipt, useWriteContract, useReadContract} from 'wagmi';
 import useRequest from 'app/hooks/useRequest';
 import {postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
 import {useTransaction} from 'app/hooks/useTransaction';
 import AppButton from 'app/Components/AppButton';
 import {useContractRead} from 'wagmi';
 import useResponse from 'app/hooks/useResponse';
+import Connectors from 'app/Components/Connectors';
 
 // 存款
 const DepositScreen = () => {
@@ -59,8 +56,6 @@ const DepositScreen = () => {
   const {back, push} = useRouter();
   const toast = useToastController();
 
-  const [isShow, setIsShow] = React.useState(false);
-
   const handlePagePress = () => {
     setShowKeyboard(false);
   };
@@ -71,43 +66,179 @@ const DepositScreen = () => {
   };
   const {address} = useAccount();
 
-  const {data: balanceData, refetch: refetchBalance} = useContractRead({
+  const {data: balance, refetch: refetchBalance} = useReadContract({
     address: currencyData?.token?.address as `0x${string}`,
     abi: erc20Abi,
     functionName: 'balanceOf',
     args: [address as `0x${string}`],
-    enabled: !!address && !!currencyData?.token?.address,
-    watch: true,
+    query: {
+      enabled: !!address && !!currencyData?.token?.address,
+    },
   });
 
-  const [isSubmit, setIsSubmit] = useState(false);
+  // 执行存款操作
+  const onDepositSubmit = async () => {
+    try {
+      setIsLoading(true);
 
-  // 当连接钱包或切换币种时，刷新余额
-  useEffect(() => {
-    if (address && currencyData?.token?.address) {
-      refetchBalance();
+      console.log('开始执行存款操作');
+      // 创建交易记录
+      const _amount = Number(convertAmountToTokenDecimals(inputValue, currencyData?.token?.tokenDecimals));
+
+      console.log('存款参数:', {
+        platform: currencyData?.token?.platform,
+        chainId: Number(currencyData?.token?.chainId),
+        tokenAddress: currencyData?.token?.address,
+        tokenSymbol: currencyData?.token?.symbol,
+        amount: _amount,
+        recipient: userInfo?.smartWallet?.address,
+        decimals: currencyData?.token?.tokenDecimals,
+      });
+
+      await onDeposit(
+        {
+          platform: currencyData?.token?.platform,
+          chainId: Number(currencyData?.token?.chainId),
+          tokenContractAddress: currencyData?.token?.address,
+          amount: _amount,
+          message: inputValue,
+          transactionCategory: 'DEPOSIT',
+          transactionType: 'DEPOSIT',
+          receiverMemberId: userInfo?.customMetadata?.id,
+        },
+        async (data) => {
+          setTransaction(data);
+          console.log('交易记录已创建:', data?.id);
+
+          try {
+            console.log('准备调用转账合约');
+            // 调用 USDT 转账，指定链 ID
+            writeContract({
+              address: currencyData?.token?.address as `0x${string}`,
+              abi: erc20Abi,
+              functionName: 'transfer',
+              args: [userInfo?.smartWallet?.address as `0x${string}`, BigInt(_amount)],
+              chainId: Number(currencyData?.token?.chainId),
+            });
+          } catch (error: any) {
+            // 这里的 try-catch 不会捕获 writeContract 的异步错误
+            // 异步错误会被上面的 onError 回调捕获
+            setIsLoading(false);
+            console.error('合约调用出现同步错误:', error);
+            toast.show(t('tips.error.deposit.failed'));
+          }
+        },
+      );
+    } catch (error) {
+      setIsLoading(false);
+      console.error('存款流程错误:', error);
+      toast.show(t('tips.error.deposit.failed'));
     }
-  }, [address, currencyData?.token?.address, refetchBalance]);
+  };
 
-  // 当提交状态变化时，检查余额并执行存款
-  useEffect(() => {
-    if (balanceData && isSubmit) {
-      const _tokenBalance = formatTokenAmount(balanceData + '', currencyData?.token?.tokenDecimals);
-      if (Number(inputValue) <= Number(_tokenBalance)) {
+  // 处理钱包连接成功后的逻辑
+  const handleWalletConnected = useCallback(async () => {
+    try {
+      console.log('开始处理钱包连接后的逻辑');
+      setIsLoading(true);
+
+      if (!address || !currencyData?.token?.address) {
+        console.error('钱包地址或代币地址不存在');
+        throw new Error('wallet_not_ready');
+      }
+
+      console.log('钱包已连接，准备检查余额:', {
+        address,
+        token: currencyData?.token?.address,
+        amount: inputValue,
+      });
+
+      // 刷新余额
+      const result = await refetchBalance();
+      console.log('余额刷新结果:', result);
+
+      // 正确处理余额为0的情况，result.data可能是BigInt(0)，布尔判断会认为是假值
+      if (result.data !== undefined) {
+        // 手动检查余额
+        const _tokenBalance = formatTokenAmount(result.data.toString(), currencyData?.token?.tokenDecimals);
+        const inputAmount = Number(inputValue);
+        const currentBalance = Number(_tokenBalance);
+
+        console.log('余额检查结果:', {
+          inputAmount,
+          currentBalance,
+          token: currencyData?.token?.symbol,
+          balanceRaw: result.data.toString(),
+        });
+
+        // 检查输入是否为有效数字
+        if (isNaN(inputAmount) || inputAmount <= 0) {
+          toast.show(t('tips.error.deposit.amountRequired'));
+          setIsLoading(false);
+          return;
+        }
+
+        // 检查余额是否足够
+        if (inputAmount > currentBalance) {
+          console.log('余额不足');
+          toast.show(
+            t('tips.error.deposit.insufficientFunds', {
+              token: currencyData?.token?.symbol,
+              chain: currencyData?.chainName,
+            }),
+            {
+              duration: 3000,
+            },
+          );
+          setIsLoading(false);
+          return;
+        }
+
+        // 余额充足，直接执行存款操作
+        console.log('余额充足，执行存款');
         onDepositSubmit();
       } else {
-        setIsSubmit(false);
-        toast.show(t('tips.error.deposit.insufficientFunds'));
+        throw new Error('fetch_balance_failed');
       }
+    } catch (error) {
+      console.error('钱包连接后处理失败:', error);
+      toast.show(t('tips.error.deposit.connectionFailed'), {
+        duration: 3000,
+      });
+      setIsLoading(false);
     }
-  }, [balanceData, currencyData?.token?.tokenDecimals, inputValue, isSubmit]);
+  }, [address, currencyData, inputValue, refetchBalance, onDepositSubmit, t]);
 
   // USDT 转账合约调用
-  const {writeContract, data: hash} = useWriteContract();
+  const {
+    writeContract,
+    data: hash,
+    status: writeStatus,
+    error: writeError,
+  } = useWriteContract({
+    mutation: {
+      onError: (error) => {
+        console.error('合约写入错误:', error);
+        setIsLoading(false);
+        // 分析错误类型并提供相应的用户反馈
+        if (
+          error?.message?.includes('user rejected') ||
+          error?.code === 4001 ||
+          error?.message?.includes('User rejected the request.')
+        ) {
+          toast.show(t('tips.error.deposit.userRejected'));
+        } else {
+          toast.show(t('tips.error.deposit.failed'));
+        }
+      },
+      onSuccess: (data) => {
+        console.log('合约写入成功，交易哈希:', data);
+      },
+    },
+  });
 
   // 监听交易状态
   const {
-    isLoading: isConfirming,
     isSuccess: isConfirmed,
     error,
     isError,
@@ -149,55 +280,30 @@ const DepositScreen = () => {
     }
   };
 
-  // 执行存款操作
-  const onDepositSubmit = async () => {
-    try {
-      setIsLoading(true);
-      setIsSubmit(false);
-
-      // 创建交易记录
-      const _amount = Number(convertAmountToTokenDecimals(inputValue, currencyData?.token?.tokenDecimals));
-
-      await onDeposit(
-        {
-          platform: currencyData?.token?.platform,
-          chainId: Number(currencyData?.token?.chainId),
-          tokenContractAddress: currencyData?.token?.address,
-          amount: _amount,
-          message: inputValue,
-          transactionCategory: 'DEPOSIT',
-          transactionType: 'DEPOSIT',
-          receiverMemberId: userInfo?.customMetadata?.id,
-        },
-        async (data) => {
-          setTransaction(data);
-          try {
-            // 调用 USDT 转账，指定链 ID
-            await writeContract({
-              address: currencyData?.token?.address,
-              abi: erc20Abi,
-              functionName: 'transfer',
-              args: [userInfo?.smartWallet?.address, BigInt(_amount)],
-              chainId: Number(currencyData?.token?.chainId),
-            });
-          } catch (error: any) {
-            setIsLoading(false);
-            // 用户取消交易
-            if (error?.name === 'UserRejectedRequestError' || error?.code === 4001) {
-              toast.show(t('tips.error.deposit.userRejected'));
-            } else {
-              console.error('Transaction error:', error);
-              toast.show(t('tips.error.deposit.failed'));
-            }
-          }
-        },
-      );
-    } catch (error) {
-      setIsLoading(false);
-      console.error('Deposit error:', error);
-      toast.show(t('tips.error.deposit.failed'));
+  // 处理用户点击存款按钮
+  const handleDepositClick = () => {
+    if (!inputValue || Number(inputValue) <= 0) {
+      toast.show(t('tips.error.deposit.amountRequired'));
+      return;
     }
+    handleWalletConnected();
   };
+
+  // 监听写入合约状态变化
+  useEffect(() => {
+    if (writeStatus === 'error' && writeError) {
+      console.error('合约写入状态错误:', writeError);
+      setIsLoading(false);
+    }
+
+    if (writeStatus === 'pending') {
+      console.log('合约写入等待中...');
+    }
+
+    if (writeStatus === 'success' && hash) {
+      console.log('合约写入已提交，哈希:', hash);
+    }
+  }, [writeStatus, writeError, hash]);
 
   return (
     <PermissionPage>
@@ -254,33 +360,23 @@ const DepositScreen = () => {
               </SizableText>
             </XStack>
           </YStack>
+          <Connectors setIsLoading={setIsLoading} currencyData={currencyData} />
           {/* <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
-            {currencyData?.tokenAmount && (
+            {balance && (
               <SizableText
                 h={appScale(24)}
                 lh={appScale(24)}
                 fontSize={'$4'}
                 color={'#212121'}
                 fontWeight={'500'}
-              >{`${t('home.balance')}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
+              >{`${t('home.balance')}: ${balance} ${currencyData?.token?.tokenSymbol} (${
                 currencyData?.chainName
               })`}</SizableText>
             )}
           </XStack> */}
 
           <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
-            <AppButton
-              onPress={() => {
-                if (!inputValue || inputValue === '0') {
-                  toast.show(t('home.send.amountToSend.tips'));
-                  return;
-                }
-                setIsLoading(true);
-                return setIsShow(true);
-              }}
-            >
-              {t('home.deposit')}
-            </AppButton>
+            <AppButton onPress={handleDepositClick}>{t('home.deposit')}</AppButton>
           </XStack>
           {!showKeyboard && (
             <>
@@ -319,13 +415,6 @@ const DepositScreen = () => {
         </YStack>
         {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
       </ScrollView>
-      <ConnectorsPopup
-        setIsLoading={setIsLoading}
-        setIsSubmit={setIsSubmit}
-        chainId={currencyData?.token?.chainId}
-        modalVisible={isShow}
-        setModalVisible={setIsShow}
-      />
       {isLoading && <AppLoading />}
     </PermissionPage>
   );

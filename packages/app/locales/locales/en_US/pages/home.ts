@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 15:09:56
+ * @LastEditTime: 2025-03-12 12:54:59
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -16,7 +16,7 @@ export default {
   'home.topUp': 'Top Up',
   'home.withdraw': 'Withdraw',
   'home.balance': 'Available balance',
-  'home.portfolio': 'Portfolio',
+  'home.portfolio': 'Assets',
   'home.history': 'History',
   'home.viewAll': 'View All',
   'home.today': 'Today',
@@ -48,14 +48,16 @@ export default {
   'home.withdraw.withdraw': 'Withdraw',
   'home.withdraw.button2': 'Connect Wallet',
   'home.withdraw.tips': 'The amount you withdraw cannot exceed your balance',
-  'home.withdraw.address': 'Withdrawal address',
-  'home.withdraw.address.tips': 'Please enter the address you want to withdraw to',
+  'home.withdraw.address': 'Withdraw Address',
+  'home.withdraw.address.tips': 'Please enter the withdrawal address',
+  'home.withdraw.address.tips2': 'Please select a wallet or enter a withdrawal address',
   'home.wallet.connected': 'Connected',
 
   'home.request.amountRequesting': 'Amount Requesting',
   'home.request.amountToRequest': 'Amount to Request',
   'home.request.amountToRequest.tips': 'Please enter the amount to request',
   'home.request.amountToRequest.tips2': 'Please enter an amount that is less than your balance',
+  
   'home.request.requestCrypto': 'Request Crypto',
 
   'home.order.youSent': 'You sent',
@@ -95,8 +97,8 @@ export default {
   'home.order.declinedTips2': 'Request declined!',
   'home.order.noTransactions': 'No Transactions',
   'home.order.noTransactions2': `You haven't made any transactions.`,
-  'home.order.noPortfolio': 'No Portfolio',
-  'home.order.noPortfolio2': `You don't have any portfolio.`,
+  'home.order.noPortfolio': 'No Assets',
+  'home.order.noPortfolio2': `You don't have any assets.`,
 
   'home.order.send.title': `Sent to (@{{name}})`,
   'home.order.payLink.title': `~PayLink (@{{name}})`,
@@ -236,4 +238,8 @@ export default {
   'home.notification.list.update.requestAcceptedDesc': '@{{name}} accepted your payment request: {{amount}}',
   'home.notification.list.update.requestDeclinedDesc': '@{{name}} declined your payment request: {{amount}}',
   'home.notification.list.update.payLinkAcceptedDesc': '@{{name}} accepted your PayLink: {{amount}}',
+
+  'home.connectors.title': 'Connect Wallet',
+  'home.connectors.noWallets': 'No Wallets',
+  'home.connectors.noWallets2': 'Not using external wallets',
 };

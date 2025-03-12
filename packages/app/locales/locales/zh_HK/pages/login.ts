@@ -14,7 +14,7 @@ export default {
   'login.type./claim': '領取',
   'login.type./requesting': '發送',
   'login.loginAgreement1':
-    '您同意接收Ezgg的賬戶通知。可能會產生短信和數據費用。消息頻率會有所不同。回復“停止”以取消訂閲。詳情請參閲',
+    '您同意接收Ezgg的賬戶通知。可能會產生短信和數據費用。消息頻率會有所不同。回復"停止"以取消訂閲。詳情請參閲',
   'login.loginAgreement2': '隱私政策和條款',
   'login.loginAgreement3': '。',
 
@@ -23,5 +23,8 @@ export default {
   'login.profile.nikeName': '暱稱',
   'login.profile.nikeName.placeholder': '請輸入您的暱稱',
   'login.profile.nikeName.error': '請輸入超過 4 個字元的暱稱',
+  'login.profile.nikeName.tooLong': '暱稱不能超過 15 個字元',
+  'login.profile.nikeName.restrictedWord': '暱稱不能包含 Twitter 或 Admin 字樣',
+  'login.profile.nikeName.invalidChar': '暱稱只能包含字母、數字和下劃線',
   'login.profile.dont': '不要',
 };

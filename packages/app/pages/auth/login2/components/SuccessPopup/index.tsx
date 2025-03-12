@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:22:01
+ * @LastEditTime: 2025-03-12 13:07:50
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -58,10 +58,32 @@ const SuccessPopup: React.FC<any> = ({
   const {appScale} = useResponse();
 
   const accountContinue = () => {
+    // 检查用户名长度是否小于4个字符
     if (accountForm?.nickname && accountForm?.nickname.length < 4) {
       toast.show(t('login.profile.nikeName.error'));
       return;
     }
+
+    // 检查用户名长度是否超过15个字符
+    if (accountForm?.nickname && accountForm?.nickname.length > 15) {
+      toast.show(t('login.profile.nikeName.tooLong'));
+      return;
+    }
+
+    // 检查用户名是否包含 Twitter 或 Admin 字样（不区分大小写）
+    const lowercaseNickname = accountForm?.nickname?.toLowerCase() || '';
+    if (lowercaseNickname.includes('twitter') || lowercaseNickname.includes('admin')) {
+      toast.show(t('login.profile.nikeName.restrictedWord'));
+      return;
+    }
+
+    // 检查用户名是否只包含字母、数字和下划线
+    const alphanumericRegex = /^[a-zA-Z0-9_]+$/;
+    if (accountForm?.nickname && !alphanumericRegex.test(accountForm.nickname)) {
+      toast.show(t('login.profile.nikeName.invalidChar'));
+      return;
+    }
+
     console.log('🚀 ~ accountContinue ~ accountForm:', accountForm);
     handleSuccess(accountForm);
   };
@@ -140,7 +162,12 @@ const SuccessPopup: React.FC<any> = ({
                 }}
               >
                 {!accountForm?.avatar ? (
-                  <AppImage width={appScale(100)} height={appScale(100)} src={require(`app/assets/images/avatar.png`)} type="local" />
+                  <AppImage
+                    width={appScale(100)}
+                    height={appScale(100)}
+                    src={require(`app/assets/images/avatar.png`)}
+                    type="local"
+                  />
                 ) : (
                   <AppImage width={appScale(100)} height={appScale(100)} src={accountForm.avatar} />
                 )}
@@ -250,9 +277,7 @@ const SuccessPopup: React.FC<any> = ({
               color={'#212121'}
               fow={'400'}
             >
-              {redirect
-                ? t('login.loginTips5')
-                : t('login.loginTips3')}
+              {redirect ? t('login.loginTips5') : t('login.loginTips3')}
             </SizableText>
             <XStack>
               <ActivityIndicator size={'large'} color={PrimaryColor} />

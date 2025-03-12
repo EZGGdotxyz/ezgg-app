@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 16:40:27
+ * @LastEditTime: 2025-03-12 12:30:38
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -53,4 +53,6 @@ export default {
 
   'tips.error.explore.selfTransfer': 'Cannot transfer to yourself',
 
+  'tips.error.deposit.amountRequired': 'Please enter a valid amount',
+  'tips.error.deposit.invalidAmount': 'Please enter a valid amount',
 };

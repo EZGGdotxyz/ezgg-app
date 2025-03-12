@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 21:07:35
+ * @LastEditTime: 2025-03-12 12:50:43
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -35,11 +35,6 @@ import TokenTransferContract from 'app/abi/TokenTransfer.json';
 import {encodeFunctionData, erc721Abi, erc20Abi, createPublicClient, http, getAddress} from 'viem';
 import {useSmartWallets} from '@privy-io/react-auth/smart-wallets';
 import {useRematchModel} from 'app/store/model';
-import {
-  postTransactionHistoryCreateTransactionHistory,
-  postTransactionHistoryUpdateTransactionHash,
-} from 'app/servers/api/transactionHistory';
-import {postTransactionPayLinkUpdateTransactionHash} from 'app/servers/api/transactionPayLink';
 import useRequest from 'app/hooks/useRequest';
 import {useTransaction} from 'app/hooks/useTransaction';
 import {PrimaryColor} from 'app/config';
@@ -48,6 +43,7 @@ import ConnectorsPopup from 'app/Components/ConnectorsPopup';
 import {useAccount} from 'wagmi';
 import useResponse from 'app/hooks/useResponse';
 import PayPopup from 'app/Components/PayPopup';
+import Connectors from 'app/Components/Connectors';
 
 // 提取
 const WithdrawScreen = () => {
@@ -73,14 +69,6 @@ const WithdrawScreen = () => {
   const {address} = useAccount();
   const {appScale} = useResponse();
 
-  const [isSubmit, setIsSubmit] = useState(false);
-
-  useEffect(() => {
-    if (address && isSubmit) {
-      submit(address);
-    }
-  }, [address, currencyData?.token?.decimals, inputValue, isSubmit]);
-
   const submit = async (_address) => {
     // 验证金额
     if (!inputValue || Number(inputValue) <= 0) {
@@ -99,7 +87,6 @@ const WithdrawScreen = () => {
       return;
     }
 
-    setIsSubmit(false);
     setIsLoading(true);
 
     const params: any = {
@@ -149,6 +136,29 @@ const WithdrawScreen = () => {
     setShowKeyboard(true);
   };
 
+  const handleSubmit = () => {
+    if (!inputValue || inputValue === '0') {
+      toast.show(t('home.send.amountToSend.tips'));
+      return;
+    }
+
+    if (Number(inputValue) > Number(currencyData?.tokenAmount)) {
+      toast.show(t('home.withdraw.tips'));
+      return;
+    }
+    console.log('🚀 ~ handleSubmit ~ address:', address);
+
+    if (address) {
+      submit(address);
+    } else {
+      if (withdrawAddress) {
+        submit(withdrawAddress);
+      } else {
+        toast.show(t('home.withdraw.address.tips2'));
+      }
+    }
+  };
+
   return (
     <PermissionPage>
       <AppHeader2 title={t('screen.home.withdraw')} fallbackUrl="/" />
@@ -160,170 +170,109 @@ const WithdrawScreen = () => {
           minHeight: '100%',
         }}
       >
-        <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress} flex={1}>
-          <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
-          <YStack w="100%" mb={appScale(24)}>
-            <XStack mb={appScale(8)} w="100%">
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                {t('home.send.amountToSend')}
-              </SizableText>
+        <YStack>
+          <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress} flex={1}>
+            <Currency setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
+            <YStack w="100%" mb={appScale(24)}>
+              <XStack mb={appScale(8)} w="100%">
+                <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                  {t('home.send.amountToSend')}
+                </SizableText>
+              </XStack>
+              <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
+                <SizableText
+                  fontSize={'$10'}
+                  h={appScale(50)}
+                  lh={appScale(50)}
+                  color={'#212121'}
+                  fontWeight={'600'}
+                  pos="relative"
+                >
+                  {inputValue || '0'}
+                  {showKeyboard && (
+                    <XStack
+                      pos="absolute"
+                      right={-4}
+                      top={0}
+                      bottom={0}
+                      w={2}
+                      animation="quick"
+                      bc="#212121"
+                      style={{
+                        animationName: 'cursorBlink',
+                        animationDuration: '1s',
+                        animationIterationCount: 'infinite',
+                        animationTimingFunction: 'steps(2, start)',
+                      }}
+                    />
+                  )}
+                </SizableText>
+              </XStack>
+            </YStack>
+            <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+              {currencyData?.tokenAmount && (
+                <SizableText
+                  h={appScale(24)}
+                  lh={appScale(24)}
+                  fontSize={'$4'}
+                  color={'#212121'}
+                  fontWeight={'500'}
+                >{`${t('home.balance')}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
+                  currencyData?.chainName
+                })`}</SizableText>
+              )}
             </XStack>
-            <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
-              <SizableText
-                fontSize={'$10'}
-                h={appScale(50)}
-                lh={appScale(50)}
-                color={'#212121'}
-                fontWeight={'600'}
-                pos="relative"
-              >
-                {inputValue || '0'}
-                {showKeyboard && (
-                  <XStack
-                    pos="absolute"
-                    right={-4}
-                    top={0}
-                    bottom={0}
-                    w={2}
-                    animation="quick"
-                    bc="#212121"
-                    style={{
-                      animationName: 'cursorBlink',
-                      animationDuration: '1s',
-                      animationIterationCount: 'infinite',
-                      animationTimingFunction: 'steps(2, start)',
-                    }}
+            {!showKeyboard && (
+              <>
+                <Connectors isWithdraw setIsLoading={setIsLoading} currencyData={currencyData} />
+                <XStack ai="center" pl={appScale(24)} pr={appScale(24)} mb={appScale(34)}>
+                  <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
+                  <SizableText fontSize={'$3'} color={'#9E9E9E'} ml={'$4'} mr={'$4'}>
+                    {t('home.deposit.or')}
+                  </SizableText>
+                  <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
+                </XStack>
+                <YStack w="100%" mb={appScale(24)}>
+                  <XStack mb={appScale(8)} w="100%">
+                    <SizableText
+                      h={appScale(30)}
+                      lh={appScale(30)}
+                      fontSize={'$3'}
+                      color={'#212121'}
+                      fontWeight={'500'}
+                    >
+                      {t('home.withdraw.address')}
+                    </SizableText>
+                  </XStack>
+                  <Input
+                    w="100%"
+                    p={appScale(16)}
+                    bc={'#FAFAFA'}
+                    br={appScale(8)}
+                    fontSize={'$5'}
+                    h={appScale(82)}
+                    lh={appScale(50)}
+                    value={withdrawAddress}
+                    onChangeText={setWithdrawAddress}
+                    borderColor={'#FAFAFA'}
+                    placeholder={t('home.withdraw.address.tips')}
                   />
-                )}
-              </SizableText>
-            </XStack>
-          </YStack>
-
-          <XStack ai="center" pl={appScale(24)} pr={appScale(24)} mb={appScale(34)}>
-            <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
-            <SizableText fontSize={'$3'} color={'#9E9E9E'} ml={'$4'} mr={'$4'}>
-              {t('home.deposit.or')}
-            </SizableText>
-            <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
-          </XStack>
-          <YStack w="100%" mb={appScale(24)}>
-            <XStack mb={appScale(8)} w="100%">
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                {t('home.withdraw.address')}
-              </SizableText>
-            </XStack>
-            <Input
-              w="100%"
-              p={appScale(16)}
-              bc={'#FAFAFA'}
-              br={appScale(8)}
-              fontSize={'$3'}
-              h={appScale(50)}
-              lh={appScale(50)}
-              value={withdrawAddress}
-              onChangeText={setWithdrawAddress}
-              borderColor={'#FAFAFA'}
-              placeholder={t('home.withdraw.address.tips')}
-            />
-          </YStack>
-          <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
-            {currencyData?.tokenAmount && (
-              <SizableText
-                h={appScale(24)}
-                lh={appScale(24)}
-                fontSize={'$4'}
-                color={'#212121'}
-                fontWeight={'500'}
-              >{`${t('home.balance')}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
-                currencyData?.chainName
-              })`}</SizableText>
+                </YStack>
+                <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
+                  <AppButton onPress={handleSubmit}>{t('home.withdraw')}</AppButton>
+                </XStack>
+              </>
             )}
-          </XStack>
+          </YStack>
 
-          {/* <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
-          <AppButton isLoading={buttonLoading} onPress={submit}>
-            {t('home.withdraw')}
-          </AppButton>
-        </XStack> */}
+          {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
         </YStack>
-        {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
       </ScrollView>
-      {!showKeyboard && (
-        <XStack
-          flexShrink={0}
-          pl={appScale(24)}
-          pr={appScale(24)}
-          pt={appScale(12)}
-          pb={appScale(isIphoneX() ? 46 : 12)}
-          w="100%"
-          ai={'center'}
-          jc={'center'}
-          space="$3"
-          borderTopWidth={1}
-          borderColor={'#F2F2F2'}
-        >
-          <Button
-            h={appScale(58)}
-            w={'50%'}
-            br={appScale(28)}
-            ai={'center'}
-            jc={'center'}
-            bc={'#fff'}
-            borderWidth={2}
-            borderColor={PrimaryColor}
-            onPress={() => {
-              handlePagePress();
-              submit(withdrawAddress);
-              // setDeclineRequestVisible(true);
-            }}
-            // disabled={isLoading}
-            pressStyle={{
-              opacity: 0.85,
-            }}
-            unstyled
-          >
-            {t('home.withdraw')}
-          </Button>
-          <AppButton
-            style={{
-              width: '50%',
-            }}
-            isLoading={buttonLoading}
-            onPress={() => {
-              handlePagePress();
-              if (!inputValue || inputValue === '0') {
-                toast.show(t('home.send.amountToSend.tips'));
-                return;
-              }
 
-              if (Number(inputValue) > Number(currencyData?.tokenAmount)) {
-                toast.show(t('home.withdraw.tips'));
-                return;
-              }
-              setIsShow(true);
-              setIsLoading(true);
-            }}
-          >
-            {t('home.withdraw.button2')}
-          </AppButton>
-        </XStack>
-      )}
-      <ConnectorsPopup
-        setIsLoading={setIsLoading}
-        setIsSubmit={setIsSubmit}
-        chainId={currencyData?.token?.chainId}
-        modalVisible={isShow}
-        setModalVisible={setIsShow}
-      />
       {isLoading && <AppLoading />}
       <PayPopup
         modalVisible={modalVisible}
-        setModalVisible={(value) => {
-          setModalVisible(value);
-          if (!value) {
-            setIsLoading(false);
-          }
-        }}
+        setModalVisible={setModalVisible}
         orderData={orderData}
         onSubmit={_onWithdraw}
       />

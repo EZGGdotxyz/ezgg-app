@@ -24,5 +24,8 @@ export default {
   'login.profile.nikeName': 'Nick Name',
   'login.profile.nikeName.placeholder': 'Please enter your nickname',
   'login.profile.nikeName.error': 'Please enter a nickname with more than 4 characters',
+  'login.profile.nikeName.tooLong': 'Nickname cannot exceed 15 characters',
+  'login.profile.nikeName.restrictedWord': 'Nickname cannot contain Twitter or Admin',
+  'login.profile.nikeName.invalidChar': 'Nickname can only contain letters, numbers, and underscores',
   'login.profile.dont': 'Dont',
 };
