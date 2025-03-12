@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 13:20:27
+ * @LastEditTime: 2025-03-12 14:34:45
  * @FilePath: /ezgg-app/packages/app/Components/AppHeader2/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -74,20 +74,22 @@ const AppHeader2: React.FC<any> = ({
         ai={'center'}
         jc={'space-between'}
       >
-        <Button unstyled onPress={onBackPress} h={'100%'} ai={'center'} jc={'center'}>
-          {!isLogo && (
-            <AppImage
-              width={appScale(28)}
-              height={appScale(28)}
-              src={
-                isClosure
-                  ? require(isDark ? 'app/assets/images/dark/closure.png' : 'app/assets/images/closure.png')
-                  : require('app/assets/images/left.png')
-              }
-              type="local"
-            />
-          )}
-        </Button>
+        <XStack h={'100%'} w={appScale(48)} ai={'center'}>
+          <Button unstyled onPress={onBackPress} h={'100%'} ai={'center'} jc={'center'}>
+            {!isLogo && (
+              <AppImage
+                width={appScale(28)}
+                height={appScale(28)}
+                src={
+                  isClosure
+                    ? require(isDark ? 'app/assets/images/dark/closure.png' : 'app/assets/images/closure.png')
+                    : require('app/assets/images/left.png')
+                }
+                type="local"
+              />
+            )}
+          </Button>
+        </XStack>
         <XStack ai={'center'} h={'100%'}>
           {isLogo && (
             <XStack mr={appScale(24)}>

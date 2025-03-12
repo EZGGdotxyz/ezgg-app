@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 12:39:26
+ * @LastEditTime: 2025-03-12 13:26:27
  * @FilePath: /ezgg-app/packages/app/Components/Connectors/index.tsx
  */
 import {AppImage, Button, SizableText, YStack, XStack} from '@my/ui';
@@ -20,7 +20,7 @@ export type ConnectorsProps = {
   isWithdraw?: boolean;
 };
 
-const Connectors = ({currencyData, setIsLoading, isWithdraw}: ConnectorsProps) => {
+const Connectors = ({currencyData, setIsLoading, isWithdraw=false}: ConnectorsProps) => {
   const {appScale} = useResponse();
   const {t} = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -78,7 +78,7 @@ const Connectors = ({currencyData, setIsLoading, isWithdraw}: ConnectorsProps) =
           </XStack>
           <XStack>
             <SizableText fontSize={'$3'} color={'#212121'}>
-              {address ? truncateAddress(address) : '-'}
+              {address ? truncateAddress(address) : ''}
             </SizableText>
             <ChevronRight size="$2" color={'#212121'} />
           </XStack>
@@ -86,6 +86,7 @@ const Connectors = ({currencyData, setIsLoading, isWithdraw}: ConnectorsProps) =
       </YStack>
 
       <ConnectorsPopup
+        isWithdraw={isWithdraw}
         modalVisible={modalVisible}
         setModalVisible={handleModalVisibilityChange}
         chainId={currencyData?.chainId}

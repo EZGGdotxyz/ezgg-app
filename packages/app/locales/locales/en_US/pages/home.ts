@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 12:54:59
+ * @LastEditTime: 2025-03-12 14:29:20
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -52,12 +52,13 @@ export default {
   'home.withdraw.address.tips': 'Please enter the withdrawal address',
   'home.withdraw.address.tips2': 'Please select a wallet or enter a withdrawal address',
   'home.wallet.connected': 'Connected',
+  'home.wallet.select': 'Selected',
 
   'home.request.amountRequesting': 'Amount Requesting',
   'home.request.amountToRequest': 'Amount to Request',
   'home.request.amountToRequest.tips': 'Please enter the amount to request',
   'home.request.amountToRequest.tips2': 'Please enter an amount that is less than your balance',
-  
+
   'home.request.requestCrypto': 'Request Crypto',
 
   'home.order.youSent': 'You sent',
@@ -70,6 +71,8 @@ export default {
   'home.order.amountRequested': 'Amount requested',
   'home.order.sentTo': 'Sent to',
   'home.order.from': 'From',
+  'home.order.depositAddress': 'Deposit Address',
+  'home.order.withdrawAddress': 'Withdraw Address',
 
   'home.order.networkFee': 'Network Fee',
   'home.order.date': 'Date',

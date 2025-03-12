@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:25:20
+ * @LastEditTime: 2025-03-12 14:35:30
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/Header/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -35,7 +35,7 @@ const Header: React.FC<any> = ({isLogin}: HeaderProps) => {
         ai={'center'}
         jc={'space-between'}
       >
-        <XStack h={'100%'} ai={'center'}>
+        <XStack h={'100%'} ai={'center'} w={appScale(56)}>
           <AppImage
             width={appScale(48)}
             height={appScale(32)}
@@ -48,7 +48,7 @@ const Header: React.FC<any> = ({isLogin}: HeaderProps) => {
             {t('screen.profile.title')}
           </SizableText>
         </XStack>
-        <XStack h={'100%'} w={appScale(48)} ai={'center'}></XStack>
+        <XStack h={'100%'} w={appScale(56)} ai={'center'}></XStack>
       </XStack>
     </XStack>
   );

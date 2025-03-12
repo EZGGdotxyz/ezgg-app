@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 12:37:57
+ * @LastEditTime: 2025-03-12 14:02:54
  * @FilePath: /ezgg-app/packages/app/Components/ConnectorsPopup/index.tsx
  */
 import {Button, Sheet, SizableText, useToastController, XStack, YStack, AppImage} from '@my/ui';
@@ -108,7 +108,7 @@ const Item = memo(
         {isCurrentConnector && (
           <XStack ai="center" space="$2">
             <SizableText color={PrimaryColor} size={'$3'} fow={'500'}>
-              {t('home.wallet.connected')}
+              {t('home.wallet.select')}
             </SizableText>
             <Check size={appScale(32)} color={PrimaryColor} />
           </XStack>
@@ -124,14 +124,16 @@ export type ConnectorsPopupProps = {
   chainId: number;
   onConnectStart?: () => void;
   onConnectEnd?: () => void;
+  isWithdraw?: boolean;
 };
 
 const ConnectorsPopup = forwardRef<any, ConnectorsPopupProps>(
-  ({modalVisible, setModalVisible, chainId, onConnectStart, onConnectEnd}, ref) => {
+  ({modalVisible, setModalVisible, chainId, onConnectStart, onConnectEnd, isWithdraw}, ref) => {
     const {t} = useTranslation();
     const toast = useToastController();
     const {connectors, error: connectError} = useConnect();
     const {isConnected, connector: activeConnector} = useAccount();
+    console.log("🚀 ~ isConnected:", isConnected)
     const {disconnect} = useDisconnect();
     const [isConnecting, setIsConnecting] = useState(false);
     const {appScale} = useResponse();
@@ -170,6 +172,7 @@ const ConnectorsPopup = forwardRef<any, ConnectorsPopupProps>(
 
         // 如果点击的是当前连接的钱包，不做任何操作
         if (activeConnector?.uid === connector?.uid) {
+          console.log('🚀 ~ 如果点击的是当前连接的钱包，不做任何操作');
           return;
         }
 
@@ -178,13 +181,14 @@ const ConnectorsPopup = forwardRef<any, ConnectorsPopupProps>(
 
         // 如果已连接其他钱包，先断开
         if (isConnected) {
+          console.log('🚀 ~ 如果已连接其他钱包，先断开');
           await disconnect();
           // 清除localStorage残留
           localStorage.removeItem('wagmi.wallet');
           localStorage.removeItem('wagmi.connected');
           localStorage.removeItem('wagmi.store');
         }
-
+        console.log('🚀 ~ 连接新钱包');
         // 连接新钱包
         await connector.connect({
           chainId: chainId,
@@ -209,48 +213,50 @@ const ConnectorsPopup = forwardRef<any, ConnectorsPopupProps>(
         <Sheet.Frame justifyContent="center" w="100%" alignItems="center">
           <Sheet.ScrollView w="100%" bc="$background">
             <YStack pb="$4" style={{width: '100vw'}}>
-              <Button
-                unstyled
-                pressStyle={{
-                  opacity: 0.85,
-                }}
-                flexDirection="row"
-                w="100%"
-                ai="center"
-                jc="space-between"
-                onPress={async () => {
-                  setModalVisible(false);
-                  if (isConnected) {
-                    await disconnect();
-                    // 清除localStorage残留
-                    localStorage.removeItem('wagmi.wallet');
-                    localStorage.removeItem('wagmi.connected');
-                    localStorage.removeItem('wagmi.store');
-                  }
-                }}
-                borderBottomWidth={1}
-                borderBottomColor={'#E0E0E0'}
-                pt={appScale(12)}
-                pb={appScale(12)}
-                pl={appScale(24)}
-                pr={appScale(24)}
-              >
-                <XStack ai="center" space="$3" h={appScale(48)}>
-                  <YStack>
-                    <SizableText color={'#212121'} size={'$4'} fow={'600'}>
-                      {t('home.wallet.connect')}
-                    </SizableText>
-                  </YStack>
-                </XStack>
-                {!isConnected && (
-                  <XStack ai="center" space="$2">
-                    <SizableText color={PrimaryColor} size={'$3'} fow={'500'}>
-                      {t('home.wallet.connected')}
-                    </SizableText>
-                    <Check size={appScale(32)} color={PrimaryColor} />
+              {isWithdraw && (
+                <Button
+                  unstyled
+                  pressStyle={{
+                    opacity: 0.85,
+                  }}
+                  flexDirection="row"
+                  w="100%"
+                  ai="center"
+                  jc="space-between"
+                  onPress={async () => {
+                    setModalVisible(false);
+                    if (isConnected) {
+                      await disconnect();
+                      // 清除localStorage残留
+                      localStorage.removeItem('wagmi.wallet');
+                      localStorage.removeItem('wagmi.connected');
+                      localStorage.removeItem('wagmi.store');
+                    }
+                  }}
+                  borderBottomWidth={1}
+                  borderBottomColor={'#E0E0E0'}
+                  pt={appScale(12)}
+                  pb={appScale(12)}
+                  pl={appScale(24)}
+                  pr={appScale(24)}
+                >
+                  <XStack ai="center" space="$3" h={appScale(48)}>
+                    <YStack>
+                      <SizableText color={'#212121'} size={'$4'} fow={'600'}>
+                        {t('home.connectors.noWallets2')}
+                      </SizableText>
+                    </YStack>
                   </XStack>
-                )}
-              </Button>
+                  {!isConnected && (
+                    <XStack ai="center" space="$2">
+                      <SizableText color={PrimaryColor} size={'$3'} fow={'500'}>
+                        {t('home.wallet.select')}
+                      </SizableText>
+                      <Check size={appScale(32)} color={PrimaryColor} />
+                    </XStack>
+                  )}
+                </Button>
+              )}
               {connectors?.map((item, index) => (
                 <Item key={index} connector={item} onSubmit={onSubmit} activeConnector={activeConnector} />
               ))}

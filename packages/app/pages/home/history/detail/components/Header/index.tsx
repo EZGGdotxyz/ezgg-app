@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:23:09
+ * @LastEditTime: 2025-03-12 14:31:02
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/Header/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText} from '@my/ui';
@@ -40,7 +40,6 @@ const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/', setShareVisibl
     } else {
       push(fallbackUrl);
     }
-
   };
   return (
     <XStack width={'100%'} pt={0} ai={'center'} backgroundColor={PrimaryColor} flexShrink={0}>
@@ -67,7 +66,8 @@ const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/', setShareVisibl
             {title}
           </SizableText>
         </XStack>
-        <Button
+        <XStack ai={'center'} width={appScale(28)} h={'100%'}></XStack>
+        {/* <Button
           unstyled
           flexDirection="row"
           ai={'center'}
@@ -84,7 +84,7 @@ const Header: React.FC<any> = ({title, onBack, fallbackUrl = '/', setShareVisibl
             src={require('app/assets/images/more.png')}
             type="local"
           />
-        </Button>
+        </Button> */}
       </XStack>
     </XStack>
   );

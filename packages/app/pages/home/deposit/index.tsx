@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 12:29:47
+ * @LastEditTime: 2025-03-12 14:28:34
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -105,12 +105,14 @@ const DepositScreen = () => {
           transactionCategory: 'DEPOSIT',
           transactionType: 'DEPOSIT',
           receiverMemberId: userInfo?.customMetadata?.id,
+          senderWalletAddress: address,
         },
         async (data) => {
           setTransaction(data);
           console.log('交易记录已创建:', data?.id);
 
           try {
+            console.log("🚀 ~ currencyData:", currencyData)
             console.log('准备调用转账合约');
             // 调用 USDT 转账，指定链 ID
             writeContract({

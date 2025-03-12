@@ -97,7 +97,7 @@ const WithdrawScreen = () => {
       transactionCategory: 'WITHDRAW',
       transactionType: 'WITHDRAW',
       senderMemberId: userInfo?.customMetadata?.id,
-      receiverAddress: _address,
+      senderWalletAddress: _address,
     };
     const _amount = Number(convertAmountToTokenDecimals(inputValue.toString(), 6));
     const transaction = await createTransaction({...params, amount: _amount});

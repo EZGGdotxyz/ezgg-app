@@ -67,6 +67,37 @@ const Keyboard: React.FC<KeyboardProps> = ({onChange, maxLength = 12, value = ''
     }
   };
 
+  // 添加键盘事件监听
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+
+      console.log('🚀 ~ handleKeyDown ~ event:', event.key);
+
+      const keyMap: Record<string, string> = {
+        Backspace: 'del',
+        Delete: 'del',
+        '.': '.',
+        ',': '.' // 兼容小数点输入
+      };
+
+      // 处理数字键
+      if (/^\d$/.test(event.key)) {
+        handleKeyPress(event.key);
+        return;
+      }
+
+      // 处理特殊按键
+      const mappedKey = keyMap[event.key];
+      if (mappedKey) {
+        event.preventDefault();
+        handleKeyPress(mappedKey);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [inputValue]); // 依赖inputValue保证最新状态
+
   return (
     <YStack w="100%" ai="center" flexShrink={0} p={appScale(12)} backgroundColor="#FAFAFA">
       <XStack w="100%" flexWrap="wrap" jc="center">

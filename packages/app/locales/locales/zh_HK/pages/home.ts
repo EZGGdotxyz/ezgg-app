@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 12:58:08
+ * @LastEditTime: 2025-03-12 13:22:10
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -52,6 +52,7 @@ export default {
   'home.withdraw.address.tips': '請輸入提取地址',
   'home.withdraw.address.tips2': '請選擇錢包或輸入提取地址',
   'home.wallet.connected': '已連接',
+  'home.wallet.select': '已選擇',
 
   'home.request.amountRequesting': '請輸入您想要請求的金額',
   'home.request.amountToRequest': '請求的金額',
