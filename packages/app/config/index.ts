@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 18:01:18
+ * @LastEditTime: 2025-03-13 14:34:27
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
 export const ExternalLinkData = {
@@ -62,9 +62,9 @@ export const CurrencyList = [
 const isRelease = false;
 
 // api 请求接口
-// export const APP_URL = isRelease ? 'https://api.ezgg.xyz' : 'https://api.catfoodworks.com';
+export const APP_URL = isRelease ? 'https://api.ezgg.xyz' : 'https://api.catfoodworks.com';
 
-export const APP_URL = isRelease ? 'https://api.ezgg.xyz' : 'https://api.ezgg.xyz';
+// export const APP_URL = isRelease ? 'https://api.ezgg.xyz' : 'https://api.ezgg.xyz';
 
 
 // 区块链网路类型：MAIN 主网；TEST 测试网；DEV 开发网

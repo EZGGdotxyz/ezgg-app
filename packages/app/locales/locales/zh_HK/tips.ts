@@ -21,11 +21,8 @@ export default {
   'tips.error.transactionSuccess': '此筆交易已被領取',
   'tips.error.transactionSuccess2': '此筆交易已被支付',
   'tips.error.transactionDeclined': '此筆交易已被拒絕',
-
   'tips.error.cameraPermissionDenied': '需要相機權限才能掃描二維碼，請在設定中開啟相機權限',
-
   'tips.error.withdraw.address.invalid': '無效的錢包地址，請檢查地址格式',
-
   'tips.error.deposit.transactionError': '交易失敗，請重試',
   'tips.error.deposit.insufficientFunds': '餘額不足，請重試',
   'tips.error.deposit.connectError': '連接錢包失敗，請重試',
@@ -55,4 +52,8 @@ export default {
 
   'tips.error.deposit.amountRequired': '請輸入有效金額',
   'tips.error.deposit.invalidAmount': '請輸入有效金額',
+
+  'tips.success.cancelPayLink': '支付連結已取消',
+  'tips.success.cancelRequestPayLink': '請求支付連結已取消',
+
 };

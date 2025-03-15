@@ -10,6 +10,7 @@ interface StoreParams {
   name: string;
   content?: string;
   type?: string;
+  expiresIn?: number; // 过期时间（毫秒）
 }
 
 /**
@@ -42,13 +43,14 @@ const keyName = 'eagg' + '_';
  * 存储localStorage
  */
 export const setStore = async (params: StoreParams) => {
-  let {name, content, type} = params;
+  let {name, content, type, expiresIn} = params;
   name = keyName + name;
   let obj = {
     dataType: typeof content,
     content: content,
     type: type,
     dateTime: new Date().getTime(),
+    expiresIn: expiresIn,
   };
   try {
     await AsyncStorage.setItem(name, JSON.stringify(obj));
@@ -67,6 +69,16 @@ export const getStore = async (params: StoreParams) => {
     const value: any = await AsyncStorage.getItem(name);
     if (value) {
       const obj: any = JSON.parse(value);
+
+      // 检查是否过期
+      if (obj.expiresIn) {
+        const now = new Date().getTime();
+        if (now - obj.dateTime > obj.expiresIn) {
+          await AsyncStorage.removeItem(name);
+          return null;
+        }
+      }
+
       let content;
       if (obj.dataType == 'string') {
         content = obj.content;

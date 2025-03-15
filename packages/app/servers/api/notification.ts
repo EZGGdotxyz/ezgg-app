@@ -92,8 +92,8 @@ export async function getNotificationPageNotification(
           tokenDecimals?: number;
           tokenContractAddress?: string;
           tokenPrice?: string;
+          tokenFeeSupport?: boolean;
           amount?: number;
-          networkFee?: number;
           message?: string;
           senderMember: {
             id?: number;
@@ -204,8 +204,8 @@ export async function getNotificationPageNotification2(
           tokenDecimals?: number;
           tokenContractAddress?: string;
           tokenPrice?: string;
+          tokenFeeSupport?: boolean;
           amount?: number;
-          networkFee?: number;
           message?: string;
           senderMember: {
             id?: number;
@@ -249,34 +249,26 @@ export async function getNotificationPageNotification2(
 }
 
 /** 更新所有通知为已读 POST /member/notification/update-notification-all-status */
-export async function postNotificationUpdateNotificationAllStatus(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.postNotificationUpdateNotificationAllStatusParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
+export async function postNotificationUpdateNotificationAllStatus(options?: {
+  [key: string]: any;
+}) {
   return request<{ code: string; msg: string }>(
     '/member/notification/update-notification-all-status',
     {
       method: 'POST',
-      params: { ...queryParams },
       ...(options || {}),
     },
   );
 }
 
 /** 更新所有通知为已读 POST /member/notification/update-notification-all-status */
-export async function postNotificationUpdateNotificationAllStatus2(
-  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
-  params: API.postNotificationUpdateNotificationAllStatusParams,
-  options?: { [key: string]: any },
-) {
-  const { id: param0, ...queryParams } = params;
+export async function postNotificationUpdateNotificationAllStatus2(options?: {
+  [key: string]: any;
+}) {
   return request<{ code: string; msg: string }>(
     '/member/notification/update-notification-all-status',
     {
       method: 'POST',
-      params: { ...queryParams },
       ...(options || {}),
     },
   );

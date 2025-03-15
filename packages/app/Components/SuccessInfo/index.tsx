@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 15:17:32
+ * @LastEditTime: 2025-03-14 16:07:54
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -163,7 +163,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
         />
       </XStack>
       <XStack mt={appScale(20)} w={'100%'} ai={'center'} jc={'center'}>
-        <SizableText h={appScale(64)} lh={appScale(64)} style={{fontSize: '40px'}} color={'#212121'} fontWeight={'700'}>
+        <SizableText h={appScale(64)} lh={appScale(64)} fontSize={'$8'} color={'#212121'} fontWeight={'700'}>
           {orderData?.amount
             ? `${formatTokenAmount(orderData?.amount, orderData?.tokenDecimals)} ${orderData?.tokenSymbol}`
             : '0'}

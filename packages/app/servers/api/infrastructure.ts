@@ -24,6 +24,7 @@ export async function getInfrastructureListBlockchain(
       show?: boolean;
       sort?: number;
       alchemyNetwork?: string;
+      tokenSymbol?: string;
     }[];
   }>('/member/infrastructure/list-blockchain', {
     method: 'GET',
@@ -56,6 +57,7 @@ export async function getInfrastructureListBlockchain2(
       show?: boolean;
       sort?: number;
       alchemyNetwork?: string;
+      tokenSymbol?: string;
     }[];
   }>('/member/infrastructure/list-blockchain', {
     method: 'GET',
@@ -160,6 +162,7 @@ export async function getInfrastructureListTokenContract(
       priceValue?: string;
       priceUpdateAt?: string;
       priceAutoUpdate?: boolean;
+      feeSupport?: boolean;
     }[];
   }>('/member/infrastructure/list-token-contract', {
     method: 'GET',
@@ -200,6 +203,7 @@ export async function getInfrastructureListTokenContract2(
       priceValue?: string;
       priceUpdateAt?: string;
       priceAutoUpdate?: boolean;
+      feeSupport?: boolean;
     }[];
   }>('/member/infrastructure/list-token-contract', {
     method: 'GET',

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 17:44:32
+ * @LastEditTime: 2025-03-13 18:03:50
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet, ScrollView} from '@my/ui';
@@ -45,18 +45,22 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
   });
 
   // 使用 useMemo 优化 tokenTypes 的计算
-  const tokenTypes = useMemo(() => [
-    {chainId: 'all', name: t('home.viewAll'), icon: ''},
-    ...blockchainList.map((item) => {
-      const chainInfo = getChainInfo(item?.chainId);
-      return {
-        chainId: item?.chainId,
-        name: chainInfo?.name,
-        chainIcon: chainInfo?.icon,
-        platform: item?.platform,
-      };
-    }),
-  ], [blockchainList, t]);
+  const tokenTypes = useMemo(
+    () => [
+      {chainId: 'all', name: t('home.viewAll'), chainIcon: ''},
+      ...blockchainList.map((item) => {
+        const chainInfo = getChainInfo(item?.chainId);
+        return {
+          chainId: item?.chainId,
+          name: chainInfo?.name,
+          chainIcon: chainInfo?.icon,
+          platform: item?.platform,
+        };
+      }),
+      {chainId: '728126428', name: 'Tron', chainIcon: 'Tron', platform: 'TRON'},
+    ],
+    [blockchainList, t],
+  );
 
   // 获取交易历史
   const fetchTransactionHistory = useCallback(async () => {
@@ -117,12 +121,7 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
       <ScrollView f={1} bc="$background">
         <YStack pb={appScale(104)}>
           {!switchOn && (
-            <TokenList
-              selectedType={selectedType}
-              setSheetOpen={setSheetOpen}
-              list={list}
-              tokenTypes={tokenTypes}
-            />
+            <TokenList selectedType={selectedType} setSheetOpen={setSheetOpen} list={list} tokenTypes={tokenTypes} />
           )}
           {switchOn && <History history={history} />}
         </YStack>

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 14:29:20
+ * @LastEditTime: 2025-03-14 16:19:13
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -24,6 +24,7 @@ export default {
   'home.receive': 'Receive',
   'home.deposit': 'Deposit',
   'home.search': 'Search',
+  'home.pending': 'Pending',
 
   'home.send.search': 'email address, phone number, user ID or wallet ',
   'home.send.recent': 'Recent',
@@ -97,6 +98,14 @@ export default {
   'home.order.declineTips': 'Decline request {{amount}} from {{ name}}?',
   'home.order.noDecline': `No, Don't Decline`,
   'home.order.yesDecline': 'Yes, Decline',
+
+  'home.order.cancel': 'Cancel PayLink',
+  'home.order.cancel2': 'Cancel Request PayLink',
+  'home.order.cancelTips': 'You want to cancel the payment link {{amount}}?',
+  'home.order.cancelTips2': 'You want to cancel the request payment link {{amount}}?',
+  'home.order.noCancel': `No, Don't Cancel`,
+  'home.order.yesCancel': 'Yes, Cancel',
+
   'home.order.declinedTips2': 'Request declined!',
   'home.order.noTransactions': 'No Transactions',
   'home.order.noTransactions2': `You haven't made any transactions.`,
@@ -123,6 +132,8 @@ export default {
   'home.paylink.reject': 'Reject',
   'home.paylink.amount': 'Amount',
   'home.paylink.network': 'Network',
+  'home.paylink.replacePay.tips': 'Sorry, ezgg does not support payment fees for {{token}}, please choose another currency to pay the fees',
+  'home.paylink.replacePay.currency': 'Currency',
 
   'home.qr.title': 'Scan QR Code',
   'home.qr.sub': 'Point the camera at the QR Code to scan.',
@@ -245,4 +256,5 @@ export default {
   'home.connectors.title': 'Connect Wallet',
   'home.connectors.noWallets': 'No Wallets',
   'home.connectors.noWallets2': 'Not using external wallets',
+  'home.withdraw.address.invalid': 'Please enter a valid withdrawal address',
 };

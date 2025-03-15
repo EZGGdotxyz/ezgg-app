@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 22:20:59
+ * @LastEditTime: 2025-03-13 17:59:38
  * @FilePath: /ezgg-app/packages/app/pages/home/history/list/index.tsx
  */
 import {
@@ -20,7 +20,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import History from '../../index/components/History';
-import { dealtHistoryList, restoreHistoryList} from 'app/utils';
+import {dealtHistoryList, restoreHistoryList} from 'app/utils';
 import useRequest from 'app/hooks/useRequest';
 import {createParam} from 'solito';
 import {useRouter} from 'solito/router';
@@ -36,6 +36,10 @@ import HistoryDayItem from 'app/Components/HistoryDayItem';
 import {useRematchModel} from 'app/store/model';
 import {ScrollView as RNScrollView} from 'react-native';
 import useResponse from 'app/hooks/useResponse';
+import DeclineRequestPopup from '../detail/components/DeclineRequestPopup';
+import AcceptRequestPopup from '../detail/components/AcceptRequestPopup';
+import AppLoading from 'app/Components/AppLoading';
+import CancelPayLinkPopup from '../detail/components/CancelPayLinkPopup';
 
 const {useParam} = createParam<{id: string}>();
 
@@ -56,12 +60,20 @@ const HistoryScreen = (props: any) => {
   const [searchText, setSearchText] = useState('');
   const [canLoadMore, setCanLoadMore] = useState(false);
   const [activeTab, setActiveTab] = useState('ALL');
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [declineRequestVisible, setDeclineRequestVisible] = useState(false);
+  const [acceptRequestVisible, setAcceptRequestVisible] = useState(false);
+  const [orderData, setOrderData] = useState<any>({});
+  const [cancelPayLinkVisible, setCancelPayLinkVisible] = useState(false);
   const categoriesScrollViewRef = useRef<RNScrollView>(null);
   const tabList = [
     {
       value: 'ALL',
       label: t('home.all'),
+    },
+    {
+      value: 'PENDING',
+      label: t('home.pending'),
     },
     {
       value: 'INCOME',
@@ -70,14 +82,6 @@ const HistoryScreen = (props: any) => {
     {
       value: 'EXPEND',
       label: t('home.expense'),
-    },
-    {
-      value: 'SEND',
-      label: t('home.send'),
-    },
-    {
-      value: 'REQUEST',
-      label: t('home.request'),
     },
     {
       value: 'DEPOSIT',
@@ -106,7 +110,9 @@ const HistoryScreen = (props: any) => {
     if (activeTab && activeTab !== 'ALL') {
       if (activeTab === 'INCOME' || activeTab === 'EXPEND') {
         params.subject = activeTab;
-      } else {
+      } else if (activeTab === 'PENDING') {
+        params.transactionStatus = 'PENDING';
+      } else if (activeTab === 'WITHDRAW' || activeTab === 'DEPOSIT') {
         params.transactionCategory = activeTab;
       }
     }
@@ -193,6 +199,17 @@ const HistoryScreen = (props: any) => {
     }
   };
 
+  const onClick = (item: any, action = '') => {
+    setOrderData(item);
+    if (action === 'cancel') {
+      setCancelPayLinkVisible(true);
+    } else if (action === 'decline') {
+      setDeclineRequestVisible(true);
+    } else {
+      setAcceptRequestVisible(true);
+    }
+  };
+
   return (
     <PermissionPage>
       <AppHeader2 title={t('screen.home.history')} fallbackUrl="/" />
@@ -264,9 +281,40 @@ const HistoryScreen = (props: any) => {
         ListFooterComponent={_renderFooter}
         ListEmptyComponent={<ListEmpty loading={loading} />}
         renderItem={({item, index}) => {
-          return <HistoryDayItem key={`day-${item.day}-${index}`} item={item} />;
+          return <HistoryDayItem activeTab={activeTab} onClick={onClick} key={`day-${item.day}-${index}`} item={item} />;
         }}
       />
+      <DeclineRequestPopup
+        setIsLoading={setIsLoading}
+        modalVisible={declineRequestVisible}
+        setModalVisible={setDeclineRequestVisible}
+        orderData={orderData}
+        onSuccess={async () => {
+          setDeclineRequestVisible(false);
+          fetchData();
+        }}
+      />
+      <AcceptRequestPopup
+        setIsLoading={setIsLoading}
+        modalVisible={acceptRequestVisible}
+        setModalVisible={setAcceptRequestVisible}
+        orderData={orderData}
+        onSuccess={async () => {
+          setAcceptRequestVisible(false);
+          fetchData();
+        }}
+      />
+      <CancelPayLinkPopup
+        setIsLoading={setIsLoading}
+        modalVisible={cancelPayLinkVisible}
+        setModalVisible={setCancelPayLinkVisible}
+        orderData={orderData}
+        onSuccess={async () => {
+          setCancelPayLinkVisible(false);
+          fetchData();
+        }}
+      />
+      {isLoading && <AppLoading />}
     </PermissionPage>
   );
 };

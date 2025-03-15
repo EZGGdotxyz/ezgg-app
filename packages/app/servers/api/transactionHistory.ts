@@ -31,6 +31,10 @@ export async function postTransactionHistoryCreateTransactionHistory(
     amount: number;
     /** 附带留言 */
     message?: string;
+    /** 付款人钱包地址 */
+    senderWalletAddress?: string;
+    /** 收款人钱包地址 */
+    receiverWalletAddress?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -74,8 +78,8 @@ export async function postTransactionHistoryCreateTransactionHistory(
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -143,6 +147,10 @@ export async function postTransactionHistoryCreateTransactionHistory2(
     amount: number;
     /** 附带留言 */
     message?: string;
+    /** 付款人钱包地址 */
+    senderWalletAddress?: string;
+    /** 收款人钱包地址 */
+    receiverWalletAddress?: string;
   },
   options?: { [key: string]: any },
 ) {
@@ -186,8 +194,8 @@ export async function postTransactionHistoryCreateTransactionHistory2(
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -274,8 +282,8 @@ export async function postTransactionHistoryDeclineTransactionHistory(
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -362,8 +370,8 @@ export async function postTransactionHistoryDeclineTransactionHistory2(
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -449,8 +457,8 @@ export async function getTransactionHistoryFindTransactionHistoryId(
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -537,8 +545,8 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -625,8 +633,8 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -713,8 +721,8 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -805,8 +813,8 @@ export async function getTransactionHistoryPageTransactionHistory(
         tokenDecimals?: number;
         tokenContractAddress?: string;
         tokenPrice?: string;
+        tokenFeeSupport?: boolean;
         amount?: number;
-        networkFee?: number;
         message?: string;
         currency?: string;
         currencyAmount?: string;
@@ -833,6 +841,32 @@ export async function getTransactionHistoryPageTransactionHistory(
           nickname?: string;
           avatar?: string;
           memberLinkedAccount?: { type?: string; search?: string }[];
+        };
+        networkFee: {
+          platform?: 'ETH' | 'SOLANA';
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          transactionHistoryId?: number;
+          transactionCode?: string;
+          chainId?: number;
+          ethToUsd?: string;
+          tokenSymbol?: string;
+          tokenDecimals?: number;
+          tokenContractAddress?: string;
+          tokenPrice?: string;
+          preVerificationGas?: string;
+          verificationGasLimit?: string;
+          callGasLimit?: string;
+          gas?: string;
+          gasPrice?: string;
+          totalWeiCost?: string;
+          totalEthCost?: string;
+          totalUsdCost?: string;
+          platformFee?: string;
+          totalTokenCost?: string;
         };
       }[];
     };
@@ -903,8 +937,8 @@ export async function getTransactionHistoryPageTransactionHistory2(
         tokenDecimals?: number;
         tokenContractAddress?: string;
         tokenPrice?: string;
+        tokenFeeSupport?: boolean;
         amount?: number;
-        networkFee?: number;
         message?: string;
         currency?: string;
         currencyAmount?: string;
@@ -932,6 +966,32 @@ export async function getTransactionHistoryPageTransactionHistory2(
           avatar?: string;
           memberLinkedAccount?: { type?: string; search?: string }[];
         };
+        networkFee: {
+          platform?: 'ETH' | 'SOLANA';
+          id?: number;
+          createBy?: number;
+          updateBy?: number;
+          createAt?: string;
+          updateAt?: string;
+          transactionHistoryId?: number;
+          transactionCode?: string;
+          chainId?: number;
+          ethToUsd?: string;
+          tokenSymbol?: string;
+          tokenDecimals?: number;
+          tokenContractAddress?: string;
+          tokenPrice?: string;
+          preVerificationGas?: string;
+          verificationGasLimit?: string;
+          callGasLimit?: string;
+          gas?: string;
+          gasPrice?: string;
+          totalWeiCost?: string;
+          totalEthCost?: string;
+          totalUsdCost?: string;
+          platformFee?: string;
+          totalTokenCost?: string;
+        };
       }[];
     };
   }>('/member/transaction/history/page-transaction-history', {
@@ -946,6 +1006,104 @@ export async function getTransactionHistoryPageTransactionHistory2(
 
       ...params,
     },
+    ...(options || {}),
+  });
+}
+
+/** 更新交易手续费 POST /member/transaction/history/update-network-fee */
+export async function postTransactionHistoryUpdateNetworkFee(
+  body: {
+    /** 交易码 */
+    transactionCode: string;
+    /** 代币地址 */
+    tokenContractAddress: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    code: string;
+    msg: string;
+    data?: {
+      platform?: 'ETH' | 'SOLANA';
+      id?: number;
+      createBy?: number;
+      updateBy?: number;
+      createAt?: string;
+      updateAt?: string;
+      transactionHistoryId?: number;
+      transactionCode?: string;
+      chainId?: number;
+      ethToUsd?: string;
+      tokenSymbol?: string;
+      tokenDecimals?: number;
+      tokenContractAddress?: string;
+      tokenPrice?: string;
+      preVerificationGas?: string;
+      verificationGasLimit?: string;
+      callGasLimit?: string;
+      gas?: string;
+      gasPrice?: string;
+      totalWeiCost?: string;
+      totalEthCost?: string;
+      totalUsdCost?: string;
+      platformFee?: string;
+      totalTokenCost?: string;
+    };
+  }>('/member/transaction/history/update-network-fee', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 更新交易手续费 POST /member/transaction/history/update-network-fee */
+export async function postTransactionHistoryUpdateNetworkFee2(
+  body: {
+    /** 交易码 */
+    transactionCode: string;
+    /** 代币地址 */
+    tokenContractAddress: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{
+    code: string;
+    msg: string;
+    data?: {
+      platform?: 'ETH' | 'SOLANA';
+      id?: number;
+      createBy?: number;
+      updateBy?: number;
+      createAt?: string;
+      updateAt?: string;
+      transactionHistoryId?: number;
+      transactionCode?: string;
+      chainId?: number;
+      ethToUsd?: string;
+      tokenSymbol?: string;
+      tokenDecimals?: number;
+      tokenContractAddress?: string;
+      tokenPrice?: string;
+      preVerificationGas?: string;
+      verificationGasLimit?: string;
+      callGasLimit?: string;
+      gas?: string;
+      gasPrice?: string;
+      totalWeiCost?: string;
+      totalEthCost?: string;
+      totalUsdCost?: string;
+      platformFee?: string;
+      totalTokenCost?: string;
+    };
+  }>('/member/transaction/history/update-network-fee', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }
@@ -1000,8 +1158,8 @@ export async function postTransactionHistoryUpdateTransactionHash(
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -1090,8 +1248,8 @@ export async function postTransactionHistoryUpdateTransactionHash2(
       tokenDecimals?: number;
       tokenContractAddress?: string;
       tokenPrice?: string;
+      tokenFeeSupport?: boolean;
       amount?: number;
-      networkFee?: number;
       message?: string;
       currency?: string;
       currencyAmount?: string;

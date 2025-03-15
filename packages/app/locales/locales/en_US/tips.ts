@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 12:30:38
+ * @LastEditTime: 2025-03-13 17:59:03
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -55,4 +55,7 @@ export default {
 
   'tips.error.deposit.amountRequired': 'Please enter a valid amount',
   'tips.error.deposit.invalidAmount': 'Please enter a valid amount',
+
+  'tips.success.cancelPayLink': 'PayLink cancelled',
+  'tips.success.cancelRequestPayLink': 'Request PayLink cancelled',
 };

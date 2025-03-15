@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 13:14:46
+ * @LastEditTime: 2025-03-14 16:08:29
  * @FilePath: /ezgg-app/packages/app/Components/PayPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -81,6 +81,7 @@ const PayPopup: React.FC<PayPopupProps> = ({modalVisible, setModalVisible, order
             p={appScale(16)}
             bw={1}
             borderColor={'#EEEEEE'}
+            mb={appScale(20)}
           >
             <XStack pb={appScale(16)} w="100%" ai="center" jc="space-between" bbw={1} bbc={'$background'}>
               <SizableText h={appScale(26)} lh={appScale(26)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>

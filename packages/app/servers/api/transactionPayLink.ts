@@ -2,6 +2,42 @@
 /* eslint-disable */
 import request from 'app/utils/request';
 
+/** PayLink拥有人取消PlayLink POST /member/transaction/pay-link/cancel-pay-link */
+export async function postTransactionPayLinkCancelPayLink(
+  body: {
+    /** 交易编号 */
+    transactionCode: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ code: string; msg: string }>('/member/transaction/pay-link/cancel-pay-link', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** PayLink拥有人取消PlayLink POST /member/transaction/pay-link/cancel-pay-link */
+export async function postTransactionPayLinkCancelPayLink2(
+  body: {
+    /** 交易编号 */
+    transactionCode: string;
+  },
+  options?: { [key: string]: any },
+) {
+  return request<{ code: string; msg: string }>('/member/transaction/pay-link/cancel-pay-link', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 创建PayLink POST /member/transaction/pay-link/create-pay-link */
 export async function postTransactionPayLinkCreatePayLink(
   body: {

@@ -13,6 +13,8 @@ declare namespace API {
     chainId: number;
     /** 货币符号：USD/HKD/CNY */
     currency?: string;
+    /** 是否支持手续费 */
+    feeSupport?: boolean;
   };
 
   type getInfrastructureListBlockchainParams = {
@@ -106,6 +108,8 @@ declare namespace API {
     search?: string;
     /** 交易主题：收入：INCOME; 支出：EXPEND； */
     subject?: 'INCOME' | 'EXPEND';
+    /** 交易状态：PENDING 待支付；ACCEPTED 已支付；DECLINED 已拒绝； */
+    transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
   };
 
   type getUserFindUserIdIdParams = {
@@ -122,11 +126,6 @@ declare namespace API {
     search?: string;
     /** 检索最近交易会员 */
     recent?: boolean;
-  };
-
-  type postNotificationUpdateNotificationAllStatusParams = {
-    /** 通知ID */
-    id: number;
   };
 
   type postNotificationUpdateNotificationStatusIdParams = {

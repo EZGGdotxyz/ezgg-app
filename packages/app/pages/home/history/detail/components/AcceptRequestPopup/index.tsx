@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 16:13:14
+ * @LastEditTime: 2025-03-15 22:41:58
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/AcceptRequestPopup/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController, YStack} from '@my/ui';
@@ -19,7 +19,7 @@ import {useSmartWallets} from '@privy-io/react-auth/smart-wallets';
 import useRequest from 'app/hooks/useRequest';
 import {encodeFunctionData, erc721Abi, erc20Abi, createPublicClient, http, getAddress} from 'viem';
 import TokenTransferContract from 'app/abi/TokenTransfer.json';
-import {postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
+import {postTransactionHistoryUpdateNetworkFee, postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
 import AppModal from 'app/Components/AppModal';
 import useResponse from 'app/hooks/useResponse';
 import {formatTokenAmount, isIphoneX} from 'app/utils';
@@ -66,11 +66,11 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
         const tokenAmountStr = String(res?.data?.tokenAmount);
         const [integerPart = '0', decimalPart = ''] = tokenAmountStr.split('.');
         const decimals = orderData?.tokenDecimals || 18;
-        
+
         // 补齐精度位数
         const paddedDecimal = decimalPart.padEnd(decimals, '0');
         const fullIntegerAmount = integerPart + paddedDecimal;
-        
+
         // 转换为 BigInt
         const tokenAmount = BigInt(fullIntegerAmount);
 
@@ -81,18 +81,39 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
         }
       }
 
-      // 代币合约地址
-      const tokenContractAddress = orderData?.tokenContractAddress!;
-      // 转账业务合约地址
-      const bizContractAddress: any = orderData?.bizContractAddress;
-      // 转账金额
-      const amount = BigInt(orderData.amount);
       const baseClient = await getClientForChain({
         id: Number(orderData?.chainId),
       });
 
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
+      }
+
+      const feeData = await makeRequest(
+        postTransactionHistoryUpdateNetworkFee({
+          transactionCode: orderData.transactionCode,
+          tokenContractAddress: orderData.tokenContractAddress!,
+        }),
+      );
+      if (!feeData?.data?.id) {
+        throw new Error('Failed to create pay link');
+      }
+      const feeTokenContractAddress = getAddress(feeData?.data?.tokenContractAddress);
+      const feeAmount = BigInt(feeData?.data?.totalTokenCost);
+      const tokenContractAddress = orderData?.tokenContractAddress!;
+      const bizContractAddress: any = orderData?.bizContractAddress;
+      const amount = BigInt(orderData.amount);
+
+      let approve: any = [];
+      if (tokenContractAddress !== feeTokenContractAddress) {
+        approve = {
+          to: feeTokenContractAddress,
+          data: encodeFunctionData({
+            abi: erc20Abi,
+            functionName: 'approve',
+            args: [getAddress(bizContractAddress), feeAmount],
+          }),
+        };
       }
 
       // 使用Privy的SmartWallet发起ERC4337标准的批量打包交易
@@ -114,7 +135,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
               data: encodeFunctionData({
                 abi: TokenTransferContract.abi,
                 functionName: 'transfer',
-                args: [orderData?.receiverWalletAddress!, tokenContractAddress, amount],
+                args: [orderData.transactionCode,orderData?.receiverWalletAddress!, tokenContractAddress, amount],
               }),
             },
           ],

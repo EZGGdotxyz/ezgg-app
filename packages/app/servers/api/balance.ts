@@ -35,8 +35,10 @@ export async function getBalanceFindBalance(
         priceValue?: string;
         priceUpdateAt?: string;
         priceAutoUpdate?: boolean;
+        feeSupport?: boolean;
       };
       tokenAmount?: string;
+      inWallet?: boolean;
     };
   }>('/member/balance/find-balance', {
     method: 'GET',
@@ -82,8 +84,10 @@ export async function getBalanceFindBalance2(
         priceValue?: string;
         priceUpdateAt?: string;
         priceAutoUpdate?: boolean;
+        feeSupport?: boolean;
       };
       tokenAmount?: string;
+      inWallet?: boolean;
     };
   }>('/member/balance/find-balance', {
     method: 'GET',
@@ -131,8 +135,10 @@ export async function getBalanceListBalance(
           priceValue?: string;
           priceUpdateAt?: string;
           priceAutoUpdate?: boolean;
+          feeSupport?: boolean;
         };
         tokenAmount?: string;
+        inWallet?: boolean;
       }[];
     };
   }>('/member/balance/list-balance', {
@@ -181,8 +187,10 @@ export async function getBalanceListBalance2(
           priceValue?: string;
           priceUpdateAt?: string;
           priceAutoUpdate?: boolean;
+          feeSupport?: boolean;
         };
         tokenAmount?: string;
+        inWallet?: boolean;
       }[];
     };
   }>('/member/balance/list-balance', {

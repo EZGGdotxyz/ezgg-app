@@ -1,22 +1,29 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 22:24:25
+ * @LastEditTime: 2025-03-13 17:53:50
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
-import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
+import {AppImage, Button, Text, YStack, XStack, SizableText, debounce} from '@my/ui';
 import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@tamagui/lucide-icons';
-import { formatNumber, formatTokenAmount, getCurrency} from 'app/utils';
+import {formatNumber, formatTokenAmount, getCurrency} from 'app/utils';
 import {getChainInfo} from 'app/utils/chain';
 import dayjs from 'dayjs';
 import useResponse from 'app/hooks/useResponse';
+import {ExternalLinkData, PrimaryColor} from 'app/config';
+import {useCallback} from 'react';
 
-export type HistoryItemProps = {item: any; isBottom?: boolean};
+export type HistoryItemProps = {
+  item: any;
+  isBottom?: boolean;
+  activeTab?: string;
+  onClick?: (item: any, action?: any) => void;
+};
 // 交易历史item
-const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) => {
+const HistoryItem: React.FC<HistoryItemProps> = ({item, isBottom = false, onClick, activeTab}) => {
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
   const [{currency}] = useRematchModel('app');
@@ -105,6 +112,35 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
     return orderData?.receiverMember?.id === userInfo?.customMetadata?.id ? '+' : '-';
   };
 
+  // 取消支付链接
+  const handleCancel = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onClick && onClick(item, 'cancel');
+  };
+
+  // 拒绝支付请求
+  const handleDecline = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onClick && onClick(item, 'decline');
+  };
+
+  // 接受支付请求
+  const handleReceive = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onClick && onClick(item, 'receive');
+  };
+
+  const judgeMyAction = () => {
+    if (item?.transactionCategory === 'REQUEST') {
+      return item?.senderMember?.id === userInfo?.customMetadata?.id;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <Button
       pt={appScale(16)}
@@ -113,24 +149,117 @@ const HistoryItem: React.FC<any> = ({item, isBottom = false}: HistoryItemProps) 
       pb={appScale(16)}
       w={'100%'}
       mb={appScale(8)}
-      pl={appScale(40)}
-      pr={appScale(24)}
+      pl={appScale(32)}
+      pr={appScale(16)}
       unstyled
       onPress={() => push(`/home/history/${item?.id}`)}
       pressStyle={{
         opacity: 0.7,
       }}
     >
-      <XStack flex={1} mb={appScale(16)} w="100%" ai={'center'} jc={'space-between'}>
-        <YStack gap={appScale(2)} w={'70%'}>
-          <SizableText fontSize={'$4'} color={'#212121'} fontWeight={'600'}>
-            {dealType().title}
-          </SizableText>
-          <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'400'}>
-            {dealType().sub}
-          </SizableText>
-        </YStack>
-        <YStack gap={appScale(2)} w={'30%'}>
+      <XStack flex={1} mb={appScale(12)} w="100%" ai={'center'} jc={'space-between'}>
+        <XStack flex={1} gap={appScale(2)} jc={'space-between'} flexWrap={'wrap'}>
+          <YStack gap={appScale(2)} maxWidth={'100%'} pr={appScale(12)}>
+            <SizableText maxWidth={'100%'} fontSize={'$4'} color={'#212121'} fontWeight={'600'}>
+              {dealType().title}
+            </SizableText>
+            <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'400'}>
+              {dealType().sub}
+            </SizableText>
+          </YStack>
+          <XStack flexShrink={0} gap={appScale(8)} jc={'flex-end'} ai={'center'}>
+            {activeTab === 'PENDING' && item?.transactionStatus === 'PENDING' && (
+              <>
+                {judgeMyAction() && (
+                  <>
+                    <Button
+                      unstyled
+                      borderWidth={1}
+                      borderColor={PrimaryColor}
+                      bc={PrimaryColor}
+                      h={appScale(42)}
+                      pl={appScale(20)}
+                      pr={appScale(20)}
+                      borderRadius={appScale(42)}
+                      jc={'center'}
+                      ai={'center'}
+                      onPress={handleReceive}
+                    >
+                      <SizableText fontSize={'$3'} color={'#212121'} fontWeight={'600'}>
+                        {t('home.order.acceptRequest')}
+                      </SizableText>
+                    </Button>
+                    <Button
+                      unstyled
+                      borderWidth={1}
+                      borderColor={'#E0E0E0'}
+                      onPress={handleDecline}
+                      bc={'#fff'}
+                      h={appScale(42)}
+                      pl={appScale(20)}
+                      pr={appScale(20)}
+                      borderRadius={appScale(42)}
+                      jc={'center'}
+                      ai={'center'}
+                    >
+                      <SizableText fontSize={'$3'} color={'#212121'} fontWeight={'600'}>
+                        {t('home.order.decline')}
+                      </SizableText>
+                    </Button>
+                  </>
+                )}
+                {(item?.transactionType === 'REQUEST_LINK' || item?.transactionType === 'PAY_LINK') && (
+                  <>
+                    <Button
+                      unstyled
+                      borderWidth={1}
+                      borderColor={PrimaryColor}
+                      bc={PrimaryColor}
+                      h={appScale(42)}
+                      pl={appScale(20)}
+                      pr={appScale(20)}
+                      borderRadius={appScale(42)}
+                      jc={'center'}
+                      ai={'center'}
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        window.open(
+                          `${ExternalLinkData.webPageHome}/${
+                            item?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
+                          }/${item?.transactionCode}`,
+                          '_blank',
+                        );
+                      }}
+                    >
+                      <SizableText fontSize={'$3'} color={'#212121'} fontWeight={'600'}>
+                        {t('home.send.link')}
+                      </SizableText>
+                    </Button>
+                    <Button
+                      unstyled
+                      borderWidth={1}
+                      borderColor={'#E0E0E0'}
+                      onPress={handleCancel}
+                      bc={'#fff'}
+                      h={appScale(42)}
+                      pl={appScale(20)}
+                      pr={appScale(20)}
+                      borderRadius={appScale(42)}
+                      jc={'center'}
+                      ai={'center'}
+                    >
+                      <SizableText fontSize={'$3'} color={'#212121'} fontWeight={'600'}>
+                        {t('home.send.void')}
+                      </SizableText>
+                    </Button>
+                  </>
+                )}
+              </>
+            )}
+          </XStack>
+        </XStack>
+        <YStack gap={appScale(2)} flexShrink={0} pl={appScale(12)}>
           <SizableText ta={'right'} fontSize={'$3'} color={'#26273C'} fontWeight={'600'}>
             {`${judgeAmountType(item)} ${formatNumber(Number(item?.currencyAmount || 0))} ${
               getCurrency(currency)?.label

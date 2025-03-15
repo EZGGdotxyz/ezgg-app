@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:17:43
+ * @LastEditTime: 2025-03-13 16:51:29
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/components/Item/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';

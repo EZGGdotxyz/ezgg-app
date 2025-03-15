@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 13:22:10
+ * @LastEditTime: 2025-03-14 16:09:48
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -24,6 +24,7 @@ export default {
   'home.receive': '接收',
   'home.deposit': '存款',
   'home.search': '搜索',
+  'home.pending': '待處理',
 
   'home.send.search': '郵件地址, 電話號碼, 用戶ID 或錢包',
   'home.send.recent': '最近',
@@ -73,7 +74,6 @@ export default {
   'home.order.depositAddress': '存款地址',
   'home.order.withdrawAddress': '提現地址',
 
-
   'home.order.networkFee': '網絡費用',
   'home.order.date': '日期',
   'home.order.to': '接收方',
@@ -96,6 +96,14 @@ export default {
   'home.order.declineTips': '您要拒絕來自{{name}}的{{amount}}的請求嗎？',
   'home.order.noDecline': `不是，不要拒絕。`,
   'home.order.yesDecline': '是的，拒絕。',
+
+  'home.order.cancel': '取消支付連結',
+  'home.order.cancel2': '取消請求支付連結',
+  'home.order.cancelTips': '您要取消{{amount}}的支付連結嗎？',
+  'home.order.cancelTips2': '您要取消{{amount}}的請求支付連結嗎？',
+  'home.order.noCancel': `不是，不要取消。`,
+  'home.order.yesCancel': '是的，取消。',
+
   'home.order.declinedTips2': '請求已被拒絕！',
   'home.order.noTransactions': '無交易記錄',
   'home.order.noTransactions2': `您尚未進行任何交易。`,
@@ -122,6 +130,8 @@ export default {
   'home.paylink.reject': '拒絕',
   'home.paylink.amount': '金額',
   'home.paylink.network': '網絡',
+  'home.paylink.replacePay.tips': '對不起，ezgg暫未對{{token}}提供支付手續費，請選擇其他貨幣支付手續費',
+  'home.paylink.replacePay.currency': '貨幣',
 
   'home.qr.title': '掃描QR碼',
   'home.qr.sub': '將相機對準QR碼進行掃描',
@@ -245,4 +255,5 @@ export default {
   'home.connectors.title': '連接錢包',
   'home.connectors.noWallets': '未連接錢包',
   'home.connectors.noWallets2': '不使用外部錢包',
+  'home.withdraw.address.invalid': '請輸入有效的提現地址',
 };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-08
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 17:19:15
+ * @LastEditTime: 2025-03-13 18:09:09
  * @FilePath: /ezgg-app/packages/app/hooks/useBlockchain.ts
  */
 import {Dispatch} from 'app/store';
@@ -194,6 +194,16 @@ export default function useBlockchain() {
         const chainsToQuery = selectedChainId
           ? blockchainList.filter((chain) => chain.chainId === selectedChainId)
           : blockchainList;
+
+        // 如果查询的链列表为空，则等待 1 秒后返回空数组 模拟tron的情况
+        if (chainsToQuery.length === 0) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          // 更新总余额
+          dispatch.user.updateState({
+            availableBalance: summaryBalance,
+          });
+          return tokenList;
+        }
 
         // 并行获取所有选中链的余额
         const results = await Promise.all(

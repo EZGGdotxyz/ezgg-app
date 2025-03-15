@@ -138,6 +138,7 @@ export const setUserIdToken = async (token: string) => {
   return setStore({
     name: USER_ID_TOKEN,
     content: token,
+    expiresIn: 3600000, // 1小时 = 3600000毫秒
   });
 };
 
@@ -153,6 +154,7 @@ export const setUserToken = async (token: string) => {
   return setStore({
     name: USER_TOKEN,
     content: token,
+    expiresIn: 3600000, // 1小时 = 3600000毫秒
   });
 };
 
