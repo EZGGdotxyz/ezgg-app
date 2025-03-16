@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-14 16:08:29
+ * @LastEditTime: 2025-03-16 21:59:02
  * @FilePath: /ezgg-app/packages/app/Components/PayPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -15,6 +15,7 @@ import useRequest from 'app/hooks/useRequest';
 import useResponse from 'app/hooks/useResponse';
 import {useRematchModel} from 'app/store/model';
 import {getChainInfo} from 'app/utils/chain';
+import { createNetworkFeeDisplay } from 'app/utils/transactionInfo';
 
 interface PayPopupProps {
   modalVisible: boolean;
@@ -126,9 +127,7 @@ const PayPopup: React.FC<PayPopupProps> = ({modalVisible, setModalVisible, order
               </SizableText>
               <XStack ai={'center'} jc={'center'}>
                 <SizableText h={appScale(26)} lh={appScale(26)} fontSize={'$4'} color={'#424242'} fontWeight={'600'}>
-                  {`${formatTokenAmount(orderData?.networkFee, orderData?.tokenDecimals)} ${
-                    orderData?.tokenSymbol || ''
-                  }`}
+                  {createNetworkFeeDisplay(orderData)}
                 </SizableText>
               </XStack>
             </XStack>

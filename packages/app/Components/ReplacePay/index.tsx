@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-14 16:02:29
+ * @LastEditTime: 2025-03-16 23:24:27
  * @FilePath: /ezgg-app/packages/app/Components/ReplacePay/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -19,7 +19,6 @@ import Currency from '../Currency';
 
 interface ReplacePayProps {
   orderData: any;
-  onSubmit: () => void;
   setIsLoading: (value: boolean) => void;
   replaceCurrencyData: any;
   setReplaceCurrencyData: (value: any) => void;
@@ -27,7 +26,6 @@ interface ReplacePayProps {
 
 const ReplacePay: React.FC<ReplacePayProps> = ({
   orderData,
-  onSubmit,
   setIsLoading,
   replaceCurrencyData,
   setReplaceCurrencyData,
@@ -124,7 +122,6 @@ const ReplacePay: React.FC<ReplacePayProps> = ({
         </YStack>
         <SizableText mb={appScale(20)} ta={'center'} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>
           {t('home.paylink.replacePay.tips', {token: orderData?.tokenSymbol})}
-          {/* {orderData?.tokenFeeSupport ? '不需要另外处理' : '需要另外处理'} */}
         </SizableText>
 
         <Currency

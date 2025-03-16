@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 18:00:56
+ * @LastEditTime: 2025-03-16 23:24:38
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -36,6 +36,7 @@ import SuccessInfo from 'app/Components/SuccessInfo';
 import {
   getTransactionHistoryFindTransactionHistoryCodeTransactionCode,
   postTransactionHistoryCreateTransactionHistory,
+  postTransactionHistoryUpdateNetworkFee,
   postTransactionHistoryUpdateTransactionHash,
 } from 'app/servers/api/transactionHistory';
 import useRequest from 'app/hooks/useRequest';
@@ -93,6 +94,16 @@ const TakeScreen = (any) => {
           }, 500);
         });
       } else {
+        const feeData = await makeRequest(
+          postTransactionHistoryUpdateNetworkFee({
+            transactionCode: orderData.transactionCode,
+            tokenContractAddress: orderData.tokenContractAddress!,
+          }),
+        );
+        if (!feeData?.data?.id) {
+          throw new Error('Failed to create pay link');
+        }
+
         const res: any = await makeRequest(
           getBalanceFindBalance({
             platform: orderData?.platform,
@@ -124,15 +135,21 @@ const TakeScreen = (any) => {
           }
         }
 
-        await onSendContract(orderData, (data) => {
-          toast.show(t('tips.success.transactionSuccess'), {
-            duration: 3000,
-          });
-          setTimeout(() => {
-            replace('/home/success?type=REQUEST_LINK&id=' + data?.id);
-          }, 500);
-          // dispatch.user.updateState({payLinkData: {}});
-        });
+        await onSendContract(
+          {
+            ...orderData,
+            networkFee: feeData?.data,
+          },
+          (data) => {
+            toast.show(t('tips.success.transactionSuccess'), {
+              duration: 3000,
+            });
+            setTimeout(() => {
+              replace('/home/success?type=REQUEST_LINK&id=' + data?.id);
+            }, 500);
+            // dispatch.user.updateState({payLinkData: {}});
+          },
+        );
       }
     } catch (error) {
       console.error(`${type} transaction error:`, error);
@@ -340,7 +357,11 @@ const TakeScreen = (any) => {
                   if (orderData?.transactionCategory === 'SEND') {
                     handleSubmit('SEND');
                   } else {
-                    setModalVisible(true);
+                    if (!orderData?.tokenFeeSupport) {
+                      return replace('/home/replace?id=' + orderData?.id);
+                    } else {
+                      setModalVisible(true);
+                    }
                   }
                 }
               }}

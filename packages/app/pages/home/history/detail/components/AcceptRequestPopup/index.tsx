@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-15 22:41:58
+ * @LastEditTime: 2025-03-16 23:11:06
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/AcceptRequestPopup/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController, YStack} from '@my/ui';
@@ -19,11 +19,15 @@ import {useSmartWallets} from '@privy-io/react-auth/smart-wallets';
 import useRequest from 'app/hooks/useRequest';
 import {encodeFunctionData, erc721Abi, erc20Abi, createPublicClient, http, getAddress} from 'viem';
 import TokenTransferContract from 'app/abi/TokenTransfer.json';
-import {postTransactionHistoryUpdateNetworkFee, postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
+import {
+  postTransactionHistoryUpdateNetworkFee,
+  postTransactionHistoryUpdateTransactionHash,
+} from 'app/servers/api/transactionHistory';
 import AppModal from 'app/Components/AppModal';
 import useResponse from 'app/hooks/useResponse';
 import {formatTokenAmount, isIphoneX} from 'app/utils';
 import {getBalanceFindBalance} from 'app/servers/api/balance';
+import {useTransaction} from 'app/hooks/useTransaction';
 
 interface AcceptRequestPopupProps {
   modalVisible: boolean;
@@ -42,15 +46,30 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
 }) => {
   const {t} = useTranslation();
   const {appScale} = useResponse();
+  const {back, replace, push} = useRouter();
 
   const {getClientForChain} = useSmartWallets();
   const {makeRequest} = useRequest();
   const toast = useToastController();
+  const {onSendPayLinkSubmit, onSendContract} = useTransaction();
 
   const onAcceptRequest = async () => {
     try {
       setModalVisible(false);
+      if (!orderData?.tokenFeeSupport) {
+        return replace('/home/replace?id=' + orderData?.id);
+      }
       setIsLoading(true);
+
+      const feeData = await makeRequest(
+        postTransactionHistoryUpdateNetworkFee({
+          transactionCode: orderData.transactionCode,
+          tokenContractAddress: orderData.tokenContractAddress!,
+        }),
+      );
+      if (!feeData?.data?.id) {
+        throw new Error('Failed to create pay link');
+      }
 
       const res: any = await makeRequest(
         getBalanceFindBalance({
@@ -81,73 +100,25 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
         }
       }
 
-      const baseClient = await getClientForChain({
-        id: Number(orderData?.chainId),
-      });
-
-      if (!baseClient) {
-        throw new Error('Failed to get client for chain');
-      }
-
-      const feeData = await makeRequest(
-        postTransactionHistoryUpdateNetworkFee({
-          transactionCode: orderData.transactionCode,
-          tokenContractAddress: orderData.tokenContractAddress!,
-        }),
-      );
-      if (!feeData?.data?.id) {
-        throw new Error('Failed to create pay link');
-      }
-      const feeTokenContractAddress = getAddress(feeData?.data?.tokenContractAddress);
-      const feeAmount = BigInt(feeData?.data?.totalTokenCost);
-      const tokenContractAddress = orderData?.tokenContractAddress!;
-      const bizContractAddress: any = orderData?.bizContractAddress;
-      const amount = BigInt(orderData.amount);
-
-      let approve: any = [];
-      if (tokenContractAddress !== feeTokenContractAddress) {
-        approve = {
-          to: feeTokenContractAddress,
-          data: encodeFunctionData({
-            abi: erc20Abi,
-            functionName: 'approve',
-            args: [getAddress(bizContractAddress), feeAmount],
-          }),
-        };
-      }
-
-      // 使用Privy的SmartWallet发起ERC4337标准的批量打包交易
-      const transactionHash = await baseClient.sendTransaction(
+      await onSendContract(
         {
-          calls: [
-            {
-              // 调用USDC代币的approve方法，授信给转账业务合约
-              to: tokenContractAddress,
-              data: encodeFunctionData({
-                abi: erc20Abi,
-                functionName: 'approve',
-                args: [bizContractAddress, amount],
-              }),
-            },
-            {
-              // 调用转账业务合约的transfer方法，将代币转给接收方（并收取手续费）
-              to: bizContractAddress,
-              data: encodeFunctionData({
-                abi: TokenTransferContract.abi,
-                functionName: 'transfer',
-                args: [orderData.transactionCode,orderData?.receiverWalletAddress!, tokenContractAddress, amount],
-              }),
-            },
-          ],
+          ...orderData,
+          networkFee: feeData?.data,
         },
-        {
-          uiOptions: {
-            showWalletUIs: false,
-          },
+        (data) => {
+          console.log('🚀 ~ onAcceptRequest ~ data:', data);
+
+          setIsLoading(false);
+          toast.show(t('tips.success.acceptRequest'), {
+            duration: 3000,
+          });
+          onSuccess();
+          // dispatch.user.updateState({payLinkData: {}});
         },
       );
-      await handleTransactionSuccess(transactionHash);
-      onSuccess();
+
+      // await handleTransactionSuccess(transactionHash);
+      // onSuccess();
     } catch (error) {
       console.error('Send transaction error:', error);
       if (error?.message.includes('The user rejected the request')) {
@@ -172,22 +143,22 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
     }
   };
 
-  const handleTransactionSuccess = async (transactionHash?: string) => {
-    if (orderData?.transactionCode && transactionHash) {
-      const res: any = await makeRequest(
-        postTransactionHistoryUpdateTransactionHash({
-          id: orderData?.id,
-          transactionHash,
-        }),
-      );
-      if (res?.data) {
-        setIsLoading(false);
-        toast.show(t('tips.success.acceptRequest'), {
-          duration: 3000,
-        });
-      }
-    }
-  };
+  // const handleTransactionSuccess = async (transactionHash?: string) => {
+  //   if (orderData?.transactionCode && transactionHash) {
+  //     const res: any = await makeRequest(
+  //       postTransactionHistoryUpdateTransactionHash({
+  //         id: orderData?.id,
+  //         transactionHash,
+  //       }),
+  //     );
+  //     if (res?.data) {
+  //       setIsLoading(false);
+  //       toast.show(t('tips.success.acceptRequest'), {
+  //         duration: 3000,
+  //       });
+  //     }
+  //   }
+  // };
 
   const onSubmit = () => {
     setModalVisible(false);

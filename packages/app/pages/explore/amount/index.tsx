@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 15:13:14
+ * @LastEditTime: 2025-03-16 23:22:50
  * @FilePath: /ezgg-app/packages/app/pages/explore/amount/index.tsx
  */
 import {
@@ -39,6 +39,7 @@ import {getUserFindUserIdId} from 'app/servers/api/member';
 import useRequest from 'app/hooks/useRequest';
 import useResponse from 'app/hooks/useResponse';
 import PayPopup from 'app/Components/PayPopup';
+import { postTransactionHistoryUpdateNetworkFee } from 'app/servers/api/transactionHistory';
 
 const {useParams} = createParam<any>();
 
@@ -136,8 +137,24 @@ const AmountScreen = () => {
       if (type === 'SEND') {
         const transaction = await createTransaction(_params);
         if (transaction?.transactionCode) {
-          setModalVisible(true);
-          setOrderData(transaction);
+          if (transaction?.tokenFeeSupport) {
+            const feeData = await makeRequest(
+              postTransactionHistoryUpdateNetworkFee({
+                transactionCode: transaction.transactionCode,
+                tokenContractAddress: transaction.tokenContractAddress!,
+              }),
+            );
+            if (!feeData?.data?.id) {
+              throw new Error('Failed to create pay link');
+            }
+            setModalVisible(true);
+            setOrderData({
+              ...transaction,
+              networkFee:feeData?.data
+            });
+          } else {
+            replace('/home/replace?id=' + transaction?.id);
+          }
         } else {
           toast.show(t('tips.error.networkError'), {
             duration: 3000,
@@ -176,10 +193,13 @@ const AmountScreen = () => {
   const _onSendContract = async () => {
     try {
       setIsLoading(true);
-      await onSendSubmit(orderData, (data) => {
-        setIsLoading(false);
-        replace('/home/success?type=QR_CODE&id=' + data?.id);
-      });
+      await onSendSubmit(
+        orderData,
+        (data) => {
+          setIsLoading(false);
+          replace('/home/success?type=QR_CODE&id=' + data?.id);
+        },
+      );
     } catch (error) {
       if (error?.message.includes('The user rejected the request')) {
         toast.show(t('tips.error.userRejected'), {
@@ -378,7 +398,6 @@ const AmountScreen = () => {
             onPress={() => {
               handlePagePress();
               if (orderData?.id) {
-                // _onSendContract();
                 setModalVisible(true);
               } else {
                 submit();

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-14 16:05:12
+ * @LastEditTime: 2025-03-16 23:22:46
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -43,6 +43,7 @@ import {useTransaction} from 'app/hooks/useTransaction';
 import useResponse from 'app/hooks/useResponse';
 import PayPopup from 'app/Components/PayPopup';
 import ReplacePay from 'app/Components/ReplacePay';
+import { postTransactionHistoryUpdateNetworkFee } from 'app/servers/api/transactionHistory';
 
 const {useParams} = createParam<any>();
 
@@ -62,8 +63,6 @@ const PayLinkScreen = ({type}: any) => {
 
   const [orderData, setOrderData] = React.useState<any>();
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [isReplacePay, setIsReplacePay] = React.useState(false);
-  const [replaceCurrencyData, setReplaceCurrencyData] = React.useState<any>();
 
   const {back, replace, push} = useRouter();
   const {onSendSubmit, onRequestSubmit, createTransaction} = useTransaction();
@@ -107,17 +106,29 @@ const PayLinkScreen = ({type}: any) => {
       const params = createTransactionParams(type);
       if (type === 'SEND') {
         const transaction = await createTransaction(params);
-        if (transaction?.tokenFeeSupport) {
-          if (transaction?.transactionCode) {
+        if (transaction?.transactionCode) {
+          if (transaction?.tokenFeeSupport) {
+            const feeData = await makeRequest(
+              postTransactionHistoryUpdateNetworkFee({
+                transactionCode: transaction.transactionCode,
+                tokenContractAddress: transaction.tokenContractAddress!,
+              }),
+            );
+            if (!feeData?.data?.id) {
+              throw new Error('Failed to create pay link');
+            }
             setModalVisible(true);
-            setOrderData(transaction);
-          } else {
-            toast.show(t('tips.error.networkError'), {
-              duration: 3000,
+            setOrderData({
+              ...transaction,
+              networkFee:feeData?.data
             });
+          } else {
+            replace('/home/replace?id=' + transaction?.id);
           }
         } else {
-          setIsReplacePay(true);
+          toast.show(t('tips.error.networkError'), {
+            duration: 3000,
+          });
         }
       } else {
         await onRequestSubmit(params, (data) => {
@@ -155,13 +166,16 @@ const PayLinkScreen = ({type}: any) => {
   const _onSendContract = async () => {
     try {
       setIsLoading(true);
-      await onSendSubmit(orderData, (data) => {
-        setIsLoading(false);
-        replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
-        setTimeout(() => {
-          dispatch.user.updateState({payLinkData: {}});
-        });
-      });
+      await onSendSubmit(
+        orderData,
+        (data) => {
+          setIsLoading(false);
+          replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
+          setTimeout(() => {
+            dispatch.user.updateState({payLinkData: {}});
+          });
+        },
+      );
     } catch (error) {
       if (error?.message.includes('The user rejected the request')) {
         toast.show(t('tips.error.userRejected'), {
@@ -188,12 +202,11 @@ const PayLinkScreen = ({type}: any) => {
   return (
     <PermissionPage>
       <AppHeader2
-        isClosure={isReplacePay}
         onBack={() => {
           replace('/');
           dispatch.user.updateState({payLinkData: {}});
         }}
-        title={isReplacePay ? t('home.paylink.approveTransaction') : t('screen.home.paylink')}
+        title={t('screen.home.paylink')}
         fallbackUrl="/"
       />
       <ScrollView
@@ -204,114 +217,104 @@ const PayLinkScreen = ({type}: any) => {
           minHeight: '100%',
         }}
       >
-        {isReplacePay ? (
-          <ReplacePay
-            replaceCurrencyData={replaceCurrencyData}
-            setReplaceCurrencyData={setReplaceCurrencyData}
-            setIsLoading={setIsLoading}
-            orderData={orderData}
-            onSubmit={_onSendContract}
-          />
-        ) : (
-          <YStack flex={1} pl={appScale(24)} pr={appScale(24)}>
-            <YStack w="100%" mb={appScale(24)}>
-              <XStack mb={appScale(8)} w="100%">
-                <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                  {t('home.paylink.recipient')}
-                </SizableText>
-              </XStack>
+        <YStack flex={1} pl={appScale(24)} pr={appScale(24)}>
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                {t('home.paylink.recipient')}
+              </SizableText>
+            </XStack>
 
-              <Button
-                w="100%"
-                p={appScale(16)}
-                bc={'#FAFAFA'}
-                br={appScale(8)}
-                unstyled
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                pressStyle={{
-                  opacity: 0.7,
-                  bc: '#FAFAFA',
-                }}
-                onPress={() => {
-                  replace(`/home/${type}?userId=${payLinkData?.userId}`);
-                }}
-              >
-                {payLinkData?.userId === 'anyone' ? (
-                  <SizableText fontSize={'$5'} color={PrimaryColor} fontWeight={'600'}>
-                    {t('home.paylink.anyoneLink')}
-                  </SizableText>
-                ) : (
-                  <XStack>
-                    <YStack pos={'relative'} w={appScale(84)} flexShrink={0}>
-                      {!payLinkData?.user?.avatar ? (
-                        <AppImage
-                          width={appScale(60)}
-                          height={appScale(60)}
-                          src={require(`app/assets/images/avatar.png`)}
-                          type="local"
-                        />
-                      ) : (
-                        <AppImage width={appScale(60)} height={appScale(60)} src={payLinkData?.user?.avatar} />
-                      )}
-                    </YStack>
-                    <YStack gap={appScale(2)}>
-                      <SizableText fontSize={'$5'} color={'#26273C'} fontWeight={'600'}>
-                        @{payLinkData?.user?.nickname}
-                      </SizableText>
-                      <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'500'}>
-                        {getUserSubName(payLinkData?.user)}
-                      </SizableText>
-                    </YStack>
-                  </XStack>
-                )}
+            <Button
+              w="100%"
+              p={appScale(16)}
+              bc={'#FAFAFA'}
+              br={appScale(8)}
+              unstyled
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+              pressStyle={{
+                opacity: 0.7,
+                bc: '#FAFAFA',
+              }}
+              onPress={() => {
+                replace(`/home/${type}?userId=${payLinkData?.userId}`);
+              }}
+            >
+              {payLinkData?.userId === 'anyone' ? (
+                <SizableText fontSize={'$5'} color={PrimaryColor} fontWeight={'600'}>
+                  {t('home.paylink.anyoneLink')}
+                </SizableText>
+              ) : (
+                <XStack>
+                  <YStack pos={'relative'} w={appScale(84)} flexShrink={0}>
+                    {!payLinkData?.user?.avatar ? (
+                      <AppImage
+                        width={appScale(60)}
+                        height={appScale(60)}
+                        src={require(`app/assets/images/avatar.png`)}
+                        type="local"
+                      />
+                    ) : (
+                      <AppImage width={appScale(60)} height={appScale(60)} src={payLinkData?.user?.avatar} />
+                    )}
+                  </YStack>
+                  <YStack gap={appScale(2)}>
+                    <SizableText fontSize={'$5'} color={'#26273C'} fontWeight={'600'}>
+                      @{payLinkData?.user?.nickname}
+                    </SizableText>
+                    <SizableText fontSize={'$3'} color={'#9395A4'} fontWeight={'500'}>
+                      {getUserSubName(payLinkData?.user)}
+                    </SizableText>
+                  </YStack>
+                </XStack>
+              )}
 
-                <ChevronRight size="$2" color={'#212121'} />
-              </Button>
-            </YStack>
-            <YStack w="100%" mb={appScale(24)}>
-              <XStack mb={appScale(8)} w="100%">
-                <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                  {type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
-                </SizableText>
-              </XStack>
-              <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)}>
-                <SizableText
-                  fontSize={'$7'}
-                  h={appScale(50)}
-                  lh={appScale(50)}
-                  color={'#212121'}
-                  fontWeight={'600'}
-                  pos="relative"
-                >
-                  {`${payLinkData?.amount} ${payLinkData?.currencyData?.token?.tokenSymbol} (${payLinkData?.currencyData?.chainName})`}
-                </SizableText>
-              </XStack>
-            </YStack>
-            <YStack w="100%" mb={appScale(24)}>
-              <XStack mb={appScale(8)} w="100%">
-                <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                  {t('home.paylink.addMessage')}
-                </SizableText>
-              </XStack>
-              <TextArea
-                w="100%"
-                unstyled
-                p={appScale(16)}
-                bc={'#FAFAFA'}
-                br={appScale(8)}
-                rows={6}
-                fontSize={'$3'}
-                lh={appScale(30)}
-                value={inputValue}
-                onChangeText={setInputValue}
-                borderColor={'#FAFAFA'}
-                placeholder={t('home.paylink.addMessage.tips')}
-              />
-            </YStack>
+              <ChevronRight size="$2" color={'#212121'} />
+            </Button>
           </YStack>
-        )}
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                {type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
+              </SizableText>
+            </XStack>
+            <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)}>
+              <SizableText
+                fontSize={'$7'}
+                h={appScale(50)}
+                lh={appScale(50)}
+                color={'#212121'}
+                fontWeight={'600'}
+                pos="relative"
+              >
+                {`${payLinkData?.amount} ${payLinkData?.currencyData?.token?.tokenSymbol} (${payLinkData?.currencyData?.chainName})`}
+              </SizableText>
+            </XStack>
+          </YStack>
+          <YStack w="100%" mb={appScale(24)}>
+            <XStack mb={appScale(8)} w="100%">
+              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                {t('home.paylink.addMessage')}
+              </SizableText>
+            </XStack>
+            <TextArea
+              w="100%"
+              unstyled
+              p={appScale(16)}
+              bc={'#FAFAFA'}
+              br={appScale(8)}
+              rows={6}
+              fontSize={'$3'}
+              lh={appScale(30)}
+              value={inputValue}
+              onChangeText={setInputValue}
+              borderColor={'#FAFAFA'}
+              placeholder={t('home.paylink.addMessage.tips')}
+            />
+          </YStack>
+        </YStack>
       </ScrollView>
 
       <XStack
@@ -353,16 +356,11 @@ const PayLinkScreen = ({type}: any) => {
             width: '50%',
           }}
           onPress={() => {
-            if (isReplacePay) {
-              console.log('🚀 ~ PayLinkScreen ~ isReplacePay:');
-              console.log('🚀 ~ PayLinkScreen ~ replaceCurrencyData:', replaceCurrencyData);
+            if (orderData?.id) {
+              // _onSendContract();
+              setModalVisible(true);
             } else {
-              if (orderData?.id) {
-                // _onSendContract();
-                setModalVisible(true);
-              } else {
-                handleSubmit(type === 'send' ? 'SEND' : 'REQUEST');
-              }
+              handleSubmit(type === 'send' ? 'SEND' : 'REQUEST');
             }
           }}
         >

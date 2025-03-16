@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 16:21:45
+ * @LastEditTime: 2025-03-16 23:22:10
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -15,6 +15,7 @@ import TokenLinkContract from 'app/abi/TokenLink.json';
 import TokenTransferContract from 'app/abi/TokenTransfer.json';
 import {
   postTransactionHistoryCreateTransactionHistory,
+  postTransactionHistoryUpdateNetworkFee,
   postTransactionHistoryUpdateTransactionHash,
 } from 'app/servers/api/transactionHistory';
 import {
@@ -160,19 +161,44 @@ export const useTransaction = () => {
         throw new Error('Failed to create pay link');
       }
 
+      const feeTokenContractAddress = getAddress(transaction?.networkFee?.tokenContractAddress);
+      const feeAmount = BigInt(transaction?.networkFee?.totalTokenCost);
       const tokenContractAddress = getAddress(payLink.data.tokenContractAddress!);
       const bizContractAddress = getAddress(payLink.data.bizContractAddress!);
       const amount = BigInt(transaction.amount);
 
+      let approve: any = {};
+
+      if (!transaction?.tokenFeeSupport) {
+        approve = {
+          to: feeTokenContractAddress,
+          data: encodeFunctionData({
+            abi: erc20Abi,
+            functionName: 'approve',
+            args: [getAddress(bizContractAddress), feeAmount],
+          }),
+        };
+      }
       const transactionHash = await sendTransaction({
         chainId: Number(transaction.chainId),
         calls: [
           {
+            // 调用USDC代币的approve方法，授信给PayLink业务合约（转账金额和手续费是同一种代币时，要把金额相加并且只调用一次approve）
             to: tokenContractAddress,
             data: encodeFunctionData({
               abi: erc20Abi,
               functionName: 'approve',
-              args: [bizContractAddress, amount],
+              args: [getAddress(bizContractAddress), transaction?.tokenFeeSupport ? amount + feeAmount : amount],
+            }),
+          },
+          ...(approve.to ? [approve] : []),
+          {
+            // 先调用转账业务合约的payFee方法，支付手续费
+            to: bizContractAddress,
+            data: encodeFunctionData({
+              abi: TokenLinkContract.abi,
+              functionName: 'payFee',
+              args: [transaction.transactionCode, feeTokenContractAddress, feeAmount],
             }),
           },
           {
@@ -180,7 +206,7 @@ export const useTransaction = () => {
             data: encodeFunctionData({
               abi: TokenLinkContract.abi,
               functionName: 'deposit',
-              args: [tokenContractAddress, amount, payLink.data.otp],
+              args: [transaction.transactionCode, tokenContractAddress, amount, payLink.data.otp],
             }),
           },
         ],
@@ -234,11 +260,7 @@ export const useTransaction = () => {
         });
         return;
       }
-
-      const tokenContractAddress = getAddress(payLink.data.tokenContractAddress!);
       const bizContractAddress = getAddress(payLink.data.bizContractAddress!);
-      const amount = BigInt(orderData.amount);
-
       const baseClient = await getClientForChain({
         id: orderData.chainId,
       });
@@ -253,7 +275,7 @@ export const useTransaction = () => {
           data: encodeFunctionData({
             abi: TokenLinkContract.abi,
             functionName: 'withdraw',
-            args: [getAddress(payLink.data.senderWalletAddress!), payLink.data.otp],
+            args: [orderData?.transactionCode,getAddress(payLink.data.senderWalletAddress!), payLink.data.otp],
           }),
         },
         {
@@ -299,18 +321,46 @@ export const useTransaction = () => {
   // 发送合约交易
   const onSendContract = async (transaction: any, onSuccess?: (data: any) => void) => {
     try {
+      const feeTokenContractAddress = getAddress(transaction?.networkFee?.tokenContractAddress);
+      const feeAmount = BigInt(transaction?.networkFee?.totalTokenCost);
+
       const tokenContractAddress = transaction.tokenContractAddress!;
       const bizContractAddress = transaction.bizContractAddress;
       const amount = BigInt(transaction.amount);
+
+      let approve: any = {};
+      if (!transaction?.tokenFeeSupport) {
+        approve = {
+          to: feeTokenContractAddress,
+          data: encodeFunctionData({
+            abi: erc20Abi,
+            functionName: 'approve',
+            args: [getAddress(bizContractAddress), feeAmount],
+          }),
+        };
+      }
+      console.log('🚀 ~ handleSendPayLink ~ approve:', approve);
+
       const transactionHash = await sendTransaction({
         chainId: transaction.chainId,
         calls: [
           {
+            // 调用USDC代币的approve方法，授信给转账业务合约（转账金额和手续费是同一种代币时，要把金额相加并且只调用一次approve）
             to: tokenContractAddress,
             data: encodeFunctionData({
               abi: erc20Abi,
               functionName: 'approve',
-              args: [getAddress(bizContractAddress!), amount],
+              args: [getAddress(bizContractAddress), transaction?.tokenFeeSupport ? amount + feeAmount : amount],
+            }),
+          },
+          ...(approve.to ? [approve] : []),
+          {
+            // 先调用转账业务合约的payFee方法，支付手续费
+            to: bizContractAddress,
+            data: encodeFunctionData({
+              abi: TokenTransferContract.abi,
+              functionName: 'payFee',
+              args: [transaction.transactionCode, feeTokenContractAddress, feeAmount],
             }),
           },
           {
@@ -318,7 +368,7 @@ export const useTransaction = () => {
             data: encodeFunctionData({
               abi: TokenTransferContract.abi,
               functionName: 'transfer',
-              args: [transaction.receiverWalletAddress!, tokenContractAddress, amount],
+              args: [transaction.transactionCode, transaction.receiverWalletAddress!, tokenContractAddress, amount],
             }),
           },
         ],
@@ -451,36 +501,6 @@ export const useTransaction = () => {
       if (onSuccess) {
         onSuccess(transaction);
       }
-
-      // const transactionHash = await sendTransaction({
-      //   chainId: params.chainId,
-      //   calls: [
-      //     {
-      //       to: getAddress(tokenContractAddress!),
-      //       data: encodeFunctionData({
-      //         abi: erc20Abi,
-      //         functionName: 'approve',
-      //         args: [getAddress(bizContractAddress!), amount],
-      //       }),
-      //     },
-      //     {
-      //       to: getAddress(bizContractAddress!),
-      //       data: encodeFunctionData({
-      //         abi: TokenTransferContract.abi,
-      //         functionName: 'transfer',
-      //         args: [transaction.receiverWalletAddress!, tokenContractAddress, amount],
-      //       }),
-      //     },
-      //   ],
-      // });
-
-      // await handleTransactionSuccess(
-      //   {
-      //     id: transaction.id,
-      //     transactionHash,
-      //   },
-      //   onSuccess,
-      // );
     } catch (error) {
       console.error('Deposit error:', error);
       toast.show(t('tips.error.networkError'), {
