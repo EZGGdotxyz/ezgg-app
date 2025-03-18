@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 14:02:54
+ * @LastEditTime: 2025-03-18 16:52:55
  * @FilePath: /ezgg-app/packages/app/Components/ConnectorsPopup/index.tsx
  */
 import {Button, Sheet, SizableText, useToastController, XStack, YStack, AppImage} from '@my/ui';
@@ -66,6 +66,7 @@ const Item = memo(
         pressStyle={{
           opacity: 0.85,
         }}
+        bc={isCurrentConnector ? PrimaryColor : '#fff'}
         flexDirection="row"
         w="100%"
         ai="center"
@@ -105,14 +106,14 @@ const Item = memo(
             </SizableText>
           </YStack>
         </XStack>
-        {isCurrentConnector && (
+        {/* {isCurrentConnector && (
           <XStack ai="center" space="$2">
             <SizableText color={PrimaryColor} size={'$3'} fow={'500'}>
               {t('home.wallet.select')}
             </SizableText>
             <Check size={appScale(32)} color={PrimaryColor} />
           </XStack>
-        )}
+        )} */}
       </Button>
     );
   },

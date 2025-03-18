@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:22:15
+ * @LastEditTime: 2025-03-18 17:27:36
  * @FilePath: /ezgg-app/packages/app/pages/explore/index/index.tsx
  */
 import {
@@ -186,7 +186,6 @@ const ExploreScreen = () => {
 
       // 扫描文件
       const result = await fileScanner.scanFile(file, true);
-      console.log('图片扫描结果:', result);
 
       // 清理文件扫描器
       try {

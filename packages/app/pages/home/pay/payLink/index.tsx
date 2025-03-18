@@ -179,7 +179,6 @@ const PayLinkScreen = ({type}: any) => {
       }
 
       await onSendSubmit(orderData, (data) => {
-        console.log("🚀 ~ awaitonSendSubmit ~ data:", data)
         setIsLoading(false);
         replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
         setTimeout(() => {

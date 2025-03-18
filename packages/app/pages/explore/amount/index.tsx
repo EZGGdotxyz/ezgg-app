@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 13:40:32
+ * @LastEditTime: 2025-03-18 17:27:31
  * @FilePath: /ezgg-app/packages/app/pages/explore/amount/index.tsx
  */
 import {
@@ -50,8 +50,6 @@ const AmountScreen = () => {
   const {t} = useTranslation();
   const [{payLinkData, userInfo}] = useRematchModel('user');
 
-  console.log('🚀 ~ AmountScreen ~ userInfo:', userInfo);
-
   const {appScale} = useResponse();
 
   const dispatch = useDispatch<Dispatch>();
@@ -78,9 +76,7 @@ const AmountScreen = () => {
 
   const _getUserFindUserIdId = async () => {
     const res = await makeRequest(getUserFindUserIdId({id: params?.id}));
-    console.log('res', res);
     if (res?.code === '0') {
-      console.log('🚀 ~ const_getUserFindUserIdId= ~ userInfo?.customMetadata?.id:', userInfo?.customMetadata?.id);
       if (userInfo?.customMetadata?.id !== Number(params?.id)) {
         setReceiverUserInfo(res?.data);
       } else {

@@ -239,7 +239,6 @@ export default function useBlockchain() {
         dispatch.user.updateState({
           availableBalance: summaryBalance,
         });
-        console.log('🚀 ~ tokenList:', tokenList);
 
         return tokenList;
       } catch (error) {

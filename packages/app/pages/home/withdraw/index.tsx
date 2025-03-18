@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 15:23:31
+ * @LastEditTime: 2025-03-18 17:25:46
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -146,7 +146,6 @@ const WithdrawScreen = () => {
       toast.show(t('home.withdraw.tips'));
       return;
     }
-    console.log('🚀 ~ handleSubmit ~ address:', address);
 
     if (address) {
       submit(address);

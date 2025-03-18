@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 13:40:16
+ * @LastEditTime: 2025-03-18 17:25:26
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -136,7 +136,6 @@ const HistoryDetailScreen = () => {
           sideName = _orderData?.receiverMember?.nickname;
         }
       }
-      console.log('🚀 ~ const_getTransactionHistoryFindTransactionHistoryId= ~ sideName:', sideName);
 
       let infoDataDefault: any = {
         title: _title,

@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:12:30
- * @FilePath: /ezgg-app/packages/app/Components/Currency/index.tsx
+ * @LastEditTime: 2025-03-18 17:12:17
+ * @FilePath: /ezgg-app/packages/app/pages/home/deposit/components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
 import {useRematchModel} from 'app/store/model';
@@ -15,54 +15,89 @@ import {TokenIcon} from '@web3icons/react';
 import React from 'react';
 import useResponse from 'app/hooks/useResponse';
 import useBlockchain from 'app/hooks/useBlockchain';
-import {getTrustWalletAssetUrl} from 'app/utils/chain';
+import {useAccount, useBalance, useToken} from 'wagmi';
 
 export type CurrencyProps = {
   currencyData: any;
   setCurrencyData: (currency: any) => void;
-  setIsLoading: (isLoading: boolean) => void;
-  isRequest?: boolean;
-  chainId?: number;
+  isConnected: boolean;
 };
 
 // 交易历史item
 const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
-  ({currencyData, setCurrencyData, setIsLoading, isRequest = false, chainId}: CurrencyProps, ref) => {
+  ({currencyData, setCurrencyData, isConnected}: CurrencyProps, ref) => {
     const {push} = useRouter();
     const {appScale} = useResponse();
-    const {getAllBalances, convertToChainGroups, loading} = useBlockchain();
-    const [{blockchainList}] = useRematchModel('app');
     const {t} = useTranslation();
     const [modalVisible, setModalVisible] = useState(false);
-    const [list, setList] = useState<any>([]);
+    const [currencyList, setCurrencyList] = useState<any>([
+      {
+        chainName: 'Base',
+        chainIcon: 'Base',
+        token: {
+          platform: 'ETH',
+          network: 'MAIN',
+          erc: 'ERC20',
+          id: 6,
+          createBy: 0,
+          updateBy: 0,
+          createAt: '2025-03-03T02:19:34.362Z',
+          updateAt: '2025-03-03T02:19:34.362Z',
+          address: '0x4200000000000000000000000000000000000006',
+          chainId: 8453,
+          tokenName: 'Wrapped Ether',
+          tokenSymbol: 'WETH',
+          tokenDecimals: 18,
+          logo: null,
+          show: true,
+          sort: 0,
+          priceCurrency: 'usd',
+          priceValue: '2438.3262341117',
+          priceUpdateAt: '2025-03-03T02:19:31.000Z',
+          priceAutoUpdate: false,
+          feeSupport: true,
+        },
+        currency: 'CNY',
+        currencyAmount: '0',
+        tokenAmount: '0',
+        inWallet: true,
+      },
+      {
+        chainName: 'Base',
+        chainIcon: 'Base',
+        token: {
+          platform: 'ETH',
+          network: 'MAIN',
+          erc: 'ERC20',
+          id: 7,
+          createBy: 0,
+          updateBy: 0,
+          createAt: '2025-03-03T02:19:34.789Z',
+          updateAt: '2025-03-03T02:19:34.789Z',
+          address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+          chainId: 8453,
+          tokenName: 'USD Coin',
+          tokenSymbol: 'USDC',
+          tokenDecimals: 6,
+          logo: null,
+          show: true,
+          sort: 0,
+          priceCurrency: 'usd',
+          priceValue: '0.9998782643',
+          priceUpdateAt: '2025-03-03T02:18:41.000Z',
+          priceAutoUpdate: false,
+          feeSupport: true,
+        },
+        currency: 'CNY',
+        currencyAmount: '0.04008874677417857468',
+        tokenAmount: '0.005543',
+        inWallet: true,
+      },
+    ]);
 
-    const selectCurrency = (item) => {
+    const selectCurrency = (item: any) => {
       setCurrencyData(item);
       setModalVisible(false);
-    };
-
-    useEffect(() => {
-      if (blockchainList?.length > 0) {
-        fetchBalances();
-      }
-    }, [blockchainList]);
-
-    const fetchBalances = async () => {
-      try {
-        setIsLoading(true);
-
-        const tokenList = await getAllBalances(false, chainId);
-        const sortedData = convertToChainGroups(tokenList);
-
-        if (sortedData.length > 0 && sortedData[0].tokenList.length > 0) {
-          setList(sortedData);
-          setCurrencyData(sortedData[0].tokenList[0]);
-        } else {
-          setList([]);
-        }
-      } finally {
-        setIsLoading(false);
-      }
     };
 
     return (
@@ -86,7 +121,15 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
               opacity: 0.7,
               bc: '#FAFAFA',
             }}
-            onPress={() => setModalVisible(true)}
+            style={{
+              opacity: !isConnected ? 0.6 : 1,
+              pointerEvents: !isConnected ? 'none' : 'auto',
+            }}
+            onPress={() => {
+              if (isConnected) {
+                setModalVisible(true);
+              }
+            }}
           >
             <XStack h={appScale(50)}>
               <XStack flexShrink={0} pos={'relative'} w={appScale(72)}>
@@ -100,14 +143,6 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
                     type="local"
                   />
                 )}
-                {/* <AppImage
-                  src={getTrustWalletAssetUrl(
-                    '0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42',
-                    currencyData?.token?.chainId,
-                  )}
-                  w={appScale(48)}
-                  h={appScale(48)}
-                /> */}
               </XStack>
 
               {currencyData?.token?.tokenSymbol && (
@@ -128,10 +163,9 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
         </YStack>
 
         <CurrencyPopup
-          isRequest={isRequest}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
-          currencyList={list}
+          currencyList={currencyList}
           currencyData={currencyData}
           selectCurrency={selectCurrency}
         />

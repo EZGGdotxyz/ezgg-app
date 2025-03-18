@@ -148,7 +148,6 @@ const HistoryScreen = (props: any) => {
 
   const onSearch = (text: string) => {
     setSearchText(text);
-    console.log('🚀 ~ onSearch ~ text:', text);
   };
 
   /**

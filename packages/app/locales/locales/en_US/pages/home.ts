@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-14 16:19:13
+ * @LastEditTime: 2025-03-18 17:22:09
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -41,10 +41,13 @@ export default {
   'home.send.tips1': 'Copy link and send',
   'home.send.tips2': 'View your claim link',
   'home.send.number.tips': 'The number of decimal places cannot exceed the token decimals',
+  'home.send.chain': 'Chain',
 
   'home.deposit.or': 'or',
   'home.deposit.sendTips': 'Send {{token}} ({{chain}} ONLY) to this address',
   'home.deposit.deposit': 'Deposit',
+  'home.deposit.amountToDeposit': 'Please enter the amount to deposit',
+  'home.deposit.balance': 'Balance in wallet',
 
   'home.withdraw.withdraw': 'Withdraw',
   'home.withdraw.button2': 'Connect Wallet',
@@ -132,7 +135,8 @@ export default {
   'home.paylink.reject': 'Reject',
   'home.paylink.amount': 'Amount',
   'home.paylink.network': 'Network',
-  'home.paylink.replacePay.tips': 'Sorry, ezgg does not support payment fees for {{token}}, please choose another currency to pay the fees',
+  'home.paylink.replacePay.tips':
+    'Sorry, ezgg does not support payment fees for {{token}}, please choose another currency to pay the fees',
   'home.paylink.replacePay.currency': 'Currency',
 
   'home.qr.title': 'Scan QR Code',

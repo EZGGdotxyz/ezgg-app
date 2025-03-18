@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 10:57:04
+ * @LastEditTime: 2025-03-18 16:48:27
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/ChainListPopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -21,13 +21,7 @@ export type ChainListPopupProps = {
 
 // 使用forwardRef正确实现组件
 const ChainListPopup = forwardRef<any, ChainListPopupProps>((props, ref) => {
-  const {
-    selectedType,
-    setSelectedType,
-    sheetOpen,
-    setSheetOpen,
-    tokenTypes,
-  } = props;
+  const {selectedType, setSelectedType, sheetOpen, setSheetOpen, tokenTypes} = props;
   const {t, i18n} = useTranslation();
   const scrollViewRef = useRef<any>(null);
   const {appScale} = useResponse();
@@ -47,7 +41,7 @@ const ChainListPopup = forwardRef<any, ChainListPopupProps>((props, ref) => {
       <Sheet.Frame justifyContent="center" w="100%" alignItems="center">
         <Sheet.ScrollView ref={scrollViewRef} w="100%" bc="$background">
           <YStack style={{width: '100vw'}}>
-            {tokenTypes.map((type) => (
+            {tokenTypes.map((type, index) => (
               <Button
                 unstyled
                 pressStyle={{
@@ -55,52 +49,47 @@ const ChainListPopup = forwardRef<any, ChainListPopupProps>((props, ref) => {
                 }}
                 bc={selectedType?.chainId === type?.chainId ? PrimaryColor : '#fff'}
                 key={type.chainId}
-                // jc={'space-between'}
                 flexDirection="row"
                 w="100%"
-                h={appScale(72)}
+                ai="center"
+                jc="space-between"
+                borderBottomWidth={1}
+                borderBottomColor={'#E0E0E0'}
+                pt={appScale(12)}
+                pb={appScale(12)}
                 pl={appScale(24)}
                 pr={appScale(24)}
-                ai="center"
                 onPress={() => {
                   setSelectedType(type);
                   setSheetOpen(false);
                 }}
               >
-                {type?.chainIcon ? (
-                  <AppImage
-                    width={appScale(28)}
-                    height={appScale(28)}
-                    src={require(`app/assets/images/chain/${type.chainIcon}.png`)}
-                    type="local"
-                  />
-
-                ) : (
-                  <GalleryVerticalEnd size="$1" color={'#212121'} />
-                )}
-
-                <SizableText color={'#212121'} size={'$4'} fow={'600'}>
-                  {type?.name}
-                </SizableText>
-                {/* <ChevronRight size="$2" color={'#212121'} /> */}
+                <XStack ai="center" space="$3">
+                  <XStack
+                    width={appScale(48)}
+                    height={appScale(48)}
+                    borderRadius={'$1'}
+                    overflow={'hidden'}
+                    bc={'#fff'}
+                    ai={'center'}
+                    jc={'center'}
+                  >
+                    {type?.chainIcon && (
+                      <AppImage
+                        width={appScale(48)}
+                        height={appScale(48)}
+                        src={require(`app/assets/images/chain/${type.chainIcon}.png`)}
+                        type="local"
+                      />
+                    )}
+                  </XStack>
+                  <YStack>
+                    <SizableText color={'#212121'} size={'$4'} fow={'600'}>
+                      {type?.name}
+                    </SizableText>
+                  </YStack>
+                </XStack>
               </Button>
-              // <Button
-              //   key={type.value}
-              //   unstyled
-              //   onPress={() => {
-              //     setSelectedType(type.value);
-              //     setSheetOpen(false);
-              //   }}
-              //   flexDirection="row"
-              //   alignItems="center"
-              //   justifyContent="space-between"
-              //   paddingVertical={appScale(8)}
-              // >
-              //   <SizableText fontSize={'$4'} color={'#26273C'} fontWeight={'500'}>
-              //     {type.label}
-              //   </SizableText>
-              //   {selectedType === type.value && <Check size={16} color="#26273C" />}
-              // </Button>
             ))}
           </YStack>
         </Sheet.ScrollView>

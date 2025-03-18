@@ -141,7 +141,6 @@ const SendToScreen = ({isRefresh, type}: any) => {
   const onSearch = (text) => {
     // setSearchText(text);
     setSearch(text);
-    console.log('🚀 ~ onSearch ~ text:', text);
   };
 
   /**

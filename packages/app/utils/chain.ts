@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-03 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 10:58:50
+ * @LastEditTime: 2025-03-18 17:26:18
  * @FilePath: /ezgg-app/packages/app/utils/chain.ts
  */
 import {getAddress} from 'viem';
@@ -152,22 +152,14 @@ export const validateAddress = (address: string, chainId: number): boolean => {
  * 获取代币图标URL
  */
 export const getTrustWalletAssetUrl = (address: string, chainId: number): string => {
-  console.log('🚀 ~ getTrustWalletAssetUrl ~ chainId:', chainId);
   const config = getChainConfig(chainId);
-
-  console.log('🚀 ~ getTrustWalletAssetUrl ~ config:', config);
-
   if (!config) return getDefaultTokenIcon();
 
   if (isNativeToken(address, chainId)) {
-    console.log('🚀 ~ getTrustWalletAssetUrl ~ address:', address);
-
     return `${TRUST_WALLET_ASSETS_BASE_URL}/${config.assetName}/info/logo.png`;
   }
 
   if (address) {
-    console.log('🚀 ~ getTrustWalletAssetUrl ~ address:', address);
-
     return `${TRUST_WALLET_ASSETS_BASE_URL}/${config.assetName}/assets/${address}/logo.png`;
   }
 

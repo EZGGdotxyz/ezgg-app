@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 13:26:27
+ * @LastEditTime: 2025-03-18 16:38:45
  * @FilePath: /ezgg-app/packages/app/Components/Connectors/index.tsx
  */
 import {AppImage, Button, SizableText, YStack, XStack} from '@my/ui';
@@ -13,6 +13,7 @@ import useResponse from 'app/hooks/useResponse';
 import ConnectorsPopup from '../ConnectorsPopup';
 import {useAccount} from 'wagmi';
 import {truncateAddress} from 'app/utils';
+import {WalletIcon} from '@web3icons/react';
 
 export type ConnectorsProps = {
   currencyData: any;
@@ -20,7 +21,7 @@ export type ConnectorsProps = {
   isWithdraw?: boolean;
 };
 
-const Connectors = ({currencyData, setIsLoading, isWithdraw=false}: ConnectorsProps) => {
+const Connectors = ({currencyData, setIsLoading, isWithdraw = false}: ConnectorsProps) => {
   const {appScale} = useResponse();
   const {t} = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,17 +65,43 @@ const Connectors = ({currencyData, setIsLoading, isWithdraw=false}: ConnectorsPr
           }}
           onPress={() => setModalVisible(true)}
         >
-          <XStack h={appScale(50)}>
-            <SizableText
-              fontSize={'$7'}
-              h={appScale(50)}
-              lh={appScale(50)}
-              color={'#212121'}
-              fontWeight={'600'}
-              pos="relative"
+          <XStack ai="center" space="$3">
+            <XStack
+              width={appScale(48)}
+              height={appScale(48)}
+              borderRadius={'$1'}
+              overflow={'hidden'}
+              bc={'#fff'}
+              ai={'center'}
+              jc={'center'}
             >
-              {isConnected && activeConnector?.name ? activeConnector.name : isWithdraw ? t('home.connectors.noWallets2') : t('home.connectors.noWallets')}
-            </SizableText>
+              {activeConnector?.name === 'WalletConnect' ? (
+                <AppImage
+                  width={appScale(48)}
+                  height={appScale(0.613 * 48)}
+                  src={require('app/assets/images/WalletConnect.png')}
+                  type="local"
+                />
+              ) : (
+                <WalletIcon name={activeConnector?.name} variant="background" size={appScale(48)} />
+              )}
+            </XStack>
+            <XStack h={appScale(50)}>
+              <SizableText
+                fontSize={'$7'}
+                h={appScale(50)}
+                lh={appScale(50)}
+                color={'#212121'}
+                fontWeight={'600'}
+                pos="relative"
+              >
+                {isConnected && activeConnector?.name
+                  ? activeConnector.name
+                  : isWithdraw
+                  ? t('home.connectors.noWallets2')
+                  : t('home.connectors.noWallets')}
+              </SizableText>
+            </XStack>
           </XStack>
           <XStack>
             <SizableText fontSize={'$3'} color={'#212121'}>

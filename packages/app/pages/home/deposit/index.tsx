@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 13:42:51
+ * @LastEditTime: 2025-03-18 17:19:59
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -24,8 +24,6 @@ import Keyboard from 'app/Components/Keyboard';
 import {convertAmountToTokenDecimals, formatTokenAmount, truncateAddress} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
-import Currency from 'app/Components/Currency';
-import ConnectorsPopup from 'app/Components/ConnectorsPopup';
 import AppLoading from 'app/Components/AppLoading';
 import DepositButton from './components/DepositButton';
 import {useFundWallet} from '@privy-io/react-auth';
@@ -40,6 +38,8 @@ import AppButton from 'app/Components/AppButton';
 import {useContractRead} from 'wagmi';
 import useResponse from 'app/hooks/useResponse';
 import Connectors from 'app/Components/Connectors';
+import Currency from './components/Currency';
+import Chain from './components/Chain';
 
 // 类型声明
 declare global {
@@ -53,17 +53,22 @@ declare global {
 // 存款
 const DepositScreen = () => {
   const {t} = useTranslation();
-  const [inputValue, setInputValue] = React.useState('');
-  const [showKeyboard, setShowKeyboard] = React.useState(false);
-  const [currencyData, setCurrencyData] = React.useState<any>();
   const [{userInfo}] = useRematchModel('user');
   const {makeRequest} = useRequest();
   const {onDeposit} = useTransaction();
   const {appScale} = useResponse();
-
-  const [isLoading, setIsLoading] = React.useState(false);
   const {back, push} = useRouter();
   const toast = useToastController();
+
+  const [selectedType, setSelectedType] = useState({
+    chainId: '',
+    chainName: '',
+    chainIcon: '',
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [showKeyboard, setShowKeyboard] = useState(false);
+  const [currencyData, setCurrencyData] = useState<any>();
 
   const handlePagePress = () => {
     setShowKeyboard(false);
@@ -73,9 +78,9 @@ const DepositScreen = () => {
     e.stopPropagation();
     setShowKeyboard(true);
   };
-  const {address, chain} = useAccount();
+  const {address, chain, isConnected} = useAccount();
 
-  const {refetch: refetchBalance} = useReadContract({
+  const {data: balance, refetch: refetchBalance} = useReadContract({
     address: currencyData?.token?.address as `0x${string}`,
     abi: erc20Abi,
     functionName: 'balanceOf',
@@ -358,16 +363,15 @@ const DepositScreen = () => {
         }}
       >
         <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
-          <Currency
-            setIsLoading={setIsLoading}
-            currencyData={currencyData}
-            setCurrencyData={setCurrencyData}
-            isRequest={true}
-          />
+          <Connectors setIsLoading={setIsLoading} currencyData={currencyData} />
+
+          <Chain isConnected={isConnected} selectedType={selectedType} setSelectedType={setSelectedType} />
+          <Currency isConnected={isConnected} currencyData={currencyData} setCurrencyData={setCurrencyData} />
+
           <YStack w="100%" mb={appScale(24)}>
             <XStack mb={appScale(8)} w="100%">
               <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                {t('home.send.amountToSend')}
+                {t('home.deposit.amountToDeposit')}
               </SizableText>
             </XStack>
             <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
@@ -400,8 +404,7 @@ const DepositScreen = () => {
               </SizableText>
             </XStack>
           </YStack>
-          <Connectors setIsLoading={setIsLoading} currencyData={currencyData} />
-          {/* <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+          <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
             {balance && (
               <SizableText
                 h={appScale(24)}
@@ -409,17 +412,17 @@ const DepositScreen = () => {
                 fontSize={'$4'}
                 color={'#212121'}
                 fontWeight={'500'}
-              >{`${t('home.balance')}: ${balance} ${currencyData?.token?.tokenSymbol} (${
+              >{`${t('home.deposit.balance')}: ${balance} ${currencyData?.token?.tokenSymbol} (${
                 currencyData?.chainName
               })`}</SizableText>
             )}
-          </XStack> */}
+          </XStack>
 
           <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
             <AppButton onPress={handleDepositClick}>{t('home.deposit')}</AppButton>
           </XStack>
           {!showKeyboard && (
-            <>
+            <YStack pb={appScale(134)}>
               <XStack ai="center" pl={appScale(24)} pr={appScale(24)} mb={appScale(34)}>
                 <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
                 <SizableText fontSize={'$3'} color={'#9E9E9E'} ml={'$4'} mr={'$4'}>
@@ -450,7 +453,7 @@ const DepositScreen = () => {
                   </CopyButton>
                 </XStack>
               </XStack>
-            </>
+            </YStack>
           )}
         </YStack>
         {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}

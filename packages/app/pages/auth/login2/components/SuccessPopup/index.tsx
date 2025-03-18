@@ -84,7 +84,6 @@ const SuccessPopup: React.FC<any> = ({
       return;
     }
 
-    console.log('🚀 ~ accountContinue ~ accountForm:', accountForm);
     handleSuccess(accountForm);
   };
 

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-14 16:09:48
+ * @LastEditTime: 2025-03-18 17:19:42
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -41,10 +41,14 @@ export default {
   'home.send.tips1': '複製連結並發送',
   'home.send.tips2': '查看您已發送的連結',
   'home.send.number.tips': '小數位數不能超過代幣的小數位數',
+  'home.send.chain': '鏈路',
+
 
   'home.deposit.or': '或 ',
   'home.deposit.sendTips': '發送 {{token}} ({{chain}} ONLY) 至如下地址',
   'home.deposit.deposit': '存款',
+  'home.deposit.amountToDeposit': '請輸入要存款的金額',
+  'home.deposit.balance': '錢包餘額',
 
   'home.withdraw.withdraw': '提取',
   'home.withdraw.button2': '連接錢包',

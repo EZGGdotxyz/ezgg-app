@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 17:13:30
+ * @LastEditTime: 2025-03-18 17:12:41
  * @FilePath: /ezgg-app/packages/app/Components/CurrencyPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -130,20 +130,16 @@ const CurrencyPopup = forwardRef<any, any>(
                         >
                           <XStack flex={1} h={appScale(48)} w="100%" ai={'center'} jc={'space-between'}>
                             <XStack flex={1} h={appScale(48)} pr={appScale(24)} pl={appScale(24)} ai={'center'}>
-                              {dayItem?.token?.tokenSymbol && (
-                                <YStack
-                                  height={appScale(48)}
-                                  width={appScale(48)}
-                                  borderRadius={appScale(24)}
-                                  overflow={'hidden'}
-                                >
-                                  <TokenIcon
-                                    symbol={dayItem?.token?.tokenSymbol}
-                                    variant="background"
-                                    size={appScale(48)}
-                                  />
-                                </YStack>
-                              )}
+                              {dayItem?.token?.tokenSymbol ? (
+                                <TokenIcon symbol={dayItem?.token?.tokenSymbol} variant="background" size={appScale(48)} />
+                              ) : (
+                                <AppImage
+                                width={appScale(48)}
+                                height={appScale(48)}
+                                src={require(`app/assets/images/df_token.png`)}
+                                type="local"
+                              />
+                            )}
 
                               {/* <AppImage
                             width={appScale(48)}
@@ -151,13 +147,13 @@ const CurrencyPopup = forwardRef<any, any>(
                             src={require(`app/assets/images/token/${dayItem.token}.png`)}
                             type="local"
                           /> */}
-                              <SizableText ml={appScale(16)} color={'#212121'} size={'$5'} fow={'400'}>
+                              <SizableText ml={appScale(16)} color={'#212121'} size={'$4'} fow={'600'}>
                                 {dayItem?.token?.tokenSymbol}
                               </SizableText>
                             </XStack>
                             {!isRequest && (
                               <XStack flexShrink={0} ai={'center'} jc={'center'} pl={appScale(24)} pr={appScale(24)}>
-                                <SizableText color={'#212121'} size={'$5'} fow={'600'}>
+                                <SizableText color={'#212121'} size={'$3'} fow={'500'}>
                                   {dayItem?.tokenAmount}
                                 </SizableText>
                               </XStack>

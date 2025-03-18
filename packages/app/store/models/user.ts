@@ -38,7 +38,6 @@ export const user = createModel<RootModel>()({
       if (payload.payLinkData !== undefined && typeof window !== 'undefined') {
         if (Object.keys(payload.payLinkData).length === 0) {
           localStorage.removeItem('payLinkData');
-          console.log('🚀 ~ updateState ~ removeItem:');
         } else {
           localStorage.setItem('payLinkData', JSON.stringify(payload.payLinkData));
         }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 17:46:43
+ * @LastEditTime: 2025-03-18 16:22:30
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -34,7 +34,7 @@ import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import useRequest from 'app/hooks/useRequest';
 import Header from './components/Header';
-import { getCurrency} from 'app/utils';
+import {getCurrency} from 'app/utils';
 import ChainPopup from './components/ChainPopup';
 import MyQrCodePopup from './components/MyQrCodePopup';
 import {usePrivy} from '@privy-io/react-auth';
@@ -50,9 +50,8 @@ import useResponse from 'app/hooks/useResponse';
 const MyScreen = () => {
   const {push, replace, back, parseNextPath} = useRouter();
   const {t, i18n} = useTranslation();
-  const {userLogout} = useUser();
+  const {userLogout, initUserInfo} = useUser();
   const {ready, authenticated, logout} = usePrivy();
-  const {initUserInfo} = useUser();
   const {appScale} = useResponse();
 
   const dispatch = useDispatch<Dispatch>();

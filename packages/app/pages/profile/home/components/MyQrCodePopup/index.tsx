@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 13:38:05
+ * @LastEditTime: 2025-03-18 17:25:54
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/MyQrCodePopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -31,12 +31,9 @@ const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible, se
 
   // 转换为 PNG 并下载
   const downloadQR = async () => {
-        console.log('🚀 ~ downloadQR ~ qrRef:', qrRef);
     if (!qrRef.current) return;
 
     const svgElement = qrRef.current.querySelector('svg');
-
-    console.log('🚀 ~ downloadQR ~ svgElement:', svgElement);
 
     if (!svgElement) return;
 
@@ -50,8 +47,6 @@ const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible, se
     const ctx = canvas.getContext('2d');
 
     const img = new Image();
-
-    console.log('🚀 ~ downloadQR ~ img:', img);
 
     img.onload = () => {
       canvas.width = img.width;

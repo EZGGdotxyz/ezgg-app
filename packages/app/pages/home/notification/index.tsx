@@ -117,7 +117,6 @@ const NotificationScreen = (props: any) => {
 
   const onSearch = (text) => {
     // setSearchText(text);
-    console.log('🚀 ~ onSearch ~ text:', text);
   };
 
   // 获取 未读消息数

@@ -29,7 +29,6 @@ const Keyboard: React.FC<KeyboardProps> = ({onChange, maxLength = 12, value = ''
 
   // 处理按键点击
   const handleKeyPress = (key: string) => {
-    console.log('🚀 ~ handleKeyPress ~ key:', key);
 
     let newValue = inputValue;
 
@@ -70,8 +69,6 @@ const Keyboard: React.FC<KeyboardProps> = ({onChange, maxLength = 12, value = ''
   // 添加键盘事件监听
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-
-      console.log('🚀 ~ handleKeyDown ~ event:', event.key);
 
       const keyMap: Record<string, string> = {
         Backspace: 'del',

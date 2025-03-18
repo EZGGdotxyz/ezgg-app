@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 14:08:58
+ * @LastEditTime: 2025-03-18 17:27:17
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -67,7 +67,6 @@ export const useTransaction = () => {
               transactionHash: params.transactionHash,
             }),
       );
-      console.log('🚀 ~ handleTransactionSuccess ~ res:', res);
 
       if (res?.code === '0') {
         onSuccess?.(res?.data || {});
@@ -93,19 +92,6 @@ export const useTransaction = () => {
     }
   };
 
-  const deployAA = async (baseClient: any) => {
-    const isAADeployed = await baseClient.account.isDeployed();
-    console.log('AA20 Account Deployment:', isAADeployed);
-    if (!isAADeployed) {
-      const txHash = await baseClient.sendTransaction({
-        to: '0x0000000000000000000000000000000000000000', // 发送给 0 地址
-        value: 0n, // 0 ETH
-        gas: 21000n, // 21000
-      });
-      console.log('AA20 Account Deployment TX:', txHash);
-    }
-  };
-
   const deployAA2 = async (chainId: any) => {
     try {
       const baseClient = await getClientForChain({
@@ -123,7 +109,6 @@ export const useTransaction = () => {
           value: 0n, // 0 ETH
           gas: 21000n, // 21000
         });
-        console.log('AA20 Account Deployment TX:', txHash);
       }
     } catch (error) {
       handleTransactionError(error, toast, t);
@@ -341,7 +326,6 @@ export const useTransaction = () => {
           }),
         };
       }
-      console.log('🚀 ~ handleSendPayLink ~ approve:', approve);
 
       const transactionHash = await sendTransaction({
         chainId: transaction.chainId,

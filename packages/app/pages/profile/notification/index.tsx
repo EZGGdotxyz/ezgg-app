@@ -133,7 +133,6 @@ const NotificationScreen = () => {
   };
   const _postSettingUpdateSetting = async (newNotifications = notifications) => {
     setLoading(true);
-    console.log('🚀 ~ const_postSettingUpdateSetting= ~ userInfo:', userInfo);
 
     const res = await makeRequest(
       postSettingUpdateSetting({

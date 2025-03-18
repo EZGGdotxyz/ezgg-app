@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-02-28 15:17:12
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 13:26:18
+ * @LastEditTime: 2025-03-18 16:00:48
  * @FilePath: /ezgg-app/packages/app/config/wagmi.ts
  */
 import {createConfig, http} from 'wagmi';
