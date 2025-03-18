@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 15:34:31
+ * @LastEditTime: 2025-03-18 13:38:59
  * @FilePath: /ezgg-app/packages/app/pages/home/success/index.tsx
  */
 import {
@@ -125,14 +125,22 @@ const SuccessScreen = () => {
     }
   };
 
+  const isPersonal = () => {
+    if (orderData?.transactionCategory === 'REQUEST') {
+      return orderData?.receiverMember?.id !== userInfo?.customMetadata?.id;
+    } else {
+      return orderData?.senderMember?.id !== userInfo?.customMetadata?.id;
+    }
+  };
+
   return (
     <PermissionPage>
       <Header />
       <YStack flex={1} jc={'space-between'}>
         <SuccessInfo type={params?.type} orderData={orderData} />
 
-        {orderData?.transactionType === 'PAY_LINK' ||
-          (orderData?.transactionType === 'REQUEST_LINK' && (
+        {(orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') &&
+          !isPersonal() && (
             <YStack pb={appScale(16)} pt={appScale(16)} pl={appScale(24)} pr={appScale(24)}>
               <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#616161'} fontWeight={'500'}>
                 {t('home.send.tips1')}
@@ -141,7 +149,7 @@ const SuccessScreen = () => {
                 {t('home.send.tips2')}
               </SizableText>
             </YStack>
-          ))}
+          )}
       </YStack>
       {isLoading && <AppLoading />}
       <SharePopup
@@ -152,7 +160,7 @@ const SuccessScreen = () => {
         })}
         shareUrl={shareUrl}
       />
-      {(orderData?.transactionCategory === 'SEND' || orderData?.transactionCategory === 'REQUEST') && (
+      {(orderData?.transactionCategory === 'SEND' || orderData?.transactionCategory === 'REQUEST') && !isPersonal() && (
         <XStack
           flexShrink={0}
           pl={appScale(24)}
@@ -175,6 +183,7 @@ const SuccessScreen = () => {
             bc={'#fff'}
             borderWidth={2}
             borderColor={PrimaryColor}
+            color={'#212121'}
             onPress={() => {
               if (orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') {
                 window.open(
@@ -205,6 +214,7 @@ const SuccessScreen = () => {
             jc={'center'}
             bc={'#fff'}
             borderWidth={2}
+            color={'#212121'}
             borderColor={PrimaryColor}
             onPress={() => {
               if (orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') {

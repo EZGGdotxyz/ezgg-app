@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-16 23:22:10
+ * @LastEditTime: 2025-03-18 14:08:58
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -23,6 +23,7 @@ import {
   postTransactionPayLinkFindPayLink,
   postTransactionPayLinkUpdateTransactionHash,
 } from 'app/servers/api/transactionPayLink';
+import {handleTransactionError} from 'app/utils/error';
 
 export interface TransactionParams {
   platform: 'ETH' | 'SOLANA';
@@ -58,7 +59,7 @@ export const useTransaction = () => {
       const res = await makeRequest(
         params.isPayLink
           ? postTransactionPayLinkUpdateTransactionHash({
-              transactionCode: params.transactionCode,
+              transactionCode: params.transactionCode!,
               transactionHash: params.transactionHash,
             })
           : postTransactionHistoryUpdateTransactionHash({
@@ -66,6 +67,7 @@ export const useTransaction = () => {
               transactionHash: params.transactionHash,
             }),
       );
+      console.log('🚀 ~ handleTransactionSuccess ~ res:', res);
 
       if (res?.code === '0') {
         onSuccess?.(res?.data || {});
@@ -73,11 +75,7 @@ export const useTransaction = () => {
         throw new Error('Update transaction hash failed');
       }
     } catch (error) {
-      console.error('Handle transaction success error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
-      throw error;
+      handleTransactionError(error, toast, t);
     }
   };
 
@@ -90,7 +88,45 @@ export const useTransaction = () => {
       }
       return transaction.data;
     } catch (error) {
-      console.error('Create transaction error:', error);
+      handleTransactionError(error, toast, t);
+      throw error;
+    }
+  };
+
+  const deployAA = async (baseClient: any) => {
+    const isAADeployed = await baseClient.account.isDeployed();
+    console.log('AA20 Account Deployment:', isAADeployed);
+    if (!isAADeployed) {
+      const txHash = await baseClient.sendTransaction({
+        to: '0x0000000000000000000000000000000000000000', // 发送给 0 地址
+        value: 0n, // 0 ETH
+        gas: 21000n, // 21000
+      });
+      console.log('AA20 Account Deployment TX:', txHash);
+    }
+  };
+
+  const deployAA2 = async (chainId: any) => {
+    try {
+      const baseClient = await getClientForChain({
+        id: chainId,
+      });
+
+      if (!baseClient) {
+        throw new Error('Failed to get client for chain');
+      }
+      const isAADeployed = await baseClient.account.isDeployed();
+      console.log('AA20 Account Deployment:', isAADeployed);
+      if (!isAADeployed) {
+        const txHash = await baseClient.sendTransaction({
+          to: '0x0000000000000000000000000000000000000000', // 发送给 0 地址
+          value: 0n, // 0 ETH
+          gas: 21000n, // 21000
+        });
+        console.log('AA20 Account Deployment TX:', txHash);
+      }
+    } catch (error) {
+      handleTransactionError(error, toast, t);
       throw error;
     }
   };
@@ -111,6 +147,8 @@ export const useTransaction = () => {
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
       }
+
+      // await deployAA(baseClient);
 
       return await baseClient.sendTransaction(
         {
@@ -143,7 +181,7 @@ export const useTransaction = () => {
         // },
       );
     } catch (error) {
-      console.error('Send transaction error:', error);
+      handleTransactionError(error, toast, t);
       throw error;
     }
   };
@@ -221,25 +259,7 @@ export const useTransaction = () => {
         onSuccess,
       );
     } catch (error) {
-      console.error('Send pay link error:', error);
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
-      }
-      throw error;
+      handleTransactionError(error, toast, t);
     }
   };
 
@@ -268,6 +288,7 @@ export const useTransaction = () => {
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
       }
+      // await deployAA(baseClient);
 
       const transactionHash = await baseClient.sendTransaction(
         {
@@ -275,7 +296,7 @@ export const useTransaction = () => {
           data: encodeFunctionData({
             abi: TokenLinkContract.abi,
             functionName: 'withdraw',
-            args: [orderData?.transactionCode,getAddress(payLink.data.senderWalletAddress!), payLink.data.otp],
+            args: [orderData?.transactionCode, getAddress(payLink.data.senderWalletAddress!), payLink.data.otp],
           }),
         },
         {
@@ -295,26 +316,7 @@ export const useTransaction = () => {
         onSuccess,
       );
     } catch (error) {
-      console.error('Send pay link submit error:', error);
-
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
-      }
-      throw error;
+      handleTransactionError(error, toast, t);
     }
   };
 
@@ -382,11 +384,7 @@ export const useTransaction = () => {
         onSuccess,
       );
     } catch (error) {
-      console.error('Send submit error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
-      throw error;
+      handleTransactionError(error, toast, t);
     }
   };
 
@@ -399,25 +397,7 @@ export const useTransaction = () => {
       }
       await onSendContract(transaction, onSuccess);
     } catch (error) {
-      console.error('Send submit error:', error);
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
-      }
-      throw error;
+      handleTransactionError(error, toast, t);
     }
   };
 
@@ -427,11 +407,7 @@ export const useTransaction = () => {
       const transaction = await createTransaction(params);
       onSuccess?.(transaction);
     } catch (error) {
-      console.error('Request submit error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
-      throw error;
+      handleTransactionError(error, toast, t);
     }
   };
 
@@ -446,6 +422,7 @@ export const useTransaction = () => {
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
       }
+      // await deployAA(baseClient);
 
       const transactionHash = await baseClient.sendTransaction(
         {
@@ -472,25 +449,7 @@ export const useTransaction = () => {
         onSuccess,
       );
     } catch (error) {
-      console.error('Withdraw error:', error);
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.transactionFailed'), {
-          duration: 3000,
-        });
-      }
-      throw error;
+      handleTransactionError(error, toast, t);
     }
   };
 
@@ -502,11 +461,7 @@ export const useTransaction = () => {
         onSuccess(transaction);
       }
     } catch (error) {
-      console.error('Deposit error:', error);
-      toast.show(t('tips.error.networkError'), {
-        duration: 3000,
-      });
-      throw error;
+      handleTransactionError(error, toast, t);
     }
   };
 
@@ -521,5 +476,6 @@ export const useTransaction = () => {
     onDeposit,
     onSendPayLinkSubmit,
     onSendContract,
+    deployAA2,
   };
 };

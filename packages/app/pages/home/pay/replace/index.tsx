@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-16 22:15:00
+ * @LastEditTime: 2025-03-18 13:39:15
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/replace/index.tsx
  */
 import {
@@ -47,6 +47,8 @@ import {
   getTransactionHistoryFindTransactionHistoryId,
   postTransactionHistoryUpdateNetworkFee,
 } from 'app/servers/api/transactionHistory';
+import {getBalanceFindBalance} from 'app/servers/api/balance';
+import {handleTransactionError} from 'app/utils/error';
 
 const {useParams} = createParam<any>();
 
@@ -67,14 +69,14 @@ const ReplaceScreen = ({type}: any) => {
   const [orderData, setOrderData] = React.useState<any>();
 
   const {back, replace, push} = useRouter();
-  const {onSendSubmit, onRequestSubmit, createTransaction} = useTransaction();
+  const {onSendSubmit, onRequestSubmit, deployAA2} = useTransaction();
   const [replaceCurrencyData, setReplaceCurrencyData] = React.useState<any>();
-
 
   const _onSendContract = async () => {
     try {
       setIsLoading(true);
-      const feeData = await makeRequest(
+      await deployAA2(Number(orderData?.chainId));
+      const feeData: any = await makeRequest(
         postTransactionHistoryUpdateNetworkFee({
           transactionCode: orderData.transactionCode,
           tokenContractAddress: replaceCurrencyData?.token?.address,
@@ -82,6 +84,30 @@ const ReplaceScreen = ({type}: any) => {
       );
       if (!feeData?.data?.id) {
         throw new Error('Failed to create pay link');
+      }
+      const res: any = await makeRequest(
+        getBalanceFindBalance({
+          platform: orderData?.platform,
+          chainId: orderData?.chainId,
+          address: replaceCurrencyData?.token?.address,
+          currency: String(orderData?.currency || 'usd').toLowerCase(),
+        }),
+      );
+
+      if (res?.data?.tokenAmount) {
+        // 考虑代币精度，将小数转换为整数
+        const tokenAmountStr = String(res?.data?.tokenAmount);
+        const [integerPart = '0', decimalPart = ''] = tokenAmountStr.split('.');
+        const decimals = feeData?.data?.tokenDecimals || 18;
+
+        // 补齐精度位数
+        const paddedDecimal = decimalPart.padEnd(decimals, '0');
+        const fullIntegerAmount = integerPart + paddedDecimal;
+        // 转换为 BigInt
+        const tokenAmount = BigInt(fullIntegerAmount);
+        if (tokenAmount < BigInt(feeData?.data?.totalTokenCost)) {
+          throw new Error('insufficient balance');
+        }
       }
       await onSendSubmit(
         {
@@ -97,23 +123,7 @@ const ReplaceScreen = ({type}: any) => {
         },
       );
     } catch (error) {
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
-      }
+      handleTransactionError(error, toast, t);
     } finally {
       setIsLoading(false);
     }
@@ -187,6 +197,7 @@ const ReplaceScreen = ({type}: any) => {
           bc={'#fff'}
           borderWidth={2}
           borderColor={PrimaryColor}
+          color={'#212121'}
           onPress={() => {
             // back();
             replace('/');

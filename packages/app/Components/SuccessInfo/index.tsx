@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-14 16:07:54
+ * @LastEditTime: 2025-03-17 15:52:09
  * @FilePath: /ezgg-app/packages/app/Components/SuccessInfo/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -41,23 +41,40 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
       const isRequest = orderData?.transactionCategory === 'REQUEST';
       let _title = '';
       let sideName: any = '';
+
       if (isRequest) {
         if (isReceiver) {
+          // 当前用户收到付款请求（将要支出）
+          _title = t(`home.history.request.${orderData?.transactionType}.title`, {
+            name: orderData?.senderMember?.nickname,
+          });
           sideName = orderData?.senderMember?.nickname;
         } else {
+          // 当前用户发起付款请求（将要收入）
+          _title = t(`home.history.send.${orderData?.transactionType}.title`, {
+            name: orderData?.receiverMember?.nickname,
+          });
           sideName = orderData?.receiverMember?.nickname;
         }
       } else {
         if (isReceiver) {
+          // 当前用户是接收方（收入）
+          _title = t(`home.history.request.${orderData?.transactionType}.title`, {
+            name: orderData?.senderMember?.nickname,
+          });
           sideName = orderData?.senderMember?.nickname;
         } else {
+          // 当前用户是发送方（支出）
+          _title = t(`home.history.send.${orderData?.transactionType}.title`, {
+            name: orderData?.receiverMember?.nickname,
+          });
           sideName = orderData?.receiverMember?.nickname;
         }
       }
 
       const infoDataDefault = {
         SEND: {
-          title: `${t('home.order.sentTo')} @${orderData?.receiverMember?.nickname}`,
+          title: _title,
           icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
@@ -66,7 +83,7 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           ],
         },
         QR_CODE: {
-          title: `${t('home.order.sentTo')} @${orderData?.receiverMember?.nickname}`,
+          title: _title,
           icon: '',
           infoList: [
             createTransactionInfoItem(t('home.order.youSent'), createAmountDisplay(orderData)),
@@ -84,10 +101,14 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           ],
         },
         REQUEST: {
-          title: `${t('home.request')} @${orderData?.senderMember?.nickname}`,
+          title: _title,
           icon: '',
           infoList: [
-            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            // createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(
+              isReceiver ? t('home.order.youRequested') : t('home.order.amountRequested'),
+              createAmountDisplay(orderData),
+            ),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
             // createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
             //   isStatus: true,
@@ -96,10 +117,15 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           ],
         },
         REQUEST_QR_CODE: {
-          title: `${t('home.request')} @${orderData?.senderMember?.nickname}`,
+          // title: `${t('home.request')} @${orderData?.senderMember?.nickname}`,
+          title: _title,
           icon: '',
           infoList: [
-            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            // createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(
+              isReceiver ? t('home.order.youRequested') : t('home.order.amountRequested'),
+              createAmountDisplay(orderData),
+            ),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
             // createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
             //   isStatus: true,
@@ -111,7 +137,11 @@ const SuccessInfo: React.FC<any> = ({type, orderData = {}}: SuccessInfoProps) =>
           title: '',
           icon: '',
           infoList: [
-            createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            // createTransactionInfoItem(t('home.order.youRequested'), createAmountDisplay(orderData)),
+            createTransactionInfoItem(
+              isReceiver ? t('home.order.youRequested') : t('home.order.amountRequested'),
+              createAmountDisplay(orderData),
+            ),
             createTransactionInfoItem(t('home.order.networkFee'), createNetworkFeeDisplay(orderData)),
             // createTransactionInfoItem(t('home.order.status'), createStatusDisplay(orderData?.transactionStatus), {
             //   isStatus: true,

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-16 23:24:38
+ * @LastEditTime: 2025-03-18 14:53:41
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -21,18 +21,12 @@ import {
 import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
-import Keyboard from 'app/Components/Keyboard';
 import AppButton from 'app/Components/AppButton';
-import {StyleSheet} from 'react-native';
 import {convertAmountToTokenDecimals, formatNumber, formatTokenAmount, getUserSubName, isIphoneX} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
-import Currency from 'app/Components/Currency';
-import PageLoading from 'app/Components/PageLoading';
-import {ChevronDown, ChevronRight} from '@tamagui/lucide-icons';
 import {createParam} from 'solito';
 import {AppName, PrimaryColor} from 'app/config';
-import SuccessInfo from 'app/Components/SuccessInfo';
 import {
   getTransactionHistoryFindTransactionHistoryCodeTransactionCode,
   postTransactionHistoryCreateTransactionHistory,
@@ -43,22 +37,14 @@ import useRequest from 'app/hooks/useRequest';
 import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import {useRematchModel} from 'app/store/model';
-import {useSmartWallets} from '@privy-io/react-auth/smart-wallets';
-import {encodeFunctionData, erc721Abi, erc20Abi, createPublicClient, http, getAddress} from 'viem';
-import TokenTransferContract from 'app/abi/TokenTransfer.json';
-import {
-  postTransactionPayLinkCreatePayLink,
-  postTransactionPayLinkFindPayLink,
-  postTransactionPayLinkUpdateTransactionHash,
-} from 'app/servers/api/transactionPayLink';
 import AppLoading from 'app/Components/AppLoading';
 import {getChainInfo} from 'app/utils/chain';
 import {TokenIcon} from '@web3icons/react';
-import TokenLinkContract from 'app/abi/TokenLink.json';
 import {useTransaction} from 'app/hooks/useTransaction';
 import useResponse from 'app/hooks/useResponse';
 import PayPopup from 'app/Components/PayPopup';
 import {getBalanceFindBalance} from 'app/servers/api/balance';
+import {handleTransactionError} from 'app/utils/error';
 
 const {useParams} = createParam<any>();
 
@@ -70,7 +56,6 @@ const TakeScreen = (any) => {
   const [{userInfo, isLogin}] = useRematchModel('user');
   const {appScale} = useResponse();
 
-  const [inputValue, setInputValue] = React.useState('');
   const {params} = useParams();
   const [isLoading, setIsLoading] = React.useState(false);
   const toast = useToastController();
@@ -79,7 +64,7 @@ const TakeScreen = (any) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const {back, push, replace} = useRouter();
 
-  const {onSendPayLinkSubmit, onSendContract} = useTransaction();
+  const {onSendPayLinkSubmit, onSendContract,deployAA2} = useTransaction();
 
   const handleSubmit = async (type: 'SEND' | 'REQUEST') => {
     try {
@@ -94,6 +79,7 @@ const TakeScreen = (any) => {
           }, 500);
         });
       } else {
+        await deployAA2(Number(orderData?.chainId));
         const feeData = await makeRequest(
           postTransactionHistoryUpdateNetworkFee({
             transactionCode: orderData.transactionCode,
@@ -130,7 +116,19 @@ const TakeScreen = (any) => {
 
           console.log('🚀 ~ onAcceptRequest ~ tokenAmount:', tokenAmount);
 
-          if (tokenAmount < BigInt(orderData?.amount)) {
+          // 确保数值有效并进行安全的计算
+          const amount = BigInt(orderData?.amount || 0);
+          const networkFeeCost = BigInt(orderData?.networkFee?.totalTokenCost || 0);
+          const totalRequired = amount + networkFeeCost;
+
+          console.log('检查余额:', {
+            amount: amount.toString(),
+            networkFeeCost: networkFeeCost.toString(),
+            totalRequired: totalRequired.toString(),
+            tokenAmount: tokenAmount.toString(),
+          });
+
+          if (tokenAmount < totalRequired) {
             throw new Error('insufficient balance');
           }
         }
@@ -152,24 +150,7 @@ const TakeScreen = (any) => {
         );
       }
     } catch (error) {
-      console.error(`${type} transaction error:`, error);
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
-      }
+      handleTransactionError(error, toast, t);
     } finally {
       setIsLoading(false);
     }

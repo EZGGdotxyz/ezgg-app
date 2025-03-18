@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 17:50:33
+ * @LastEditTime: 2025-03-18 14:30:52
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -89,7 +89,7 @@ const SuccessPopup: React.FC<any> = ({
   };
 
   return (
-    <AppModal zIndex={12} setModalVisible={setModalVisible} modalVisible={modalVisible}>
+    <AppModal isExit={false} zIndex={12} setModalVisible={setModalVisible} modalVisible={modalVisible}>
       <YStack
         // h={140}
         w={'90%'}

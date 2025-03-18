@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-26 14:21:05
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 16:27:21
+ * @LastEditTime: 2025-03-17 22:13:31
  * @FilePath: /ezgg-app/apps/next/pages/_app.tsx
  */
 import '@tamagui/core/reset.css';
@@ -10,7 +10,7 @@ import '../style/global.css';
 import '../style/react-photo-view.css';
 import '@tamagui/font-inter/css/700.css';
 import 'raf/polyfill';
-import {AppName, PrimaryColor} from 'app/config';
+import {AppName, PrimaryColor, PRIVY_APP_ID} from 'app/config';
 
 import {NextThemeProvider, useRootTheme} from '@tamagui/next-theme';
 import i18n from 'app/locales/index';
@@ -94,7 +94,7 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
         />
       </Head>
       <PrivyProvider
-        appId="cm74gcbre00h972np2f6bdut8"
+        appId={PRIVY_APP_ID}
         config={{
           loginMethods: ['email', 'google', 'wallet'],
           appearance: {
@@ -105,7 +105,6 @@ function MyApp({Component, pageProps}: SolitoAppProps) {
           embeddedWallets: {
             createOnLogin: 'all-users',
           },
-          // useFirstPartyCookies:true
         }}
       >
         <SmartWalletsProvider>

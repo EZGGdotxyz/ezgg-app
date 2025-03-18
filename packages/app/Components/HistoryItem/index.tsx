@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-13 17:53:50
+ * @LastEditTime: 2025-03-18 13:59:55
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, debounce} from '@my/ui';
@@ -274,7 +274,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({item, isBottom = false, onClic
       </XStack>
       <XStack w="100%" jc={'space-between'} mb={'$2'}>
         <SizableText color={'#9395A4'} size={'$1'} fow={'500'}>
-          {dayjs(item?.createAt).format('HH:mm A')}
+          {dayjs(item?.updateAt).format('HH:mm A')}
         </SizableText>
       </XStack>
       {!isBottom && <XStack h={2} width={'80%'} bc={'rgba(238, 238, 238, 1)'}></XStack>}

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:17:34
+ * @LastEditTime: 2025-03-18 13:39:26
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/components/ContactItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -41,6 +41,7 @@ const ContactItem: React.FC<any> = ({item, itemKey, onSubmit}: ContactListProps)
       w={'100%'}
       mb={appScale(8)}
       bc={'#fff'}
+      color={'#212121'}
       onPress={() => onSubmit(item)}
     >
       <YStack pos={'relative'} w={appScale(72)} flexShrink={0}>

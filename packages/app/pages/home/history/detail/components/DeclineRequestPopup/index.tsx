@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 16:32:26
+ * @LastEditTime: 2025-03-18 13:40:02
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/DeclineRequestPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -105,6 +105,7 @@ const DeclineRequestPopup: React.FC<DeclineRequestPopupProps> = ({
               bc={'#fff'}
               borderWidth={2}
               borderColor={PrimaryColor}
+              color={'#212121'}
               onPress={() => {
                 setModalVisible(false);
               }}

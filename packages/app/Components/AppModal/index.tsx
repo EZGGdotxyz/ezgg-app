@@ -1,8 +1,8 @@
 /*
  * @Date: 2023-12-08 16:25:15
- * @LastEditors: snapxlabs
- * @LastEditTime: 2024-07-30 16:18:53
- * @FilePath: /snapx-nfc-app/packages/app/Components/AppModal/index.tsx
+ * @LastEditors: yosan
+ * @LastEditTime: 2025-03-18 14:30:43
+ * @FilePath: /ezgg-app/packages/app/Components/AppModal/index.tsx
  */
 import {Button, Paragraph, YStack} from '@my/ui';
 import {PrimaryColor} from 'app/config';
@@ -15,14 +15,17 @@ interface AppButtonProps {
   children: React.ReactNode;
   animationType?: string;
   zIndex: number;
+  isExit?: boolean;
 }
 
 export default function AppModal(props: AppButtonProps) {
-  const {modalVisible, setModalVisible, children, animationType = 'fade', zIndex = 10} = props;
+  const {modalVisible, setModalVisible, children, animationType = 'fade', zIndex = 10, isExit = true} = props;
   const [app] = useRematchModel('app');
 
   const onExit = () => {
-    setModalVisible(false);
+    if (isExit) {
+      setModalVisible(false);
+    }
   };
 
   return (

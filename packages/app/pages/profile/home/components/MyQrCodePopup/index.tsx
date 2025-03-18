@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:16:14
+ * @LastEditTime: 2025-03-18 13:38:05
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/components/MyQrCodePopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -132,6 +132,7 @@ const MyQrCodePopup: React.FC<any> = ({userId, modalVisible, setModalVisible, se
             ai={'center'}
             jc={'center'}
             bc={'#fff'}
+            color={'#212121'}
             borderWidth={2}
             borderColor={PrimaryColor}
             onPress={() => {

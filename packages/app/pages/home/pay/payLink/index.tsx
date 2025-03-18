@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-16 23:22:46
+ * @LastEditTime: 2025-03-18 15:23:06
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -43,7 +43,9 @@ import {useTransaction} from 'app/hooks/useTransaction';
 import useResponse from 'app/hooks/useResponse';
 import PayPopup from 'app/Components/PayPopup';
 import ReplacePay from 'app/Components/ReplacePay';
-import { postTransactionHistoryUpdateNetworkFee } from 'app/servers/api/transactionHistory';
+import {postTransactionHistoryUpdateNetworkFee} from 'app/servers/api/transactionHistory';
+import {getBalanceFindBalance} from 'app/servers/api/balance';
+import {handleTransactionError} from 'app/utils/error';
 
 const {useParams} = createParam<any>();
 
@@ -65,7 +67,7 @@ const PayLinkScreen = ({type}: any) => {
   const [modalVisible, setModalVisible] = React.useState(false);
 
   const {back, replace, push} = useRouter();
-  const {onSendSubmit, onRequestSubmit, createTransaction} = useTransaction();
+  const {onSendSubmit, onRequestSubmit, createTransaction,deployAA2} = useTransaction();
 
   const createTransactionParams = (type: 'SEND' | 'REQUEST') => {
     const _amount = Number(
@@ -108,6 +110,7 @@ const PayLinkScreen = ({type}: any) => {
         const transaction = await createTransaction(params);
         if (transaction?.transactionCode) {
           if (transaction?.tokenFeeSupport) {
+            await deployAA2(Number(transaction?.chainId));
             const feeData = await makeRequest(
               postTransactionHistoryUpdateNetworkFee({
                 transactionCode: transaction.transactionCode,
@@ -120,7 +123,7 @@ const PayLinkScreen = ({type}: any) => {
             setModalVisible(true);
             setOrderData({
               ...transaction,
-              networkFee:feeData?.data
+              networkFee: feeData?.data,
             });
           } else {
             replace('/home/replace?id=' + transaction?.id);
@@ -140,24 +143,7 @@ const PayLinkScreen = ({type}: any) => {
         });
       }
     } catch (error) {
-      console.error(`${type} transaction error:`, error);
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
-      }
+      handleTransactionError(error, toast, t);
     } finally {
       setIsLoading(false);
     }
@@ -166,34 +152,42 @@ const PayLinkScreen = ({type}: any) => {
   const _onSendContract = async () => {
     try {
       setIsLoading(true);
-      await onSendSubmit(
-        orderData,
-        (data) => {
-          setIsLoading(false);
-          replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
-          setTimeout(() => {
-            dispatch.user.updateState({payLinkData: {}});
-          });
-        },
+
+      const res: any = await makeRequest(
+        getBalanceFindBalance({
+          platform: orderData?.platform,
+          chainId: orderData?.chainId,
+          address: orderData?.tokenContractAddress,
+          currency: String(orderData?.currency || 'usd').toLowerCase(),
+        }),
       );
-    } catch (error) {
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
+      if (res?.data?.tokenAmount) {
+        // 考虑代币精度，将小数转换为整数
+        const tokenAmountStr = String(res?.data?.tokenAmount);
+        const [integerPart = '0', decimalPart = ''] = tokenAmountStr.split('.');
+        const decimals = orderData?.tokenDecimals || 18;
+
+        // 补齐精度位数
+        const paddedDecimal = decimalPart.padEnd(decimals, '0');
+        const fullIntegerAmount = integerPart + paddedDecimal;
+
+        // 转换为 BigInt
+        const tokenAmount = BigInt(fullIntegerAmount);
+        if (tokenAmount < BigInt(orderData?.amount + Number(orderData?.networkFee?.totalTokenCost))) {
+          throw new Error('insufficient balance');
+        }
       }
+
+      await onSendSubmit(orderData, (data) => {
+        console.log("🚀 ~ awaitonSendSubmit ~ data:", data)
+        setIsLoading(false);
+        replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
+        setTimeout(() => {
+          dispatch.user.updateState({payLinkData: {}});
+        });
+      });
+    } catch (error) {
+      handleTransactionError(error, toast, t);
     } finally {
       setIsLoading(false);
     }
@@ -308,6 +302,7 @@ const PayLinkScreen = ({type}: any) => {
               rows={6}
               fontSize={'$3'}
               lh={appScale(30)}
+              color={'#212121'}
               value={inputValue}
               onChangeText={setInputValue}
               borderColor={'#FAFAFA'}
@@ -339,6 +334,7 @@ const PayLinkScreen = ({type}: any) => {
           bc={'#fff'}
           borderWidth={2}
           borderColor={PrimaryColor}
+          color={'#212121'}
           onPress={() => {
             // back();
             replace('/');

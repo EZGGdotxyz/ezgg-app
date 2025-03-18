@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-16 23:11:06
+ * @LastEditTime: 2025-03-18 13:40:12
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/AcceptRequestPopup/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController, YStack} from '@my/ui';
@@ -28,6 +28,7 @@ import useResponse from 'app/hooks/useResponse';
 import {formatTokenAmount, isIphoneX} from 'app/utils';
 import {getBalanceFindBalance} from 'app/servers/api/balance';
 import {useTransaction} from 'app/hooks/useTransaction';
+import {handleTransactionError} from 'app/utils/error';
 
 interface AcceptRequestPopupProps {
   modalVisible: boolean;
@@ -48,10 +49,9 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
   const {appScale} = useResponse();
   const {back, replace, push} = useRouter();
 
-  const {getClientForChain} = useSmartWallets();
   const {makeRequest} = useRequest();
   const toast = useToastController();
-  const {onSendPayLinkSubmit, onSendContract} = useTransaction();
+  const {onSendPayLinkSubmit, onSendContract,deployAA2} = useTransaction();
 
   const onAcceptRequest = async () => {
     try {
@@ -60,6 +60,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
         return replace('/home/replace?id=' + orderData?.id);
       }
       setIsLoading(true);
+      await deployAA2(Number(orderData?.chainId));
 
       const feeData = await makeRequest(
         postTransactionHistoryUpdateNetworkFee({
@@ -93,9 +94,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
         // 转换为 BigInt
         const tokenAmount = BigInt(fullIntegerAmount);
 
-        console.log('🚀 ~ onAcceptRequest ~ tokenAmount:', tokenAmount);
-
-        if (tokenAmount < BigInt(orderData?.amount)) {
+        if (tokenAmount < BigInt(orderData?.amount + Number(orderData?.networkFee?.totalTokenCost))) {
           throw new Error('insufficient balance');
         }
       }
@@ -106,59 +105,19 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
           networkFee: feeData?.data,
         },
         (data) => {
-          console.log('🚀 ~ onAcceptRequest ~ data:', data);
-
           setIsLoading(false);
           toast.show(t('tips.success.acceptRequest'), {
             duration: 3000,
           });
           onSuccess();
-          // dispatch.user.updateState({payLinkData: {}});
         },
       );
-
-      // await handleTransactionSuccess(transactionHash);
-      // onSuccess();
     } catch (error) {
-      console.error('Send transaction error:', error);
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
-      }
+      handleTransactionError(error, toast, t);
     } finally {
       setIsLoading(false);
     }
   };
-
-  // const handleTransactionSuccess = async (transactionHash?: string) => {
-  //   if (orderData?.transactionCode && transactionHash) {
-  //     const res: any = await makeRequest(
-  //       postTransactionHistoryUpdateTransactionHash({
-  //         id: orderData?.id,
-  //         transactionHash,
-  //       }),
-  //     );
-  //     if (res?.data) {
-  //       setIsLoading(false);
-  //       toast.show(t('tips.success.acceptRequest'), {
-  //         duration: 3000,
-  //       });
-  //     }
-  //   }
-  // };
 
   const onSubmit = () => {
     setModalVisible(false);
@@ -233,6 +192,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
               bc={'#fff'}
               borderWidth={2}
               borderColor={PrimaryColor}
+              color={'#212121'}
               onPress={() => {
                 setModalVisible(false);
               }}

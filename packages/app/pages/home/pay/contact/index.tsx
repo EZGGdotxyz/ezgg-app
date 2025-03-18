@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:17:37
+ * @LastEditTime: 2025-03-18 14:32:38
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/contact/index.tsx
  */
 import {
@@ -65,6 +65,7 @@ const SendToScreen = ({isRefresh, type}: any) => {
     };
     if (search) {
       params.search = search;
+      params.recent = false;
     }
     const res = await makeRequest(getUserPageMember(params));
     if (res?.data?.record && res?.data?.record.length > 0) {

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-16 23:24:27
+ * @LastEditTime: 2025-03-17 14:28:26
  * @FilePath: /ezgg-app/packages/app/Components/ReplacePay/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -124,11 +124,14 @@ const ReplacePay: React.FC<ReplacePayProps> = ({
           {t('home.paylink.replacePay.tips', {token: orderData?.tokenSymbol})}
         </SizableText>
 
-        <Currency
-          setIsLoading={setIsLoading}
-          currencyData={replaceCurrencyData}
-          setCurrencyData={setReplaceCurrencyData}
-        />
+        {orderData?.chainId && (
+          <Currency
+            chainId={orderData?.chainId}
+            setIsLoading={setIsLoading}
+            currencyData={replaceCurrencyData}
+            setCurrencyData={setReplaceCurrencyData}
+          />
+        )}
       </YStack>
     </YStack>
   );

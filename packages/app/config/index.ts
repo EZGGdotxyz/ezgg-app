@@ -1,13 +1,9 @@
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-15 23:18:06
+ * @LastEditTime: 2025-03-18 09:48:34
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
-export const ExternalLinkData = {
-  webPageHome: 'https://app.catfoodworks.com',
-};
-
 // 主题色
 export const PrimaryColor = '#FEB54F';
 
@@ -17,7 +13,6 @@ export const DefaultLanguage = 'en_US';
 
 export const AppName = 'ezgg.xyz';
 export const MAX_WIDTH = 768;
-
 
 export const CurrencyList = [
   {
@@ -59,13 +54,19 @@ export const CurrencyList = [
 ];
 
 // 是否生产环境
-const isRelease = false;
+const isRelease = true;
 
 // api 请求接口
 export const APP_URL = isRelease ? 'https://api.ezgg.xyz' : 'https://apiv2.catfoodworks.com';
 
-// export const APP_URL = isRelease ? 'https://api.ezgg.xyz' : 'https://api.ezgg.xyz';
+// export const APP_URL = isRelease ? '/api/' : 'https://apiv2.catfoodworks.com';
 
+// privy id
+export const PRIVY_APP_ID = isRelease ? 'cm8csbmfc018vhknhlq3ltrgq' : 'cm74gcbre00h972np2f6bdut8';
 
 // 区块链网路类型：MAIN 主网；TEST 测试网；DEV 开发网
 export const NETWORK = isRelease ? 'MAIN' : 'TEST';
+
+export const ExternalLinkData = {
+  webPageHome: isRelease ? 'https://www.ezgg.xyz' : 'https://app.catfoodworks.com',
+};

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-16 23:22:50
+ * @LastEditTime: 2025-03-18 13:40:32
  * @FilePath: /ezgg-app/packages/app/pages/explore/amount/index.tsx
  */
 import {
@@ -39,7 +39,9 @@ import {getUserFindUserIdId} from 'app/servers/api/member';
 import useRequest from 'app/hooks/useRequest';
 import useResponse from 'app/hooks/useResponse';
 import PayPopup from 'app/Components/PayPopup';
-import { postTransactionHistoryUpdateNetworkFee } from 'app/servers/api/transactionHistory';
+import {postTransactionHistoryUpdateNetworkFee} from 'app/servers/api/transactionHistory';
+import {getBalanceFindBalance} from 'app/servers/api/balance';
+import {handleTransactionError} from 'app/utils/error';
 
 const {useParams} = createParam<any>();
 
@@ -60,7 +62,7 @@ const AmountScreen = () => {
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const {back, push, replace} = useRouter();
   const {params} = useParams();
-  const {onSendSubmit, onRequestSubmit, createTransaction} = useTransaction();
+  const {onSendSubmit, onRequestSubmit, createTransaction,deployAA2} = useTransaction();
   const {makeRequest} = useRequest();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [orderData, setOrderData] = React.useState<any>();
@@ -138,6 +140,7 @@ const AmountScreen = () => {
         const transaction = await createTransaction(_params);
         if (transaction?.transactionCode) {
           if (transaction?.tokenFeeSupport) {
+            await deployAA2(Number(transaction?.chainId));
             const feeData = await makeRequest(
               postTransactionHistoryUpdateNetworkFee({
                 transactionCode: transaction.transactionCode,
@@ -150,7 +153,7 @@ const AmountScreen = () => {
             setModalVisible(true);
             setOrderData({
               ...transaction,
-              networkFee:feeData?.data
+              networkFee: feeData?.data,
             });
           } else {
             replace('/home/replace?id=' + transaction?.id);
@@ -167,24 +170,7 @@ const AmountScreen = () => {
         });
       }
     } catch (error) {
-      console.error(`${type} transaction error:`, error);
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
-      }
+      handleTransactionError(error, toast, t);
     } finally {
       setIsLoading(false);
     }
@@ -193,31 +179,37 @@ const AmountScreen = () => {
   const _onSendContract = async () => {
     try {
       setIsLoading(true);
-      await onSendSubmit(
-        orderData,
-        (data) => {
-          setIsLoading(false);
-          replace('/home/success?type=QR_CODE&id=' + data?.id);
-        },
+
+      const res: any = await makeRequest(
+        getBalanceFindBalance({
+          platform: orderData?.platform,
+          chainId: orderData?.chainId,
+          address: orderData?.tokenContractAddress,
+          currency: String(orderData?.currency || 'usd').toLowerCase(),
+        }),
       );
-    } catch (error) {
-      if (error?.message.includes('The user rejected the request')) {
-        toast.show(t('tips.error.userRejected'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient allowance')) {
-        toast.show(t('tips.error.insufficientAllowance'), {
-          duration: 3000,
-        });
-      } else if (error?.message.includes('insufficient balance')) {
-        toast.show(t('tips.error.insufficientBalance'), {
-          duration: 3000,
-        });
-      } else {
-        toast.show(t('tips.error.networkError'), {
-          duration: 3000,
-        });
+      if (res?.data?.tokenAmount) {
+        // 考虑代币精度，将小数转换为整数
+        const tokenAmountStr = String(res?.data?.tokenAmount);
+        const [integerPart = '0', decimalPart = ''] = tokenAmountStr.split('.');
+        const decimals = orderData?.tokenDecimals || 18;
+
+        // 补齐精度位数
+        const paddedDecimal = decimalPart.padEnd(decimals, '0');
+        const fullIntegerAmount = integerPart + paddedDecimal;
+
+        // 转换为 BigInt
+        const tokenAmount = BigInt(fullIntegerAmount);
+        if (tokenAmount < BigInt(orderData?.amount + Number(orderData?.networkFee?.totalTokenCost))) {
+          throw new Error('insufficient balance');
+        }
       }
+      await onSendSubmit(orderData, (data) => {
+        setIsLoading(false);
+        replace('/home/success?type=QR_CODE&id=' + data?.id);
+      });
+    } catch (error) {
+      handleTransactionError(error, toast, t);
     } finally {
       setIsLoading(false);
     }
@@ -377,6 +369,7 @@ const AmountScreen = () => {
             bc={'#fff'}
             borderWidth={2}
             borderColor={PrimaryColor}
+            color={'#212121'}
             onPress={() => {
               handlePagePress();
               // setDeclineRequestVisible(true);

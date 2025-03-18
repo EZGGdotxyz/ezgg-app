@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-10 16:44:53
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 15:00:16
+ * @LastEditTime: 2025-03-18 13:21:41
  * @FilePath: /ezgg-app/apps/next/next.config.js
  */
 /** @type {import('next').NextConfig} */
@@ -92,7 +92,7 @@ module.exports = function () {
     //   return [
     //     {
     //       source: '/api/:path*',
-    //       destination: `${'https://4ba43b97.r6.cpolar.top'}/:path*`,
+    //       destination: `${'https://api.ezgg.xyz'}/:path*`,
     //       // source: '/api',
     //       // destination: 'https://4ba43b97.r6.cpolar.top', // 替换为您的实际API域名
     //       // rewrite: (path) => path.replace(/^\/api/, ''),

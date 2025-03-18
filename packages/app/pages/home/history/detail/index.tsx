@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 13:02:51
+ * @LastEditTime: 2025-03-18 13:40:16
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -428,6 +428,7 @@ const HistoryDetailScreen = () => {
             jc={'center'}
             bc={'#fff'}
             borderWidth={2}
+            color={'#212121'}
             borderColor={PrimaryColor}
             onPress={() => {
               window.open(

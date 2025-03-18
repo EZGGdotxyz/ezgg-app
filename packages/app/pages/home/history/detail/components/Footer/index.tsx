@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-07 12:54:04
+ * @LastEditTime: 2025-03-18 13:39:56
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/Footer/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController} from '@my/ui';
@@ -49,6 +49,7 @@ const Footer: React.FC<any> = ({setDeclineRequestVisible, setAcceptRequestVisibl
         bc={'#fff'}
         borderWidth={2}
         borderColor={PrimaryColor}
+        color={'#212121'}
         onPress={() => {
           setDeclineRequestVisible(true);
         }}

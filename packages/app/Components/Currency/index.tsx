@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-13 18:01:08
+ * @LastEditTime: 2025-03-17 14:25:47
  * @FilePath: /ezgg-app/packages/app/Components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -22,11 +22,12 @@ export type CurrencyProps = {
   setCurrencyData: (currency: any) => void;
   setIsLoading: (isLoading: boolean) => void;
   isRequest?: boolean;
+  chainId?: number;
 };
 
 // 交易历史item
 const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
-  ({currencyData, setCurrencyData, setIsLoading, isRequest = false}: CurrencyProps, ref) => {
+  ({currencyData, setCurrencyData, setIsLoading, isRequest = false, chainId}: CurrencyProps, ref) => {
     const {push} = useRouter();
     const {appScale} = useResponse();
     const {getAllBalances, convertToChainGroups, loading} = useBlockchain();
@@ -49,7 +50,8 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
     const fetchBalances = async () => {
       try {
         setIsLoading(true);
-        const tokenList = await getAllBalances();
+
+        const tokenList = await getAllBalances(false, chainId);
         const sortedData = convertToChainGroups(tokenList);
 
         if (sortedData.length > 0 && sortedData[0].tokenList.length > 0) {

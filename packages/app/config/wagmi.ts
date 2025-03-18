@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-02-28 15:17:12
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 14:01:15
+ * @LastEditTime: 2025-03-18 13:26:18
  * @FilePath: /ezgg-app/packages/app/config/wagmi.ts
  */
 import {createConfig, http} from 'wagmi';
@@ -11,12 +11,13 @@ import {bsc, polygon, base, baseSepolia, polygonAmoy, bscTestnet} from 'wagmi/ch
 
 import {createClient} from 'viem';
 import {injected, metaMask, safe, walletConnect} from 'wagmi/connectors';
+import {NETWORK} from '.';
 
 const projectId = 'e2a7b198dd86bf327980143954b10234';
 
 const config = createConfig({
   // chains: [base, polygon, bsc],
-  chains: [baseSepolia, polygonAmoy, bscTestnet],
+  chains: NETWORK === 'MAIN' ? [base, polygon, bsc] : [baseSepolia, polygonAmoy, bscTestnet],
   client({chain}) {
     return createClient({chain, transport: http()});
   },

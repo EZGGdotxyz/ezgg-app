@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-13 17:56:26
+ * @LastEditTime: 2025-03-18 13:40:07
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/CancelPayLinkPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -116,6 +116,7 @@ const CancelPayLinkPopup: React.FC<CancelPayLinkPopupProps> = ({
               bc={'#fff'}
               borderWidth={2}
               borderColor={PrimaryColor}
+              color={'#212121'}
               onPress={() => {
                 setModalVisible(false);
               }}

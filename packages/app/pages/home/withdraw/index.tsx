@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 12:50:43
+ * @LastEditTime: 2025-03-18 15:23:31
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -252,6 +252,7 @@ const WithdrawScreen = () => {
                     fontSize={'$5'}
                     h={appScale(82)}
                     lh={appScale(50)}
+                    color={'#212121'}
                     value={withdrawAddress}
                     onChangeText={setWithdrawAddress}
                     borderColor={'#FAFAFA'}

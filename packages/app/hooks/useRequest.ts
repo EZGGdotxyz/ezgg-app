@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 14:56:30
+ * @LastEditTime: 2025-03-17 21:16:15
  * @FilePath: /ezgg-app/packages/app/hooks/useRequest.ts
  */
 import {useToastController} from '@my/ui';
@@ -11,6 +11,7 @@ import {Dispatch} from 'app/store';
 import {useRouter} from 'solito/router';
 import {usePrivy} from '@privy-io/react-auth';
 import {useCallback, useRef} from 'react';
+import {debounce} from 'lodash';
 
 // 定义API响应类型
 interface ApiResponse<T = any> {
@@ -51,6 +52,8 @@ export default function useRequest() {
 
   // 用于存储请求取消控制器
   const abortControllerRef = useRef<AbortController | null>(null);
+  // 用于存储上一次执行 handleUnauthorized 的时间戳
+  const lastUnauthorizedTimeRef = useRef<number>(0);
 
   // 错误提示常量
   const UNKNOWN_ERROR = t('tips.error.request.default');
@@ -79,7 +82,7 @@ export default function useRequest() {
    * @returns null 表示请求处理失败
    */
   const handleUnauthorized = useCallback(
-    async (showErrorToast = true): Promise<null> => {
+    debounce(async (showErrorToast = true): Promise<null> => {
       try {
         // 先登出Privy
         await logout();
@@ -100,7 +103,7 @@ export default function useRequest() {
       }
 
       return handleRequestError(i18n.t('tips.error.request.unauthorized'), showErrorToast);
-    },
+    }, 2000, {leading: true, trailing: false}),
     [logout, dispatch, replace, handleRequestError, i18n],
   );
 

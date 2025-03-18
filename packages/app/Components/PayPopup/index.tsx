@@ -153,6 +153,7 @@ const PayPopup: React.FC<PayPopupProps> = ({modalVisible, setModalVisible, order
               bc={'#fff'}
               borderWidth={2}
               borderColor={PrimaryColor}
+              color={'#212121'}
               onPress={() => {
                 setModalVisible(false);
               }}

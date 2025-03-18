@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 14:28:34
+ * @LastEditTime: 2025-03-18 13:42:51
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -41,6 +41,15 @@ import {useContractRead} from 'wagmi';
 import useResponse from 'app/hooks/useResponse';
 import Connectors from 'app/Components/Connectors';
 
+// 类型声明
+declare global {
+  interface Window {
+    ethereum?: {
+      request: (args: {method: string; params?: any[]}) => Promise<any>;
+    };
+  }
+}
+
 // 存款
 const DepositScreen = () => {
   const {t} = useTranslation();
@@ -64,9 +73,9 @@ const DepositScreen = () => {
     e.stopPropagation();
     setShowKeyboard(true);
   };
-  const {address} = useAccount();
+  const {address, chain} = useAccount();
 
-  const {data: balance, refetch: refetchBalance} = useReadContract({
+  const {refetch: refetchBalance} = useReadContract({
     address: currencyData?.token?.address as `0x${string}`,
     abi: erc20Abi,
     functionName: 'balanceOf',
@@ -74,6 +83,7 @@ const DepositScreen = () => {
     query: {
       enabled: !!address && !!currencyData?.token?.address,
     },
+    chainId: Number(currencyData?.token?.chainId),
   });
 
   // 执行存款操作
@@ -112,7 +122,7 @@ const DepositScreen = () => {
           console.log('交易记录已创建:', data?.id);
 
           try {
-            console.log("🚀 ~ currencyData:", currencyData)
+            console.log('🚀 ~ currencyData:', currencyData);
             console.log('准备调用转账合约');
             // 调用 USDT 转账，指定链 ID
             writeContract({
@@ -149,11 +159,33 @@ const DepositScreen = () => {
         throw new Error('wallet_not_ready');
       }
 
+      // 检查当前链ID是否匹配
+      const targetChainId = Number(currencyData?.token?.chainId);
+      if (chain?.id !== targetChainId) {
+        console.log('需要切换链:', {current: chain?.id, target: targetChainId});
+        try {
+          await window.ethereum?.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{chainId: `0x${targetChainId.toString(16)}`}],
+          });
+        } catch (switchError: any) {
+          console.error('切换链失败:', switchError);
+          if (switchError?.code === 4902) {
+            toast.show(t('tips.error.deposit.chainNotSupported'));
+          } else {
+            toast.show(t('tips.error.deposit.chainSwitchFailed'));
+          }
+          setIsLoading(false);
+          return;
+        }
+      }
+
       console.log('钱包已连接，准备检查余额:', {
         address,
         token: currencyData?.token?.address,
         amount: inputValue,
       });
+      // onDepositSubmit();
 
       // 刷新余额
       const result = await refetchBalance();
@@ -204,9 +236,15 @@ const DepositScreen = () => {
       }
     } catch (error) {
       console.error('钱包连接后处理失败:', error);
-      toast.show(t('tips.error.deposit.connectionFailed'), {
-        duration: 3000,
-      });
+      if (error?.message?.includes('fetch_balance_failed')) {
+        toast.show(t('tips.error.deposit.insufficientFunds'), {
+          duration: 3000,
+        });
+      } else {
+        toast.show(t('tips.error.deposit.connectionFailed'), {
+          duration: 3000,
+        });
+      }
       setIsLoading(false);
     }
   }, [address, currencyData, inputValue, refetchBalance, onDepositSubmit, t]);
