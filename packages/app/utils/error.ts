@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-17 21:58:18
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-17 22:00:23
+ * @LastEditTime: 2025-03-18 17:35:53
  * @FilePath: /ezgg-app/packages/app/utils/error.ts
  */
 import {useToastController} from '@my/ui';
@@ -9,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 
 // 统一的错误处理方法
 export const handleTransactionError = (error: any, toast: any, t: any) => {
-  console.error('Transaction error:', error);
+  console.log("🚀 ~ handleTransactionError ~ error:", error)
   if (error?.message.includes('The user rejected the request')) {
     toast.show(t('tips.error.userRejected'), {
       duration: 3000,
