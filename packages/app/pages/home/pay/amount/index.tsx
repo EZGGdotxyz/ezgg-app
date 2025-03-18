@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 12:42:34
+ * @LastEditTime: 2025-03-18 22:07:06
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/amount/index.tsx
  */
 import {
@@ -61,10 +61,10 @@ const AmountScreen = ({type}: any) => {
       toast.show(type === 'send' ? t('home.send.amountToSend.tips') : t('home.request.amountToRequest.tips'));
       return;
     }
-    // if (type === 'send' && Number(inputValue) > Number(currencyData?.tokenAmount)) {
-    //   toast.show(t('home.send.amountToSend.tips2'));
-    //   return;
-    // }
+    if (type === 'send' && Number(inputValue) > Number(currencyData?.tokenAmount)) {
+      toast.show(t('home.send.amountToSend.tips2'));
+      return;
+    }
     if (Number(inputValue) === 0) {
       toast.show(t('home.request.amountToRequest.tips3'));
       return;
@@ -113,7 +113,12 @@ const AmountScreen = ({type}: any) => {
         }}
       >
         <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
-          <Currency isRequest={type === 'request'} setIsLoading={setIsLoading} currencyData={currencyData} setCurrencyData={setCurrencyData} />
+          <Currency
+            isRequest={type === 'request'}
+            setIsLoading={setIsLoading}
+            currencyData={currencyData}
+            setCurrencyData={setCurrencyData}
+          />
           <YStack w="100%" mb={appScale(24)}>
             <XStack mb={appScale(8)} w="100%">
               <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 09:48:34
+ * @LastEditTime: 2025-03-18 21:24:51
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
 // 主题色

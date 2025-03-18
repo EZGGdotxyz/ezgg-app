@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 16:38:45
+ * @LastEditTime: 2025-03-18 18:07:25
  * @FilePath: /ezgg-app/packages/app/Components/Connectors/index.tsx
  */
 import {AppImage, Button, SizableText, YStack, XStack} from '@my/ui';
@@ -44,7 +44,7 @@ const Connectors = ({currencyData, setIsLoading, isWithdraw = false}: Connectors
 
   return (
     <>
-      <YStack w="100%" mb={appScale(24)}>
+      <YStack w="100%" mb={appScale(12)}>
         <XStack mb={appScale(8)} w="100%">
           <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
             {t('home.connectors.title')}
@@ -67,8 +67,8 @@ const Connectors = ({currencyData, setIsLoading, isWithdraw = false}: Connectors
         >
           <XStack ai="center" space="$3">
             <XStack
-              width={appScale(48)}
-              height={appScale(48)}
+              width={appScale(24)}
+              height={appScale(24)}
               borderRadius={'$1'}
               overflow={'hidden'}
               bc={'#fff'}
@@ -77,20 +77,20 @@ const Connectors = ({currencyData, setIsLoading, isWithdraw = false}: Connectors
             >
               {activeConnector?.name === 'WalletConnect' ? (
                 <AppImage
-                  width={appScale(48)}
-                  height={appScale(0.613 * 48)}
+                  width={appScale(32)}
+                  height={appScale(0.613 * 32)}
                   src={require('app/assets/images/WalletConnect.png')}
                   type="local"
                 />
               ) : (
-                <WalletIcon name={activeConnector?.name} variant="background" size={appScale(48)} />
+                <WalletIcon name={activeConnector?.name} variant="background" size={appScale(32)} />
               )}
             </XStack>
-            <XStack h={appScale(50)}>
+            <XStack h={appScale(32)}>
               <SizableText
-                fontSize={'$7'}
-                h={appScale(50)}
-                lh={appScale(50)}
+                fontSize={'$5'}
+                h={appScale(32)}
+                lh={appScale(32)}
                 color={'#212121'}
                 fontWeight={'600'}
                 pos="relative"

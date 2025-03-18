@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:22:09
+ * @LastEditTime: 2025-03-18 20:40:46
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/pages/home.ts
  */
 
@@ -44,10 +44,11 @@ export default {
   'home.send.chain': 'Chain',
 
   'home.deposit.or': 'or',
-  'home.deposit.sendTips': 'Send {{token}} ({{chain}} ONLY) to this address',
+  'home.deposit.sendTips': 'Send ERC20 ({{chain}} ONLY) to this address',
+  // 'home.deposit.sendTips': 'Send {{token}} ({{chain}} ONLY) to this address',
   'home.deposit.deposit': 'Deposit',
   'home.deposit.amountToDeposit': 'Please enter the amount to deposit',
-  'home.deposit.balance': 'Balance in wallet',
+  'home.deposit.balance': 'Your Available {{token}}',
 
   'home.withdraw.withdraw': 'Withdraw',
   'home.withdraw.button2': 'Connect Wallet',
@@ -153,7 +154,9 @@ export default {
   'home.deposit.walletDetectionError': 'Failed to detect wallets',
   'home.deposit.walletSelected': 'Selected wallet: {{wallet}}',
   'home.deposit.walletConnectionError': 'Failed to connect wallet',
-
+  'home.deposit.transfer': 'Transfer',
+  'home.deposit.connectWallet': 'Connect Wallet',
+  
   'home.take.tips': 'Here is ${{amount}} in crypto!',
   'home.take.tips2': 'Send ${{amount}} to @{{name}}',
   'home.take.message': 'Message',

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:12:41
+ * @LastEditTime: 2025-03-18 21:29:17
  * @FilePath: /ezgg-app/packages/app/Components/CurrencyPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -119,9 +119,8 @@ const CurrencyPopup = forwardRef<any, any>(
                           key={dayItem?.token?.address + 'id' + index}
                           flexDirection="column"
                           w="100%"
-                          h={appScale(56)}
-                          // pb={appScale(16)}
-                          // pt={appScale(16)}
+                          pb={appScale(16)}
+                          pt={appScale(16)}
                           ai="flex-end"
                           jc="flex-end"
                           onPress={() => {
@@ -130,17 +129,15 @@ const CurrencyPopup = forwardRef<any, any>(
                         >
                           <XStack flex={1} h={appScale(48)} w="100%" ai={'center'} jc={'space-between'}>
                             <XStack flex={1} h={appScale(48)} pr={appScale(24)} pl={appScale(24)} ai={'center'}>
-                              {dayItem?.token?.tokenSymbol ? (
-                                <TokenIcon symbol={dayItem?.token?.tokenSymbol} variant="background" size={appScale(48)} />
-                              ) : (
-                                <AppImage
-                                width={appScale(48)}
-                                height={appScale(48)}
-                                src={require(`app/assets/images/df_token.png`)}
-                                type="local"
-                              />
-                            )}
-
+                              <XStack w={appScale(48)} h={appScale(48)} overflow={'hidden'} br={appScale(24)}>
+                                {dayItem?.token?.tokenSymbol && (
+                                  <TokenIcon
+                                    symbol={dayItem?.token?.tokenSymbol}
+                                    variant="background"
+                                    size={appScale(48)}
+                                  />
+                                )}
+                              </XStack>
                               {/* <AppImage
                             width={appScale(48)}
                             height={appScale(48)}
@@ -161,7 +158,15 @@ const CurrencyPopup = forwardRef<any, any>(
                           </XStack>
 
                           {index !== item.tokenList.length - 1 && (
-                            <XStack h={2} width={'80%'} bc={'rgba(238, 238, 238, 1)'}></XStack>
+                            <XStack
+                              h={2}
+                              width={'80%'}
+                              bc={
+                                currencyData?.token?.address === dayItem?.token?.address
+                                  ? PrimaryColor
+                                  : 'rgba(238, 238, 238, 1)'
+                              }
+                            ></XStack>
                           )}
                         </Button>
                       ))}

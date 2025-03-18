@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 22:24:57
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:19:42
+ * @LastEditTime: 2025-03-18 20:40:31
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/pages/home.ts
  */
 
@@ -45,10 +45,10 @@ export default {
 
 
   'home.deposit.or': '或 ',
-  'home.deposit.sendTips': '發送 {{token}} ({{chain}} ONLY) 至如下地址',
+  'home.deposit.sendTips': '發送 ERC20 ({{chain}} ONLY) 至如下地址',
   'home.deposit.deposit': '存款',
   'home.deposit.amountToDeposit': '請輸入要存款的金額',
-  'home.deposit.balance': '錢包餘額',
+  'home.deposit.balance': '您可用的 {{token}}',
 
   'home.withdraw.withdraw': '提取',
   'home.withdraw.button2': '連接錢包',
@@ -151,6 +151,8 @@ export default {
   'home.deposit.walletDetectionError': '檢測錢包失敗',
   'home.deposit.walletSelected': '已選擇錢包：{{wallet}}',
   'home.deposit.walletConnectionError': '連接錢包失敗',
+  'home.deposit.transfer': '轉賬',
+  'home.deposit.connectWallet': '連接錢包',
 
   'home.take.tips': '這裡有{{amount}}的加密貨幣！',
   'home.take.tips2': '發送{{amount}}給@{{name}}',

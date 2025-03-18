@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:19:59
+ * @LastEditTime: 2025-03-18 21:37:59
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -21,7 +21,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
-import {convertAmountToTokenDecimals, formatTokenAmount, truncateAddress} from 'app/utils';
+import {convertAmountToTokenDecimals, formatNumber, formatTokenAmount, getCurrency, truncateAddress} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import AppLoading from 'app/Components/AppLoading';
@@ -40,6 +40,7 @@ import useResponse from 'app/hooks/useResponse';
 import Connectors from 'app/Components/Connectors';
 import Currency from './components/Currency';
 import Chain from './components/Chain';
+import Transfer from './components/Transfer';
 
 // 类型声明
 declare global {
@@ -69,6 +70,7 @@ const DepositScreen = () => {
   const [inputValue, setInputValue] = useState('');
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [currencyData, setCurrencyData] = useState<any>();
+  const [switchOn, setSwitchOn] = useState(false);
 
   const handlePagePress = () => {
     setShowKeyboard(false);
@@ -164,27 +166,6 @@ const DepositScreen = () => {
         throw new Error('wallet_not_ready');
       }
 
-      // 检查当前链ID是否匹配
-      const targetChainId = Number(currencyData?.token?.chainId);
-      if (chain?.id !== targetChainId) {
-        console.log('需要切换链:', {current: chain?.id, target: targetChainId});
-        try {
-          await window.ethereum?.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{chainId: `0x${targetChainId.toString(16)}`}],
-          });
-        } catch (switchError: any) {
-          console.error('切换链失败:', switchError);
-          if (switchError?.code === 4902) {
-            toast.show(t('tips.error.deposit.chainNotSupported'));
-          } else {
-            toast.show(t('tips.error.deposit.chainSwitchFailed'));
-          }
-          setIsLoading(false);
-          return;
-        }
-      }
-
       console.log('钱包已连接，准备检查余额:', {
         address,
         token: currencyData?.token?.address,
@@ -201,7 +182,9 @@ const DepositScreen = () => {
         // 手动检查余额
         const _tokenBalance = formatTokenAmount(result.data.toString(), currencyData?.token?.tokenDecimals);
         const inputAmount = Number(inputValue);
+        console.log('🚀 ~ handleWalletConnected ~ inputAmount:', inputAmount);
         const currentBalance = Number(_tokenBalance);
+        console.log('🚀 ~ handleWalletConnected ~ currentBalance:', currentBalance);
 
         console.log('余额检查结果:', {
           inputAmount,
@@ -353,7 +336,51 @@ const DepositScreen = () => {
   return (
     <PermissionPage>
       <AppHeader2 title={t('screen.home.deposit')} fallbackUrl="/" />
-      {/* <TokenBalance tokenAddress="0x833589fcd6edb6e08f4c7c32d4f71b54bda02913" userAddress={address} /> */}
+      <XStack w={'100%'} bc="$background" flexShrink={0} pt={appScale(12)} pb={appScale(12)} ai="center" jc="center">
+        <XStack
+          position="relative"
+          width={appScale(326)}
+          height={appScale(56)}
+          br={appScale(28)}
+          bc={'#EBEFF1'}
+          onPress={() => setSwitchOn(!switchOn)}
+        >
+          <XStack
+            animation="quick"
+            position="absolute"
+            top={appScale(4)}
+            width={appScale(158)}
+            height={appScale(48)}
+            br={appScale(24)}
+            bc="#FFFFFF"
+            x={switchOn ? appScale(164) : appScale(4)}
+          />
+          <XStack top={0} position="absolute" w={'100%'} h={'100%'}>
+            <SizableText
+              w={'50%'}
+              ta={'center'}
+              col={!switchOn ? '$color' : '$color11'}
+              fontSize={'$4'}
+              fow={'500'}
+              height={appScale(56)}
+              lh={appScale(56)}
+            >
+              {t('home.deposit.connectWallet')}
+            </SizableText>
+            <SizableText
+              w={'50%'}
+              height={appScale(56)}
+              lh={appScale(56)}
+              ta={'center'}
+              col={switchOn ? '$color' : '$color11'}
+              fow={'500'}
+              fontSize={'$4'}
+            >
+              {t('home.deposit.transfer')}
+            </SizableText>
+          </XStack>
+        </XStack>
+      </XStack>
       <ScrollView
         flex={1}
         w={'100%'}
@@ -362,101 +389,86 @@ const DepositScreen = () => {
           minHeight: '100%',
         }}
       >
-        <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
-          <Connectors setIsLoading={setIsLoading} currencyData={currencyData} />
+        {!switchOn && (
+          <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
+            <Connectors setIsLoading={setIsLoading} currencyData={currencyData} />
 
-          <Chain isConnected={isConnected} selectedType={selectedType} setSelectedType={setSelectedType} />
-          <Currency isConnected={isConnected} currencyData={currencyData} setCurrencyData={setCurrencyData} />
-
-          <YStack w="100%" mb={appScale(24)}>
-            <XStack mb={appScale(8)} w="100%">
-              <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                {t('home.deposit.amountToDeposit')}
+            <Chain isConnected={isConnected} selectedType={selectedType} setSelectedType={setSelectedType} />
+            <Currency
+              address={address}
+              selectedType={selectedType}
+              isConnected={isConnected && selectedType?.chainId !== ''}
+              currencyData={currencyData}
+              setCurrencyData={setCurrencyData}
+            />
+            <XStack mb={appScale(24)} minHeight={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+              <SizableText lh={appScale(24)} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>
+                {currencyData?.token?.tokenSymbol
+                  ? `${t('home.deposit.balance', {
+                      token: currencyData?.token?.tokenSymbol,
+                    })}`
+                  : ''}
+                {currencyData?.token?.tokenSymbol
+                  ? `: ${
+                      balance ? formatTokenAmount(balance.toString(), currencyData?.token?.tokenDecimals) : '0.00'
+                    } ${currencyData?.token?.tokenSymbol} (${
+                      getCurrency(currencyData?.currency)?.symbol
+                    } ${formatNumber(currencyData?.currencyAmount)})`
+                  : ''}
               </SizableText>
             </XStack>
-            <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>
-              <SizableText
-                fontSize={'$10'}
-                h={appScale(50)}
-                lh={appScale(50)}
-                color={'#212121'}
-                fontWeight={'600'}
-                pos="relative"
+            <YStack w="100%" mb={appScale(24)}>
+              <XStack mb={appScale(8)} w="100%">
+                <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                  {t('home.deposit.amountToDeposit')}
+                </SizableText>
+              </XStack>
+              <XStack
+                w="100%"
+                paddingVertical={appScale(16)}
+                paddingHorizontal={appScale(16)}
+                bc={'#FAFAFA'}
+                br={appScale(8)}
+                onPress={handleInputPress}
               >
-                {inputValue || '0'}
-                {showKeyboard && (
-                  <XStack
-                    pos="absolute"
-                    right={-4}
-                    top={0}
-                    bottom={0}
-                    w={2}
-                    animation="quick"
-                    bc="#212121"
-                    style={{
-                      animationName: 'cursorBlink',
-                      animationDuration: '1s',
-                      animationIterationCount: 'infinite',
-                      animationTimingFunction: 'steps(2, start)',
-                    }}
-                  />
-                )}
-              </SizableText>
-            </XStack>
-          </YStack>
-          <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
-            {balance && (
-              <SizableText
-                h={appScale(24)}
-                lh={appScale(24)}
-                fontSize={'$4'}
-                color={'#212121'}
-                fontWeight={'500'}
-              >{`${t('home.deposit.balance')}: ${balance} ${currencyData?.token?.tokenSymbol} (${
-                currencyData?.chainName
-              })`}</SizableText>
-            )}
-          </XStack>
-
-          <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
-            <AppButton onPress={handleDepositClick}>{t('home.deposit')}</AppButton>
-          </XStack>
-          {!showKeyboard && (
-            <YStack pb={appScale(134)}>
-              <XStack ai="center" pl={appScale(24)} pr={appScale(24)} mb={appScale(34)}>
-                <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
-                <SizableText fontSize={'$3'} color={'#9E9E9E'} ml={'$4'} mr={'$4'}>
-                  {t('home.deposit.or')}
-                </SizableText>
-                <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
-              </XStack>
-              <XStack ai="center" jc={'center'} w="100%" mb={appScale(48)}>
-                <SizableText ta={'center'} fontSize={'$4'} color={'#212121'} fow="600">
-                  {t('home.deposit.sendTips', {
-                    token: currencyData?.token?.tokenSymbol,
-                    chain: currencyData?.chainName,
-                  })}
-                </SizableText>
-              </XStack>
-              <XStack ai="center" jc={'center'} w="100%" mb={appScale(24)}>
-                <SizableText ta={'center'} fontSize={'$7'} color={'#212121'} fow="700" mr={'$4'}>
-                  {truncateAddress(userInfo?.smartWallet?.address)}
-                </SizableText>
-                <XStack ai={'center'} jc={'center'} ml={appScale(6)}>
-                  <CopyButton unstyled text={userInfo?.smartWallet?.address}>
-                    <AppImage
-                      width={appScale(30)}
-                      height={appScale(30)}
-                      src={require('app/assets/images/copy.png')}
-                      type="local"
+                <SizableText
+                  fontSize={'$8'}
+                  h={appScale(32)}
+                  lh={appScale(32)}
+                  color={'#212121'}
+                  fontWeight={'600'}
+                  pos="relative"
+                >
+                  {inputValue || '0'}
+                  {showKeyboard && (
+                    <XStack
+                      pos="absolute"
+                      right={-4}
+                      top={0}
+                      bottom={0}
+                      w={2}
+                      animation="quick"
+                      bc="#212121"
+                      style={{
+                        animationName: 'cursorBlink',
+                        animationDuration: '1s',
+                        animationIterationCount: 'infinite',
+                        animationTimingFunction: 'steps(2, start)',
+                      }}
                     />
-                  </CopyButton>
-                </XStack>
+                  )}
+                </SizableText>
               </XStack>
             </YStack>
-          )}
-        </YStack>
-        {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
+
+            <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
+              <AppButton onPress={handleDepositClick}>{t('home.deposit')}</AppButton>
+            </XStack>
+
+            {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
+          </YStack>
+        )}
+        {switchOn && <Transfer currencyData={currencyData} />}
       </ScrollView>
       {isLoading && <AppLoading />}
     </PermissionPage>

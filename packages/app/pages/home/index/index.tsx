@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 17:42:43
+ * @LastEditTime: 2025-03-18 21:09:24
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -16,20 +16,22 @@ import {useDispatch} from 'react-redux';
 import {Dispatch} from 'app/store';
 import {Platform, useColorScheme} from 'react-native';
 // import {pushingRegisterDevice} from 'app/servers/api/2000Yidongtuisongguanli';
-import { formatNumber, getCurrency} from 'app/utils';
+import {formatNumber, getCurrency} from 'app/utils';
 import {PrimaryColor} from 'app/config';
 import HomeList from './components/HomeList';
 import AppLoading from 'app/Components/AppLoading';
 import {getNotificationGetUnreadCount} from 'app/servers/api/notification';
 import useResponse from 'app/hooks/useResponse';
+import {usePrivy} from '@privy-io/react-auth';
 
 interface HomeScreenProps {}
 // 首页
 const HomeScreen = () => {
-  const { appScale } = useResponse();
+  const {appScale} = useResponse();
   const {t, i18n} = useTranslation();
   const {makeRequest} = useRequest();
   const dispatch = useDispatch<Dispatch>();
+  const {ready, authenticated} = usePrivy();
 
   const [{currency}] = useRematchModel('app');
   const [{isLogin, availableBalance}] = useRematchModel('user');
@@ -40,10 +42,6 @@ const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [switchOn, setSwitchOn] = useState(false);
-  useEffect(() => {
-    if (isLogin) {
-    }
-  }, [isLogin]);
 
   const navList = [
     {
@@ -92,7 +90,7 @@ const HomeScreen = () => {
 
   return (
     <PermissionPage isHomePage={true}>
-      <HomeHeader isLogin={isLogin} />
+      <HomeHeader />
       <YStack
         flexShrink={0}
         pt={appScale(8)}

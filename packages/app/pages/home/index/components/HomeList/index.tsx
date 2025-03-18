@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-13 18:03:50
+ * @LastEditTime: 2025-03-18 17:51:58
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet, ScrollView} from '@my/ui';
@@ -57,7 +57,7 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
           platform: item?.platform,
         };
       }),
-      {chainId: '728126428', name: 'Tron', chainIcon: 'Tron', platform: 'TRON'},
+      // {chainId: '728126428', name: 'Tron', chainIcon: 'Tron', platform: 'TRON'},
     ],
     [blockchainList, t],
   );

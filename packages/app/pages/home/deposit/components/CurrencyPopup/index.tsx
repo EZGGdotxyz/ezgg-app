@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:25:23
+ * @LastEditTime: 2025-03-18 21:29:05
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/components/CurrencyPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -124,7 +124,7 @@ const CurrencyPopup = forwardRef<any, any>(
                           height={appScale(48)}
                           borderRadius={'$1'}
                           overflow={'hidden'}
-                          bc={'#fff'}
+                          bc={currencyData?.token?.address === item?.token?.address ? PrimaryColor : '#fff'}
                           ai={'center'}
                           jc={'center'}
                         >
@@ -134,15 +134,8 @@ const CurrencyPopup = forwardRef<any, any>(
                             borderRadius={appScale(24)}
                             overflow={'hidden'}
                           >
-                            {item?.token?.tokenSymbol ? (
+                            {item?.token?.tokenSymbol && (
                               <TokenIcon symbol={item?.token?.tokenSymbol} variant="background" size={appScale(48)} />
-                            ) : (
-                              <AppImage
-                                width={appScale(48)}
-                                height={appScale(48)}
-                                src={require(`app/assets/images/df_token.png`)}
-                                type="local"
-                              />
                             )}
                           </YStack>
                         </XStack>

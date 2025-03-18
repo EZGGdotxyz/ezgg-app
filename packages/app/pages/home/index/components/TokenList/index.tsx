@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 09:09:20
+ * @LastEditTime: 2025-03-18 21:10:40
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/TokenList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet} from '@my/ui';
@@ -9,7 +9,7 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@tamagui/lucide-icons';
-import { formatNumber, getCurrency} from 'app/utils';
+import {formatNumber, getCurrency} from 'app/utils';
 import {useMemo} from 'react';
 import AppButton from 'app/Components/AppButton';
 import ChainListPopup from 'app/pages/home/index/components/ChainListPopup';
@@ -17,6 +17,7 @@ import useRequest from 'app/hooks/useRequest';
 import {TokenIcon} from '@web3icons/react';
 import {getChainInfo} from 'app/utils/chain';
 import useResponse from 'app/hooks/useResponse';
+import {usePrivy} from '@privy-io/react-auth';
 
 export type TokenListProps = {
   list: any[];
@@ -31,6 +32,7 @@ const TokenList: React.FC<TokenListProps> = ({list, tokenTypes, setSheetOpen, se
   const {push} = useRouter();
   const {t} = useTranslation();
   const {appScale} = useResponse();
+  const {ready, authenticated} = usePrivy();
 
   const getSelectedLabel = useMemo(() => {
     const selected = tokenTypes.find((type) => type.chainId === selectedType?.chainId);
@@ -94,9 +96,7 @@ const TokenList: React.FC<TokenListProps> = ({list, tokenTypes, setSheetOpen, se
 
   const renderLoginButton = () => (
     <YStack pt={appScale(48)}>
-      <AppButton onPress={() => push('/login')}>
-        {t('login.loginButton')}
-      </AppButton>
+      <AppButton onPress={() => push('/login')}>{t('login.loginButton')}</AppButton>
     </YStack>
   );
 
@@ -117,13 +117,13 @@ const TokenList: React.FC<TokenListProps> = ({list, tokenTypes, setSheetOpen, se
           <ChevronDown size="$2" color={'$color11'} />
         </Button>
       )}
-      {list.length > 0 ? (
-        list.map(renderTokenItem)
-      ) : isLogin ? (
-        renderEmptyState()
-      ) : (
-        renderLoginButton()
-      )}
+      {list.length > 0
+        ? list.map(renderTokenItem)
+        : ready
+        ? isLogin
+          ? renderEmptyState()
+          : renderLoginButton()
+        : renderEmptyState()}
     </YStack>
   );
 };

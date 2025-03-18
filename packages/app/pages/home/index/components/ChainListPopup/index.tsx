@@ -1,11 +1,11 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 16:48:27
+ * @LastEditTime: 2025-03-18 17:51:16
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/ChainListPopup/index.tsx
  */
 import {AppImage, Button, Paragraph, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
-import {Airplay, AlignJustify, Check, ChevronRight, GalleryVerticalEnd} from '@tamagui/lucide-icons';
+import {Airplay, AlignJustify, Check, ChevronRight, GalleryVerticalEnd, List} from '@tamagui/lucide-icons';
 import {PrimaryColor} from 'app/config';
 import {useTranslation} from 'react-i18next';
 import {forwardRef, useRef} from 'react';
@@ -70,17 +70,19 @@ const ChainListPopup = forwardRef<any, ChainListPopupProps>((props, ref) => {
                     height={appScale(48)}
                     borderRadius={'$1'}
                     overflow={'hidden'}
-                    bc={'#fff'}
+                    bc={selectedType?.chainId === type?.chainId ? PrimaryColor : '#fff'}
                     ai={'center'}
                     jc={'center'}
                   >
-                    {type?.chainIcon && (
+                    {type?.chainIcon ? (
                       <AppImage
                         width={appScale(48)}
                         height={appScale(48)}
                         src={require(`app/assets/images/chain/${type.chainIcon}.png`)}
                         type="local"
                       />
+                    ) : (
+                      <List size={appScale(32)} />
                     )}
                   </XStack>
                   <YStack>

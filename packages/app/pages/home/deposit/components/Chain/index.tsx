@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:05:32
+ * @LastEditTime: 2025-03-18 21:26:28
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/components/Chain/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -48,7 +48,7 @@ const Chain = React.forwardRef<HTMLDivElement, ChainProps>(
               platform: item?.platform,
             };
           }),
-          {chainId: '728126428', name: 'Tron', chainIcon: 'Tron', platform: 'TRON'},
+          // {chainId: '728126428', name: 'Tron', chainIcon: 'Tron', platform: 'TRON'},
         ];
         setTokenTypes(_tokenTypes);
         setSelectedType(_tokenTypes[0]);
@@ -57,7 +57,7 @@ const Chain = React.forwardRef<HTMLDivElement, ChainProps>(
 
     return (
       <>
-        <YStack w="100%" mb={appScale(24)}>
+        <YStack w="100%" mb={appScale(12)}>
           <XStack mb={appScale(8)} w="100%">
             <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
               {t('home.send.chain')}
@@ -88,29 +88,29 @@ const Chain = React.forwardRef<HTMLDivElement, ChainProps>(
           >
             <XStack ai="center" space="$3">
               <XStack
-                width={appScale(48)}
-                height={appScale(48)}
+                width={appScale(32)}
+                height={appScale(32)}
                 borderRadius={'$1'}
                 overflow={'hidden'}
-                bc={'#fff'}
+                bc={'#FAFAFA'}
                 ai={'center'}
                 jc={'center'}
               >
                 {selectedType?.chainIcon && (
                   <AppImage
-                    width={appScale(48)}
-                    height={appScale(48)}
-                    borderRadius={appScale(24)}
+                    width={appScale(32)}
+                    height={appScale(32)}
+                    borderRadius={appScale(16)}
                     src={require(`app/assets/images/chain/${selectedType.chainIcon}.png`)}
                     type="local"
                   />
                 )}
               </XStack>
-              <XStack h={appScale(50)}>
+              <XStack h={appScale(32)}>
                 <SizableText
-                  fontSize={'$7'}
-                  h={appScale(50)}
-                  lh={appScale(50)}
+                  fontSize={'$5'}
+                  h={appScale(32)}
+                  lh={appScale(32)}
                   color={'#212121'}
                   fontWeight={'600'}
                   pos="relative"

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 15:23:06
+ * @LastEditTime: 2025-03-18 22:06:49
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -67,7 +67,7 @@ const PayLinkScreen = ({type}: any) => {
   const [modalVisible, setModalVisible] = React.useState(false);
 
   const {back, replace, push} = useRouter();
-  const {onSendSubmit, onRequestSubmit, createTransaction,deployAA2} = useTransaction();
+  const {onSendSubmit, onRequestSubmit, createTransaction, deployAA2} = useTransaction();
 
   const createTransactionParams = (type: 'SEND' | 'REQUEST') => {
     const _amount = Number(
@@ -127,6 +127,9 @@ const PayLinkScreen = ({type}: any) => {
             });
           } else {
             replace('/home/replace?id=' + transaction?.id);
+            setTimeout(() => {
+              dispatch.user.updateState({payLinkData: {}});
+            }, 300);
           }
         } else {
           toast.show(t('tips.error.networkError'), {
@@ -139,7 +142,7 @@ const PayLinkScreen = ({type}: any) => {
           replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
           setTimeout(() => {
             dispatch.user.updateState({payLinkData: {}});
-          });
+          }, 300);
         });
       }
     } catch (error) {
@@ -183,7 +186,7 @@ const PayLinkScreen = ({type}: any) => {
         replace(`/home/success?type=${data?.transactionType}&id=${data?.id}`);
         setTimeout(() => {
           dispatch.user.updateState({payLinkData: {}});
-        });
+        }, 300);
       });
     } catch (error) {
       handleTransactionError(error, toast, t);
@@ -197,7 +200,9 @@ const PayLinkScreen = ({type}: any) => {
       <AppHeader2
         onBack={() => {
           replace('/');
-          dispatch.user.updateState({payLinkData: {}});
+          setTimeout(() => {
+            dispatch.user.updateState({payLinkData: {}});
+          }, 300);
         }}
         title={t('screen.home.paylink')}
         fallbackUrl="/"
@@ -337,7 +342,9 @@ const PayLinkScreen = ({type}: any) => {
           onPress={() => {
             // back();
             replace('/');
-            dispatch.user.updateState({payLinkData: {}});
+            setTimeout(() => {
+              dispatch.user.updateState({payLinkData: {}});
+            }, 300);
           }}
           pressStyle={{
             opacity: 0.85,

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:12:17
+ * @LastEditTime: 2025-03-18 22:09:08
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -16,84 +16,63 @@ import React from 'react';
 import useResponse from 'app/hooks/useResponse';
 import useBlockchain from 'app/hooks/useBlockchain';
 import {useAccount, useBalance, useToken} from 'wagmi';
+import {getBalanceListBalance} from 'app/servers/api/balance';
+import useRequest from 'app/hooks/useRequest';
+import {ActivityIndicator} from 'react-native';
+import {PrimaryColor} from 'app/config';
 
 export type CurrencyProps = {
   currencyData: any;
   setCurrencyData: (currency: any) => void;
   isConnected: boolean;
+  selectedType: any;
+  address: string;
 };
 
 // 交易历史item
 const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
-  ({currencyData, setCurrencyData, isConnected}: CurrencyProps, ref) => {
+  ({currencyData, setCurrencyData, isConnected, selectedType, address}: CurrencyProps, ref) => {
+    console.log('🚀 ~ selectedType:', selectedType);
     const {push} = useRouter();
+    const {makeRequest} = useRequest();
+
     const {appScale} = useResponse();
     const {t} = useTranslation();
     const [modalVisible, setModalVisible] = useState(false);
-    const [currencyList, setCurrencyList] = useState<any>([
-      {
-        chainName: 'Base',
-        chainIcon: 'Base',
-        token: {
-          platform: 'ETH',
-          network: 'MAIN',
-          erc: 'ERC20',
-          id: 6,
-          createBy: 0,
-          updateBy: 0,
-          createAt: '2025-03-03T02:19:34.362Z',
-          updateAt: '2025-03-03T02:19:34.362Z',
-          address: '0x4200000000000000000000000000000000000006',
-          chainId: 8453,
-          tokenName: 'Wrapped Ether',
-          tokenSymbol: 'WETH',
-          tokenDecimals: 18,
-          logo: null,
-          show: true,
-          sort: 0,
-          priceCurrency: 'usd',
-          priceValue: '2438.3262341117',
-          priceUpdateAt: '2025-03-03T02:19:31.000Z',
-          priceAutoUpdate: false,
-          feeSupport: true,
-        },
-        currency: 'CNY',
-        currencyAmount: '0',
-        tokenAmount: '0',
-        inWallet: true,
-      },
-      {
-        chainName: 'Base',
-        chainIcon: 'Base',
-        token: {
-          platform: 'ETH',
-          network: 'MAIN',
-          erc: 'ERC20',
-          id: 7,
-          createBy: 0,
-          updateBy: 0,
-          createAt: '2025-03-03T02:19:34.789Z',
-          updateAt: '2025-03-03T02:19:34.789Z',
-          address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-          chainId: 8453,
-          tokenName: 'USD Coin',
-          tokenSymbol: 'USDC',
-          tokenDecimals: 6,
-          logo: null,
-          show: true,
-          sort: 0,
-          priceCurrency: 'usd',
-          priceValue: '0.9998782643',
-          priceUpdateAt: '2025-03-03T02:18:41.000Z',
-          priceAutoUpdate: false,
-          feeSupport: true,
-        },
-        currency: 'CNY',
-        currencyAmount: '0.04008874677417857468',
-        tokenAmount: '0.005543',
-        inWallet: true,
-      },
-    ]);
+    const [currencyList, setCurrencyList] = useState<any>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [{currency}] = useRematchModel('app');
+
+    const _getBalanceListBalance = async () => {
+      setIsLoading(true);
+      const res = await makeRequest(
+        getBalanceListBalance({
+          platform: selectedType?.platform,
+          chainId: selectedType?.chainId,
+          currency: currency,
+          smartWalletAddress: address,
+        }),
+      );
+      if (res?.data?.tokens) {
+        const _tokens: any = [];
+        res?.data?.tokens.forEach((item: any) => {
+          if (item?.token?.tokenSymbol && item?.tokenAmount !== '0') {
+            _tokens.push(item);
+          }
+        });
+        setCurrencyList(_tokens);
+        setCurrencyData(_tokens[0]);
+      } else {
+        setCurrencyList([]);
+      }
+      setIsLoading(false);
+    };
+
+    useEffect(() => {
+      if (address && selectedType?.chainId) {
+        _getBalanceListBalance();
+      }
+    }, [selectedType, address]);
 
     const selectCurrency = (item: any) => {
       setCurrencyData(item);
@@ -102,7 +81,7 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
 
     return (
       <>
-        <YStack w="100%" mb={appScale(24)} onPress={() => setModalVisible(true)}>
+        <YStack w="100%" mb={appScale(12)} onPress={() => setModalVisible(true)}>
           <XStack mb={appScale(8)} w="100%">
             <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
               {t('home.send.currency')}
@@ -131,34 +110,40 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
               }
             }}
           >
-            <XStack h={appScale(50)}>
-              <XStack flexShrink={0} pos={'relative'} w={appScale(72)}>
-                {currencyData?.token?.tokenSymbol ? (
-                  <TokenIcon symbol={currencyData?.token?.tokenSymbol} variant="background" size={appScale(48)} />
-                ) : (
-                  <AppImage
-                    width={appScale(48)}
-                    height={appScale(48)}
-                    src={require(`app/assets/images/df_token.png`)}
-                    type="local"
-                  />
-                )}
+            {isLoading ? (
+              <XStack ai="center" h={appScale(32)} w={'100%'} jc="center">
+                <ActivityIndicator size="large" color={PrimaryColor} />
               </XStack>
+            ) : (
+              <>
+                <XStack ai="center" space="$3">
+                  <XStack
+                    flexShrink={0}
+                    pos={'relative'}
+                    w={appScale(32)}
+                    h={appScale(32)}
+                    overflow={'hidden'}
+                    br={appScale(16)}
+                  >
+                    <TokenIcon symbol={currencyData?.token?.tokenSymbol} variant="background" size={appScale(32)} />
+                  </XStack>
 
-              {currencyData?.token?.tokenSymbol && (
-                <SizableText
-                  fontSize={'$7'}
-                  h={appScale(50)}
-                  lh={appScale(50)}
-                  color={'#212121'}
-                  fontWeight={'600'}
-                  pos="relative"
-                >
-                  {`${currencyData?.token?.tokenSymbol} (${currencyData?.chainName})`}
-                </SizableText>
-              )}
-            </XStack>
-            <ChevronRight size="$2" color={'#212121'} />
+                  {currencyData?.token?.tokenSymbol && (
+                    <SizableText
+                      fontSize={'$5'}
+                      h={appScale(32)}
+                      lh={appScale(32)}
+                      color={'#212121'}
+                      fontWeight={'600'}
+                      pos="relative"
+                    >
+                      {`${currencyData?.token?.tokenSymbol}`}
+                    </SizableText>
+                  )}
+                </XStack>
+                <ChevronRight size="$2" color={'#212121'} />
+              </>
+            )}
           </Button>
         </YStack>
 

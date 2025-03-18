@@ -11,7 +11,6 @@ import AppModal from 'app/Components/AppModal';
 import QrCode from 'app/Components/QrCode';
 import {ExternalLinkData, PrimaryColor} from 'app/config';
 import { isIphoneX} from 'app/utils';
-import QRCode from 'qrcode.react';
 import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:12:30
+ * @LastEditTime: 2025-03-18 18:04:26
  * @FilePath: /ezgg-app/packages/app/Components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -90,16 +90,18 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
           >
             <XStack h={appScale(50)}>
               <XStack flexShrink={0} pos={'relative'} w={appScale(72)}>
-                {currencyData?.token?.tokenSymbol ? (
-                  <TokenIcon symbol={currencyData?.token?.tokenSymbol} variant="background" size={appScale(48)} />
-                ) : (
-                  <AppImage
-                    width={appScale(48)}
-                    height={appScale(48)}
-                    src={require(`app/assets/images/df_token.png`)}
-                    type="local"
-                  />
-                )}
+                <XStack w={appScale(48)} h={appScale(48)} overflow={'hidden'} br={appScale(24)}>
+                  {currencyData?.token?.tokenSymbol ? (
+                    <TokenIcon symbol={currencyData?.token?.tokenSymbol} variant="background" size={appScale(48)} />
+                  ) : (
+                    <AppImage
+                      width={appScale(48)}
+                      height={appScale(48)}
+                      src={require(`app/assets/images/df_token.png`)}
+                      type="local"
+                    />
+                  )}
+                </XStack>
                 {/* <AppImage
                   src={getTrustWalletAssetUrl(
                     '0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42',
