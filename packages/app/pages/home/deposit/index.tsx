@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 21:37:59
+ * @LastEditTime: 2025-03-19 14:54:24
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -468,7 +468,7 @@ const DepositScreen = () => {
             {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
           </YStack>
         )}
-        {switchOn && <Transfer currencyData={currencyData} />}
+        {switchOn && <Transfer currencyData={currencyData} selectedType={selectedType} setSelectedType={setSelectedType} />}
       </ScrollView>
       {isLoading && <AppLoading />}
     </PermissionPage>

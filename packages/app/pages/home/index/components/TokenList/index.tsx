@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 21:10:40
+ * @LastEditTime: 2025-03-19 14:31:21
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/TokenList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet} from '@my/ui';
@@ -14,10 +14,10 @@ import {useMemo} from 'react';
 import AppButton from 'app/Components/AppButton';
 import ChainListPopup from 'app/pages/home/index/components/ChainListPopup';
 import useRequest from 'app/hooks/useRequest';
-import {TokenIcon} from '@web3icons/react';
 import {getChainInfo} from 'app/utils/chain';
 import useResponse from 'app/hooks/useResponse';
 import {usePrivy} from '@privy-io/react-auth';
+import TokenIconWrapper from 'app/Components/TokenIconWrapper';
 
 export type TokenListProps = {
   list: any[];
@@ -42,9 +42,12 @@ const TokenList: React.FC<TokenListProps> = ({list, tokenTypes, setSheetOpen, se
   const renderTokenItem = (item: any, index: number) => (
     <XStack key={index} pt={appScale(16)} pb={appScale(16)} w={'100%'} mb={appScale(8)}>
       <XStack flexShrink={0} h={appScale(56)} pos={'relative'} pr={appScale(24)}>
-        <YStack height={appScale(48)} width={appScale(48)} borderRadius={appScale(24)} overflow={'hidden'}>
-          <TokenIcon symbol={item?.token?.tokenSymbol} variant="background" size={appScale(48)} />
-        </YStack>
+        <TokenIconWrapper
+          tokenAddress={item?.token?.address}
+          chainId={item?.token?.chainId}
+          tokenSymbol={item?.token?.tokenSymbol}
+          size={48}
+        />
         {item?.chainIcon && (
           <XStack pos={'absolute'} bottom={appScale(4)} right={appScale(16)}>
             <AppImage

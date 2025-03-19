@@ -183,7 +183,12 @@ const ConnectorsPopup = forwardRef<any, ConnectorsPopupProps>(
         // 如果已连接其他钱包，先断开
         if (isConnected) {
           console.log('🚀 ~ 如果已连接其他钱包，先断开');
-          await disconnect();
+          try {
+            await disconnect();
+          } catch (error) {
+            console.error('断开连接失败:', error);
+            // 即使断开连接失败，也继续清除本地存储
+          }
           // 清除localStorage残留
           localStorage.removeItem('wagmi.wallet');
           localStorage.removeItem('wagmi.connected');

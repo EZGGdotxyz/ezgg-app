@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:25:40
+ * @LastEditTime: 2025-03-19 14:56:10
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -45,6 +45,7 @@ import useResponse from 'app/hooks/useResponse';
 import PayPopup from 'app/Components/PayPopup';
 import {getBalanceFindBalance} from 'app/servers/api/balance';
 import {handleTransactionError} from 'app/utils/error';
+import TokenIconWrapper from 'app/Components/TokenIconWrapper';
 
 const {useParams} = createParam<any>();
 
@@ -64,7 +65,7 @@ const TakeScreen = (any) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const {back, push, replace} = useRouter();
 
-  const {onSendPayLinkSubmit, onSendContract,deployAA2} = useTransaction();
+  const {onSendPayLinkSubmit, onSendContract, deployAA2} = useTransaction();
 
   const handleSubmit = async (type: 'SEND' | 'REQUEST') => {
     try {
@@ -254,9 +255,12 @@ const TakeScreen = (any) => {
               <XStack h={appScale(50)}>
                 <XStack flexShrink={0} pos={'relative'} w={appScale(72)}>
                   {orderData?.tokenSymbol && (
-                    <YStack height={appScale(48)} width={appScale(48)} borderRadius={appScale(24)} overflow={'hidden'}>
-                      <TokenIcon symbol={orderData?.tokenSymbol} variant="background" size={appScale(48)} />
-                    </YStack>
+                    <TokenIconWrapper
+                      tokenAddress={orderData?.tokenContractAddress}
+                      chainId={orderData?.chainId}
+                      tokenSymbol={orderData?.tokenSymbol}
+                      size={48}
+                    />
                   )}
                 </XStack>
 

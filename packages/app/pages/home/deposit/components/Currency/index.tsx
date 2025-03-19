@@ -20,6 +20,7 @@ import {getBalanceListBalance} from 'app/servers/api/balance';
 import useRequest from 'app/hooks/useRequest';
 import {ActivityIndicator} from 'react-native';
 import {PrimaryColor} from 'app/config';
+import TokenIconWrapper from 'app/Components/TokenIconWrapper';
 
 export type CurrencyProps = {
   currencyData: any;
@@ -117,16 +118,12 @@ const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
             ) : (
               <>
                 <XStack ai="center" space="$3">
-                  <XStack
-                    flexShrink={0}
-                    pos={'relative'}
-                    w={appScale(32)}
-                    h={appScale(32)}
-                    overflow={'hidden'}
-                    br={appScale(16)}
-                  >
-                    <TokenIcon symbol={currencyData?.token?.tokenSymbol} variant="background" size={appScale(32)} />
-                  </XStack>
+                  <TokenIconWrapper
+                    tokenAddress={currencyData?.token?.address}
+                    chainId={currencyData?.token?.chainId}
+                    tokenSymbol={currencyData?.token?.tokenSymbol}
+                    size={32}
+                  />
 
                   {currencyData?.token?.tokenSymbol && (
                     <SizableText

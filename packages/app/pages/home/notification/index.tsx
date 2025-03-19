@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:23:54
+ * @LastEditTime: 2025-03-19 14:49:38
  * @FilePath: /ezgg-app/packages/app/pages/home/notification/index.tsx
  */
 import {
@@ -19,7 +19,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
-import { dealtHistoryList, restoreHistoryList} from 'app/utils';
+import {dealtHistoryList, restoreHistoryList} from 'app/utils';
 import useRequest from 'app/hooks/useRequest';
 import {createParam} from 'solito';
 import {useRouter} from 'solito/router';
@@ -164,7 +164,7 @@ const NotificationScreen = (props: any) => {
 
   const _postNotificationUpdateNotificationStatusId = async (_orderData: any) => {
     // setIsLoading(true);
-    const res = await makeRequest(postNotificationUpdateNotificationStatusId({id: Number(id)}));
+    const res = await makeRequest(postNotificationUpdateNotificationStatusId({id: Number(_orderData?.id)}));
     if (res?.code === '0') {
       // fetchData();
       // _getUnread();
@@ -196,6 +196,9 @@ const NotificationScreen = (props: any) => {
   };
 
   const onRead = (item: any, action = '') => {
+    if (!item?.id) {
+      return;
+    }
     if (action) {
       setOrderData(item);
       if (action === 'cancel') {

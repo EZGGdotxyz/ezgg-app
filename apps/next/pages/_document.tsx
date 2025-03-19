@@ -1,10 +1,11 @@
 /*
  * @Date: 2024-01-10 16:56:27
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 14:04:58
+ * @LastEditTime: 2025-03-19 14:58:47
  * @FilePath: /ezgg-app/apps/next/pages/_document.tsx
  */
 import {config} from '@my/ui';
+import { isRelease } from 'app/config';
 import NextDocument, {DocumentContext, DocumentInitialProps, Head, Html, Main, NextScript} from 'next/document';
 import {Children} from 'react';
 import {AppRegistry} from 'react-native';
@@ -46,8 +47,12 @@ export default class Document extends NextDocument {
         <body>
           <Main />
           <NextScript />
-          <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-          <script>eruda.init();</script>
+          {!isRelease && (
+            <>
+              <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+              <script>eruda.init();</script>
+            </>
+          )}
         </body>
       </Html>
     );

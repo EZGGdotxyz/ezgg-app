@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 14:17:09
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-11 16:30:00
+ * @LastEditTime: 2025-03-18 22:25:02
  * @FilePath: /ezgg-app/packages/app/Components/TabBar/index.tsx
  */
 import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
@@ -20,13 +20,16 @@ const TabBar = ({state, descriptors, navigation}) => {
   const {appScale} = useResponse();
 
   return (
-    <XStack
-      height={appScale(isIphoneX() ? 64 + 34 : 64)}
-      pt={8}
-      pb={appScale(isIphoneX() ? 8 + 34 : 8)}
-      style={styles.tabbar}
-    >
-      <XStack jc={'center'} ai={'center'} style={{width: '100%', maxWidth: MAX_WIDTH}} bc="$background">
+    <XStack style={styles.tabbar}>
+      <XStack
+        jc={'center'}
+        height={appScale(isIphoneX() ? 64 + 34 : 64)}
+        pt={8}
+        pb={appScale(isIphoneX() ? 8 + 34 : 8)}
+        ai={'center'}
+        bc="$background"
+        style={styles.tabbarCon}
+      >
         {state.routes.map((route, index) => {
           if (route.name === 'login') return null;
           let label = route.name;
@@ -121,6 +124,11 @@ const styles = StyleSheet.create({
     // backgroundColor: 'white',
     // paddingVertical: 15,
     borderCurve: 'continuous',
+  },
+  tabbarCon: {
+    width: '100%',
+    maxWidth: MAX_WIDTH,
+    boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.1)',
   },
 });
 

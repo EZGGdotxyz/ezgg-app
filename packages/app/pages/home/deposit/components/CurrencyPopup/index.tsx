@@ -8,6 +8,7 @@ import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} 
 import {Airplay, AlignJustify} from '@tamagui/lucide-icons';
 import {TokenIcon} from '@web3icons/react';
 import AppModal from 'app/Components/AppModal';
+import TokenIconWrapper from 'app/Components/TokenIconWrapper';
 import {PrimaryColor} from 'app/config';
 import useResponse from 'app/hooks/useResponse';
 import {formatNumber, formatTokenAmount} from 'app/utils';
@@ -135,7 +136,12 @@ const CurrencyPopup = forwardRef<any, any>(
                             overflow={'hidden'}
                           >
                             {item?.token?.tokenSymbol && (
-                              <TokenIcon symbol={item?.token?.tokenSymbol} variant="background" size={appScale(48)} />
+                              <TokenIconWrapper
+                                tokenAddress={item?.token?.address}
+                                chainId={item?.token?.chainId}
+                                tokenSymbol={item?.token?.tokenSymbol}
+                                size={48}
+                              />
                             )}
                           </YStack>
                         </XStack>

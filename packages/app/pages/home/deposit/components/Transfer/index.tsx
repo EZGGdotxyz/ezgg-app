@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 21:32:41
+ * @LastEditTime: 2025-03-19 14:54:17
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/components/Transfer/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -17,13 +17,17 @@ import CopyButton from 'app/Components/CopyButton';
 import AppButton from 'app/Components/AppButton';
 import {ExternalLinkData} from 'app/config';
 import {truncateAddress} from 'app/utils';
+import {getChainInfo} from 'app/utils/chain';
+import Chain from '../Chain';
 
 export type TransferProps = {
   currencyData: any;
+  selectedType: any;
+  setSelectedType: (selectedType: any) => void;
 };
 
 // 鏈路
-const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(({currencyData}: TransferProps, ref) => {
+const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(({currencyData, selectedType, setSelectedType}: TransferProps, ref) => {
   const {push} = useRouter();
   const qrRef = useRef<HTMLDivElement>(null); // 指定元素类型
   const {appScale} = useResponse();
@@ -34,8 +38,8 @@ const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(({currencyData}
   const downloadQR = async () => {
     if (!qrRef.current) return;
     const svgElement = qrRef.current.querySelector('svg');
-    console.log("🚀 ~ downloadQR ~  qrRef.current.:",  qrRef.current)
-    console.log("🚀 ~ downloadQR ~ svgElement:", svgElement)
+    console.log('🚀 ~ downloadQR ~  qrRef.current.:', qrRef.current);
+    console.log('🚀 ~ downloadQR ~ svgElement:', svgElement);
     if (!svgElement) return;
 
     // 将 SVG 转化为 Data URL
@@ -68,12 +72,14 @@ const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(({currencyData}
 
   return (
     <YStack pl={appScale(24)} pr={appScale(24)}>
+      <Chain isConnected={true} selectedType={selectedType} setSelectedType={setSelectedType} />
+
       <YStack pb={appScale(24)} pt={appScale(12)}>
         <XStack ai="center" jc={'center'} w="100%" mb={appScale(24)}>
           <SizableText ta={'center'} fontSize={'$4'} color={'#212121'} fow="600">
             {t('home.deposit.sendTips', {
               token: currencyData?.token?.tokenSymbol,
-              chain: currencyData?.chainName,
+              chain: getChainInfo(currencyData?.token?.chainId)?.name,
             })}
           </SizableText>
         </XStack>

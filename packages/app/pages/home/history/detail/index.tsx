@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:25:26
+ * @LastEditTime: 2025-03-19 14:45:32
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -46,6 +46,7 @@ import AcceptRequestPopup from './components/AcceptRequestPopup';
 import {useRouter} from 'solito/router';
 const {useParams} = createParam<any>();
 import useResponse from 'app/hooks/useResponse';
+import CancelPayLinkPopup from './components/CancelPayLinkPopup';
 
 // 订单详情
 const HistoryDetailScreen = () => {
@@ -67,6 +68,7 @@ const HistoryDetailScreen = () => {
   const [shareVisible, setShareVisible] = useState(false);
   const [declineRequestVisible, setDeclineRequestVisible] = useState(false);
   const [acceptRequestVisible, setAcceptRequestVisible] = useState(false);
+  const [cancelPayLinkVisible, setCancelPayLinkVisible] = useState(false);
   const toast = useToastController();
   const statusList = {
     PENDING: {
@@ -430,11 +432,10 @@ const HistoryDetailScreen = () => {
             color={'#212121'}
             borderColor={PrimaryColor}
             onPress={() => {
-              window.open(
+              onCopy(
                 `${ExternalLinkData.webPageHome}/${
                   orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
                 }/${orderData?.transactionCode}`,
-                '_blank',
               );
             }}
             // disabled={isLoading}
@@ -443,21 +444,17 @@ const HistoryDetailScreen = () => {
             }}
             unstyled
           >
-            {t('home.send.viewLink')}
+            {t('home.send.copyLink')}
           </Button>
           <AppButton
             style={{
               width: '50%',
             }}
             onPress={() => {
-              onCopy(
-                `${ExternalLinkData.webPageHome}/${
-                  orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
-                }/${orderData?.transactionCode}`,
-              );
+              setCancelPayLinkVisible(true);
             }}
           >
-            {t('home.send.copyLink')}
+            {t('home.send.void')}
           </AppButton>
         </XStack>
       )}
@@ -487,6 +484,16 @@ const HistoryDetailScreen = () => {
         onSuccess={() => {
           _getTransactionHistoryFindTransactionHistoryId();
           setAcceptRequestVisible(false);
+        }}
+      />
+      <CancelPayLinkPopup
+        setIsLoading={setIsLoading}
+        modalVisible={cancelPayLinkVisible}
+        setModalVisible={setCancelPayLinkVisible}
+        orderData={orderData}
+        onSuccess={async () => {
+          setCancelPayLinkVisible(false);
+          _getTransactionHistoryFindTransactionHistoryId();
         }}
       />
       {isLoading && <AppLoading />}

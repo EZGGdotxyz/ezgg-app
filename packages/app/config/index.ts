@@ -54,7 +54,7 @@ export const CurrencyList = [
 ];
 
 // 是否生产环境
-const isRelease = true;
+export const isRelease = true;
 
 // api 请求接口
 export const APP_URL = isRelease ? 'https://api.ezgg.xyz' : 'https://apiv2.catfoodworks.com';

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-03 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:26:18
+ * @LastEditTime: 2025-03-19 11:42:49
  * @FilePath: /ezgg-app/packages/app/utils/chain.ts
  */
 import {getAddress} from 'viem';
@@ -23,6 +23,7 @@ interface ChainConfig {
   explorerUrl: string;
   testnetExplorerUrl?: string;
   isEVM: boolean;
+  wethAddress?: string;
 }
 
 // 链配置映射
@@ -173,15 +174,27 @@ const isNativeToken = (address: string, chainId: number): boolean => {
   const config = getChainConfig(chainId);
   if (!config) return false;
 
+  // 检查地址是否为空
+  if (!address) return false;
+
+  // 转换为小写进行比较
+  const lowerAddress = address.toLowerCase();
+
+  // 检查是否是 EVM 链的 WETH 地址
   if (config.isEVM) {
-    return !address || address.toLowerCase() === NATIVE_TOKEN_ADDRESS;
+    const wethAddress = config.wethAddress?.toLowerCase();
+    return lowerAddress === wethAddress || lowerAddress === NATIVE_TOKEN_ADDRESS;
   }
 
-  if (config.assetName === 'tron') {
-    return address?.toLowerCase() === 'trx';
+  // 检查是否是特定链的原生代币
+  switch (config.assetName) {
+    case 'tron':
+      return lowerAddress === 'trx';
+    case 'solana':
+      return lowerAddress === 'sol';
+    default:
+      return false;
   }
-
-  return false;
 };
 
 /**

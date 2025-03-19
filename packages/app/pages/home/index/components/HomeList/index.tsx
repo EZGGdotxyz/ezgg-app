@@ -14,7 +14,6 @@ import {useEffect, useState, useCallback, useMemo, useRef} from 'react';
 import AppButton from 'app/Components/AppButton';
 import ChainListPopup from 'app/pages/home/index/components/ChainListPopup';
 import useRequest from 'app/hooks/useRequest';
-import {TokenIcon} from '@web3icons/react';
 import {getChainInfo} from 'app/utils/chain';
 import TokenList from '../TokenList';
 import History from '../History';

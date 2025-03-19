@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 21:29:17
+ * @LastEditTime: 2025-03-19 14:32:06
  * @FilePath: /ezgg-app/packages/app/Components/CurrencyPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, Sheet, SizableText, Text, XStack, YStack} from '@my/ui';
@@ -14,6 +14,7 @@ import {formatNumber, formatTokenAmount} from 'app/utils';
 import {useEffect, useRef, forwardRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'solito/link';
+import TokenIconWrapper from '../TokenIconWrapper';
 
 export type CurrencyPopupProps = {
   modalVisible: any;
@@ -131,19 +132,14 @@ const CurrencyPopup = forwardRef<any, any>(
                             <XStack flex={1} h={appScale(48)} pr={appScale(24)} pl={appScale(24)} ai={'center'}>
                               <XStack w={appScale(48)} h={appScale(48)} overflow={'hidden'} br={appScale(24)}>
                                 {dayItem?.token?.tokenSymbol && (
-                                  <TokenIcon
-                                    symbol={dayItem?.token?.tokenSymbol}
-                                    variant="background"
-                                    size={appScale(48)}
+                                  <TokenIconWrapper
+                                    tokenAddress={dayItem?.token?.address}
+                                    chainId={dayItem?.token?.chainId}
+                                    tokenSymbol={dayItem?.token?.tokenSymbol}
+                                    size={48}
                                   />
                                 )}
                               </XStack>
-                              {/* <AppImage
-                            width={appScale(48)}
-                            height={appScale(48)}
-                            src={require(`app/assets/images/token/${dayItem.token}.png`)}
-                            type="local"
-                          /> */}
                               <SizableText ml={appScale(16)} color={'#212121'} size={'$4'} fow={'600'}>
                                 {dayItem?.token?.tokenSymbol}
                               </SizableText>
