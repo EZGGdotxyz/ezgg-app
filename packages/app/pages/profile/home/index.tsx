@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 16:22:30
+ * @LastEditTime: 2025-03-20 15:51:50
  * @FilePath: /ezgg-app/packages/app/pages/profile/home/index.tsx
  */
 import {
@@ -123,11 +123,11 @@ const MyScreen = () => {
     ...(isLogin ? LogoutItems : []),
   ];
 
-  useEffect(() => {
-    if (isLogin) {
-      initUserInfo();
-    }
-  }, [isLogin]);
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     initUserInfo();
+  //   }
+  // }, [isLogin]);
 
   const onLogout = async () => {
     setIsLoading(true);

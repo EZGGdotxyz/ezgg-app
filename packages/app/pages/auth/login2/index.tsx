@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-10 16:48:34
+ * @LastEditTime: 2025-03-20 15:50:39
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {YStack, SizableText, AppImage, Button, ScrollView} from '@my/ui';
@@ -58,18 +58,14 @@ const LoginScreen = () => {
 
         initLogin(JSON.parse(token), JSON.parse(idToken));
         const _userInfo = await initUserInfo();
-        if (_userInfo?.customMetadata?.nickname) {
-          handleSuccess({
-            nickname: _userInfo?.customMetadata?.nickname || '',
-            avatar: _userInfo?.customMetadata?.avatar || '',
-          });
-        } else {
-          setAccountForm({
-            nickname: _userInfo?.customMetadata?.nickname || '',
-            avatar: _userInfo?.customMetadata?.avatar || '',
-          });
-          setIsSetInfo(true);
-        }
+        await postUserUpdateMember({
+          nickname: _userInfo?.customMetadata?.nickname || '',
+          avatar: _userInfo?.customMetadata?.avatar || '',
+        });
+        setTimeout(async () => {
+          setModalVisible(false);
+          onLink();
+        }, 1000);
       } catch (error) {
         console.error('登录处理失败:', error);
         setModalVisible(false);
@@ -90,7 +86,7 @@ const LoginScreen = () => {
           await refreshUser();
           setTimeout(async () => {
             setModalVisible(false);
-            getInfrastructureList();
+            // getInfrastructureList();
             onLink();
           });
         } catch (error) {
@@ -179,15 +175,7 @@ const LoginScreen = () => {
           </View>
         </YStack>
       </ScrollView>
-      <SuccessPopup
-        redirect={params?.redirect || ''}
-        handleSuccess={handleSuccess}
-        accountForm={accountForm}
-        setAccountForm={setAccountForm}
-        isSetInfo={isSetInfo}
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-      />
+      <SuccessPopup redirect={params?.redirect || ''} modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </PermissionPage>
   );
 };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 13:40:07
+ * @LastEditTime: 2025-03-20 15:08:00
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/CancelPayLinkPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -15,6 +15,7 @@ import {postTransactionHistoryDeclineTransactionHistory} from 'app/servers/api/t
 import useRequest from 'app/hooks/useRequest';
 import useResponse from 'app/hooks/useResponse';
 import {postTransactionPayLinkCancelPayLink} from 'app/servers/api/transactionPayLink';
+import {useTransaction} from 'app/hooks/useTransaction';
 
 interface CancelPayLinkPopupProps {
   modalVisible: boolean;
@@ -35,35 +36,53 @@ const CancelPayLinkPopup: React.FC<CancelPayLinkPopupProps> = ({
   const {makeRequest} = useRequest();
   const toast = useToastController();
   const {appScale} = useResponse();
+  const {onCancelPayLink, onSendContract, deployAA2} = useTransaction();
 
   const onSubmit = async () => {
     try {
       setModalVisible(false);
       setIsLoading(true);
-      const res = await makeRequest(
-        postTransactionPayLinkCancelPayLink({
-          transactionCode: orderData?.transactionCode,
-        }),
-      );
 
-      if (res?.code === '0') {
-        toast.show(
-          t(
-            orderData?.transactionType === 'REQUEST_LINK'
-              ? 'tips.success.cancelRequestPayLink'
-              : 'tips.success.cancelPayLink',
-          ),
-          {
-            duration: 3000,
-          },
+      if (orderData?.transactionType === 'REQUEST_LINK') {
+        const res = await makeRequest(
+          postTransactionHistoryDeclineTransactionHistory({
+            id: orderData?.id,
+          }),
         );
-        onSuccess();
+        if (res?.code === '0') {
+          toast.show(
+            t(
+              orderData?.transactionType === 'REQUEST_LINK'
+                ? 'tips.success.cancelRequestPayLink'
+                : 'tips.success.cancelPayLink',
+            ),
+            {
+              duration: 3000,
+            },
+          );
+          onSuccess();
+        }
+        setIsLoading(false);
+      } else {
+        onCancelPayLink(orderData, () => {
+          setIsLoading(false);
+          toast.show(
+            t(
+              orderData?.transactionType === 'REQUEST_LINK'
+                ? 'tips.success.cancelRequestPayLink'
+                : 'tips.success.cancelPayLink',
+            ),
+            {
+              duration: 3000,
+            },
+          );
+          onSuccess();
+        });
       }
     } catch (error) {
       toast.show(t('tips.error.networkError'), {
         duration: 3000,
       });
-    } finally {
       setIsLoading(false);
     }
   };

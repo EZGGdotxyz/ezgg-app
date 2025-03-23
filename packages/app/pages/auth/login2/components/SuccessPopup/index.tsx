@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 14:30:52
+ * @LastEditTime: 2025-03-20 15:26:37
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/components/SuccessPopup/index.tsx
  */
 import {
@@ -32,20 +32,12 @@ import useRequest from 'app/hooks/useRequest';
 import useResponse from 'app/hooks/useResponse';
 
 export type SuccessPopupProps = {
-  handleSuccess: (values: any) => void;
-  accountForm: any;
-  setAccountForm: (values) => void;
-  isSetInfo: boolean;
   modalVisible: any;
   setModalVisible: (values) => void;
   redirect: string;
 };
 
 const SuccessPopup: React.FC<any> = ({
-  handleSuccess,
-  accountForm,
-  setAccountForm,
-  isSetInfo,
   modalVisible,
   setModalVisible,
   redirect,
@@ -56,36 +48,6 @@ const SuccessPopup: React.FC<any> = ({
   const toast = useToastController();
   const {makeRequest} = useRequest();
   const {appScale} = useResponse();
-
-  const accountContinue = () => {
-    // 检查用户名长度是否小于4个字符
-    if (accountForm?.nickname && accountForm?.nickname.length < 4) {
-      toast.show(t('login.profile.nikeName.error'));
-      return;
-    }
-
-    // 检查用户名长度是否超过15个字符
-    if (accountForm?.nickname && accountForm?.nickname.length > 15) {
-      toast.show(t('login.profile.nikeName.tooLong'));
-      return;
-    }
-
-    // 检查用户名是否包含 Twitter 或 Admin 字样（不区分大小写）
-    const lowercaseNickname = accountForm?.nickname?.toLowerCase() || '';
-    if (lowercaseNickname.includes('twitter') || lowercaseNickname.includes('admin')) {
-      toast.show(t('login.profile.nikeName.restrictedWord'));
-      return;
-    }
-
-    // 检查用户名是否只包含字母、数字和下划线
-    const alphanumericRegex = /^[a-zA-Z0-9_]+$/;
-    if (accountForm?.nickname && !alphanumericRegex.test(accountForm.nickname)) {
-      toast.show(t('login.profile.nikeName.invalidChar'));
-      return;
-    }
-
-    handleSuccess(accountForm);
-  };
 
   return (
     <AppModal isExit={false} zIndex={12} setModalVisible={setModalVisible} modalVisible={modalVisible}>
@@ -100,189 +62,34 @@ const SuccessPopup: React.FC<any> = ({
         l={'5%'}
         bc="#fff"
       >
-        {isSetInfo && (
-          <YStack ai={'center'} pt={appScale(40)} pr={appScale(32)} pl={appScale(32)} pb={appScale(32)}>
-            <YStack w="100%" mb={appScale(24)}>
-            <SizableText ta={'center'} mb={appScale(12)} col={'#212121'} fontSize={'$4'}>
-            {t('login.profile.title')}
-              </SizableText>
-              <SizableText ta={'center'} col={'#212121'} fontSize={'$4'}>
-                {t('login.profile.sub')}
-              </SizableText>
-            </YStack>
-            <YStack mb={appScale(24)} pos={'relative'}>
-              <Button
-                w={appScale(104)}
-                h={appScale(104)}
-                borderRadius={appScale(52)}
-                overflow={'hidden'}
-                borderWidth={2}
-                borderColor={'#eee'}
-                flexShrink={0}
-                unstyled
-                onPress={() => {
-                  const input = document.createElement('input');
-                  input.type = 'file';
-                  input.accept = 'image/*';
-                  input.onchange = async (e: any) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = async (e: any) => {
-                        try {
-                          setLoading(true);
-                          const formData = new FormData();
-                          formData.append('file', file);
-                          const res = await makeRequest(
-                            postFileUpload({
-                              data: formData,
-                              headers: {
-                                'Content-Type': 'multipart/form-data',
-                              },
-                            }),
-                          );
-                          if (res?.data?.url) {
-                            setAccountForm({
-                              ...accountForm,
-                              avatar: res.data.url,
-                            });
-                          }
-                        } catch (error) {
-                          console.error('上传头像失败:', error);
-                          toast.show(t('common.upload.failed'));
-                        } finally {
-                          setLoading(false);
-                        }
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  };
-                  input.click();
-                }}
-              >
-                {!accountForm?.avatar ? (
-                  <AppImage
-                    width={appScale(100)}
-                    height={appScale(100)}
-                    src={require(`app/assets/images/avatar.png`)}
-                    type="local"
-                  />
-                ) : (
-                  <AppImage width={appScale(100)} height={appScale(100)} src={accountForm.avatar} />
-                )}
-              </Button>
-              <XStack
-                bc={PrimaryColor}
-                borderRadius={4}
-                w={appScale(28)}
-                h={appScale(28)}
-                pos={'absolute'}
-                bottom={0}
-                right={0}
-                ai={'center'}
-                jc={'center'}
-                pressStyle={{opacity: 0.8}}
-              >
-                <Edit3 size={'$1'} color={'#212121'} />
-              </XStack>
-            </YStack>
-
-            <YStack w={'100%'}>
-              <SizableText ta="left" mb={appScale(12)} col={'#212121'} fontSize={'$4'} fow={'700'}>
-                {t('login.profile.nikeName')}
-              </SizableText>
-              <XStack
-                w="100%"
-                p={appScale(16)}
-                bc={'#FAFAFA'}
-                br={appScale(8)}
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                mb={appScale(24)}
-              >
-                <Input
-                  w={'100%'}
-                  unstyled
-                  fontSize={'$8'}
-                  h={appScale(50)}
-                  lh={appScale(50)}
-                  color={'#212121'}
-                  fontWeight={'600'}
-                  pos="relative"
-                  // style={{borderWidth: 0, paddingLeft: 16, paddingRight: 16, height: 50, flex: 1, width: '100%'}}
-                  value={accountForm.nickname}
-                  onChangeText={(text) => {
-                    setAccountForm({
-                      ...accountForm,
-                      nickname: text,
-                    });
-                  }}
-                  placeholder={t('login.profile.nikeName.placeholder')}
-                />
-              </XStack>
-            </YStack>
-
-            <YStack w={appScale(343)}>
-              <AppButton isLoading={loading} onPress={accountContinue}>
-                {t('operate.button.login')}
-              </AppButton>
-              {/* <Button
-                style={{
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-                unstyled
-                mt={appScale(24)}
-                chromeless
-                onPress={() => {
-                  handleSuccess({
-                    nickname: '',
-                    avatar: '',
-                  });
-                  // push('/');
-                  // setModalVisible(false);
-                }}
-              >
-                <SizableText col={'#212121'} fontSize={'$3'}>
-                  {t('login.profile.dont')}
-                </SizableText>
-              </Button> */}
-            </YStack>
-          </YStack>
-        )}
-
-        {!isSetInfo && (
-          <YStack ai={'center'} pt={appScale(40)} pr={appScale(32)} pl={appScale(32)} pb={appScale(32)}>
-            <AppImage
-              src={require('app/assets/images/logoBg.png')}
-              type="local"
-              width={appScale(186)}
-              height={appScale(180)}
-            />
-            <SizableText ta={'center'} mb={appScale(32)} fontSize={'$6'} color={'#212121'} fow={'700'}>
-              {t('login.loginTips1')}
-            </SizableText>
-            <SizableText ta={'center'} h={appScale(26)} lh={appScale(26)} fontSize={'$4'} color={'#212121'} fow={'400'}>
-              {t('login.loginTips2')}
-            </SizableText>
-            <SizableText
-              ta={'center'}
-              h={appScale(26)}
-              lh={appScale(26)}
-              mb={appScale(32)}
-              fontSize={'$4'}
-              color={'#212121'}
-              fow={'400'}
-            >
-              {redirect ? t('login.loginTips5') : t('login.loginTips3')}
-            </SizableText>
-            <XStack>
-              <ActivityIndicator size={'large'} color={PrimaryColor} />
-            </XStack>
-          </YStack>
-        )}
+        <YStack ai={'center'} pt={appScale(40)} pr={appScale(32)} pl={appScale(32)} pb={appScale(32)}>
+          <AppImage
+            src={require('app/assets/images/logoBg.png')}
+            type="local"
+            width={appScale(186)}
+            height={appScale(180)}
+          />
+          <SizableText ta={'center'} mb={appScale(32)} fontSize={'$6'} color={'#212121'} fow={'700'}>
+            {t('login.loginTips1')}
+          </SizableText>
+          <SizableText ta={'center'} h={appScale(26)} lh={appScale(26)} fontSize={'$4'} color={'#212121'} fow={'400'}>
+            {t('login.loginTips2')}
+          </SizableText>
+          <SizableText
+            ta={'center'}
+            h={appScale(26)}
+            lh={appScale(26)}
+            mb={appScale(32)}
+            fontSize={'$4'}
+            color={'#212121'}
+            fow={'400'}
+          >
+            {redirect ? t('login.loginTips5') : t('login.loginTips3')}
+          </SizableText>
+          <XStack>
+            <ActivityIndicator size={'large'} color={PrimaryColor} />
+          </XStack>
+        </YStack>
       </YStack>
     </AppModal>
   );

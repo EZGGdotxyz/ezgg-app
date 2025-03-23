@@ -57,4 +57,7 @@ export default {
 
   'tips.success.cancelPayLink': 'PayLink cancelled',
   'tips.success.cancelRequestPayLink': 'Request PayLink cancelled',
+
+  'tips.userInfo.success': 'User information updated successfully',
+  'tips.userInfo.failed': 'User information update failed',
 };

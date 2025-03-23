@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-19 14:45:32
+ * @LastEditTime: 2025-03-20 14:55:14
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/index.tsx
  */
 import {
@@ -407,57 +407,58 @@ const HistoryDetailScreen = () => {
           />
         )}
 
-      {(orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') && (
-        <XStack
-          flexShrink={0}
-          pl={appScale(24)}
-          pr={appScale(24)}
-          pt={appScale(12)}
-          pb={appScale(isIphoneX() ? 46 : 12)}
-          w="100%"
-          ai={'center'}
-          jc={'center'}
-          space="$3"
-          borderTopWidth={1}
-          borderColor={'#F2F2F2'}
-        >
-          <Button
-            h={appScale(58)}
-            w={'50%'}
-            br={appScale(28)}
+      {orderData?.transactionStatus === 'PENDING' &&
+        (orderData?.transactionType === 'PAY_LINK' || orderData?.transactionType === 'REQUEST_LINK') && (
+          <XStack
+            flexShrink={0}
+            pl={appScale(24)}
+            pr={appScale(24)}
+            pt={appScale(12)}
+            pb={appScale(isIphoneX() ? 46 : 12)}
+            w="100%"
             ai={'center'}
             jc={'center'}
-            bc={'#fff'}
-            borderWidth={2}
-            color={'#212121'}
-            borderColor={PrimaryColor}
-            onPress={() => {
-              onCopy(
-                `${ExternalLinkData.webPageHome}/${
-                  orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
-                }/${orderData?.transactionCode}`,
-              );
-            }}
-            // disabled={isLoading}
-            pressStyle={{
-              opacity: 0.85,
-            }}
-            unstyled
+            space="$3"
+            borderTopWidth={1}
+            borderColor={'#F2F2F2'}
           >
-            {t('home.send.copyLink')}
-          </Button>
-          <AppButton
-            style={{
-              width: '50%',
-            }}
-            onPress={() => {
-              setCancelPayLinkVisible(true);
-            }}
-          >
-            {t('home.send.void')}
-          </AppButton>
-        </XStack>
-      )}
+            <Button
+              h={appScale(58)}
+              w={'50%'}
+              br={appScale(28)}
+              ai={'center'}
+              jc={'center'}
+              bc={'#fff'}
+              borderWidth={2}
+              color={'#212121'}
+              borderColor={PrimaryColor}
+              onPress={() => {
+                onCopy(
+                  `${ExternalLinkData.webPageHome}/${
+                    orderData?.transactionCategory === 'SEND' ? 'claim' : 'requesting'
+                  }/${orderData?.transactionCode}`,
+                );
+              }}
+              // disabled={isLoading}
+              pressStyle={{
+                opacity: 0.85,
+              }}
+              unstyled
+            >
+              {t('home.send.copyLink')}
+            </Button>
+            <AppButton
+              style={{
+                width: '50%',
+              }}
+              onPress={() => {
+                setCancelPayLinkVisible(true);
+              }}
+            >
+              {t('home.send.void')}
+            </AppButton>
+          </XStack>
+        )}
 
       {/* <SharePopup
         modalVisible={shareVisible}

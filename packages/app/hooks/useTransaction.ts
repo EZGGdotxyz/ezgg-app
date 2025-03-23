@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:27:17
+ * @LastEditTime: 2025-03-20 15:03:21
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -19,6 +19,7 @@ import {
   postTransactionHistoryUpdateTransactionHash,
 } from 'app/servers/api/transactionHistory';
 import {
+  postTransactionPayLinkCancelPayLink,
   postTransactionPayLinkCreatePayLink,
   postTransactionPayLinkFindPayLink,
   postTransactionPayLinkUpdateTransactionHash,
@@ -449,6 +450,63 @@ export const useTransaction = () => {
     }
   };
 
+  // 取消支付链接
+  const onCancelPayLink = async (orderData: any, onSuccess?: (data: any) => void) => {
+    try {
+      const res = await makeRequest(
+        postTransactionPayLinkCancelPayLink({
+          transactionCode: orderData?.transactionCode,
+        }),
+      );
+      if (res?.code !== '0') {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+        return;
+      }
+
+      const payLink = await makeRequest(
+        postTransactionPayLinkFindPayLink({
+          transactionCode: orderData?.transactionCode,
+        }),
+      );
+      if (!payLink?.data?.transactionCode) {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+        return;
+      }
+      const baseClient = await getClientForChain({
+        id: orderData.chainId,
+      });
+
+      if (!baseClient) {
+        throw new Error('Failed to get client for chain');
+      }
+      // await deployAA(baseClient);
+      const bizContractAddress = getAddress(payLink.data.bizContractAddress!);
+
+      const transactionHash = await baseClient.sendTransaction(
+        {
+          to: bizContractAddress,
+          data: encodeFunctionData({
+            abi: TokenLinkContract.abi,
+            functionName: 'cancel',
+            args: [orderData?.transactionCode, payLink.data.otp],
+          }),
+        },
+        {
+          uiOptions: {
+            showWalletUIs: false,
+          },
+        },
+      );
+      onSuccess?.(transactionHash);
+    } catch (error) {
+      handleTransactionError(error, toast, t);
+    }
+  };
+
   return {
     handleTransactionSuccess,
     createTransaction,
@@ -461,5 +519,6 @@ export const useTransaction = () => {
     onSendPayLinkSubmit,
     onSendContract,
     deployAA2,
+    onCancelPayLink
   };
 };

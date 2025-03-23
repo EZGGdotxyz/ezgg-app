@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 15:14:02
+ * @LastEditTime: 2025-03-20 15:43:40
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/tips.ts
  */
 export default {
@@ -53,4 +53,6 @@ export default {
   'tips.success.cancelPayLink': '支付連結已取消',
   'tips.success.cancelRequestPayLink': '請求支付連結已取消',
 
+  'tips.userInfo.success': '用戶信息更新成功',
+  'tips.userInfo.failed': '用戶信息更新失敗',
 };

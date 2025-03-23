@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 16:35:29
+ * @LastEditTime: 2025-03-20 15:38:40
  * @FilePath: /ezgg-app/packages/app/hooks/useInit.ts
  */
 import {Dispatch} from 'app/store';
@@ -60,7 +60,7 @@ export default function useInit() {
   }, [dispatch]);
 
   // 初始化函数
-  const initApp = async () => {
+  const initUser = async () => {
     const token: any = await getUserToken();
     const idToken: any = await getUserIdToken();
     const userInfo: any = await getUserInfo();
@@ -76,7 +76,15 @@ export default function useInit() {
       // 获取区块链列表
       getInfrastructureList();
     }
+  };
 
+  useEffect(() => {
+    if (ready && authenticated) {
+      initUser();
+    }
+  }, [ready, authenticated]);
+
+  const initApp = async () => {
     // 设置语言
     const locale = (await getLanguage()) || DefaultLanguage;
 
@@ -85,22 +93,16 @@ export default function useInit() {
     dispatch.app.updateState({
       currency,
     });
-
     if (locale) {
       i18n?.changeLanguage(locale);
     }
   };
 
-  useEffect(() => {
-    if (ready && authenticated) {
-      initApp();
-    }
-  }, [ready, authenticated]);
 
-  // // 在组件挂载时初始化
-  // useEffect(() => {
-  //   initApp();
-  // }, []);
+  // 在组件挂载时初始化
+  useEffect(() => {
+    initApp();
+  }, []);
 
   return {
     _init: initApp,

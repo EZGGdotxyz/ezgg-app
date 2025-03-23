@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 15:23:38
+ * @LastEditTime: 2025-03-20 14:44:16
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/History/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -16,9 +16,10 @@ import useResponse from 'app/hooks/useResponse';
 
 export type HistoryProps = {
   history: any[];
+  onClick: (item: any, action?: any) => void;
 };
 
-const History: React.FC<HistoryProps> = ({history}) => {
+const History: React.FC<HistoryProps> = ({history, onClick}) => {
   const [{isLogin}] = useRematchModel('user');
   const {push} = useRouter();
   const {t} = useTranslation();
@@ -65,7 +66,7 @@ const History: React.FC<HistoryProps> = ({history}) => {
         <ChevronRight size="$2" color={'$color11'} />
       </XStack>
       {history.map((item, index) => (
-        <HistoryDayItem key={index} item={item} />
+        <HistoryDayItem onClick={onClick} key={`day-${item.day}-${index}`} item={item} />
       ))}
     </>
   );

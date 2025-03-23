@@ -1,7 +1,7 @@
 <!--
  * @Date: 2024-01-10 16:44:53
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:33:30
+ * @LastEditTime: 2025-03-20 14:11:06
  * @FilePath: /ezgg-app/README.md
 -->
 
@@ -17,7 +17,8 @@ https://next-terminal.catfoodworks.com/
 /app/srv/public
 
 
-rm -f crypto-transfer-frontend
-
+rm -r crypto-transfer-frontend
 
 unzip crypto-transfer-frontend.zip
+
+rm crypto-transfer-frontend.zip

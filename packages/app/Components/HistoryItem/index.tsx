@@ -19,11 +19,10 @@ import {useCallback} from 'react';
 export type HistoryItemProps = {
   item: any;
   isBottom?: boolean;
-  activeTab?: string;
   onClick?: (item: any, action?: any) => void;
 };
 // 交易历史item
-const HistoryItem: React.FC<HistoryItemProps> = ({item, isBottom = false, onClick, activeTab}) => {
+const HistoryItem: React.FC<HistoryItemProps> = ({item, isBottom = false, onClick}) => {
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
   const [{currency}] = useRematchModel('app');

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:51:58
+ * @LastEditTime: 2025-03-20 14:43:20
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/HomeList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet, ScrollView} from '@my/ui';
@@ -20,6 +20,9 @@ import History from '../History';
 import {getTransactionHistoryPageTransactionHistory} from 'app/servers/api/transactionHistory';
 import useResponse from 'app/hooks/useResponse';
 import useBlockchain from 'app/hooks/useBlockchain';
+import CancelPayLinkPopup from 'app/pages/home/history/detail/components/CancelPayLinkPopup';
+import AcceptRequestPopup from 'app/pages/home/history/detail/components/AcceptRequestPopup';
+import DeclineRequestPopup from 'app/pages/home/history/detail/components/DeclineRequestPopup';
 
 export type HomeListProps = {
   switchOn: boolean;
@@ -42,6 +45,10 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
     chainId: 'all',
     platform: 'ETH',
   });
+  const [declineRequestVisible, setDeclineRequestVisible] = useState(false);
+  const [acceptRequestVisible, setAcceptRequestVisible] = useState(false);
+  const [orderData, setOrderData] = useState<any>({});
+  const [cancelPayLinkVisible, setCancelPayLinkVisible] = useState(false);
 
   // 使用 useMemo 优化 tokenTypes 的计算
   const tokenTypes = useMemo(
@@ -115,6 +122,16 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
 
   const chainListPopupRef = useRef(null);
 
+  const onClick = (item: any, action = '') => {
+    setOrderData(item);
+    if (action === 'cancel') {
+      setCancelPayLinkVisible(true);
+    } else if (action === 'decline') {
+      setDeclineRequestVisible(true);
+    } else {
+      setAcceptRequestVisible(true);
+    }
+  };
   return (
     <YStack f={1}>
       <ScrollView f={1} bc="$background">
@@ -122,7 +139,7 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
           {!switchOn && (
             <TokenList selectedType={selectedType} setSheetOpen={setSheetOpen} list={list} tokenTypes={tokenTypes} />
           )}
-          {switchOn && <History history={history} />}
+          {switchOn && <History history={history} onClick={onClick} />}
         </YStack>
       </ScrollView>
       <ChainListPopup
@@ -132,6 +149,36 @@ const HomeList: React.FC<HomeListProps> = ({switchOn, setIsLoading}) => {
         sheetOpen={sheetOpen}
         setSelectedType={setSelectedType}
         selectedType={selectedType}
+      />
+      <DeclineRequestPopup
+        setIsLoading={setIsLoading}
+        modalVisible={declineRequestVisible}
+        setModalVisible={setDeclineRequestVisible}
+        orderData={orderData}
+        onSuccess={async () => {
+          setDeclineRequestVisible(false);
+          fetchTransactionHistory();
+        }}
+      />
+      <AcceptRequestPopup
+        setIsLoading={setIsLoading}
+        modalVisible={acceptRequestVisible}
+        setModalVisible={setAcceptRequestVisible}
+        orderData={orderData}
+        onSuccess={async () => {
+          setAcceptRequestVisible(false);
+          fetchTransactionHistory();
+        }}
+      />
+      <CancelPayLinkPopup
+        setIsLoading={setIsLoading}
+        modalVisible={cancelPayLinkVisible}
+        setModalVisible={setCancelPayLinkVisible}
+        orderData={orderData}
+        onSuccess={async () => {
+          setCancelPayLinkVisible(false);
+          fetchTransactionHistory();
+        }}
       />
     </YStack>
   );

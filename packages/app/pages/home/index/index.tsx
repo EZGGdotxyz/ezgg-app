@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-07 15:49:22
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 21:09:24
+ * @LastEditTime: 2025-03-20 15:54:01
  * @FilePath: /ezgg-app/packages/app/pages/home/index/index.tsx
  */
 import {AppImage, Button, Label, ScrollView, Separator, SizableText, XStack, YStack} from '@my/ui';
@@ -23,6 +23,7 @@ import AppLoading from 'app/Components/AppLoading';
 import {getNotificationGetUnreadCount} from 'app/servers/api/notification';
 import useResponse from 'app/hooks/useResponse';
 import {usePrivy} from '@privy-io/react-auth';
+import SetUserInfo from 'app/Components/SetUserInfo';
 
 interface HomeScreenProps {}
 // 首页
@@ -85,7 +86,9 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    isLogin && _getUnread();
+    if (isLogin) {
+      _getUnread();
+    }
   }, [isLogin]);
 
   return (
@@ -188,6 +191,8 @@ const HomeScreen = () => {
         </XStack>
       </XStack>
       <HomeList switchOn={switchOn} setIsLoading={setIsLoading} />
+
+      <SetUserInfo setIsLoading={setIsLoading} />
       {isLoading && <AppLoading />}
     </PermissionPage>
   );

@@ -13,9 +13,9 @@ import {getRelativeDate} from 'app/utils';
 import HistoryItem from '../HistoryItem';
 import useResponse from 'app/hooks/useResponse';
 
-export type HistoryDayItemProps = {item: any; activeTab?: string; onClick?: (item: any, action?: any) => void};
+export type HistoryDayItemProps = {item: any; onClick?: (item: any, action?: any) => void};
 // 交易历史item
-const HistoryDayItem: React.FC<HistoryDayItemProps> = ({item, activeTab, onClick}) => {
+const HistoryDayItem: React.FC<HistoryDayItemProps> = ({item, onClick}) => {
   const {push} = useRouter();
   const {t, i18n} = useTranslation();
   const {appScale} = useResponse();
@@ -29,7 +29,7 @@ const HistoryDayItem: React.FC<HistoryDayItemProps> = ({item, activeTab, onClick
         <XStack h={2} flex={1} bc={'rgba(238, 238, 238, 1)'}></XStack>
       </XStack>
       {item.list.map((dayItem, index) => (
-        <HistoryItem activeTab={activeTab} onClick={onClick} key={dayItem?.id} item={dayItem} isBottom={index === item.list.length - 1} />
+        <HistoryItem  onClick={onClick} key={dayItem?.id} item={dayItem} isBottom={index === item.list.length - 1} />
       ))}
     </YStack>
   );

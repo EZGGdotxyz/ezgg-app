@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 14:30:43
+ * @LastEditTime: 2025-03-20 15:10:29
  * @FilePath: /ezgg-app/packages/app/Components/AppModal/index.tsx
  */
 import {Button, Paragraph, YStack} from '@my/ui';

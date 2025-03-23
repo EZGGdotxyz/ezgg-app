@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-19 14:56:10
+ * @LastEditTime: 2025-03-20 15:53:23
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -46,6 +46,7 @@ import PayPopup from 'app/Components/PayPopup';
 import {getBalanceFindBalance} from 'app/servers/api/balance';
 import {handleTransactionError} from 'app/utils/error';
 import TokenIconWrapper from 'app/Components/TokenIconWrapper';
+import SetUserInfo from 'app/Components/SetUserInfo';
 
 const {useParams} = createParam<any>();
 
@@ -406,6 +407,7 @@ const TakeScreen = (any) => {
         </YStack>
       </ScrollView>
       {isLoading && <AppLoading />}
+      <SetUserInfo setIsLoading={setIsLoading} />
       <PayPopup
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
