@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-17 14:28:26
+ * @LastEditTime: 2025-03-24 14:00:58
  * @FilePath: /ezgg-app/packages/app/Components/ReplacePay/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';
@@ -126,6 +126,7 @@ const ReplacePay: React.FC<ReplacePayProps> = ({
 
         {orderData?.chainId && (
           <Currency
+            isReplace={true}
             chainId={orderData?.chainId}
             setIsLoading={setIsLoading}
             currencyData={replaceCurrencyData}

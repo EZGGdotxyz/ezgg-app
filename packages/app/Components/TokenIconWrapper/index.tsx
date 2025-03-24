@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-19 11:27:10
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-19 14:18:48
+ * @LastEditTime: 2025-03-24 11:30:18
  * @FilePath: /ezgg-app/packages/app/Components/TokenIconWrapper/index.tsx
  */
 import {useEffect, useState} from 'react';
@@ -45,6 +45,12 @@ const TokenIconWrapper: React.FC<TokenIconWrapperProps> = ({tokenAddress, chainI
   useEffect(() => {
     const loadIcon = async () => {
       try {
+        // 1. 检查是否为 HKC
+        if (processedTokenSymbol === 'HKC') {
+          setIconUrl(null);
+          return;
+        }
+
         // 2. 从 Trust Wallet 获取
         const trustWalletUrl = getTrustWalletAssetUrl(tokenAddress, chainId);
         if (trustWalletUrl && !trustWalletUrl.endsWith('info/logo.png')) {
@@ -84,6 +90,20 @@ const TokenIconWrapper: React.FC<TokenIconWrapperProps> = ({tokenAddress, chainI
     setImageLoadError(true);
     setIconUrl(null);
   };
+
+  // 如果是 HKC，使用本地图片
+  if (processedTokenSymbol === 'HKC') {
+    return (
+      <YStack height={appScale(size)} width={appScale(size)} borderRadius={appScale(size / 2)} overflow={'hidden'}>
+        <AppImage
+          width={appScale(size)}
+          height={appScale(size)}
+          src={require('app/assets/images/token/hkc.jpg')}
+          type="local"
+        />
+      </YStack>
+    );
+  }
 
   if (iconUrl && !imageLoadError) {
     return (

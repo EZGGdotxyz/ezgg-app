@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 22:06:49
+ * @LastEditTime: 2025-03-24 14:05:28
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -287,7 +287,9 @@ const PayLinkScreen = ({type}: any) => {
                 fontWeight={'600'}
                 pos="relative"
               >
-                {`${payLinkData?.amount} ${payLinkData?.currencyData?.token?.tokenSymbol} (${payLinkData?.currencyData?.chainName})`}
+                {payLinkData?.amount
+                  ? `${payLinkData?.amount} ${payLinkData?.currencyData?.token?.tokenSymbol} (${payLinkData?.currencyData?.chainName})`
+                  : ''}
               </SizableText>
             </XStack>
           </YStack>

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-30 18:40:54
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 21:24:51
+ * @LastEditTime: 2025-03-24 11:33:16
  * @FilePath: /ezgg-app/packages/app/config/index.ts
  */
 // 主题色
@@ -42,15 +42,15 @@ export const CurrencyList = [
     label: 'HKD',
     symbol: 'HK$',
   },
-  {
-    id: '4',
-    emoji: '🇸🇬',
-    chineseName: '新加坡幣',
-    englishName: 'Singapore dollar',
-    code: 'sgd',
-    label: 'SGD',
-    symbol: 'S$',
-  },
+  // {
+  //   id: '4',
+  //   emoji: '🇸🇬',
+  //   chineseName: '新加坡幣',
+  //   englishName: 'Singapore dollar',
+  //   code: 'sgd',
+  //   label: 'SGD',
+  //   symbol: 'S$',
+  // },
 ];
 
 // 是否生产环境
