@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 13:39:15
+ * @LastEditTime: 2025-03-24 14:56:47
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/replace/index.tsx
  */
 import {
@@ -90,7 +90,7 @@ const ReplaceScreen = ({type}: any) => {
           platform: orderData?.platform,
           chainId: orderData?.chainId,
           address: replaceCurrencyData?.token?.address,
-          currency: String(orderData?.currency || 'usd').toLowerCase(),
+          currency: String(orderData?.currency || 'USD'),
         }),
       );
 

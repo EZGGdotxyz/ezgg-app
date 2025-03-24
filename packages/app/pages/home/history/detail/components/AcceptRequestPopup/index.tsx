@@ -77,7 +77,7 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
           platform: orderData?.platform,
           chainId: orderData?.chainId,
           address: orderData?.tokenContractAddress,
-          currency: String(orderData?.currency || 'usd').toLowerCase(),
+          currency: String(orderData?.currency || 'USD'),
         }),
       );
 

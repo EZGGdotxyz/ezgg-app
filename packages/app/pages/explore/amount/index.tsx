@@ -60,7 +60,7 @@ const AmountScreen = () => {
   const [buttonLoading, setButtonLoading] = React.useState(false);
   const {back, push, replace} = useRouter();
   const {params} = useParams();
-  const {onSendSubmit, onRequestSubmit, createTransaction,deployAA2} = useTransaction();
+  const {onSendSubmit, onRequestSubmit, createTransaction, deployAA2} = useTransaction();
   const {makeRequest} = useRequest();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [orderData, setOrderData] = React.useState<any>();
@@ -181,7 +181,7 @@ const AmountScreen = () => {
           platform: orderData?.platform,
           chainId: orderData?.chainId,
           address: orderData?.tokenContractAddress,
-          currency: String(orderData?.currency || 'usd').toLowerCase(),
+          currency: String(orderData?.currency || 'USD'),
         }),
       );
       if (res?.data?.tokenAmount) {

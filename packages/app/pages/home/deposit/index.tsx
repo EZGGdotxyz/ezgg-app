@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-19 14:54:24
+ * @LastEditTime: 2025-03-24 14:46:43
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -21,7 +21,14 @@ import React, {useEffect, useState, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import Keyboard from 'app/Components/Keyboard';
-import {convertAmountToTokenDecimals, formatNumber, formatTokenAmount, getCurrency, truncateAddress} from 'app/utils';
+import {
+  convertAmountToTokenDecimals,
+  formatCurrencyAmount,
+  formatNumber,
+  formatTokenAmount,
+  getCurrency,
+  truncateAddress,
+} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import AppLoading from 'app/Components/AppLoading';
@@ -413,7 +420,12 @@ const DepositScreen = () => {
                       balance ? formatTokenAmount(balance.toString(), currencyData?.token?.tokenDecimals) : '0.00'
                     } ${currencyData?.token?.tokenSymbol} (${
                       getCurrency(currencyData?.currency)?.symbol
-                    } ${formatNumber(currencyData?.currencyAmount)})`
+                    } ${formatCurrencyAmount(
+                      currencyData?.token?.tokenSymbol,
+                      formatTokenAmount(balance ? balance?.toString() : 0, currencyData?.token?.tokenDecimals),
+                      currencyData?.currencyAmount,
+                      getCurrency(currencyData?.currency)?.label,
+                    )})`
                   : ''}
               </SizableText>
             </XStack>
@@ -468,7 +480,9 @@ const DepositScreen = () => {
             {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
           </YStack>
         )}
-        {switchOn && <Transfer currencyData={currencyData} selectedType={selectedType} setSelectedType={setSelectedType} />}
+        {switchOn && (
+          <Transfer currencyData={currencyData} selectedType={selectedType} setSelectedType={setSelectedType} />
+        )}
       </ScrollView>
       {isLoading && <AppLoading />}
     </PermissionPage>

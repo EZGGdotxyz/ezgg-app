@@ -62,7 +62,7 @@ export const user = createModel<RootModel>()({
       dispatch.app.updateState({
         globalConfig: {},
         unread: 0,
-        currency: 'usd',
+        currency: 'USD',
       });
       removeUserInfo();
       removeUserToken();

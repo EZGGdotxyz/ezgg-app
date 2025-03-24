@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-19 14:31:21
+ * @LastEditTime: 2025-03-24 14:47:48
  * @FilePath: /ezgg-app/packages/app/pages/home/index/components/TokenList/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, Sheet} from '@my/ui';
@@ -9,7 +9,7 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@tamagui/lucide-icons';
-import {formatNumber, getCurrency} from 'app/utils';
+import {formatCurrencyAmount, formatNumber, getCurrency} from 'app/utils';
 import {useMemo} from 'react';
 import AppButton from 'app/Components/AppButton';
 import ChainListPopup from 'app/pages/home/index/components/ChainListPopup';
@@ -73,7 +73,13 @@ const TokenList: React.FC<TokenListProps> = ({list, tokenTypes, setSheetOpen, se
             {item?.tokenAmount}
           </SizableText>
           <SizableText ta={'right'} fontSize={'$4'} color={'#9395A4'} fontWeight={'500'}>
-            {formatNumber(Number(item?.currencyAmount))} {getCurrency(currency)?.label}
+            {formatCurrencyAmount(
+              item?.token?.tokenSymbol,
+              item?.tokenAmount,
+              item?.currencyAmount,
+              getCurrency(currency)?.label,
+            )}
+            {getCurrency(currency)?.label}
           </SizableText>
         </YStack>
       </XStack>

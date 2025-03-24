@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-19 14:41:50
+ * @LastEditTime: 2025-03-24 14:46:08
  * @FilePath: /ezgg-app/packages/app/Components/HistoryItem/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText, debounce} from '@my/ui';
@@ -9,7 +9,7 @@ import {useRematchModel} from 'app/store/model';
 import {useRouter} from 'solito/router';
 import {useTranslation} from 'react-i18next';
 import {ChevronDown} from '@tamagui/lucide-icons';
-import {formatNumber, formatTokenAmount, getCurrency} from 'app/utils';
+import {formatCurrencyAmount, formatNumber, formatTokenAmount, getCurrency} from 'app/utils';
 import {getChainInfo} from 'app/utils/chain';
 import dayjs from 'dayjs';
 import useResponse from 'app/hooks/useResponse';
@@ -260,9 +260,12 @@ const HistoryItem: React.FC<HistoryItemProps> = ({item, isBottom = false, onClic
         </XStack>
         <YStack gap={appScale(2)} flexShrink={0} pl={appScale(12)}>
           <SizableText ta={'right'} fontSize={'$3'} color={'#26273C'} fontWeight={'600'}>
-            {`${judgeAmountType(item)} ${formatNumber(Number(item?.currencyAmount || 0))} ${
-              getCurrency(currency)?.label
-            }`}
+            {`${judgeAmountType(item)} ${formatCurrencyAmount(
+              item?.tokenSymbol,
+              formatTokenAmount(item?.amount, item?.tokenDecimals),
+              item?.currencyAmount,
+              getCurrency(currency)?.label,
+            )} ${getCurrency(currency)?.label}`}
           </SizableText>
           <SizableText ta={'right'} fontSize={'$1'} color={'#9395A4'} fontWeight={'500'}>
             {`${judgeAmountType(item)} ${formatTokenAmount(item?.amount, item?.tokenDecimals)} ${item?.tokenSymbol} (${

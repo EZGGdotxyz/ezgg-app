@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-12 17:43:21
+ * @LastEditTime: 2025-03-24 15:02:06
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -196,5 +196,13 @@ export const convertAmountToTokenDecimals = (amount: string, decimals: number): 
   } catch (error) {
     console.error('金额转换错误:', error);
     return '0';
+  }
+};
+
+export const formatCurrencyAmount = (tokenSymbol: any, tokenAmount: any, currencyAmount: any, currency: any) => {
+  if (tokenSymbol === 'HKC' && currency === 'HKD') {
+    return formatNumber(Number(tokenAmount));
+  } else {
+    return formatNumber(Number(currencyAmount));
   }
 };

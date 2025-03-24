@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-20 15:53:23
+ * @LastEditTime: 2025-03-24 14:56:53
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -22,7 +22,15 @@ import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppButton from 'app/Components/AppButton';
-import {convertAmountToTokenDecimals, formatNumber, formatTokenAmount, getUserSubName, isIphoneX} from 'app/utils';
+import {
+  convertAmountToTokenDecimals,
+  formatCurrencyAmount,
+  formatNumber,
+  formatTokenAmount,
+  getCurrency,
+  getUserSubName,
+  isIphoneX,
+} from 'app/utils';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
 import {createParam} from 'solito';
@@ -55,6 +63,8 @@ const TakeScreen = (any) => {
   const {t} = useTranslation();
   const {makeRequest} = useRequest();
   const dispatch = useDispatch<Dispatch>();
+  const [{currency}] = useRematchModel('app');
+
   const [{userInfo, isLogin}] = useRematchModel('user');
   const {appScale} = useResponse();
 
@@ -97,7 +107,7 @@ const TakeScreen = (any) => {
             platform: orderData?.platform,
             chainId: orderData?.chainId,
             address: orderData?.tokenContractAddress,
-            currency: String(orderData?.currency || 'usd').toLowerCase(),
+            currency: String(orderData?.currency || 'USD'),
           }),
         );
 
@@ -165,7 +175,10 @@ const TakeScreen = (any) => {
   const _getTransactionHistoryFindTransactionHistoryCodeTransactionCode = async () => {
     setIsLoading(true);
     const res = await makeRequest(
-      getTransactionHistoryFindTransactionHistoryCodeTransactionCode({transactionCode: params?.code}),
+      getTransactionHistoryFindTransactionHistoryCodeTransactionCode({
+        transactionCode: params?.code,
+        currency: currency,
+      }),
     );
     if (res?.code === '0') {
       const _orderData = res?.data;
@@ -324,7 +337,14 @@ const TakeScreen = (any) => {
 
           <XStack w="100%" mb={appScale(24)}>
             <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$4'} color={'#212121'} fontWeight={'400'}>
-              {orderData?.currencyAmount ? `≈ $${orderData?.currencyAmount} ${orderData?.currency}` : ''}
+              {orderData?.currencyAmount
+                ? `≈ $${formatCurrencyAmount(
+                    orderData?.tokenSymbol,
+                    formatTokenAmount(orderData?.amount, orderData?.tokenDecimals),
+                    orderData?.currencyAmount,
+                    getCurrency(orderData?.currency)?.label,
+                  )} ${orderData?.currency}`
+                : ''}
             </SizableText>
           </XStack>
 

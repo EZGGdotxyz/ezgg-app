@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-24 14:05:28
+ * @LastEditTime: 2025-03-24 14:56:43
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -161,7 +161,7 @@ const PayLinkScreen = ({type}: any) => {
           platform: orderData?.platform,
           chainId: orderData?.chainId,
           address: orderData?.tokenContractAddress,
-          currency: String(orderData?.currency || 'usd').toLowerCase(),
+          currency: String(orderData?.currency || 'USD'),
         }),
       );
       if (res?.data?.tokenAmount) {
