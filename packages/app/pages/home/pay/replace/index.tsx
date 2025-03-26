@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-24 14:56:47
+ * @LastEditTime: 2025-03-26 10:14:50
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/replace/index.tsx
  */
 import {
@@ -104,8 +104,8 @@ const ReplaceScreen = ({type}: any) => {
         const paddedDecimal = decimalPart.padEnd(decimals, '0');
         const fullIntegerAmount = integerPart + paddedDecimal;
         // 转换为 BigInt
-        const tokenAmount = BigInt(fullIntegerAmount);
-        if (tokenAmount < BigInt(feeData?.data?.totalTokenCost)) {
+        const tokenAmount = BigInt(Number(fullIntegerAmount));
+        if (tokenAmount < BigInt(Number(feeData?.data?.totalTokenCost))) {
           throw new Error('insufficient balance');
         }
       }

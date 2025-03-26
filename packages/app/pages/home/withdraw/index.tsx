@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:25:46
+ * @LastEditTime: 2025-03-26 10:10:37
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -210,13 +210,9 @@ const WithdrawScreen = () => {
             </YStack>
             <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
               {currencyData?.tokenAmount && (
-                <SizableText
-                  h={appScale(24)}
-                  lh={appScale(24)}
-                  fontSize={'$4'}
-                  color={'#212121'}
-                  fontWeight={'500'}
-                >{`${t('home.balance')}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
+                <SizableText lh={appScale(24)} ta="center" fontSize={'$4'} color={'#212121'} fontWeight={'500'}>{`${t(
+                  'home.balance',
+                )}: ${currencyData?.tokenAmount} ${currencyData?.token?.tokenSymbol} (${
                   currencyData?.chainName
                 })`}</SizableText>
               )}

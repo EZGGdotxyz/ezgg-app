@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-24 14:56:43
+ * @LastEditTime: 2025-03-26 10:12:33
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -168,15 +168,15 @@ const PayLinkScreen = ({type}: any) => {
         // 考虑代币精度，将小数转换为整数
         const tokenAmountStr = String(res?.data?.tokenAmount);
         const [integerPart = '0', decimalPart = ''] = tokenAmountStr.split('.');
-        const decimals = orderData?.tokenDecimals || 18;
+        const decimals = orderData?.tokenDecimals;
 
         // 补齐精度位数
         const paddedDecimal = decimalPart.padEnd(decimals, '0');
         const fullIntegerAmount = integerPart + paddedDecimal;
 
         // 转换为 BigInt
-        const tokenAmount = BigInt(fullIntegerAmount);
-        if (tokenAmount < BigInt(orderData?.amount + Number(orderData?.networkFee?.totalTokenCost))) {
+        const tokenAmount = BigInt(Number(fullIntegerAmount));
+        if (tokenAmount < BigInt(Number(orderData?.amount) + Number(orderData?.networkFee?.totalTokenCost))) {
           throw new Error('insufficient balance');
         }
       }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 13:40:12
+ * @LastEditTime: 2025-03-26 10:14:07
  * @FilePath: /ezgg-app/packages/app/pages/home/history/detail/components/AcceptRequestPopup/index.tsx
  */
 import {AppImage, Button, Text, XStack, SizableText, useToastController, YStack} from '@my/ui';
@@ -92,9 +92,9 @@ const AcceptRequestPopup: React.FC<AcceptRequestPopupProps> = ({
         const fullIntegerAmount = integerPart + paddedDecimal;
 
         // 转换为 BigInt
-        const tokenAmount = BigInt(fullIntegerAmount);
+        const tokenAmount = BigInt(Number(fullIntegerAmount));
 
-        if (tokenAmount < BigInt(orderData?.amount + Number(orderData?.networkFee?.totalTokenCost))) {
+        if (tokenAmount < BigInt(Number(orderData?.amount) + Number(orderData?.networkFee?.totalTokenCost))) {
           throw new Error('insufficient balance');
         }
       }

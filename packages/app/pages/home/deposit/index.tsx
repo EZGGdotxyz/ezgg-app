@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-24 14:46:43
+ * @LastEditTime: 2025-03-26 10:11:56
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -397,88 +397,89 @@ const DepositScreen = () => {
         }}
       >
         {!switchOn && (
-          <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
-            <Connectors setIsLoading={setIsLoading} currencyData={currencyData} />
+          <>
+            <YStack pl={appScale(24)} pr={appScale(24)} onPress={handlePagePress}>
+              <Connectors setIsLoading={setIsLoading} currencyData={currencyData} />
 
-            <Chain isConnected={isConnected} selectedType={selectedType} setSelectedType={setSelectedType} />
-            <Currency
-              address={address}
-              selectedType={selectedType}
-              isConnected={isConnected && selectedType?.chainId !== ''}
-              currencyData={currencyData}
-              setCurrencyData={setCurrencyData}
-            />
-            <XStack mb={appScale(24)} minHeight={appScale(24)} w="100%" ai={'center'} jc={'center'}>
-              <SizableText lh={appScale(24)} fontSize={'$4'} color={'#212121'} fontWeight={'500'}>
-                {currencyData?.token?.tokenSymbol
-                  ? `${t('home.deposit.balance', {
-                      token: currencyData?.token?.tokenSymbol,
-                    })}`
-                  : ''}
-                {currencyData?.token?.tokenSymbol
-                  ? `: ${
-                      balance ? formatTokenAmount(balance.toString(), currencyData?.token?.tokenDecimals) : '0.00'
-                    } ${currencyData?.token?.tokenSymbol} (${
-                      getCurrency(currencyData?.currency)?.symbol
-                    } ${formatCurrencyAmount(
-                      currencyData?.token?.tokenSymbol,
-                      formatTokenAmount(balance ? balance?.toString() : 0, currencyData?.token?.tokenDecimals),
-                      currencyData?.currencyAmount,
-                      getCurrency(currencyData?.currency)?.label,
-                    )})`
-                  : ''}
-              </SizableText>
-            </XStack>
-            <YStack w="100%" mb={appScale(24)}>
-              <XStack mb={appScale(8)} w="100%">
-                <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                  {t('home.deposit.amountToDeposit')}
+              <Chain isConnected={isConnected} selectedType={selectedType} setSelectedType={setSelectedType} />
+              <Currency
+                address={address}
+                selectedType={selectedType}
+                isConnected={isConnected && selectedType?.chainId !== ''}
+                currencyData={currencyData}
+                setCurrencyData={setCurrencyData}
+              />
+              <XStack mb={appScale(24)} minHeight={appScale(24)} w="100%" ai={'center'} jc={'center'}>
+                <SizableText lh={appScale(24)} ta="center" fontSize={'$4'} color={'#212121'} fontWeight={'500'}>
+                  {currencyData?.token?.tokenSymbol
+                    ? `${t('home.deposit.balance', {
+                        token: currencyData?.token?.tokenSymbol,
+                      })}`
+                    : ''}
+                  {currencyData?.token?.tokenSymbol
+                    ? `: ${
+                        balance ? formatTokenAmount(balance.toString(), currencyData?.token?.tokenDecimals) : '0.00'
+                      } ${currencyData?.token?.tokenSymbol} (${
+                        getCurrency(currencyData?.currency)?.symbol
+                      } ${formatCurrencyAmount(
+                        currencyData?.token?.tokenSymbol,
+                        formatTokenAmount(balance ? balance?.toString() : 0, currencyData?.token?.tokenDecimals),
+                        currencyData?.currencyAmount,
+                        getCurrency(currencyData?.currency)?.label,
+                      )})`
+                    : ''}
                 </SizableText>
               </XStack>
-              <XStack
-                w="100%"
-                paddingVertical={appScale(16)}
-                paddingHorizontal={appScale(16)}
-                bc={'#FAFAFA'}
-                br={appScale(8)}
-                onPress={handleInputPress}
-              >
-                <SizableText
-                  fontSize={'$8'}
-                  h={appScale(32)}
-                  lh={appScale(32)}
-                  color={'#212121'}
-                  fontWeight={'600'}
-                  pos="relative"
+              <YStack w="100%" mb={appScale(24)}>
+                <XStack mb={appScale(8)} w="100%">
+                  <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
+                    {t('home.deposit.amountToDeposit')}
+                  </SizableText>
+                </XStack>
+                <XStack
+                  w="100%"
+                  paddingVertical={appScale(16)}
+                  paddingHorizontal={appScale(16)}
+                  bc={'#FAFAFA'}
+                  br={appScale(8)}
+                  onPress={handleInputPress}
                 >
-                  {inputValue || '0'}
-                  {showKeyboard && (
-                    <XStack
-                      pos="absolute"
-                      right={-4}
-                      top={0}
-                      bottom={0}
-                      w={2}
-                      animation="quick"
-                      bc="#212121"
-                      style={{
-                        animationName: 'cursorBlink',
-                        animationDuration: '1s',
-                        animationIterationCount: 'infinite',
-                        animationTimingFunction: 'steps(2, start)',
-                      }}
-                    />
-                  )}
-                </SizableText>
+                  <SizableText
+                    fontSize={'$8'}
+                    h={appScale(32)}
+                    lh={appScale(32)}
+                    color={'#212121'}
+                    fontWeight={'600'}
+                    pos="relative"
+                  >
+                    {inputValue || '0'}
+                    {showKeyboard && (
+                      <XStack
+                        pos="absolute"
+                        right={-4}
+                        top={0}
+                        bottom={0}
+                        w={2}
+                        animation="quick"
+                        bc="#212121"
+                        style={{
+                          animationName: 'cursorBlink',
+                          animationDuration: '1s',
+                          animationIterationCount: 'infinite',
+                          animationTimingFunction: 'steps(2, start)',
+                        }}
+                      />
+                    )}
+                  </SizableText>
+                </XStack>
+              </YStack>
+
+              <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
+                <AppButton onPress={handleDepositClick}>{t('home.deposit')}</AppButton>
               </XStack>
             </YStack>
-
-            <XStack mb={appScale(34)} w="100%" ai={'center'} jc={'center'}>
-              <AppButton onPress={handleDepositClick}>{t('home.deposit')}</AppButton>
-            </XStack>
-
             {showKeyboard && <Keyboard onChange={setInputValue} value={inputValue} />}
-          </YStack>
+          </>
         )}
         {switchOn && (
           <Transfer currencyData={currencyData} selectedType={selectedType} setSelectedType={setSelectedType} />

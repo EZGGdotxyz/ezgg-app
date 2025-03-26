@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-24 15:02:06
+ * @LastEditTime: 2025-03-26 10:07:40
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -68,16 +68,45 @@ export const formatDateTime = (date: any) => {
 };
 
 /**
- * 格式化数字，显示两位小数并用千分位分隔
+ * 格式化数字，显示指定小数位数并用千分位分隔
  * @param num 需要格式化的数字
+ * @param decimals 小数位数，默认为2位
  * @returns 格式化后的字符串，例如：1,234.56
  */
-export const formatNumber = (num: number) => {
-  return Number(num).toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-    roundingMode: 'trunc',
-  });
+export const formatNumber = (num: number, decimals: number = 2) => {
+  if (!num) return `0.${'0'.repeat(decimals)}`;
+
+  // 处理小数位数
+  const parts = num.toString().split('.');
+  if (parts.length === 1) {
+    return Number(num).toLocaleString('en-US', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+
+  const integerPart = parts[0];
+  let decimalPart = parts[1];
+
+  // 规则2：超过指定小数位数直接截断，不四舍五入
+  if (decimalPart.length > decimals) {
+    decimalPart = decimalPart.slice(0, decimals);
+  }
+
+  // 规则3：移除末尾的0
+  decimalPart = decimalPart.replace(/0+$/, '');
+
+  // 如果小数部分为空，返回指定小数位数
+  if (!decimalPart) {
+    return Number(num).toLocaleString('en-US', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+
+  // 组合整数和小数部分，并添加千分位
+  const formattedInteger = Number(integerPart).toLocaleString('en-US');
+  return `${formattedInteger}.${decimalPart}`;
 };
 
 /**
@@ -173,12 +202,30 @@ export const getUserSubName = (item) => {
 export const formatTokenAmount = (amount: string | number, decimals: number = 18) => {
   if (!amount) return '0.00';
   const value = Number(amount) / Math.pow(10, decimals);
+
+  // 处理小数位数
   const parts = value.toString().split('.');
   if (parts.length === 1) {
+    return value.toFixed(2); // 规则1：小于2位小数补0
+  }
+
+  const integerPart = parts[0];
+  let decimalPart = parts[1];
+
+  // 规则2：超过6位小数直接截断，不四舍五入
+  if (decimalPart.length > 6) {
+    decimalPart = decimalPart.slice(0, 6);
+  }
+
+  // 规则3：移除末尾的0
+  decimalPart = decimalPart.replace(/0+$/, '');
+
+  // 如果小数部分为空，返回两位小数
+  if (!decimalPart) {
     return value.toFixed(2);
   }
-  const decimalPlaces = parts[1].length;
-  return decimalPlaces <= 2 ? value.toFixed(2) : value.toFixed(decimals);
+
+  return `${integerPart}.${decimalPart}`;
 };
 
 // 添加金额转换工具函数

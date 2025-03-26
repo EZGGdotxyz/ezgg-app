@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-20 15:03:21
+ * @LastEditTime: 2025-03-26 10:40:54
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -82,7 +82,12 @@ export const useTransaction = () => {
   // 创建交易
   const createTransaction = async (params: TransactionParams) => {
     try {
-      const transaction = await makeRequest(postTransactionHistoryCreateTransactionHistory(params));
+      const transaction = await makeRequest(
+        postTransactionHistoryCreateTransactionHistory({
+          ...params,
+          amount: params.amount + '',
+        }),
+      );
       if (!transaction?.data?.id) {
         throw new Error('Transaction creation failed');
       }
@@ -186,10 +191,10 @@ export const useTransaction = () => {
       }
 
       const feeTokenContractAddress = getAddress(transaction?.networkFee?.tokenContractAddress);
-      const feeAmount = BigInt(transaction?.networkFee?.totalTokenCost);
+      const feeAmount = BigInt(Number(transaction?.networkFee?.totalTokenCost));
       const tokenContractAddress = getAddress(payLink.data.tokenContractAddress!);
       const bizContractAddress = getAddress(payLink.data.bizContractAddress!);
-      const amount = BigInt(transaction.amount);
+      const amount = BigInt(Number(transaction.amount));
 
       let approve: any = {};
 
@@ -310,11 +315,11 @@ export const useTransaction = () => {
   const onSendContract = async (transaction: any, onSuccess?: (data: any) => void) => {
     try {
       const feeTokenContractAddress = getAddress(transaction?.networkFee?.tokenContractAddress);
-      const feeAmount = BigInt(transaction?.networkFee?.totalTokenCost);
+      const feeAmount = BigInt(Number(transaction?.networkFee?.totalTokenCost));
 
       const tokenContractAddress = transaction.tokenContractAddress!;
       const bizContractAddress = transaction.bizContractAddress;
-      const amount = BigInt(transaction.amount);
+      const amount = BigInt(Number(transaction.amount));
 
       let approve: any = {};
       if (!transaction?.tokenFeeSupport) {
@@ -415,7 +420,7 @@ export const useTransaction = () => {
           data: encodeFunctionData({
             abi: erc20Abi,
             functionName: 'transfer',
-            args: [transaction.receiverAddress as `0x${string}`, BigInt(transaction.amount)],
+            args: [transaction.receiverAddress as `0x${string}`, BigInt(Number(transaction.amount))],
           }),
         },
         {
@@ -519,6 +524,6 @@ export const useTransaction = () => {
     onSendPayLinkSubmit,
     onSendContract,
     deployAA2,
-    onCancelPayLink
+    onCancelPayLink,
   };
 };

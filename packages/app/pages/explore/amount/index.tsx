@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 17:27:31
+ * @LastEditTime: 2025-03-26 10:46:43
  * @FilePath: /ezgg-app/packages/app/pages/explore/amount/index.tsx
  */
 import {
@@ -90,7 +90,9 @@ const AmountScreen = () => {
 
   const submit = () => {
     if (!inputValue || inputValue === '0') {
-      toast.show(params?.type === 'send' ? t('home.send.amountToSend.tips') : t('home.request.amountToRequest.tips'));
+      toast.show(
+        params?.type !== 'request' ? t('home.send.amountToSend.tips') : t('home.request.amountToRequest.tips'),
+      );
       return;
     }
     if (params?.type !== 'request' && Number(inputValue) > Number(currencyData?.tokenAmount)) {
@@ -195,8 +197,8 @@ const AmountScreen = () => {
         const fullIntegerAmount = integerPart + paddedDecimal;
 
         // 转换为 BigInt
-        const tokenAmount = BigInt(fullIntegerAmount);
-        if (tokenAmount < BigInt(orderData?.amount + Number(orderData?.networkFee?.totalTokenCost))) {
+        const tokenAmount = BigInt(Number(fullIntegerAmount));
+        if (tokenAmount < BigInt(Number(orderData?.amount) + Number(orderData?.networkFee?.totalTokenCost))) {
           throw new Error('insufficient balance');
         }
       }
@@ -283,7 +285,7 @@ const AmountScreen = () => {
           <YStack w="100%" mb={appScale(24)}>
             <XStack mb={appScale(8)} w="100%">
               <SizableText h={appScale(30)} lh={appScale(30)} fontSize={'$3'} color={'#212121'} fontWeight={'500'}>
-                {params?.type === 'send' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
+                {params?.type !== 'request' ? t('home.send.amountToSend') : t('home.request.amountToRequest')}
               </SizableText>
             </XStack>
             <XStack w="100%" p={appScale(16)} bc={'#FAFAFA'} br={appScale(8)} onPress={handleInputPress}>

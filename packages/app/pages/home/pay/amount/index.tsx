@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 22:07:06
+ * @LastEditTime: 2025-03-26 10:11:25
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/amount/index.tsx
  */
 import {
@@ -159,7 +159,7 @@ const AmountScreen = ({type}: any) => {
             <XStack mb={appScale(24)} mih={appScale(24)} w="100%" ai={'center'} jc={'center'}>
               {currencyData?.tokenAmount && (
                 <SizableText
-                  h={appScale(24)}
+                  ta="center"
                   lh={appScale(24)}
                   fontSize={'$3'}
                   color={'#212121'}

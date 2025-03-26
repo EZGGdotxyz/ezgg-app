@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-24 14:56:53
+ * @LastEditTime: 2025-03-26 10:15:08
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -124,13 +124,13 @@ const TakeScreen = (any) => {
           const fullIntegerAmount = integerPart + paddedDecimal;
 
           // 转换为 BigInt
-          const tokenAmount = BigInt(fullIntegerAmount);
+          const tokenAmount = BigInt(Number(fullIntegerAmount));
 
           console.log('🚀 ~ onAcceptRequest ~ tokenAmount:', tokenAmount);
 
           // 确保数值有效并进行安全的计算
-          const amount = BigInt(orderData?.amount || 0);
-          const networkFeeCost = BigInt(orderData?.networkFee?.totalTokenCost || 0);
+          const amount = BigInt(Number(orderData?.amount || 0));
+          const networkFeeCost = BigInt(Number(orderData?.networkFee?.totalTokenCost || 0));
           const totalRequired = amount + networkFeeCost;
 
           console.log('检查余额:', {
