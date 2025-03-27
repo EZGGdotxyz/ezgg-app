@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-26 10:10:37
+ * @LastEditTime: 2025-03-26 14:08:56
  * @FilePath: /ezgg-app/packages/app/pages/home/withdraw/index.tsx
  */
 import {
@@ -44,6 +44,7 @@ import {useAccount} from 'wagmi';
 import useResponse from 'app/hooks/useResponse';
 import PayPopup from 'app/Components/PayPopup';
 import Connectors from 'app/Components/Connectors';
+import {postTransactionHistoryUpdateNetworkFee} from 'app/servers/api/transactionHistory';
 
 // 提取
 const WithdrawScreen = () => {
@@ -55,7 +56,7 @@ const WithdrawScreen = () => {
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [buttonLoading, setButtonLoading] = React.useState(false);
-  const {back, push} = useRouter();
+  const {back, push, replace} = useRouter();
   const toast = useToastController();
   const [currencyData, setCurrencyData] = React.useState<any>();
 
@@ -65,7 +66,7 @@ const WithdrawScreen = () => {
   const [withdrawAddress, setWithdrawAddress] = React.useState('');
   const [isShow, setIsShow] = React.useState(false);
 
-  const {onWithdraw, createTransaction} = useTransaction();
+  const {onWithdraw, onSendContract, createTransaction, deployAA2} = useTransaction();
   const {address} = useAccount();
   const {appScale} = useResponse();
 
@@ -89,28 +90,47 @@ const WithdrawScreen = () => {
 
     setIsLoading(true);
 
-    const params: any = {
-      platform: currencyData?.token?.platform,
-      chainId: Number(currencyData?.token?.chainId),
-      tokenContractAddress: currencyData?.token?.address,
-      message: inputValue,
-      transactionCategory: 'WITHDRAW',
-      transactionType: 'WITHDRAW',
-      senderMemberId: userInfo?.customMetadata?.id,
-      senderWalletAddress: _address,
-    };
-    const _amount = Number(convertAmountToTokenDecimals(inputValue.toString(), 6));
-    const transaction = await createTransaction({...params, amount: _amount});
-
-    if (transaction?.transactionCode) {
-      setModalVisible(true);
-      setOrderData({...transaction, receiverAddress: _address});
-    } else {
-      toast.show(t('tips.error.withdraw.failed'));
-      setIsLoading(false);
-    }
-
     try {
+      const params: any = {
+        platform: currencyData?.token?.platform,
+        chainId: Number(currencyData?.token?.chainId),
+        tokenContractAddress: currencyData?.token?.address,
+        message: inputValue,
+        transactionCategory: 'WITHDRAW',
+        transactionType: 'WITHDRAW',
+        senderMemberId: userInfo?.customMetadata?.id,
+        receiverWalletAddress: _address,
+      };
+      const _amount = Number(convertAmountToTokenDecimals(inputValue.toString(), currencyData?.token?.tokenDecimals));
+      const transaction = await createTransaction({...params, amount: _amount});
+
+      if (transaction?.transactionCode) {
+        if (transaction?.tokenFeeSupport) {
+          await deployAA2(Number(transaction?.chainId));
+          const feeData = await makeRequest(
+            postTransactionHistoryUpdateNetworkFee({
+              transactionCode: transaction.transactionCode,
+              tokenContractAddress: transaction.tokenContractAddress!,
+            }),
+          );
+          if (!feeData?.data?.id) {
+            throw new Error('Failed to create pay link');
+          }
+          setOrderData({
+            ...transaction,
+            receiverAddress: _address,
+            networkFee: feeData?.data,
+          });
+          setModalVisible(true);
+          setIsLoading(false);
+        } else {
+          replace('/home/replace?id=' + transaction?.id);
+        }
+      } else {
+        toast.show(t('tips.error.networkError'), {
+          duration: 3000,
+        });
+      }
     } catch (error) {
       console.error('Withdraw error:', error);
       setIsLoading(false);
@@ -120,11 +140,19 @@ const WithdrawScreen = () => {
 
   const _onWithdraw = async () => {
     try {
-      await onWithdraw(orderData, (data) => {
-        setIsLoading(false);
-        push('/home/success?type=WITHDRAW&id=' + data?.id);
-      });
-    } catch (error) {}
+      setIsLoading(true);
+      await onSendContract(
+        orderData,
+        (data) => {
+          setIsLoading(false);
+          push('/home/success?type=WITHDRAW&id=' + data?.id);
+        },
+        true,
+      );
+    } catch (error) {
+      setIsLoading(false);
+      toast.show(t('tips.error.withdraw.failed'));
+    }
   };
 
   const handlePagePress = () => {

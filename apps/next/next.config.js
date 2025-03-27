@@ -1,12 +1,14 @@
 /*
  * @Date: 2024-01-10 16:44:53
- * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 13:21:41
+ * @LastEditors: error: git config user.name & please set dead value or install git
+ * @LastEditTime: 2025-03-26 22:48:06
  * @FilePath: /ezgg-app/apps/next/next.config.js
  */
 /** @type {import('next').NextConfig} */
 const {withTamagui} = require('@tamagui/next-plugin');
 const {join} = require('path');
+const withPWA = require('next-pwa')
+const runtimeCaching = require('next-pwa/cache')
 
 const boolVals = {
   true: true,
@@ -109,4 +111,20 @@ module.exports = function () {
   }
 
   return config;
+  // 配置 PWA，适配静态导出模式
+  return withPWA({
+    dest: 'crypto-transfer-frontend', // 改为与 distDir 相同的目录
+    register: true,
+    skipWaiting: true,
+    runtimeCaching,
+    disable: process.env.NODE_ENV === 'development',
+    buildExcludes: [/middleware-manifest\.json$/],
+    // 添加以下配置以支持静态导出
+    fallbacks: {
+      document: '/404.html'
+    },
+    // 确保生成的 service worker 文件在正确的位置
+    sw: 'service-worker.js',
+    publicExcludes: ['!noprecache/**/*', '!.well-known/**/*']
+  })(config);
 };

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-07-09 11:22:59
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-26 10:07:40
+ * @LastEditTime: 2025-03-26 13:16:05
  * @FilePath: /ezgg-app/packages/app/utils/index.ts
  */
 import {scale as baseScale, verticalScale, moderateScale} from 'react-native-size-matters';
@@ -9,6 +9,7 @@ import {Dimensions, Platform, PixelRatio} from 'react-native';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 import {CurrencyList} from 'app/config';
+import BigNumber from 'bignumber.js';
 
 // 比较当前设备和对照设备的屏幕宽高
 function matchIOSScreenSize(screenWidth: number, screenHeight: number, screenW: number, screenH: number) {
@@ -233,13 +234,15 @@ export const convertAmountToTokenDecimals = (amount: string, decimals: number): 
   try {
     // 移除金额中的所有逗号
     const cleanAmount = amount.replace(/,/g, '');
-    // 将字符串转换为数字
-    const amountNumber = parseFloat(cleanAmount);
-    // 计算转换后的值 (amount * 10^decimals)
-    const multiplier = Math.pow(10, decimals);
-    const convertedAmount = (amountNumber * multiplier).toString();
-    // 移除可能的小数点和尾随的零
-    return convertedAmount.split('.')[0];
+
+    // 使用 BigNumber 处理数字
+    const bn = new BigNumber(cleanAmount);
+
+    // 计算 10^decimals
+    const multiplier = new BigNumber(10).pow(decimals);
+
+    // 计算结果并转换为字符串
+    return bn.times(multiplier).toString();
   } catch (error) {
     console.error('金额转换错误:', error);
     return '0';

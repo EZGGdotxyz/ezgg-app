@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-05 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-16 21:59:02
+ * @LastEditTime: 2025-03-26 13:25:01
  * @FilePath: /ezgg-app/packages/app/Components/PayPopup/index.tsx
  */
 import {AppImage, Button, ScrollView, SizableText, useToastController, XStack, YStack} from '@my/ui';

@@ -45,6 +45,7 @@ export async function getBalanceFindBalance(
     params: {
       // currency has a default value: USD
       currency: 'USD',
+
       ...params,
     },
     ...(options || {}),
@@ -94,6 +95,7 @@ export async function getBalanceFindBalance2(
     params: {
       // currency has a default value: USD
       currency: 'USD',
+
       ...params,
     },
     ...(options || {}),
@@ -146,6 +148,7 @@ export async function getBalanceListBalance(
     params: {
       // currency has a default value: USD
       currency: 'USD',
+
       ...params,
     },
     ...(options || {}),
@@ -198,6 +201,7 @@ export async function getBalanceListBalance2(
     params: {
       // currency has a default value: USD
       currency: 'USD',
+
       ...params,
     },
     ...(options || {}),

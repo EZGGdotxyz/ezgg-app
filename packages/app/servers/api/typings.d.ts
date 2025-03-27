@@ -6,6 +6,8 @@ declare namespace API {
     currency?: string;
     /** 代币合约地址 */
     address: string;
+    /** 钱包地址 */
+    smartWalletAddress?: string;
   };
 
   type getBalanceListBalanceParams = {
@@ -15,6 +17,8 @@ declare namespace API {
     currency?: string;
     /** 是否支持手续费 */
     feeSupport?: boolean;
+    /** 钱包地址 */
+    smartWalletAddress?: string;
   };
 
   type getInfrastructureListBlockchainParams = {

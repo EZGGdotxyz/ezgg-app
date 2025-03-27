@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-26 10:40:54
+ * @LastEditTime: 2025-03-26 14:06:37
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -30,7 +30,7 @@ export interface TransactionParams {
   platform: 'ETH' | 'SOLANA';
   chainId: number;
   tokenContractAddress: string;
-  amount: number;
+  amount: string;
   message: string;
   transactionCategory: 'SEND' | 'REQUEST' | 'WITHDRAW' | 'DEPOSIT';
   transactionType: 'SEND' | 'REQUEST' | 'DEPOSIT' | 'WITHDRAW' | 'PAY_LINK' | 'QR_CODE';
@@ -82,10 +82,12 @@ export const useTransaction = () => {
   // 创建交易
   const createTransaction = async (params: TransactionParams) => {
     try {
+      // 使用原生方法处理科学计数法
+      const amount = Number(params.amount).toLocaleString('fullwide', {useGrouping: false});
       const transaction = await makeRequest(
         postTransactionHistoryCreateTransactionHistory({
           ...params,
-          amount: params.amount + '',
+          amount: String(amount),
         }),
       );
       if (!transaction?.data?.id) {
@@ -312,7 +314,7 @@ export const useTransaction = () => {
   };
 
   // 发送合约交易
-  const onSendContract = async (transaction: any, onSuccess?: (data: any) => void) => {
+  const onSendContract = async (transaction: any, onSuccess?: (data: any) => void, isWithdraw = false) => {
     try {
       const feeTokenContractAddress = getAddress(transaction?.networkFee?.tokenContractAddress);
       const feeAmount = BigInt(Number(transaction?.networkFee?.totalTokenCost));
@@ -360,7 +362,12 @@ export const useTransaction = () => {
             data: encodeFunctionData({
               abi: TokenTransferContract.abi,
               functionName: 'transfer',
-              args: [transaction.transactionCode, transaction.receiverWalletAddress!, tokenContractAddress, amount],
+              args: [
+                transaction.transactionCode,
+                isWithdraw ? transaction.receiverAddress : transaction.receiverWalletAddress!,
+                tokenContractAddress,
+                amount,
+              ],
             }),
           },
         ],
@@ -412,7 +419,6 @@ export const useTransaction = () => {
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
       }
-      // await deployAA(baseClient);
 
       const transactionHash = await baseClient.sendTransaction(
         {

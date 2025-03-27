@@ -107,6 +107,32 @@ export async function postTransactionHistoryCreateTransactionHistory(
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
       };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
+      };
     };
   }>('/member/transaction/history/create-transaction-history', {
     method: 'POST',
@@ -223,6 +249,32 @@ export async function postTransactionHistoryCreateTransactionHistory2(
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
       };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
+      };
     };
   }>('/member/transaction/history/create-transaction-history', {
     method: 'POST',
@@ -310,6 +362,32 @@ export async function postTransactionHistoryDeclineTransactionHistory(
         nickname?: string;
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
+      };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
       };
     };
   }>('/member/transaction/history/decline-transaction-history', {
@@ -399,6 +477,32 @@ export async function postTransactionHistoryDeclineTransactionHistory2(
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
       };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
+      };
     };
   }>('/member/transaction/history/decline-transaction-history', {
     method: 'POST',
@@ -485,6 +589,32 @@ export async function getTransactionHistoryFindTransactionHistoryId(
         nickname?: string;
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
+      };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
       };
     };
   }>(`/member/transaction/history/find-transaction-history/${param0}`, {
@@ -574,6 +704,32 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
       };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
+      };
     };
   }>(`/member/transaction/history/find-transaction-history/${param0}`, {
     method: 'GET',
@@ -662,6 +818,32 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
       };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
+      };
     };
   }>(`/member/transaction/history/find-transaction-history/code/${param0}`, {
     method: 'GET',
@@ -749,6 +931,32 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
         nickname?: string;
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
+      };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
       };
     };
   }>(`/member/transaction/history/find-transaction-history/code/${param0}`, {
@@ -1187,6 +1395,32 @@ export async function postTransactionHistoryUpdateTransactionHash(
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
       };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
+      };
     };
   }>('/member/transaction/history/update-transaction-hash', {
     method: 'POST',
@@ -1276,6 +1510,32 @@ export async function postTransactionHistoryUpdateTransactionHash2(
         nickname?: string;
         avatar?: string;
         memberLinkedAccount?: { type?: string; search?: string }[];
+      };
+      networkFee: {
+        platform?: 'ETH' | 'SOLANA';
+        id?: number;
+        createBy?: number;
+        updateBy?: number;
+        createAt?: string;
+        updateAt?: string;
+        transactionHistoryId?: number;
+        transactionCode?: string;
+        chainId?: number;
+        ethToUsd?: string;
+        tokenSymbol?: string;
+        tokenDecimals?: number;
+        tokenContractAddress?: string;
+        tokenPrice?: string;
+        preVerificationGas?: string;
+        verificationGasLimit?: string;
+        callGasLimit?: string;
+        gas?: string;
+        gasPrice?: string;
+        totalWeiCost?: string;
+        totalEthCost?: string;
+        totalUsdCost?: string;
+        platformFee?: string;
+        totalTokenCost?: string;
       };
     };
   }>('/member/transaction/history/update-transaction-hash', {
