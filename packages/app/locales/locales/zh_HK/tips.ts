@@ -53,6 +53,8 @@ export default {
   'tips.success.cancelPayLink': '支付連結已取消',
   'tips.success.cancelRequestPayLink': '請求支付連結已取消',
 
+  'tips.error.failedToCreatePayLink': '創建支付連結失敗',
+
   'tips.userInfo.success': '用戶信息更新成功',
   'tips.userInfo.failed': '用戶信息更新失敗',
 };

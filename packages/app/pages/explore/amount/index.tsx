@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-26 10:46:43
+ * @LastEditTime: 2025-04-01 12:35:21
  * @FilePath: /ezgg-app/packages/app/pages/explore/amount/index.tsx
  */
 import {
@@ -42,13 +42,15 @@ import PayPopup from 'app/Components/PayPopup';
 import {postTransactionHistoryUpdateNetworkFee} from 'app/servers/api/transactionHistory';
 import {getBalanceFindBalance} from 'app/servers/api/balance';
 import {handleTransactionError} from 'app/utils/error';
+import useUser from 'app/hooks/useUser';
 
 const {useParams} = createParam<any>();
 
 // 存款
 const AmountScreen = () => {
   const {t} = useTranslation();
-  const [{payLinkData, userInfo}] = useRematchModel('user');
+  const [{payLinkData, userInfo, isLogin}] = useRematchModel('user');
+  const {initUserInfo} = useUser();
 
   const {appScale} = useResponse();
 
@@ -67,6 +69,12 @@ const AmountScreen = () => {
   const [receiverUserInfo, setReceiverUserInfo] = React.useState<any>();
 
   const toast = useToastController();
+
+  useEffect(() => {
+    if (isLogin) {
+      initUserInfo();
+    }
+  }, [isLogin]);
 
   useEffect(() => {
     if (params?.id && userInfo?.customMetadata?.id) {
@@ -386,6 +394,7 @@ const AmountScreen = () => {
             style={{
               width: '50%',
             }}
+            disabled={!isLogin}
             onPress={() => {
               handlePagePress();
               if (orderData?.id) {

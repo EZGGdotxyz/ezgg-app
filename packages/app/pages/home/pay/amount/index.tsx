@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-26 10:11:25
+ * @LastEditTime: 2025-04-01 12:31:15
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/amount/index.tsx
  */
 import {

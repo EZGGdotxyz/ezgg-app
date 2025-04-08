@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-26 10:12:33
+ * @LastEditTime: 2025-04-01 12:35:29
  * @FilePath: /ezgg-app/packages/app/pages/home/pay/payLink/index.tsx
  */
 import {
@@ -46,6 +46,7 @@ import ReplacePay from 'app/Components/ReplacePay';
 import {postTransactionHistoryUpdateNetworkFee} from 'app/servers/api/transactionHistory';
 import {getBalanceFindBalance} from 'app/servers/api/balance';
 import {handleTransactionError} from 'app/utils/error';
+import useUser from 'app/hooks/useUser';
 
 const {useParams} = createParam<any>();
 
@@ -54,8 +55,9 @@ const PayLinkScreen = ({type}: any) => {
   const {t} = useTranslation();
   const {makeRequest} = useRequest();
   const dispatch = useDispatch<Dispatch>();
-  const [{payLinkData, userInfo}] = useRematchModel('user');
+  const [{payLinkData, userInfo, isLogin}] = useRematchModel('user');
   const {appScale} = useResponse();
+  const {initUserInfo} = useUser();
 
   const [inputValue, setInputValue] = React.useState('');
   const {params} = useParams();
@@ -68,6 +70,12 @@ const PayLinkScreen = ({type}: any) => {
 
   const {back, replace, push} = useRouter();
   const {onSendSubmit, onRequestSubmit, createTransaction, deployAA2} = useTransaction();
+
+  useEffect(() => {
+    if (isLogin) {
+      initUserInfo();
+    }
+  }, [isLogin]);
 
   const createTransactionParams = (type: 'SEND' | 'REQUEST') => {
     const _amount = Number(
@@ -359,6 +367,7 @@ const PayLinkScreen = ({type}: any) => {
           style={{
             width: '50%',
           }}
+          disabled={!isLogin}
           onPress={() => {
             if (orderData?.id) {
               // _onSendContract();

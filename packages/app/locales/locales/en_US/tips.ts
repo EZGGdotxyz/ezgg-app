@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 15:14:09
+ * @LastEditTime: 2025-04-08 15:50:28
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -57,6 +57,8 @@ export default {
 
   'tips.success.cancelPayLink': 'PayLink cancelled',
   'tips.success.cancelRequestPayLink': 'Request PayLink cancelled',
+
+  'tips.error.failedToCreatePayLink': 'Failed to create PayLink',
 
   'tips.userInfo.success': 'User information updated successfully',
   'tips.userInfo.failed': 'User information update failed',

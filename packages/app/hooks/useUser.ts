@@ -1,11 +1,11 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-08 00:13:26
+ * @LastEditTime: 2025-03-28 10:07:44
  * @FilePath: /ezgg-app/packages/app/hooks/useUser.ts
  */
 import {Dispatch} from 'app/store';
-import {setUserIdToken, setUserInfo, setUserToken} from 'app/utils/auth';
+import {getUserInfo, setUserIdToken, setUserInfo, setUserToken} from 'app/utils/auth';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {Platform} from 'react-native';
@@ -91,8 +91,13 @@ export default function useUser() {
         userInfo: res?.data,
       });
       return res.data;
+    } else {
+      const userInfo: any = await getUserInfo();
+      dispatch.user.updateState({
+        userInfo,
+      });
+      return userInfo;
     }
-    return {};
   };
 
   /**

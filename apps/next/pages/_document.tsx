@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-10 16:56:27
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-19 14:58:47
+ * @LastEditTime: 2025-03-31 21:27:40
  * @FilePath: /ezgg-app/apps/next/pages/_document.tsx
  */
 import {config} from '@my/ui';
@@ -42,11 +42,12 @@ export default class Document extends NextDocument {
       <Html>
         <Head>
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta name="application-name" content="ezgg" />
+          <meta name="application-name" content="EZGG" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-          <meta name="apple-mobile-web-app-title" content="ezgg" />
-          <meta name="description" content="ezgg Application" />
+          <meta name="apple-mobile-web-app-title" content="EZGG" />
+          <meta name="description" content="The EZiest self-custodial wallet log in with email / number. send and request crypto with a link, without worrying gas" />
+          <meta name="keywords" content="EZGG,Crypto,Link,Wallet,Self-custodial,USDT,USDC" />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
           <meta name="theme-color" content="#000000" />

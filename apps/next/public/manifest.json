@@ -1,7 +1,7 @@
 {
-  "name": "ezgg",
-  "short_name": "ezgg",
-  "description": "ezgg Application",
+  "name": "EZGG",
+  "short_name": "EZGG",
+  "description": "The EZiest self-custodial wallet log in with email / number. send and request crypto with a link, without worrying gas",
   "icons": [
     {
       "src": "./icon/web-app-manifest-192x192.png",

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-26 10:15:08
+ * @LastEditTime: 2025-03-31 21:25:56
  * @FilePath: /ezgg-app/packages/app/pages/home/take/index.tsx
  */
 import {
@@ -397,7 +397,7 @@ const TakeScreen = (any) => {
                 }}
               >
                 <SizableText col={'#212121'} fontSize={'$3'}>
-                  {t('login.profile.dont')}
+                  {t('operate.button.cancel')}
                 </SizableText>
               </Button>
             </XStack>
