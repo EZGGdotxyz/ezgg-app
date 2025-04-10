@@ -57,4 +57,5 @@ export default {
 
   'tips.userInfo.success': '用戶信息更新成功',
   'tips.userInfo.failed': '用戶信息更新失敗',
+  'tips.error.gasFeeTooLow': 'Gas 費用過低，請重試',
 };

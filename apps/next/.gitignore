@@ -2,3 +2,6 @@
 /mobile
 /crypto-transfer-frontend
 crypto-transfer-frontend.zip
+
+# Sentry Config File
+.env.sentry-build-plugin

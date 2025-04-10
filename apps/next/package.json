@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sentry/nextjs": "^9.11.0",
     "@tamagui/config": "^1.125.2",
     "@tamagui/next-theme": "^1.125.2",
     "app": "0.0.0",

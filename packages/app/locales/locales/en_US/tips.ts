@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-04-08 15:50:28
+ * @LastEditTime: 2025-04-10 15:04:21
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -62,4 +62,6 @@ export default {
 
   'tips.userInfo.success': 'User information updated successfully',
   'tips.userInfo.failed': 'User information update failed',
+
+  'tips.error.gasFeeTooLow': 'Gas fee is too low, please try again',
 };

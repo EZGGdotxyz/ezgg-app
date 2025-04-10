@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-04-01 12:30:52
+ * @LastEditTime: 2025-04-10 15:26:10
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
@@ -146,6 +146,8 @@ export const useTransaction = () => {
       return await baseClient.sendTransaction(
         {
           calls: params.calls,
+          maxPriorityFeePerGas: 5000000n, // 设置为 5,000,000 wei
+          maxFeePerGas: 100000000n, // 设置一个合理的 maxFeePerGas
         },
         {
           uiOptions: {
