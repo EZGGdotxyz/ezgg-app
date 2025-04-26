@@ -93,7 +93,7 @@ export async function getNotificationPageNotification(
           tokenContractAddress?: string;
           tokenPrice?: string;
           tokenFeeSupport?: boolean;
-          amount?: number;
+          amount?: string;
           message?: string;
           senderMember: {
             id?: number;
@@ -205,7 +205,7 @@ export async function getNotificationPageNotification2(
           tokenContractAddress?: string;
           tokenPrice?: string;
           tokenFeeSupport?: boolean;
-          amount?: number;
+          amount?: string;
           message?: string;
           senderMember: {
             id?: number;

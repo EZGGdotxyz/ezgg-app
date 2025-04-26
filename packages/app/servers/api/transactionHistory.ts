@@ -28,7 +28,7 @@ export async function postTransactionHistoryCreateTransactionHistory(
     /** 收款人 - 会员id */
     receiverMemberId?: number;
     /** 交易金额（代币数量） */
-    amount: number;
+    amount: string;
     /** 附带留言 */
     message?: string;
     /** 付款人钱包地址 */
@@ -79,7 +79,7 @@ export async function postTransactionHistoryCreateTransactionHistory(
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -170,7 +170,7 @@ export async function postTransactionHistoryCreateTransactionHistory2(
     /** 收款人 - 会员id */
     receiverMemberId?: number;
     /** 交易金额（代币数量） */
-    amount: number;
+    amount: string;
     /** 附带留言 */
     message?: string;
     /** 付款人钱包地址 */
@@ -221,7 +221,7 @@ export async function postTransactionHistoryCreateTransactionHistory2(
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -335,7 +335,7 @@ export async function postTransactionHistoryDeclineTransactionHistory(
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -449,7 +449,7 @@ export async function postTransactionHistoryDeclineTransactionHistory2(
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -562,7 +562,7 @@ export async function getTransactionHistoryFindTransactionHistoryId(
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -676,7 +676,7 @@ export async function getTransactionHistoryFindTransactionHistoryId2(
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -790,7 +790,7 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -904,7 +904,7 @@ export async function getTransactionHistoryFindTransactionHistoryCodeTransaction
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -1022,7 +1022,7 @@ export async function getTransactionHistoryPageTransactionHistory(
         tokenContractAddress?: string;
         tokenPrice?: string;
         tokenFeeSupport?: boolean;
-        amount?: number;
+        amount?: string;
         message?: string;
         currency?: string;
         currencyAmount?: string;
@@ -1146,7 +1146,7 @@ export async function getTransactionHistoryPageTransactionHistory2(
         tokenContractAddress?: string;
         tokenPrice?: string;
         tokenFeeSupport?: boolean;
-        amount?: number;
+        amount?: string;
         message?: string;
         currency?: string;
         currencyAmount?: string;
@@ -1367,7 +1367,7 @@ export async function postTransactionHistoryUpdateTransactionHash(
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;
@@ -1483,7 +1483,7 @@ export async function postTransactionHistoryUpdateTransactionHash2(
       tokenContractAddress?: string;
       tokenPrice?: string;
       tokenFeeSupport?: boolean;
-      amount?: number;
+      amount?: string;
       message?: string;
       currency?: string;
       currencyAmount?: string;

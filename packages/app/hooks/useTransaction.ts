@@ -146,8 +146,8 @@ export const useTransaction = () => {
       return await baseClient.sendTransaction(
         {
           calls: params.calls,
-          maxPriorityFeePerGas: 5000000n, // 设置为 5,000,000 wei
-          maxFeePerGas: 100000000n, // 设置一个合理的 maxFeePerGas
+          // maxPriorityFeePerGas: 5000000n, // 设置为 5,000,000 wei
+          // maxFeePerGas: 100000000n, // 设置一个合理的 maxFeePerGas
         },
         {
           uiOptions: {

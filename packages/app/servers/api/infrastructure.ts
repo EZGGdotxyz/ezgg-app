@@ -14,6 +14,7 @@ export async function getInfrastructureListBlockchain(
     data?: {
       platform?: 'ETH' | 'SOLANA';
       network?: 'MAIN' | 'TEST' | 'DEV';
+      smartWalletType?: 'PRIVY' | 'BICONOMY';
       id?: number;
       createBy?: number;
       updateBy?: number;
@@ -47,6 +48,7 @@ export async function getInfrastructureListBlockchain2(
     data?: {
       platform?: 'ETH' | 'SOLANA';
       network?: 'MAIN' | 'TEST' | 'DEV';
+      smartWalletType?: 'PRIVY' | 'BICONOMY';
       id?: number;
       createBy?: number;
       updateBy?: number;

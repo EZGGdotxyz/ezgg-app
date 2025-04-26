@@ -30,11 +30,13 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.18.9",
+    "@biconomy/abstractjs": "^1.0.3",
     "@manypkg/cli": "^0.19.1",
-    "@privy-io/react-auth": "^2.6.1",
+    "@privy-io/react-auth": "^2.8.3",
     "@privy-io/wagmi": "^1.0.3",
     "@react-google-maps/api": "^2.19.3",
     "@react-native-async-storage/async-storage": "1.18.2",
+    "@rhinestone/module-sdk": "^0.2.8",
     "@shopify/flash-list": "1.6.4",
     "@solana/spl-token": "^0.3.9",
     "@solana/web3.js": "^1.87.6",
@@ -76,7 +78,7 @@
     "swiper": "^11.1.5",
     "turbo": "^1.10.3",
     "typescript": "^5.3.3",
-    "viem": "2.x",
+    "viem": "^2.27.2",
     "wagmi": "^2.14.12"
   },
   "packageManager": "yarn@4.0.2",

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-03 10:00:00
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-19 11:42:49
+ * @LastEditTime: 2025-04-19 20:23:18
  * @FilePath: /ezgg-app/packages/app/utils/chain.ts
  */
 import {getAddress} from 'viem';
@@ -14,12 +14,11 @@ const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 // 链相关类型定义
 export type ChainId = 1 | 56 | 137 | 8453 | 728126428 | 97 | 80001 | 80002 | 84532 | 100001 | 9999;
-export type ChainName = 'ethereum' | 'smartchain' | 'polygon' | 'base' | 'tron' | 'solana';
 
 // 链配置
 interface ChainConfig {
   name: string;
-  assetName: ChainName;
+  assetName: string;
   explorerUrl: string;
   testnetExplorerUrl?: string;
   isEVM: boolean;
@@ -49,6 +48,28 @@ const CHAIN_CONFIGS: {[key in number]: ChainConfig} = {
     testnetExplorerUrl: 'https://sepolia.basescan.org',
     isEVM: true,
   },
+  10143: {
+    name: 'Monad',
+    assetName: 'monad',
+    explorerUrl: 'https://testnet.monadexplorer.com',
+    testnetExplorerUrl: 'https://testnet.monadexplorer.com',
+    isEVM: true,
+  },
+  421614: {
+    name: 'Arbitrum',
+    assetName: 'arbitrum',
+    explorerUrl: 'https://arbiscan.io',
+    testnetExplorerUrl: 'https://sepolia.arbiscan.io',
+    isEVM: true,
+  },
+  534352: {
+    name: 'Scroll',
+    assetName: 'scroll',
+    explorerUrl: 'https://scrollscan.com',
+    testnetExplorerUrl: 'https://sepolia.scrollscan.com',
+    isEVM: true,
+  },
+
   728126428: {
     name: 'Tron',
     assetName: 'tron',
@@ -82,6 +103,9 @@ const getChainConfig = (chainId: number): ChainConfig | undefined => {
       80001: 137, // Mumbai -> Polygon
       80002: 137, // Polygon Amoy -> Polygon
       84532: 8453, // Base Sepolia -> Base
+      42161: 421614, // Arbitrum -> Arbitrum
+      10143: 10143, // Monad Testnet -> Monad
+      534351: 534352, // Scroll -> Scroll
     }[chainId] || chainId;
 
   return CHAIN_CONFIGS[mainnetChainId];

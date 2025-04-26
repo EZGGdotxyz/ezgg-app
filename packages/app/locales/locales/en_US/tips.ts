@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-04-10 15:04:21
+ * @LastEditTime: 2025-04-10 15:48:54
  * @FilePath: /ezgg-app/packages/app/locales/locales/en_US/tips.ts
  */
 export default {
@@ -64,4 +64,17 @@ export default {
   'tips.userInfo.failed': 'User information update failed',
 
   'tips.error.gasFeeTooLow': 'Gas fee is too low, please try again',
+  'tips.error.insufficientTokenBalance': 'Insufficient token balance',
+  'tips.error.notContractOwner': 'You are not the contract owner',
+  'tips.error.contractPaused': 'Contract is paused',
+  'tips.error.contractExecutionFailed': 'Contract execution failed',
+  'tips.error.nonceTooLow': 'Transaction nonce is too low',
+  'tips.error.transactionAlreadyKnown': 'Transaction already exists',
+  'tips.error.transactionUnderpriced': 'Transaction gas price is too low',
+  'tips.error.gasTooLow': 'Gas fee is too low',
+  'tips.error.gasExceedsAllowance': 'Gas demand exceeds limit',
+  'tips.error.invalidOpcode': 'Invalid opcode',
+  'tips.error.outOfGas': 'Gas insufficient',
+  'tips.error.invalidSender': 'Invalid sender',
+  'tips.error.invalidSignature': 'Invalid signature',
 };

@@ -116,6 +116,15 @@ declare namespace API {
     transactionStatus?: 'PENDING' | 'ACCEPTED' | 'DECLINED';
   };
 
+  type getUserFindSmartWalletAddressParams = {
+    /** 区块链平台 */
+    platform: 'ETH' | 'SOLANA';
+    /** 区块链ID */
+    chainId: number;
+    /** Privy会员ID */
+    did: string;
+  };
+
   type getUserFindUserIdIdParams = {
     /** 用户ID */
     id: number;
@@ -129,7 +138,7 @@ declare namespace API {
     /** 检索条件 */
     search?: string;
     /** 检索最近交易会员 */
-    recent?: boolean;
+    recent?: 'true' | 'false';
   };
 
   type postNotificationUpdateNotificationStatusIdParams = {

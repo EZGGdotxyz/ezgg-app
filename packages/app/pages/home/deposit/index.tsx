@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-26 10:11:56
+ * @LastEditTime: 2025-04-10 18:30:38
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/index.tsx
  */
 import {
@@ -37,7 +37,7 @@ import {useFundWallet} from '@privy-io/react-auth';
 import {useRematchModel} from 'app/store/model';
 import CopyButton from 'app/Components/CopyButton';
 import {erc20Abi, type Hex, parseEther, parseUnits} from 'viem';
-import {useAccount, useWaitForTransactionReceipt, useWriteContract, useReadContract} from 'wagmi';
+import {useAccount, useWaitForTransactionReceipt, useWriteContract, useReadContract, useSwitchChain} from 'wagmi';
 import useRequest from 'app/hooks/useRequest';
 import {postTransactionHistoryUpdateTransactionHash} from 'app/servers/api/transactionHistory';
 import {useTransaction} from 'app/hooks/useTransaction';
@@ -78,6 +78,7 @@ const DepositScreen = () => {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [currencyData, setCurrencyData] = useState<any>();
   const [switchOn, setSwitchOn] = useState(false);
+  const [targetChainId, setTargetChainId] = useState<number | null>(null);
 
   const handlePagePress = () => {
     setShowKeyboard(false);
@@ -88,6 +89,7 @@ const DepositScreen = () => {
     setShowKeyboard(true);
   };
   const {address, chain, isConnected} = useAccount();
+  const {switchChain} = useSwitchChain();
 
   const {data: balance, refetch: refetchBalance} = useReadContract({
     address: currencyData?.token?.address as `0x${string}`,
@@ -138,13 +140,35 @@ const DepositScreen = () => {
           try {
             console.log('🚀 ~ currencyData:', currencyData);
             console.log('准备调用转账合约');
+
+            // 检查当前链ID是否与目标链ID匹配
+            const _targetChainId = Number(currencyData?.token?.chainId);
+            setTargetChainId(_targetChainId);
+
+            if (chain?.id !== _targetChainId) {
+              console.log(`当前链ID: ${chain?.id}, 目标链ID: ${_targetChainId}，需要切换链`);
+              try {
+                await switchChain({ chainId: _targetChainId });
+                // 切换链后重新执行存款操作
+                setTimeout(() => {
+                  onDepositSubmit();
+                }, 1000);
+                return;
+              } catch (error) {
+                console.error('切换链失败:', error);
+                setIsLoading(false);
+                toast.show(t('tips.error.deposit.switchChainFailed'));
+                return;
+              }
+            }
+
             // 调用 USDT 转账，指定链 ID
             writeContract({
               address: currencyData?.token?.address as `0x${string}`,
               abi: erc20Abi,
               functionName: 'transfer',
               args: [userInfo?.smartWallet?.address as `0x${string}`, BigInt(_amount)],
-              chainId: Number(currencyData?.token?.chainId),
+              chainId: _targetChainId,
             });
           } catch (error: any) {
             // 这里的 try-catch 不会捕获 writeContract 的异步错误
@@ -178,7 +202,27 @@ const DepositScreen = () => {
         token: currencyData?.token?.address,
         amount: inputValue,
       });
-      // onDepositSubmit();
+
+      // 检查当前链ID是否与目标链ID匹配
+      const _targetChainId = Number(currencyData?.token?.chainId);
+      setTargetChainId(_targetChainId);
+
+      if (chain?.id !== _targetChainId) {
+        console.log(`当前链ID: ${chain?.id}, 目标链ID: ${_targetChainId}，需要切换链`);
+        try {
+          await switchChain({ chainId: _targetChainId });
+          // 切换链后重新执行存款操作
+          setTimeout(() => {
+            onDepositSubmit();
+          }, 1000);
+          return;
+        } catch (error) {
+          console.error('切换链失败:', error);
+          setIsLoading(false);
+          toast.show(t('tips.error.deposit.switchChainFailed'));
+          return;
+        }
+      }
 
       // 刷新余额
       const result = await refetchBalance();

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-01-04 23:04:36
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-20 15:43:40
+ * @LastEditTime: 2025-04-10 15:46:32
  * @FilePath: /ezgg-app/packages/app/locales/locales/zh_HK/tips.ts
  */
 export default {
@@ -28,10 +28,10 @@ export default {
   'tips.error.deposit.transactionSuccess': '交易成功',
   'tips.success.transactionSuccess': '交易成功',
 
-  "tips.error.deposit.updateFailed": "更新交易記錄失敗",
-  "tips.error.withdraw.invalidAmount": "請輸入有效金額",
-  "tips.error.withdraw.insufficientFunds": "餘額不足",
-  "tips.error.withdraw.failed": "提現失敗，請重試",
+  'tips.error.deposit.updateFailed': '更新交易記錄失敗',
+  'tips.error.withdraw.invalidAmount': '請輸入有效金額',
+  'tips.error.withdraw.insufficientFunds': '餘額不足',
+  'tips.error.withdraw.failed': '提現失敗，請重試',
 
   'tips.list.read': '訊息已讀取',
 
@@ -57,5 +57,19 @@ export default {
 
   'tips.userInfo.success': '用戶信息更新成功',
   'tips.userInfo.failed': '用戶信息更新失敗',
+
   'tips.error.gasFeeTooLow': 'Gas 費用過低，請重試',
+  'tips.error.insufficientTokenBalance': '代幣餘額不足',
+  'tips.error.notContractOwner': '您不是合約所有者',
+  'tips.error.contractPaused': '合約已暫停',
+  'tips.error.contractExecutionFailed': '合約執行失敗',
+  'tips.error.nonceTooLow': '交易序號過低',
+  'tips.error.transactionAlreadyKnown': '交易已存在',
+  'tips.error.transactionUnderpriced': '交易 gas 價格過低',
+  'tips.error.gasTooLow': 'Gas 費用過低',
+  'tips.error.gasExceedsAllowance': 'Gas 需求超過限額',
+  'tips.error.invalidOpcode': '無效操作碼',
+  'tips.error.outOfGas': 'Gas 不足',
+  'tips.error.invalidSender': '無效發送者',
+  'tips.error.invalidSignature': '無效簽章',
 };
