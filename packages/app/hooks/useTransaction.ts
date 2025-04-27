@@ -1,13 +1,12 @@
 /*
  * @Date: 2025-03-04 21:47:07
  * @LastEditors: yosan
- * @LastEditTime: 2025-04-10 15:26:10
+ * @LastEditTime: 2025-04-27 10:30:55
  * @FilePath: /ezgg-app/packages/app/hooks/useTransaction.ts
  */
 import {useTranslation} from 'react-i18next';
 import {useToastController} from '@my/ui';
 import {useSmartWallets} from '@privy-io/react-auth/smart-wallets';
-import {encodeFunctionData, erc20Abi, getAddress} from 'viem';
 import {useRematchModel} from 'app/store/model';
 import useRequest from 'app/hooks/useRequest';
 import {convertAmountToTokenDecimals} from 'app/utils';
@@ -25,7 +24,72 @@ import {
   postTransactionPayLinkUpdateTransactionHash,
 } from 'app/servers/api/transactionPayLink';
 import {handleTransactionError} from 'app/utils/error';
+import {useWallets} from '@privy-io/react-auth';
+import {
+  encodeFunctionData,
+  erc20Abi,
+  createPublicClient,
+  http,
+  getAddress,
+  Chain,
+  Hex,
+  createWalletClient,
+  custom,
+} from 'viem';
 
+import {createBicoPaymasterClient, createSmartAccountClient, toNexusAccount} from '@biconomy/abstractjs';
+
+
+const paymasterUrl = (chainId: number) => {
+  switch (chainId) {
+    case 97:
+      return `https://paymaster.biconomy.io/api/v2/${chainId}/9Yzu5pN8q.f2b8eeaa-1320-44d5-ad12-9bf5c2cdc189`;
+    case 534351:
+      return `https://paymaster.biconomy.io/api/v2/${chainId}/XXTqovaTm.2a644550-a89b-470b-9f95-bedf7a3fb197`;
+    default:
+      return `https://paymaster.biconomy.io/api/v2/${chainId}/9Yzu5pN8q.f2b8eeaa-1320-44d5-ad12-9bf5c2cdc189`;
+  }
+};
+
+import {
+  base,
+  baseSepolia,
+  polygon,
+  polygonAmoy,
+  bsc,
+  bscTestnet,
+  arbitrum,
+  arbitrumSepolia,
+  monadTestnet,
+  scroll,
+  scrollSepolia,
+} from 'viem/chains';
+
+import {getInfrastructureListBlockchain} from 'app/servers/api/infrastructure';
+import {NETWORK} from 'app/config';
+import {postUserUpdateMemberSmartWallet} from 'app/servers/api/member';
+
+const chains: any[] = [
+  base,
+  baseSepolia,
+  polygon,
+  polygonAmoy,
+  bsc,
+  bscTestnet,
+  arbitrum,
+  arbitrumSepolia,
+  monadTestnet,
+  scroll,
+  scrollSepolia,
+];
+
+const bundlerUrl = (chainId: number) =>
+  `https://bundler.biconomy.io/api/v3/${chainId}/nJPK7B3ru.dd7f7861-190d-41bd-af80-6877f74b8f44`;
+
+export enum BlockChainSmartWalletType {
+  PRIVY = 'PRIVY',
+  BICONOMY = 'BICONOMY',
+}
 export interface TransactionParams {
   platform: 'ETH' | 'SOLANA';
   chainId: number;
@@ -51,6 +115,80 @@ export const useTransaction = () => {
   const toast = useToastController();
   const {getClientForChain} = useSmartWallets();
   const {makeRequest} = useRequest();
+  const {wallets} = useWallets();
+
+  const _getClientForChain = async (chainId: number): Promise<any> => {
+    if (chainId !== 97 && chainId !== 56 && chainId !== 534352 && chainId !== 534351) {
+      const baseClient = await getClientForChain({
+        id: chainId,
+      });
+      return baseClient;
+    } else {
+      // 创建当前链的基于BICONOMY的智能钱包客户端
+      const embeddedWallet = wallets.find((wallet) => wallet.walletClientType === 'privy');
+      if (embeddedWallet) {
+        const nexusClient = await getNexusClient(embeddedWallet, chainId);
+        return nexusClient;
+      }
+      return null;
+    }
+  };
+
+  const syncSmartWalletAddress = async (platform: any, embeddedWallet: any, callback: () => void) => {
+    const requestBody: any = {
+      smartWallet: [],
+    };
+    // const {data} = await listBlockChain({platform});
+    // 使用 getInfrastructureListTokenContract 获取数据
+    const tokenContractRes: any = await getInfrastructureListBlockchain({
+      platform: 'ETH',
+      network: NETWORK,
+    });
+
+    const blockChains = tokenContractRes.data?.filter(
+      (x: any) => x.smartWalletType === BlockChainSmartWalletType.BICONOMY,
+    );
+    for (const {chainId} of blockChains) {
+      const nexusClient = await getNexusClient(embeddedWallet, chainId);
+      requestBody.smartWallet.push({
+        platform,
+        chainId,
+        address: nexusClient.account.address,
+      });
+    }
+
+    if (requestBody.smartWallet.length > 0) {
+      await postUserUpdateMemberSmartWallet({
+        smartWallet: requestBody.smartWallet,
+      });
+      callback();
+    }
+  };
+
+  const getNexusClient = async (embeddedWallet: any, chainId: number) => {
+    const chain = chains.find((x) => x.id == chainId);
+    // 获取 Ethers.js 的 Signer
+    const provider = await embeddedWallet.getEthereumProvider();
+    const walletClient = createWalletClient({
+      account: embeddedWallet.address as Hex,
+      chain,
+      transport: custom(provider),
+    });
+    // 初始化智能钱包客户端
+    const nexusClient = createSmartAccountClient({
+      account: await toNexusAccount({
+        signer: walletClient,
+        chain: chain!,
+        transport: http(),
+      }),
+      // Bundler API地址，从Biconomy控制面板获取
+      transport: http(bundlerUrl(chainId)),
+      // Paymaster API地址，从Biconomy控制面板获取
+      paymaster: createBicoPaymasterClient({paymasterUrl: paymasterUrl(chainId)}),
+    });
+
+    return nexusClient;
+  };
 
   // 处理交易成功后的操作
   const handleTransactionSuccess = async (params: TransactionSuccessParams, onSuccess?: (data: any) => void) => {
@@ -102,17 +240,15 @@ export const useTransaction = () => {
 
   const deployAA2 = async (chainId: any) => {
     try {
-      const baseClient = await getClientForChain({
-        id: chainId,
-      });
+      const baseClient: any = await _getClientForChain(chainId);
 
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
       }
-      const isAADeployed = await baseClient.account.isDeployed();
+      const isAADeployed = await baseClient?.account?.isDeployed();
       console.log('AA20 Account Deployment:', isAADeployed);
       if (!isAADeployed) {
-        const txHash = await baseClient.sendTransaction({
+        const txHash = await baseClient?.sendTransaction({
           to: '0x0000000000000000000000000000000000000000', // 发送给 0 地址
           value: 0n, // 0 ETH
           gas: 21000n, // 21000
@@ -133,9 +269,7 @@ export const useTransaction = () => {
     }>;
   }) => {
     try {
-      const baseClient = await getClientForChain({
-        id: params.chainId,
-      });
+      const baseClient: any =await  _getClientForChain(params.chainId);
 
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
@@ -276,9 +410,7 @@ export const useTransaction = () => {
         return;
       }
       const bizContractAddress = getAddress(payLink.data.bizContractAddress!);
-      const baseClient = await getClientForChain({
-        id: orderData.chainId,
-      });
+      const baseClient: any =await _getClientForChain(orderData?.chainId);
 
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
@@ -414,9 +546,7 @@ export const useTransaction = () => {
   const onWithdraw = async (transaction: any, onSuccess?: (data: any) => void) => {
     try {
       const tokenContractAddress = transaction.tokenContractAddress!;
-      const baseClient = await getClientForChain({
-        id: transaction.chainId,
-      });
+      const baseClient: any =await _getClientForChain(transaction?.chainId);
 
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
@@ -489,9 +619,8 @@ export const useTransaction = () => {
         });
         return;
       }
-      const baseClient = await getClientForChain({
-        id: orderData.chainId,
-      });
+
+      const baseClient: any =await _getClientForChain(orderData?.chainId);
 
       if (!baseClient) {
         throw new Error('Failed to get client for chain');
@@ -533,5 +662,7 @@ export const useTransaction = () => {
     onSendContract,
     deployAA2,
     onCancelPayLink,
+    _getClientForChain,
+    syncSmartWalletAddress,
   };
 };

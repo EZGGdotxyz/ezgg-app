@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-20 15:38:40
+ * @LastEditTime: 2025-04-27 12:14:10
  * @FilePath: /ezgg-app/packages/app/hooks/useInit.ts
  */
 import {Dispatch} from 'app/store';
@@ -64,15 +64,13 @@ export default function useInit() {
     const token: any = await getUserToken();
     const idToken: any = await getUserIdToken();
     const userInfo: any = await getUserInfo();
+
     // 设置 token
     if (token && idToken) {
       // const res = await refreshUser();
       // console.log('res', res);
       initLogin(token, idToken);
-      // 获取用户信息
-      if (userInfo?.customMetadata?.id) {
-        initUserInfo();
-      }
+      initUserInfo();
       // 获取区块链列表
       getInfrastructureList();
     }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-20 15:52:36
+ * @LastEditTime: 2025-04-27 10:33:06
  * @FilePath: /ezgg-app/packages/app/Components/SetUserInfo/index.tsx
  */
 import {
@@ -82,7 +82,7 @@ const SetUserInfo: React.FC<any> = ({setIsLoading}: SetUserInfoProps) => {
 
   useEffect(() => {
     if (userInfo?.customMetadata?.id) {
-      if (!userInfo?.customMetadata?.nickname) {
+      if (!userInfo?.customMetadata?.nickname || userInfo?.customMetadata?.nickname?.startsWith('Crypto-')) {
         setIsSetInfo(true);
       }
     }
@@ -259,7 +259,7 @@ const SetUserInfo: React.FC<any> = ({setIsLoading}: SetUserInfoProps) => {
 
             <YStack w={appScale(343)}>
               <AppButton isLoading={loading} onPress={accountContinue}>
-                {t('operate.button.login')}
+                {t('operate.button.confirm')}
               </AppButton>
               {/* <Button
                 style={{

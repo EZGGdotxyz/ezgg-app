@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-18 22:09:08
+ * @LastEditTime: 2025-04-27 10:03:40
  * @FilePath: /ezgg-app/packages/app/pages/home/deposit/components/Currency/index.tsx
  */
 import {AppImage, Button, Text, YStack, XStack, SizableText} from '@my/ui';
@@ -33,7 +33,6 @@ export type CurrencyProps = {
 // 交易历史item
 const Currency = React.forwardRef<HTMLDivElement, CurrencyProps>(
   ({currencyData, setCurrencyData, isConnected, selectedType, address}: CurrencyProps, ref) => {
-    console.log('🚀 ~ selectedType:', selectedType);
     const {push} = useRouter();
     const {makeRequest} = useRequest();
 

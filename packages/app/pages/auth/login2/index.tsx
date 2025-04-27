@@ -1,24 +1,25 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-20 15:50:39
+ * @LastEditTime: 2025-04-27 12:13:41
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
-import {YStack, SizableText, AppImage, Button, ScrollView} from '@my/ui';
-import React, {useState, useCallback} from 'react';
+import {YStack, SizableText, AppImage, Button, ScrollView, useToastController} from '@my/ui';
+import React, {useState, useCallback, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import PermissionPage from 'app/Components/PermissionPage';
 import AppHeader2 from 'app/Components/AppHeader2';
 import {useRouter} from 'solito/router';
-import {useLogin, usePrivy, useUser as usePrivyUser} from '@privy-io/react-auth';
+import {useLogin, usePrivy, useUser as usePrivyUser, useWallets} from '@privy-io/react-auth';
 import SuccessPopup from './components/SuccessPopup';
-import {AppName, PrimaryColor} from 'app/config';
+import {AppName, NETWORK, PrimaryColor} from 'app/config';
 import useUser from 'app/hooks/useUser';
-import {postUserUpdateMember} from 'app/servers/api/member';
+import {postUserUpdateMember, postUserUpdateMemberSmartWallet} from 'app/servers/api/member';
 import {View} from 'react-native';
 import useInit from 'app/hooks/useInit';
 import {createParam} from 'solito';
 import useResponse from 'app/hooks/useResponse';
+import {useTransaction} from 'app/hooks/useTransaction';
 const {useParams} = createParam<any>();
 
 const LoginScreen = () => {
@@ -27,52 +28,62 @@ const LoginScreen = () => {
   const {push} = useRouter();
   const {params} = useParams();
   const {appScale} = useResponse();
-
-  const {getInfrastructureList} = useInit();
   const {initLogin, initUserInfo, onLink} = useUser();
   const [modalVisible, setModalVisible] = useState(false);
   const [isSetInfo, setIsSetInfo] = useState(false);
-  const [accountForm, setAccountForm] = useState({
-    nickname: '',
-    avatar: '',
-  });
+  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
   const {refreshUser} = usePrivyUser();
+  const {syncSmartWalletAddress} = useTransaction();
+
+  const {wallets} = useWallets();
+
+  useEffect(() => {
+    // 同步当前用户基于BICONOMY的智能钱包地址
+    const embeddedWallet = wallets.find((wallet) => wallet.walletClientType === 'privy');
+    if (embeddedWallet && isLoginSuccess) {
+      // syncSmartWalletAddress('ETH', embeddedWallet, handleLogin);
+      handleLogin();
+    }
+  }, [wallets, isLoginSuccess]);
 
   const {login} = useLogin({
     onComplete: async (user) => {
       setModalVisible(true);
-      await handleLogin(user);
+      setIsLoginSuccess(true);
+      // await handleLogin(user);
     },
   });
 
-  const handleLogin = useCallback(
-    async (user: any) => {
-      try {
-        const token = localStorage.getItem('privy:token');
-        const idToken = localStorage.getItem('privy:id_token');
+  const handleLogin = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('privy:token');
+      const idToken = localStorage.getItem('privy:id_token');
 
-        if (!token || !idToken) {
-          console.error('登录失败: 无法获取令牌');
-          return;
-        }
-
-        initLogin(JSON.parse(token), JSON.parse(idToken));
-        const _userInfo = await initUserInfo();
-        await postUserUpdateMember({
-          nickname: _userInfo?.customMetadata?.nickname || '',
-          avatar: _userInfo?.customMetadata?.avatar || '',
-        });
-        setTimeout(async () => {
-          setModalVisible(false);
-          onLink();
-        }, 1000);
-      } catch (error) {
-        console.error('登录处理失败:', error);
-        setModalVisible(false);
+      if (!token || !idToken) {
+        console.error('登录失败: 无法获取令牌');
+        return;
       }
-    },
-    [initLogin, initUserInfo],
-  );
+
+      initLogin(JSON.parse(token), JSON.parse(idToken));
+      const _userInfo = await initUserInfo();
+      await postUserUpdateMember({
+        nickname: _userInfo?.customMetadata?.nickname || '',
+        avatar: _userInfo?.customMetadata?.avatar || '',
+      });
+      const embeddedWallet = wallets.find((wallet) => wallet.walletClientType === 'privy');
+      if (embeddedWallet) {
+        syncSmartWalletAddress('ETH', embeddedWallet, () => {
+          setTimeout(async () => {
+            setModalVisible(false);
+            onLink();
+          }, 1000);
+        });
+      }
+    } catch (error) {
+      console.error('登录处理失败:', error);
+      setModalVisible(false);
+    }
+  }, [initLogin, initUserInfo]);
 
   const handleSuccess = useCallback(
     async (_userInfo: any) => {

@@ -1,7 +1,7 @@
 /*
  * @Date: 2025-03-08
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-13 18:09:09
+ * @LastEditTime: 2025-04-26 21:43:09
  * @FilePath: /ezgg-app/packages/app/hooks/useBlockchain.ts
  */
 import {Dispatch} from 'app/store';
@@ -77,11 +77,20 @@ export default function useBlockchain() {
 
       if (ethRes?.data) {
         const ethData = ethRes.data as BlockchainResponse[];
-        _blockchainList = ethData.map((item) => ({
-          platform: 'ETH' as Platform,
-          chainId: item.chainId,
-          network: item.network,
-        }));
+        // ethData.map((item) => ({
+        //   platform: 'ETH' as Platform,
+        //   chainId: item.chainId,
+        //   network: item.network,
+        // }));
+        ethData.forEach((item) => {
+          if (item.id !== 7 && item.id !== 9) {
+            _blockchainList.push({
+              platform: 'ETH' as Platform,
+              chainId: item.chainId,
+              network: item.network,
+            });
+          }
+        });
       }
 
       // 获取 SOLANA 平台的区块链列表

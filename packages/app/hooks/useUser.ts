@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 10:37:32
  * @LastEditors: yosan
- * @LastEditTime: 2025-03-28 10:07:44
+ * @LastEditTime: 2025-04-27 10:29:17
  * @FilePath: /ezgg-app/packages/app/hooks/useUser.ts
  */
 import {Dispatch} from 'app/store';
@@ -83,7 +83,7 @@ export default function useUser() {
    * 获取并初始化用户信息
    * @returns 用户信息对象
    */
-  const initUserInfo = async (): Promise<Record<string, any>> => {
+  const initUserInfo = async (): Promise<Record<string, any> | null> => {
     const res = await makeRequest(getUserFindUser());
     if (res?.data) {
       setUserInfo(res?.data);
@@ -93,10 +93,14 @@ export default function useUser() {
       return res.data;
     } else {
       const userInfo: any = await getUserInfo();
-      dispatch.user.updateState({
-        userInfo,
-      });
-      return userInfo;
+      if (userInfo?.customMetadata?.id) {
+        dispatch.user.updateState({
+          userInfo,
+        });
+        return userInfo;
+      } else {
+        return null;
+      }
     }
   };
 
