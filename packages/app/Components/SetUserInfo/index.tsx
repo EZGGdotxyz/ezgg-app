@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-08 16:25:15
  * @LastEditors: yosan
- * @LastEditTime: 2025-04-27 10:33:06
+ * @LastEditTime: 2025-04-27 14:15:44
  * @FilePath: /ezgg-app/packages/app/Components/SetUserInfo/index.tsx
  */
 import {
@@ -44,8 +44,13 @@ const SetUserInfo: React.FC<any> = ({setIsLoading}: SetUserInfoProps) => {
   const {initUserInfo} = useUser();
   const {refreshUser} = usePrivyUser();
   const accountContinue = () => {
+    if (!accountForm?.nickname) {
+      toast.show(t('login.profile.nikeName.error'));
+      return;
+    }
+
     // 检查用户名长度是否小于4个字符
-    if (accountForm?.nickname && accountForm?.nickname.length < 4) {
+    if (accountForm?.nickname.length < 4) {
       toast.show(t('login.profile.nikeName.error'));
       return;
     }

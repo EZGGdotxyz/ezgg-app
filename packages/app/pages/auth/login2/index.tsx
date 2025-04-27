@@ -1,7 +1,7 @@
 /*
  * @Date: 2023-12-18 14:37:38
  * @LastEditors: yosan
- * @LastEditTime: 2025-04-27 12:13:41
+ * @LastEditTime: 2025-04-27 14:09:56
  * @FilePath: /ezgg-app/packages/app/pages/auth/login2/index.tsx
  */
 import {YStack, SizableText, AppImage, Button, ScrollView, useToastController} from '@my/ui';
@@ -70,6 +70,8 @@ const LoginScreen = () => {
         nickname: _userInfo?.customMetadata?.nickname || '',
         avatar: _userInfo?.customMetadata?.avatar || '',
       });
+      await refreshUser();
+      await initUserInfo();
       const embeddedWallet = wallets.find((wallet) => wallet.walletClientType === 'privy');
       if (embeddedWallet) {
         syncSmartWalletAddress('ETH', embeddedWallet, () => {
